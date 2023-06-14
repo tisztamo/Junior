@@ -1,0 +1,22 @@
+{
+  "name": "gpcontrib",
+  "version": "0.0.1",
+  "description": "Build large documents with AI",
+  "type": "module",
+  "main": "src/main.js",
+  "bin": {
+    "contrib": "src/main.js"
+  },
+  "scripts": {
+    "start": "node src/main.js"
+  },
+  "keywords": [
+    "cli",
+    "uppercase"
+  ],
+  "author": "",
+  "license": "GPL",
+  "dependencies": {
+    "chatgpt": "^5.2.4"
+  }
+}

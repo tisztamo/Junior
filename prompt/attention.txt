@@ -1,0 +1,5 @@
+prompt/system.md
+src/attention.md
+src/filesystem.md
+task/design.md
+format/descriptive.md
