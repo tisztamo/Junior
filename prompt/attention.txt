@@ -2,7 +2,6 @@ prompt/system.md
 ./
 src/
 src/attention/
-doc/attention/attention.md iface
 src/attention/attention.js
-prompt/task/design.md
-prompt/format/descriptive.md
+prompt/task/refactor/split.md
+prompt/format/new_file_version.md
