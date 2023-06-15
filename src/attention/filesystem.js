@@ -25,17 +25,17 @@ export const processPath = async (root, p) => {
 const processFile = async (p) => {
   try {
     const content = await readFile(p, "utf8")
-    return `${path.basename(p)}:\n${content}`
+    return `${p}:\n${content}\n`
   } catch (error) {
-    return `${path.basename(p)}: err!`
+    return `${p}: err!\n`
   }
 }
 
 const processDirectory = async (p) => {
   try {
     const content = await readdir(p)
-    return `${path.basename(p)}:\n${content.join(', ')}`
+    return `${p}:\n${content.join(', ')}\n`
   } catch (error) {
-    return `${path.basename(p)}: err!`
+    return `${p}: err!\n`
   }
 }

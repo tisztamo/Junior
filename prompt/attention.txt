@@ -1,5 +1,8 @@
 prompt/system.md
-src/attention.md
-src/filesystem.md
-task/design.md
-format/descriptive.md
+./
+./src
+doc/attention/attention.md
+src/attention/attention.js
+prompt/task/doc/fix-format.md
+prompt/format/doc.md
+prompt/format/new_file_version.md
