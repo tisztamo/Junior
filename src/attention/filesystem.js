@@ -18,7 +18,7 @@ export const processPath = async (root, p) => {
     const stats = await stat(fullPath)
     return stats.isDirectory() ? await processDirectory(fullPath) : await processFile(fullPath)
   } catch (error) {
-    return `${path.basename(p)}: err!`
+    return `${p}: err!`
   }
 }
 
