@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import main from './main.js';
+import main from '../main.js';
 
 const executeCode = async (cod, last_command_result, parent_message_id, rl) => {
   rl.question('\x1b[1mEXECUTE? [y/n]\x1b[0m ', async (answer) => {

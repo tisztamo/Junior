@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-import createQuery from './prompt.js';
+import createQuery from './prompt/prompt.js';
 import { api, get_model, get_system_prompt, rl } from './config.js';
-import executeCode from './executeCode.js';
-import extractCode from './extractCode.js';
+import executeCode from './execute/executeCode.js';
+import extractCode from './execute/extractCode.js';
 
 console.log("Welcome to Contributor. Model: " + get_model() + "\n");
 console.log("System prompt:", await get_system_prompt())

@@ -1,9 +1,3 @@
 # Task: Generate documentation
 
-Each .js module needs an accompanying .md file that describes it in concise and simple english.
-
-The description has the following sections:
-
-- Interface
-- Example(s)
-- Implementation
+For every dumped .js module without accompanying .md under doc/, predict the missing file from the source.
