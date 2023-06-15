@@ -1,6 +1,6 @@
 # Interface
 
-The `createQuery` function is the only exported module in this file. This is an asynchronous function that takes a task description and returns a string to be used as an AI prompt. The output string is composed of the current attention appended with the task description, if any.
+This is an asynchronous function that takes a task description and returns a string to be used as an AI prompt. The output string is composed of the current attention appended with the task description, if any.
 
 # Example(s)
 
