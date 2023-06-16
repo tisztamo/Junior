@@ -3,7 +3,7 @@
 import { readAttention } from "../attention/readAttention.js"
 
 const createQuery = async (task) => {
-  return `${(await readAttention())}${task ? task + "\n" : ""}`
+  return `${(await readAttention())}\n${task ? task : ""}`
 }
 
 export default createQuery
