@@ -1,4 +1,4 @@
-# Task: Design a new feature
+# Task: Implement a new feature
 
 ## Improve prompt structure
 
@@ -23,7 +23,7 @@ The problem is even greater when working with doc .md files.
 The best way seems to create a prompt descriptor that can describe the task
 requirements and refer to an attention file.
 
-Task requirement are currently composed of the following:
+Task requirements will be composed of the following:
 - task description (what we need to do, what is the expected result)
 - output format (e.g. english prose, dumped files, unidiff etc.)
 
@@ -37,4 +37,5 @@ task: prompt/task/refactor/split.md
 format: prompt/format/new_file_version.md
 attention: attention.txt
 
+Modify prompt.js so that it reads and processed the descriptor!
 

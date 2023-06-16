@@ -1,0 +1,3 @@
+task: prompt/task/refactor/split.md
+format: prompt/format/new_file_version.md
+attention: prompt/attention.txt

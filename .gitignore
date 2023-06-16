@@ -2,3 +2,5 @@ secret.sh
 node_modules/
 prompt/attention-cache/
 tmp/
+current_prompt.md
+

@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-import createQuery from './prompt/prompt.js';
+import createPrompt from './prompt/createPrompt.js';
+import fs from 'fs/promises';
 import { api, get_model, get_system_prompt, rl } from './config.js';
 import executeCode from './execute/executeCode.js';
 import extractCode from './execute/extractCode.js';
@@ -12,9 +13,10 @@ const main = async (last_command_result = "", parent_message_id = null, rl) => {
   rl.question('$ ', async (task) => {
     let lastTextLength = 0;
     console.log("\x1b[2m");
-    const query = await createQuery(task, last_command_result)
-    console.debug("Query:", query)
-    const res = await api.sendMessage(query, {
+    const prompt = await createPrompt(task, last_command_result)
+    console.debug("Query:", prompt)
+    await fs.writeFile("current_prompt.md", prompt)
+    const res = await api.sendMessage(prompt, {
       parentMessageId: parent_message_id,
       onProgress: (partialResponse) => {
         // Print only the new text added to the partial response
