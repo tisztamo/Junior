@@ -1,4 +1,3 @@
-prompt/system.md
 src/
 src/attention/
 src/attention/readAttention.js
