@@ -7,7 +7,7 @@ const api = process.argv[2] === "-d" ? {
   } : new ChatGPTAPI({
   debug: true,
   apiKey: process.env.OPENAI_API_KEY,
-  systemMessage: await get_system_prompt(),
+  systemMessage: "",//SYSTEM,
   completionParams: {
     model: get_model(),
     stream: true,
