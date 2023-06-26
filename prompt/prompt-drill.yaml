@@ -1,0 +1,3 @@
+task: prompt/task/book/drill_down.md
+format: prompt/format/descriptive.md
+attention: AI_vs_Blockchain/attention.txt

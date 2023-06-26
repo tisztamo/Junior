@@ -2,12 +2,12 @@
 
 import createPrompt from './prompt/createPrompt.js';
 import fs from 'fs/promises';
-import { api, get_model, get_system_prompt, rl } from './config.js';
+import { api, get_model, getSystemPrompt, rl } from './config.js';
 import executeCode from './execute/executeCode.js';
 import extractCode from './execute/extractCode.js';
 
 console.log("Welcome to Contributor. Model: " + get_model() + "\n");
-console.log("System prompt:", await get_system_prompt())
+console.log("System prompt:", await getSystemPrompt())
 
 const main = async (last_command_result = "", parent_message_id = null, rl) => {
   rl.question('$ ', async (task) => {

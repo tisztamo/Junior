@@ -2,12 +2,17 @@ import fs from 'fs/promises';
 import readline from 'readline';
 import { ChatGPTAPI } from 'chatgpt';
 
-const api = process.argv[2] === "-d" ? {
+// test if -d or --dry-run cli arg is present
+function isDryRun() {
+  return process.argv.includes("-d") || process.argv.includes("--dry-run");
+}
+
+const api = isDryRun() ? {
     sendMessage: () => { return {id: 42, text: "DRY RUN, NOT SENT"}}
   } : new ChatGPTAPI({
   debug: true,
   apiKey: process.env.OPENAI_API_KEY,
-  systemMessage: await get_system_prompt(),
+  systemMessage: await getSystemPrompt(),
   completionParams: {
     model: get_model(),
     stream: true,
@@ -25,7 +30,7 @@ function get_model() {
   return process.argv[2] === "4" ? "gpt-4" : "gpt-3.5-turbo";
 }
 
-async function get_system_prompt() {
+async function getSystemPrompt() {
   return (await fs.readFile("prompt/system.md", "utf8")).toString()
 }
-export { api, rl, get_model, get_system_prompt };
+export { api, rl, get_model, getSystemPrompt};

@@ -1,0 +1,3 @@
+task: prompt/task/book/decompose.md
+format: prompt/format/title_only.md
+attention: AI_vs_Blockchain/attention.txt
