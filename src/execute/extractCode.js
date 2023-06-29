@@ -4,4 +4,4 @@ function extractCode(res) {
   return match ? match[1].trim() : null;
 }
 
-export default extractCode;
+export { extractCode };

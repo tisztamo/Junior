@@ -29,7 +29,11 @@ const createPrompt = async (userInput) => {
   const task = await readFile(promptDescriptor.task, "utf8");
   const format = await readFile(promptDescriptor.format, "utf8");
   const system = await getSystemPromptIfNeeded();
-  return `${system}# Working set\n\n${attention}\n\n# Task\n\n${task}\n\n# Output Format\n\n${format}\n\n${userInput ? userInput : ""}`;
+  const saveto = promptDescriptor.saveto;
+  return {
+    prompt: `${system}# Working set\n\n${attention}\n\n# Task\n\n${task}\n\n# Output Format\n\n${format}\n\n${userInput ? userInput : ""}`,
+    saveto
+  };
 }
 
-export default createPrompt
+export { createPrompt };

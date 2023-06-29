@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import main from '../main.js';
+import { startInteractiveSession } from "../interactiveSession/startInteractiveSession.js";
 
 const executeCode = async (cod, last_command_result, parent_message_id, rl) => {
   rl.question('\x1b[1mEXECUTE? [y/n]\x1b[0m ', async (answer) => {
@@ -19,13 +19,13 @@ const executeCode = async (cod, last_command_result, parent_message_id, rl) => {
           }
           last_command_result = "Command executed. Output:\n" + stdout + "\n" + stderr + "\n";
         }
-        main(last_command_result, parent_message_id, rl);
+        startInteractiveSession(last_command_result, parent_message_id, rl)
       });
     } else {
       last_command_result = "Command skipped.\n";
-      main(last_command_result, parent_message_id, rl);
+      startInteractiveSession(last_command_result, parent_message_id, rl);
     }
   });
 }
 
-export default executeCode;
+export { executeCode };

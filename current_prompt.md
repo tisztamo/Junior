@@ -11,53 +11,20 @@ The contents of some dirs are not listed, ask for their content if needed.
 # Working set
 
 src/:
-attention, config.js, execute, main.js, prompt, utils
+attention, config.js, execute, interactiveSession, main.js, prompt, utils
 
 src/main.js:
 #!/usr/bin/env node
 
-import createPrompt from './prompt/createPrompt.js';
-import fs from 'fs/promises';
+import { startInteractiveSession } from './interactiveSession/startInteractiveSession.js';
 import { api, get_model, getSystemPrompt, rl } from './config.js';
-import executeCode from './execute/executeCode.js';
-import extractCode from './execute/extractCode.js';
 
 console.log("Welcome to Contributor. Model: " + get_model() + "\n");
 console.log("System prompt:", await getSystemPrompt())
 
-const main = async (last_command_result = "", parent_message_id = null, rl) => {
-  rl.question('$ ', async (task) => {
-    let lastTextLength = 0;
-    console.log("\x1b[2m");
-    const prompt = await createPrompt(task, last_command_result)
-    console.debug("Query:", prompt)
-    await fs.writeFile("current_prompt.md", prompt)
-    const res = await api.sendMessage(prompt, {
-      parentMessageId: parent_message_id,
-      onProgress: (partialResponse) => {
-        // Print only the new text added to the partial response
-        const newText = partialResponse.text.slice(lastTextLength);
-        process.stdout.write(newText);
-        lastTextLength = partialResponse.text.length;
-      }
-    });
-    parent_message_id = res.id;
-    console.log("\x1b[0m");
-    const msg = res.text.trim();
-    console.log("");
-    const cod = extractCode(msg);
-    if (cod) {
-      await executeCode(cod, last_command_result, parent_message_id, rl);
-    } else {
-      last_command_result = "";
-      main(last_command_result, parent_message_id, rl);
-    }
-  });
-}
+startInteractiveSession("", null, rl, api);
 
-main("", null, rl);
-
-export default main;
+export { startInteractiveSession };
 
 
 src/prompt/createPrompt.js:
@@ -92,11 +59,14 @@ const createPrompt = async (userInput) => {
   const task = await readFile(promptDescriptor.task, "utf8");
   const format = await readFile(promptDescriptor.format, "utf8");
   const system = await getSystemPromptIfNeeded();
-  return `${system}# Working set\n\n${attention}\n\n# Task\n\n${task}\n\n# Output Format\n\n${format}\n\n${userInput ? userInput : ""}`;
+  const saveto = promptDescriptor.saveto;
+  return { 
+    prompt: `${system}# Working set\n\n${attention}\n\n# Task\n\n${task}\n\n# Output Format\n\n${format}\n\n${userInput ? userInput : ""}`,
+    saveto
+  };
 }
 
-export default createPrompt
-
+export { createPrompt };
 
 current_prompt.yaml:
 task: prompt/task/feature/implement.md
@@ -118,4 +88,3 @@ Implement the following new feature!
 Provide the new file(s) as code blocks, each prefixed with its path and a colon.
 Avoid any explanatory text, as your output will be programmatically processed!
 
-current_prompt.yaml now optionally contains a "saveto" line, pointing to the path where the full prompt should be saved.
