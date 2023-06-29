@@ -18,7 +18,7 @@ function getPromptFlag() {
 // return the system prompt if the --system-prompt or -s flag is present
 async function getSystemPromptIfNeeded() {
   if (process.argv.includes("--system-prompt") || process.argv.includes("-s")) {
-    return getSystemPrompt();
+    return `${await getSystemPrompt()}\n`;
   }
   return "";
 }

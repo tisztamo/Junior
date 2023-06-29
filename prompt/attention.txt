@@ -1,4 +1,0 @@
-src/
-src/attention/
-src/attention/readAttention.js
-src/prompt/createPrompt.js

@@ -1,0 +1,1 @@
+A single shell script that creates everything is the preferred output
