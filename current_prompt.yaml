@@ -1,4 +1,8 @@
 task: prompt/task/feature/implement.md
 format: prompt/format/new_file_version.md
-attention: attention.txt
+attention:
+  - ./
+  - ./src/
+  - ./src/prompt/createPrompt.js
+  - ./src/attention/readAttention.js
 saveto: current_prompt.md
