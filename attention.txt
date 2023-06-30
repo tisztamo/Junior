@@ -1,4 +1,3 @@
 src/
-src/main.js
 src/prompt/createPrompt.js
-current_prompt.yaml
+src/attention/readAttention.js

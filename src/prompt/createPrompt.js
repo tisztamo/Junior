@@ -1,7 +1,7 @@
-// Returns a string to be used as AI prompt, composed of the current attention, task description, and output format
+// Returns an object containing the AI prompt and the save location. 
+// The AI prompt is composed of the current attention, task description, and output format.
 
 import { readAttention } from "../attention/readAttention.js"
-import fs from 'fs';
 import util from 'util';
 import yaml from 'js-yaml';
 import { getSystemPrompt } from "../config.js";
@@ -31,7 +31,7 @@ const createPrompt = async (userInput) => {
   const system = await getSystemPromptIfNeeded();
   const saveto = promptDescriptor.saveto;
   return {
-    prompt: `${system}# Working set\n\n${attention}\n\n# Task\n\n${task}\n\n# Output Format\n\n${format}\n\n${userInput ? userInput : ""}`,
+    prompt: `${system}# Working set\n\n${attention.join("\n")}\n\n# Task\n\n${task}\n\n# Output Format\n\n${format}\n\n${userInput ? userInput : ""}`,
     saveto
   };
 }

@@ -13,20 +13,6 @@ The contents of some dirs are not listed, ask for their content if needed.
 src/:
 attention, config.js, execute, interactiveSession, main.js, prompt, utils
 
-src/main.js:
-#!/usr/bin/env node
-
-import { startInteractiveSession } from './interactiveSession/startInteractiveSession.js';
-import { api, get_model, getSystemPrompt, rl } from './config.js';
-
-console.log("Welcome to Contributor. Model: " + get_model() + "\n");
-console.log("System prompt:", await getSystemPrompt())
-
-startInteractiveSession("", null, rl, api);
-
-export { startInteractiveSession };
-
-
 src/prompt/createPrompt.js:
 // Returns a string to be used as AI prompt, composed of the current attention, task description, and output format
 
@@ -60,7 +46,7 @@ const createPrompt = async (userInput) => {
   const format = await readFile(promptDescriptor.format, "utf8");
   const system = await getSystemPromptIfNeeded();
   const saveto = promptDescriptor.saveto;
-  return { 
+  return {
     prompt: `${system}# Working set\n\n${attention}\n\n# Task\n\n${task}\n\n# Output Format\n\n${format}\n\n${userInput ? userInput : ""}`,
     saveto
   };
@@ -68,23 +54,48 @@ const createPrompt = async (userInput) => {
 
 export { createPrompt };
 
-current_prompt.yaml:
-task: prompt/task/feature/implement.md
-format: prompt/format/new_file_version.md
-attention: attention.txt
-saveto: current_prompt.md
+src/attention/readAttention.js:
+import fs from 'fs';
+import path from 'path';
+import util from 'util';
+import { processPath } from './filesystem.js';
+import { processInterfaceSection } from './processInterfaceSection.js';
+
+const readFile = util.promisify(fs.readFile);
+
+export const readAttention = async (attentionFilePath = "prompt/attention.txt", attentionRootDir = '.') => {
+  try {
+    const data = await readFile(path.join(attentionRootDir, attentionFilePath), "utf8");
+    const lines = data.split("\n");
+    const processedLines = await Promise.all(lines.map(line => {
+      const trimmedLine = line.trim();
+      if (trimmedLine.endsWith(' iface')) {
+        const filePath = trimmedLine.slice(0, -6).trim();
+        return processInterfaceSection(attentionRootDir, filePath);
+      } else {
+        return processPath(attentionRootDir, trimmedLine);
+      }
+    }));
+    return processedLines.join("\n");
+  } catch (error) {
+    console.warn(error);
+    throw new Error("Attention file is missing or unreadable!");
+  }
+};
 
 
 
 # Task
 
-Implement the following new feature!
+Implement the following feature!
 
 - Write a small synopsis about the implementation!
-- Create new files when needed! Target line count: 20
+- Create new files when needed!
+- When a file is larger than 25 lines or can be splitted logically, split it!
 
 # Output Format
 
 Provide the new file(s) as code blocks, each prefixed with its path and a colon.
 Avoid any explanatory text, as your output will be programmatically processed!
 
+The use of attention.txt should be eliminated. Instead of reading the attention from this external file, include its line as an array in the prompt descriptor yaml file.
