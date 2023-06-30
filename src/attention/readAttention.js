@@ -1,4 +1,4 @@
-import { processPath } from './filesystem.js';
+import { processFile } from './filesystem.js';
 import { processInterfaceSection } from './processInterfaceSection.js';
 import { printFolderStructure } from './printFolderStructure.js';
 
@@ -12,7 +12,7 @@ export const readAttention = async (attentionArray = [], attentionRootDir = '.')
       } else if (trimmedLine.endsWith('/')) {
         return printFolderStructure(attentionRootDir, trimmedLine.slice(0, -1).trim());
       } else {
-        return processPath(attentionRootDir, trimmedLine);
+        return processFile(attentionRootDir, trimmedLine);
       }
     }));
     return processedLines;
