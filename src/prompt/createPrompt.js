@@ -3,6 +3,7 @@
 
 import { readAttention } from "../attention/readAttention.js"
 import util from 'util';
+import fs from 'fs';
 import yaml from 'js-yaml';
 import { getSystemPrompt } from "../config.js";
 const readFile = util.promisify(fs.readFile);
