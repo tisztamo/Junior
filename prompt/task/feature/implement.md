@@ -6,14 +6,6 @@ Implement the following feature!
 
 Requirements:
 
-When creating prompts from the yaml descriptor, injecting arbitrary values into the
-markdown files would be great! E.g. the "requirements" key is not parsed currently,
-but it would be nice for the implement.md (This markdown file injected into the current prompt) to allow us simply write ${requirements}
-in ES6 style.
+<%= requirements %>
 
-Notes:
-
-Idea: ejs is what we need. All uknown keys in the yaml should be made available for a ejs template.
-This template is used instead of the markdown files. The template, when filled out, reveals a markdown, which will be injected to the prompt.
-
-Test: <%= requirements%>
+Test: this should show the .gitignore in the prompt: <%= testkey %>

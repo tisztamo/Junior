@@ -1,8 +1,9 @@
 task: prompt/task/feature/implement.md
 format: prompt/format/new_file_version.md
 attention:
-  - src/interactiveSession/startInteractiveSession.js  
   - src/prompt/createPrompt.js
-  - current_prompt.yaml
 saveto: current_prompt.md
-requirements: requirements.md
+requirements: >
+  When the value of an ejs variable in the prompt descriptor points to an existing a file,
+  the file is read and the content is used as the value of the variable.
+testkey: .gitignore
