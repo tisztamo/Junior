@@ -5,6 +5,7 @@ import { readAttention } from "../attention/readAttention.js"
 import util from 'util';
 import fs from 'fs';
 import yaml from 'js-yaml';
+import ejs from 'ejs';
 import { getSystemPrompt } from "../config.js";
 const readFile = util.promisify(fs.readFile);
 
@@ -25,10 +26,17 @@ async function getSystemPromptIfNeeded() {
 }
 
 const createPrompt = async (userInput) => {
-  const promptDescriptor = yaml.load(await readFile(getPromptFlag() || "prompt/prompt-list.yaml", "utf8"));  
+  const promptDescriptor = yaml.load(await readFile(getPromptFlag() || "prompt/prompt-list.yaml", "utf8"));
+  const templateVars = Object.keys(promptDescriptor)
+    .filter(key => ['task', 'format', 'attention', 'saveto'].indexOf(key) < 0)
+    .reduce((obj, key) => {
+      obj[key] = promptDescriptor[key];
+      return obj;
+    }, {});
+
   const attention = await readAttention(promptDescriptor.attention);
-  const task = await readFile(promptDescriptor.task, "utf8");
-  const format = await readFile(promptDescriptor.format, "utf8");
+  const task = await ejs.renderFile(promptDescriptor.task, templateVars, {async: true});
+  const format = await ejs.renderFile(promptDescriptor.format, templateVars, {async: true});
   const system = await getSystemPromptIfNeeded();
   const saveto = promptDescriptor.saveto;
   return {

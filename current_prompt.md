@@ -10,115 +10,107 @@ Other files are only listed in their dir, so you know they exists, ask for the c
 
 # Working set
 
-src/attention/
-├── filesystem.js
-├── printFolderStructure.js
-├── processInterfaceSection.js
-├── readAttention.js
+src/interactiveSession/startInteractiveSession.js:
+import { createPrompt } from '../prompt/createPrompt.js';
+import { saveAndSendPrompt } from './saveAndSendPrompt.js';
 
-src/attention/readAttention.js:
-import { processFile } from './filesystem.js';
-import { processInterfaceSection } from './processInterfaceSection.js';
-import { printFolderStructure } from './printFolderStructure.js';
-
-export const readAttention = async (attentionArray = [], attentionRootDir = '.') => {
-  try {
-    const processedLines = await Promise.all(attentionArray.map(line => {
-      const trimmedLine = line.trim();
-      if (trimmedLine.endsWith(' iface')) {
-        const filePath = trimmedLine.slice(0, -6).trim();
-        return processInterfaceSection(attentionRootDir, filePath);
-      } else if (trimmedLine.endsWith('/')) {
-        return printFolderStructure(attentionRootDir, trimmedLine.slice(0, -1).trim());
-      } else {
-        return processFile(attentionRootDir, trimmedLine);
-      }
-    }));
-    return processedLines;
-  } catch (error) {
-    console.warn(error);
-    throw new Error("Error processing attention lines!");
-  }
+const startInteractiveSession = async (last_command_result = "", parent_message_id = null, rl, api) => {
+  rl.question('$ ', async (task) => {
+    const { prompt, saveto } = await createPrompt(task, last_command_result);
+    await saveAndSendPrompt(prompt, saveto, parent_message_id, api, rl, last_command_result, startInteractiveSession);
+  });
 };
 
-
-src/attention/filesystem.js:
-import fs from 'fs'
-import path from 'path'
-import util from 'util'
-
-const readFile = util.promisify(fs.readFile)
-
-export const processFile = async (root, p) => {
-  const fullPath = path.join(root, p)
-  try {
-    const content = await readFile(fullPath, "utf8")
-    return `${p}:\n${content}\n`
-  } catch (error) {
-    return `${p}: err!\n`
-  }
-}
+export { startInteractiveSession };
 
 
-src/attention/processInterfaceSection.js:
-import fs from 'fs';
-import path from 'path';
+src/prompt/createPrompt.js:
+// Returns an object containing the AI prompt and the save location. 
+// The AI prompt is composed of the current attention, task description, and output format.
+
+import { readAttention } from "../attention/readAttention.js"
 import util from 'util';
-
+import fs from 'fs';
+import yaml from 'js-yaml';
+import ejs from 'ejs';
+import { getSystemPrompt } from "../config.js";
 const readFile = util.promisify(fs.readFile);
 
-export async function processInterfaceSection(attentionRootDir, filePath) {
-  const fullPath = path.join(attentionRootDir, filePath);
-  const fileData = await readFile(fullPath, "utf8");
-  const sections = fileData.split("##");
-  const interfaceSection = sections.find(section => section.toLowerCase().includes("interface"));
-
-  if (interfaceSection) {
-    return `${filePath} iface:\n${interfaceSection.trim().substring(10)}`;
-  } else {
-    return fileData;
+// Get the value of the --prompt flag, if it exists
+function getPromptFlag() {
+  const promptFlag = process.argv.find(arg => arg.startsWith("--prompt="));
+  if (promptFlag) {
+    return promptFlag.split("=")[1];
   }
 }
 
-
-src/attention/printFolderStructure.js:
-import fs from 'fs';
-import path from 'path';
-import util from 'util';
-
-const readdir = util.promisify(fs.readdir);
-const stat = util.promisify(fs.stat);
-
-export const printFolderStructure = async (rootDir, dir) => {
-  let structure = dir + '/\n';
-  try {
-    const entries = await readdir(path.join(rootDir, dir));
-    for (let i = 0; i < entries.length; i++) {
-      const entry = entries[i];
-      const entryStat = await stat(path.join(rootDir, dir, entry));
-      if (entryStat.isDirectory()) {
-        structure += '├── ' + entry + '/...\n';
-      } else {
-        structure += '├── ' + entry + '\n';
-      }
-    }
-    return structure;
-  } catch (error) {
-    console.warn(error);
-    throw new Error("Error processing directory structure!");
+// return the system prompt if the --system-prompt or -s flag is present
+async function getSystemPromptIfNeeded() {
+  if (process.argv.includes("--system-prompt") || process.argv.includes("-s")) {
+    return `${await getSystemPrompt()}\n`;
   }
-};
+  return "";
+}
+
+const createPrompt = async (userInput) => {
+  const promptDescriptor = yaml.load(await readFile(getPromptFlag() || "prompt/prompt-list.yaml", "utf8"));
+  const templateVars = Object.keys(promptDescriptor)
+    .filter(key => ['task', 'format', 'attention', 'saveto'].indexOf(key) < 0)
+    .reduce((obj, key) => {
+      obj[key] = promptDescriptor[key];
+      return obj;
+    }, {});
+
+  const attention = await readAttention(promptDescriptor.attention);
+  const task = await ejs.renderFile(promptDescriptor.task, templateVars, {async: true});
+  const format = await ejs.renderFile(promptDescriptor.format, templateVars, {async: true});
+  const system = await getSystemPromptIfNeeded();
+  const saveto = promptDescriptor.saveto;
+  return {
+    prompt: `${system}# Working set\n\n${attention.join("\n")}\n\n# Task\n\n${task}\n\n# Output Format\n\n${format}\n\n${userInput ? userInput : ""}`,
+    saveto
+  };
+}
+
+export { createPrompt };
+
+
+current_prompt.yaml:
+task: prompt/task/feature/implement.md
+format: prompt/format/new_file_version.md
+attention:
+  - src/interactiveSession/startInteractiveSession.js  
+  - src/prompt/createPrompt.js
+  - current_prompt.yaml
+saveto: current_prompt.md
+requirements: requirements.md
 
 
 
 # Task
 
-Clean the code by removing unused imports, functions, variables, files, etc!
+Implement the following feature!
 
+- Write a plan before the implementation!
+- Create new files when needed!
+- When a file is larger than 25 lines or can be splitted logically, split it!
+
+Requirements:
+
+When creating prompts from the yaml descriptor, injecting arbitrary values into the
+markdown files would be great! E.g. the "requirements" key is not parsed currently,
+but it would be nice for the implement.md (This markdown file injected into the current prompt) to allow us simply write ${requirements}
+in ES6 style.
+
+Notes:
+
+Idea: ejs is what we need. All uknown keys in the yaml should be made available for a ejs template.
+This template is used instead of the markdown files. The template, when filled out, reveals a markdown, which will be injected to the prompt.
+
+Test: requirements.md
 
 # Output Format
 
 Provide the new file(s) as code blocks, each prefixed with its path and a colon.
 Avoid any explanatory text, as your output will be programmatically processed!
 
-directories are now handled by printing them out. processPath should not process directories, only files, so it may be possible to completely eliminate it.

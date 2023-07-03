@@ -1,9 +1,8 @@
-task: prompt/task/refactor/remove_unused.md
+task: prompt/task/feature/implement.md
 format: prompt/format/new_file_version.md
 attention:
-  - src/attention/
-  - src/attention/readAttention.js
-  - src/attention/filesystem.js
-  - src/attention/processInterfaceSection.js
-  - src/attention/printFolderStructure.js
+  - src/interactiveSession/startInteractiveSession.js  
+  - src/prompt/createPrompt.js
+  - current_prompt.yaml
 saveto: current_prompt.md
+requirements: requirements.md
