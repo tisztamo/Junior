@@ -1,5 +1,7 @@
 import { createSignal } from 'solid-js';
 import { render } from 'solid-js/web';
+import copy from 'clipboard-copy';
+import { marked } from 'marked';
 
 const App = () => {
   const [notes, setNotes] = createSignal('');
@@ -13,7 +15,20 @@ const App = () => {
     });
 
     const data = await response.json();
-    setPrompt(data.prompt);
+
+    // Copy original markdown to clipboard
+    copy(data.prompt)
+      .then(() => {
+        console.log('Prompt copied to clipboard!');
+      })
+      .catch(err => {
+        console.error('Failed to copy prompt: ', err);
+      });
+
+    // Convert markdown to HTML for display
+    const htmlPrompt = marked(data.prompt);
+
+    setPrompt(htmlPrompt);
   };
 
   return (

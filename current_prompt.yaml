@@ -3,7 +3,6 @@ attention:
   - ./
   - src/server.js
   - src/frontend.jsx
-  - src/prompt/createPrompt.js
 requirements: >
-  
+  When the prompt arrives to the frontend, copy it to the clipboard.  
 format: prompt/format/shell.md
