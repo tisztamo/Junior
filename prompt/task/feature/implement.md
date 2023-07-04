@@ -1,11 +1,9 @@
 Implement the following feature!
 
-- Write a plan before the implementation!
+- Write a plan first, only implement after the plan is ready!
 - Create new files when needed!
-- When a file is larger than 25 lines or can be splitted logically, split it!
+- Every js js file should only export a single function!
 
 Requirements:
 
 <%= requirements %>
-
-Test: this should show the .gitignore in the prompt: <%= testkey %>

@@ -1,4 +1,4 @@
-import { processFile } from './filesystem.js';
+import { processFile } from './processFile.js';
 import { processInterfaceSection } from './processInterfaceSection.js';
 import { printFolderStructure } from './printFolderStructure.js';
 

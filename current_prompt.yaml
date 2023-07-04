@@ -1,9 +1,12 @@
 task: prompt/task/feature/implement.md
-format: prompt/format/new_file_version.md
 attention:
-  - src/prompt/createPrompt.js
-saveto: current_prompt.md
+  - src/attention/processFile.js
 requirements: >
-  When the value of an ejs variable in the prompt descriptor points to an existing a file,
-  the file is read and the content is used as the value of the variable.
-testkey: .gitignore
+  When printing the contents of a file in the attention, use markdown code blocks.
+  E.g.:
+  dir/sample.txt:
+  ```
+  This is the contents of the file.
+  ```
+  Also find a better name for filesystem.js!
+format: prompt/format/new_file_version.md
