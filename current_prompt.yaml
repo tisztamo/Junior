@@ -1,19 +1,16 @@
 task: prompt/task/feature/implement.md
 attention:
+  - ./
+  - package.json
   - src/interactiveSession/startInteractiveSession.js
-  - src/prompt/createPrompt.js
-  - src/attention/readAttention.js
-  - current_prompt.yaml
-  - prompt/system.md
 requirements: >
-  Write a README.md for this _exploratory_ project!
-  Project oneliner: Your AI contributor which writes itself.
-  The goal of the project is to allow the programmer to communicate only
-  with the AI, and only supervise the development process, similarly to
-  how Linus Thorwalds supervises the kernel development without writing code (mention this!).
+  We need a web interface in addition to the interactive session.
 
-  Describe the followings to the end user!
-    - What is the prompt descriptor (current_prompt.yaml, or specified by --prompt=myprompt.yaml),
-      and how it is used to generate a prompt. Provide a simple example yaml!
-    - How the attention mechanism works (files are printed, dirs listed)
-format: prompt/format/new_file_version.md
+  In the first version we will only have a single input field for the
+  user to enter their notes (it is errorneously called task in the interactive session).
+  When the start button is clicked, the prompt is generated and displayed to the user.
+
+  First, let's start with installing missing dependencies, configuring the
+  backend and solidjs frontend, vite bundling and creating the basic structure of the
+  webapp. An index.html is also needed.
+format: prompt/format/shell.md
