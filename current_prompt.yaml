@@ -1,19 +1,9 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/interactiveSession/startInteractiveSession.js
+  - ./
+  - src/server.js
+  - src/frontend.jsx
   - src/prompt/createPrompt.js
-  - src/attention/readAttention.js
-  - current_prompt.yaml
-  - prompt/system.md
 requirements: >
-  Write a README.md for this _exploratory_ project!
-  Project oneliner: Your AI contributor which writes itself.
-  The goal of the project is to allow the programmer to communicate only
-  with the AI, and only supervise the development process, similarly to
-  how Linus Thorwalds supervises the kernel development without writing code (mention this!).
-
-  Describe the followings to the end user!
-    - What is the prompt descriptor (current_prompt.yaml, or specified by --prompt=myprompt.yaml),
-      and how it is used to generate a prompt. Provide a simple example yaml!
-    - How the attention mechanism works (files are printed, dirs listed)
-format: prompt/format/new_file_version.md
+  
+format: prompt/format/shell.md

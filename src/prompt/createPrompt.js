@@ -10,7 +10,7 @@ import { extractTemplateVars } from './extractTemplateVars.js';
 const readFile = util.promisify(fs.readFile);
 
 const createPrompt = async (userInput) => {
-  const promptDescriptor = yaml.load(await readFile(getPromptFlag() || "prompt/prompt-list.yaml", "utf8"));
+  const promptDescriptor = yaml.load(await readFile(getPromptFlag() || "current_prompt.yaml", "utf8"));
   let templateVars = extractTemplateVars(promptDescriptor);
 
   templateVars = await resolveTemplateVariables(templateVars);
