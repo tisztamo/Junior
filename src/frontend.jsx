@@ -20,7 +20,7 @@ const App = () => {
     <>
       <input type="text" value={notes()} onInput={e => setNotes(e.target.value)} />
       <button onClick={generatePrompt}>Start</button>
-      <p>{prompt()}</p>
+      <div innerHTML={prompt()}></div>
     </>
   );
 };

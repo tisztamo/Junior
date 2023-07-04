@@ -1,16 +1,9 @@
 task: prompt/task/feature/implement.md
 attention:
   - ./
-  - package.json
-  - src/interactiveSession/startInteractiveSession.js
+  - src/server.js
+  - src/frontend.jsx
+  - src/prompt/createPrompt.js
 requirements: >
-  We need a web interface in addition to the interactive session.
-
-  In the first version we will only have a single input field for the
-  user to enter their notes (it is errorneously called task in the interactive session).
-  When the start button is clicked, the prompt is generated and displayed to the user.
-
-  First, let's start with installing missing dependencies, configuring the
-  backend and solidjs frontend, vite bundling and creating the basic structure of the
-  webapp. An index.html is also needed.
+  
 format: prompt/format/shell.md
