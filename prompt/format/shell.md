@@ -1,1 +1,3 @@
-A single shell script that creates everything is the preferred output
+A single shell script that creates everything.
+
+Assume Ubuntu. npm, nix, docker and jq are installed.
