@@ -1,13 +1,12 @@
-task: prompt/task/feature/implement.md
+task: prompt/task/refactor/split.md
 attention:
   - ./
   - src/
-  - src/frontend/App.jsx
+  - package.json
   - src/server.js
+  - src/servePromptDescriptor.js
 requirements: >
-  prompt.yaml should be displayed on the frontend.
-  For this:
-   - We need the backend to serve the file
-   - We need a new component which will display the file as verbatim text.
-    This component should be put before the notes input.
+  The backend needs its own directory.
+  Move server.js to it and split it into two.
+  Also move servePromptDescriptor.js.
 format: prompt/format/shell.md

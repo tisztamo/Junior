@@ -35,6 +35,7 @@ Other files are only listed in their dir, so you know they exists, ask for the c
 ```
 src/
 ├── attention/...
+├── backend/...
 ├── config.js
 ├── execute/...
 ├── frontend/...
@@ -42,95 +43,77 @@ src/
 ├── interactiveSession/...
 ├── main.js
 ├── prompt/...
-├── servePromptDescriptor.js
-├── server.js
 ├── utils/...
 ├── vite.config.js
 
 ```
-src/frontend/App.jsx:
+package.json:
 ```
-import { createSignal } from 'solid-js';
-import { marked } from 'marked';
-import copy from 'clipboard-copy';
-import { generatePrompt } from './generatePrompt';
-import PromptDescriptorViewer from './PromptDescriptorViewer';
-
-const App = () => {
-  const [notes, setNotes] = createSignal('');
-  const [prompt, setPrompt] = createSignal('');
-
-  const handleGeneratePrompt = async () => {
-    const response = await generatePrompt(notes());
-
-    copy(response.prompt)
-      .then(() => {
-        console.log('Prompt copied to clipboard!');
-      })
-      .catch(err => {
-        console.error('Failed to copy prompt: ', err);
-      });
-
-    const htmlPrompt = marked(response.prompt);
-
-    setPrompt(htmlPrompt);
-  };
-
-  return (
-    <>
-      <PromptDescriptorViewer />
-      <input type="text" value={notes()} onInput={e => setNotes(e.target.value)} />
-      <button onClick={handleGeneratePrompt}>Start</button>
-      <div innerHTML={prompt()}></div>
-    </>
-  );
-};
-
-export default App;
-
-```
-
-src/server.js:
-```
-import express from 'express';
-import cors from 'cors';
-import processPrompt from './prompt/promptProcessing.js';
-import { servePromptDescriptor } from './servePromptDescriptor.js';
-
-const app = express();
-
-app.use(cors());
-app.use(express.json());
-
-app.get('/descriptor', servePromptDescriptor);
-
-app.post('/generate', async (req, res) => {
-  const { notes } = req.body;
-  const { prompt } = await processPrompt(notes);
-  res.json({ prompt: prompt });
-});
-
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
-});
+{
+  "name": "gpcontrib",
+  "version": "0.0.1",
+  "description": "Build large documents with AI",
+  "type": "module",
+  "main": "src/main.js",
+  "bin": {
+    "contrib": "src/main.js"
+  },
+  "scripts": {
+    "cli": "node src/main.js",
+    "start": "node src/backend/server.js --prompt=prompt.yaml -s & vite src --open "
+  },
+  "keywords": [
+    "cli",
+    "uppercase"
+  ],
+  "author": "",
+  "license": "GPL",
+  "dependencies": {
+    "autoprefixer": "^10.4.14",
+    "chatgpt": "^5.2.4",
+    "clipboard-copy": "^4.0.1",
+    "cors": "^2.8.5",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "js-yaml": "^4.1.0",
+    "marked": "^5.1.0",
+    "postcss": "^8.4.24",
+    "solid-js": "^1.7.7",
+    "tailwindcss": "^3.3.2",
+    "vite": "^4.3.9",
+    "vite-plugin-solid": "^2.7.0"
+  },
+  "directories": {
+    "doc": "doc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tisztamo/contributor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tisztamo/contributor/issues"
+  },
+  "homepage": "https://github.com/tisztamo/contributor#readme",
+  "devDependencies": {
+    "babel-preset-solid": "^1.7.7"
+  }
+}
 
 ```
+
+src/server.js: err!
+
+src/servePromptDescriptor.js: err!
 
 
 # Task
 
-Implement the following feature!
+## Refactor by split
 
-- Write a plan first, only implement after the plan is ready!
-- Create new files when needed!
-- Every js js file should only export a single function!
+A file is too big. We need to split it into parts.
+Identify the possible parts and refactor the code in separate files!
 
-Requirements:
-
-prompt.yaml should be displayed on the frontend. For this:
- - We need the backend to serve the file
- - We need a new component which will display the file as verbatim text.
-  This component should be put before the notes input.
+The backend needs its own directory. Move server.js to it and split it into two. Also move servePromptDescriptor.js.
 
 
 
