@@ -18,10 +18,10 @@ Other files are only listed in their dir, so you know they exists, ask for the c
 ├── .vscode/...
 ├── README.md
 ├── babel.config.js
+├── change.sh
 ├── dist/...
 ├── doc/...
 ├── node_modules/...
-├── operation.sh
 ├── package-lock.json
 ├── package.json
 ├── prompt/...
@@ -32,72 +32,111 @@ Other files are only listed in their dir, so you know they exists, ask for the c
 ├── tmp/...
 
 ```
-src/prompt/createPrompt.js:
 ```
-import { readAttention } from "../attention/readAttention.js"
-import util from 'util';
-import fs from 'fs';
-import yaml from 'js-yaml';
-import ejs from 'ejs';
-import { getPromptFlag } from './getPromptFlag.js';
-import { getSystemPromptIfNeeded } from './getSystemPromptIfNeeded.js';
-import { resolveTemplateVariables } from './resolveTemplateVariables.js';
-import { extractTemplateVars } from './extractTemplateVars.js';
-const readFile = util.promisify(fs.readFile);
+src/
+├── attention/...
+├── config.js
+├── execute/...
+├── frontend/...
+├── index.html
+├── interactiveSession/...
+├── main.js
+├── prompt/...
+├── servePromptDescriptor.js
+├── server.js
+├── utils/...
+├── vite.config.js
 
-const createPrompt = async (userInput) => {
-  const promptDescriptor = yaml.load(await readFile(getPromptFlag() || "prompt.yaml", "utf8"));
-  let templateVars = extractTemplateVars(promptDescriptor);
+```
+src/frontend/App.jsx:
+```
+import { createSignal } from 'solid-js';
+import { marked } from 'marked';
+import copy from 'clipboard-copy';
+import { generatePrompt } from './generatePrompt';
+import PromptDescriptorViewer from './PromptDescriptorViewer';
 
-  templateVars = await resolveTemplateVariables(templateVars);
+const App = () => {
+  const [notes, setNotes] = createSignal('');
+  const [prompt, setPrompt] = createSignal('');
 
-  const attention = await readAttention(promptDescriptor.attention);
-  const task = await ejs.renderFile(promptDescriptor.task, templateVars, {async: true});
-  const format = await ejs.renderFile(promptDescriptor.format, templateVars, {async: true});
-  const system = await getSystemPromptIfNeeded();
-  const saveto = promptDescriptor.saveto;
-  return {
-    prompt: `${system}# Working set\n\n${attention.join("\n")}\n\n# Task\n\n${task}\n\n# Output Format\n\n${format}\n\n${userInput ? userInput : ""}`,
-    saveto
+  const handleGeneratePrompt = async () => {
+    const response = await generatePrompt(notes());
+
+    copy(response.prompt)
+      .then(() => {
+        console.log('Prompt copied to clipboard!');
+      })
+      .catch(err => {
+        console.error('Failed to copy prompt: ', err);
+      });
+
+    const htmlPrompt = marked(response.prompt);
+
+    setPrompt(htmlPrompt);
   };
-}
 
-export { createPrompt };
+  return (
+    <>
+      <PromptDescriptorViewer />
+      <input type="text" value={notes()} onInput={e => setNotes(e.target.value)} />
+      <button onClick={handleGeneratePrompt}>Start</button>
+      <div innerHTML={prompt()}></div>
+    </>
+  );
+};
+
+export default App;
 
 ```
 
-src/prompt/promptProcessing.js:
+src/server.js:
 ```
-import { createPrompt } from './createPrompt.js';
-import fs from 'fs/promises';
+import express from 'express';
+import cors from 'cors';
+import processPrompt from './prompt/promptProcessing.js';
+import { servePromptDescriptor } from './servePromptDescriptor.js';
 
-const processPrompt = async (task, last_command_result, saveto = 'prompt.md', parent_message_id = null) => {
-  const { prompt, saveto: newSaveto } = await createPrompt(task, last_command_result);
-  await fs.writeFile(newSaveto || saveto, prompt);
-  return { prompt, parent_message_id };
-}
+const app = express();
 
-export default processPrompt;
+app.use(cors());
+app.use(express.json());
+
+app.get('/descriptor', servePromptDescriptor);
+
+app.post('/generate', async (req, res) => {
+  const { notes } = req.body;
+  const { prompt } = await processPrompt(notes);
+  res.json({ prompt: prompt });
+});
+
+app.listen(3000, () => {
+  console.log('Server is running on port 3000');
+});
 
 ```
 
 
 # Task
 
-Rename the following files
+Implement the following feature!
 
-You need to follow dependencies to maintain coherence.
+- Write a plan first, only implement after the plan is ready!
+- Create new files when needed!
+- Every js js file should only export a single function!
 
-Before executing, write a concise plan! The plan should show:
- - How do you avoid breaking other parts of the code.
- - If you had to choose, your way of thinking.
+Requirements:
 
-current_prompt.yaml to prompt.yaml and current_prompt.md to prompt.md.
+prompt.yaml should be displayed on the frontend. For this:
+ - We need the backend to serve the file
+ - We need a new component which will display the file as verbatim text.
+  This component should be put before the notes input.
+
 
 
 # Output Format
 
-A single shell script that creates everything.
-
-Assume Ubuntu. npm, nix, docker and jq are installed.
+./change.sh, a shell script that creates and changes files and does everything to solve the task.
+Files should be heredoc.
+Assume OSX. npm and jq are installed.
 

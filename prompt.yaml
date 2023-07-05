@@ -1,8 +1,13 @@
-task: prompt/task/refactor/rename_file.md
+task: prompt/task/feature/implement.md
 attention:
   - ./
-  - src/prompt/createPrompt.js
-  - src/prompt/promptProcessing.js
+  - src/
+  - src/frontend/App.jsx
+  - src/server.js
 requirements: >
- current_prompt.yaml to prompt.yaml and current_prompt.md to prompt.md.
+  prompt.yaml should be displayed on the frontend.
+  For this:
+   - We need the backend to serve the file
+   - We need a new component which will display the file as verbatim text.
+    This component should be put before the notes input.
 format: prompt/format/shell.md
