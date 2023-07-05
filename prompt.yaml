@@ -1,0 +1,8 @@
+task: prompt/task/refactor/rename_file.md
+attention:
+  - ./
+  - src/prompt/createPrompt.js
+  - src/prompt/promptProcessing.js
+requirements: >
+ current_prompt.yaml to prompt.yaml and current_prompt.md to prompt.md.
+format: prompt/format/shell.md

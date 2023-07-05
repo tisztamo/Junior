@@ -8,7 +8,7 @@ The goal of this exploratory project is to allow programmers to communicate sole
 
 ### The Prompt Descriptor
 
-A prompt descriptor (current_prompt.yaml) is a YAML file that provides details necessary to generate a prompt for the AI model.
+A prompt descriptor (prompt.yaml) provides details necessary to generate a prompt for the AI model.
 
 For instance, here is an example of a prompt descriptor:
 
@@ -18,7 +18,7 @@ attention:
   - src/interactiveSession/startInteractiveSession.js
   - src/prompt/createPrompt.js
   - src/attention/readAttention.js
-  - current_prompt.yaml
+  - prompt.yaml
 requirements: >
   Write a README.md for this _exploratory_ project!
 format: prompt/format/new_file_version.md

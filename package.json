@@ -9,7 +9,7 @@
   },
   "scripts": {
     "cli": "node src/main.js",
-    "start": "node src/server.js --prompt=current_prompt.yaml -s & vite src --open "
+    "start": "node src/server.js --prompt=prompt.yaml -s & vite src --open "
   },
   "keywords": [
     "cli",
