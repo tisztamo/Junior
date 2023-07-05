@@ -1,3 +1,3 @@
-A single shell script that creates everything.
-
-Assume Ubuntu. npm, nix, docker and jq are installed.
+change.sh, a shell script that creates everything.
+Files should be heredoc.
+Assume OSX. npm and jq are installed.
