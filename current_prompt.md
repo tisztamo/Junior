@@ -10,6 +10,7 @@ Other files are only listed in their dir, so you know they exists, ask for the c
 
 # Working set
 
+```
 ./
 ├── .DS_Store
 ├── .git/...
@@ -29,30 +30,23 @@ Other files are only listed in their dir, so you know they exists, ask for the c
 ├── src/...
 ├── tmp/...
 
-src/server.js:
 ```
-import express from 'express';
-import cors from 'cors';
-import processPrompt from './prompt/promptProcessing.js';
-
-const app = express();
-
-app.use(cors());
-app.use(express.json());
-
-app.post('/generate', async (req, res) => {
-  const { notes } = req.body;
-  const { prompt } = await processPrompt(notes);
-  // Return original markdown
-  res.json({ prompt: prompt });
-});
-
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
-});
+```
+src/
+├── attention/...
+├── config.js
+├── execute/...
+├── frontend/...
+├── frontend.jsx
+├── index.html
+├── interactiveSession/...
+├── main.js
+├── prompt/...
+├── server.js
+├── utils/...
+├── vite.config.js
 
 ```
-
 src/frontend.jsx:
 ```
 import { createSignal } from 'solid-js';
@@ -101,22 +95,45 @@ render(App, document.getElementById('app'));
 
 ```
 
+src/index.html:
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Contributor</title>
+</head>
+<body>
+  <div id="app"></div>
+  <script type="module" src="/frontend/index.jsx"></script>
+</body>
+</html>
+
+```
+
 
 # Task
 
-Implement the following feature!
+## Refactor by split
 
-- Write a plan first, only implement after the plan is ready!
-- Create new files when needed!
-- Every js js file should only export a single function!
+A file is too big. We need to split it into parts.
+Identify the possible parts and refactor the code in separate files!
 
-Requirements:
-
-When the prompt arrives to the frontend, copy it to the clipboard.  
+Create a new folder &#34;src/frontend&#34;, and move the frontend.jsx to it. Also split the file logically.
 
 
 
 # Output Format
 
-A single shell script that creates everything is the preferred output
+Provide the new or modified file(s) as code blocks, each prefixed with its path and a colon.
+JS files should only export a single function and be named after the function: e.g. `myFn.js` should export `myFn()`.
+Always output full files, copying unchanged content.
+
+E.g.:
+
+texts/sample.txt:
+```
+A sample text file.
+```
+
 
