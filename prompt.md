@@ -33,6 +33,13 @@ Other files are only listed in their dir, so you know they exists, ask for the c
 
 ```
 ```
+prompt/
+├── format/...
+├── system.md
+├── task/...
+
+```
+```
 src/
 ├── attention/...
 ├── backend/...
@@ -47,73 +54,96 @@ src/
 ├── vite.config.js
 
 ```
-package.json:
+src/backend/server.js:
 ```
-{
-  "name": "gpcontrib",
-  "version": "0.0.1",
-  "description": "Build large documents with AI",
-  "type": "module",
-  "main": "src/main.js",
-  "bin": {
-    "contrib": "src/main.js"
-  },
-  "scripts": {
-    "cli": "node src/main.js",
-    "start": "node src/backend/server.js --prompt=prompt.yaml -s & vite src --open "
-  },
-  "keywords": [
-    "cli",
-    "uppercase"
-  ],
-  "author": "",
-  "license": "GPL",
-  "dependencies": {
-    "autoprefixer": "^10.4.14",
-    "chatgpt": "^5.2.4",
-    "clipboard-copy": "^4.0.1",
-    "cors": "^2.8.5",
-    "ejs": "^3.1.9",
-    "express": "^4.18.2",
-    "js-yaml": "^4.1.0",
-    "marked": "^5.1.0",
-    "postcss": "^8.4.24",
-    "solid-js": "^1.7.7",
-    "tailwindcss": "^3.3.2",
-    "vite": "^4.3.9",
-    "vite-plugin-solid": "^2.7.0"
-  },
-  "directories": {
-    "doc": "doc"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/tisztamo/contributor.git"
-  },
-  "bugs": {
-    "url": "https://github.com/tisztamo/contributor/issues"
-  },
-  "homepage": "https://github.com/tisztamo/contributor#readme",
-  "devDependencies": {
-    "babel-preset-solid": "^1.7.7"
-  }
-}
+import express from 'express';
+import cors from 'cors';
+import { generateHandler, descriptorHandler } from './handlers.js';
+
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+
+app.get('/descriptor', descriptorHandler);
+
+app.post('/generate', generateHandler);
+
+app.listen(3000, () => {
+  console.log('Server is running on port 3000');
+});
 
 ```
 
-src/server.js: err!
+src/backend/handlers.js:
+```
+import processPrompt from '../prompt/promptProcessing.js';
+import { servePromptDescriptor } from './servePromptDescriptor.js';
 
-src/servePromptDescriptor.js: err!
+export const generateHandler = async (req, res) => {
+  const { notes } = req.body;
+  const { prompt } = await processPrompt(notes);
+  res.json({ prompt: prompt });
+};
+
+export const descriptorHandler = servePromptDescriptor;
+
+```
+
+src/frontend/App.jsx:
+```
+import { createSignal } from 'solid-js';
+import { marked } from 'marked';
+import copy from 'clipboard-copy';
+import { generatePrompt } from './generatePrompt';
+import PromptDescriptorViewer from './PromptDescriptorViewer';
+
+const App = () => {
+  const [notes, setNotes] = createSignal('');
+  const [prompt, setPrompt] = createSignal('');
+
+  const handleGeneratePrompt = async () => {
+    const response = await generatePrompt(notes());
+
+    copy(response.prompt)
+      .then(() => {
+        console.log('Prompt copied to clipboard!');
+      })
+      .catch(err => {
+        console.error('Failed to copy prompt: ', err);
+      });
+
+    const htmlPrompt = marked(response.prompt);
+
+    setPrompt(htmlPrompt);
+  };
+
+  return (
+    <>
+      <PromptDescriptorViewer />
+      <input type="text" value={notes()} onInput={e => setNotes(e.target.value)} />
+      <button onClick={handleGeneratePrompt}>Start</button>
+      <div innerHTML={prompt()}></div>
+    </>
+  );
+};
+
+export default App;
+
+```
 
 
 # Task
 
-## Refactor by split
+Implement the following feature!
 
-A file is too big. We need to split it into parts.
-Identify the possible parts and refactor the code in separate files!
+- Write a plan first, only implement after the plan is ready!
+- Create new files when needed!
+- Every js js file should only export a single function!
 
-The backend needs its own directory. Move server.js to it and split it into two. Also move servePromptDescriptor.js.
+Requirements:
+
+We need a way to select the task. The server should serve a list of tasks on a new endpoint, based on what it finds in the prompt/task directory recursively (list of relative paths). The client should display the list of tasks and allow the user to select one.
 
 
 

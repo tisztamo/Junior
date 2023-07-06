@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import { generateHandler, descriptorHandler } from './handlers.js';
+import { listTasks } from './listTasks.js';
 
 const app = express();
 
@@ -8,6 +9,7 @@ app.use(cors());
 app.use(express.json());
 
 app.get('/descriptor', descriptorHandler);
+app.get('/tasks', (req, res) => res.json({ tasks: listTasks() }));
 
 app.post('/generate', generateHandler);
 

@@ -1,12 +1,13 @@
-task: prompt/task/refactor/split.md
+task: prompt/task/feature/implement.md
 attention:
   - ./
+  - prompt/
   - src/
-  - package.json
-  - src/server.js
-  - src/servePromptDescriptor.js
+  - src/backend/server.js
+  - src/backend/handlers.js
+  - src/frontend/App.jsx
 requirements: >
-  The backend needs its own directory.
-  Move server.js to it and split it into two.
-  Also move servePromptDescriptor.js.
+  We need a way to select the task.
+  The server should serve a list of tasks on a new endpoint, based on what it finds in the prompt/task directory recursively (list of relative paths).
+  The client should display the list of tasks and allow the user to select one.
 format: prompt/format/shell.md

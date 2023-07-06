@@ -2,11 +2,13 @@ import { createSignal } from 'solid-js';
 import { marked } from 'marked';
 import copy from 'clipboard-copy';
 import { generatePrompt } from './generatePrompt';
+import { fetchTasks } from './fetchTasks';
 import PromptDescriptorViewer from './PromptDescriptorViewer';
 
 const App = () => {
   const [notes, setNotes] = createSignal('');
   const [prompt, setPrompt] = createSignal('');
+  const tasks = fetchTasks();
 
   const handleGeneratePrompt = async () => {
     const response = await generatePrompt(notes());
@@ -30,6 +32,12 @@ const App = () => {
       <input type="text" value={notes()} onInput={e => setNotes(e.target.value)} />
       <button onClick={handleGeneratePrompt}>Start</button>
       <div innerHTML={prompt()}></div>
+      <div>
+        <label>Tasks:</label>
+        <select>
+          {tasks().map(task => <option value={task}>{task}</option>)}
+        </select>
+      </div>
     </>
   );
 };
