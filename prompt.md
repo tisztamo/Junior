@@ -33,13 +33,6 @@ Other files are only listed in their dir, so you know they exists, ask for the c
 
 ```
 ```
-prompt/
-├── format/...
-├── system.md
-├── task/...
-
-```
-```
 src/
 ├── attention/...
 ├── backend/...
@@ -54,76 +47,36 @@ src/
 ├── vite.config.js
 
 ```
-src/backend/server.js:
 ```
-import express from 'express';
-import cors from 'cors';
-import { generateHandler, descriptorHandler } from './handlers.js';
-
-const app = express();
-
-app.use(cors());
-app.use(express.json());
-
-app.get('/descriptor', descriptorHandler);
-
-app.post('/generate', generateHandler);
-
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
-});
+src/frontend/
+├── App.jsx
+├── PromptDescriptorViewer.jsx
+├── components/...
+├── fetchTasks.js
+├── generatePrompt.js
+├── index.jsx
 
 ```
-
-src/backend/handlers.js:
-```
-import processPrompt from '../prompt/promptProcessing.js';
-import { servePromptDescriptor } from './servePromptDescriptor.js';
-
-export const generateHandler = async (req, res) => {
-  const { notes } = req.body;
-  const { prompt } = await processPrompt(notes);
-  res.json({ prompt: prompt });
-};
-
-export const descriptorHandler = servePromptDescriptor;
-
-```
-
 src/frontend/App.jsx:
 ```
 import { createSignal } from 'solid-js';
-import { marked } from 'marked';
-import copy from 'clipboard-copy';
-import { generatePrompt } from './generatePrompt';
 import PromptDescriptorViewer from './PromptDescriptorViewer';
+import NotesInput from './components/NotesInput';
+import StartButton from './components/StartButton';
+import PromptDisplay from './components/PromptDisplay';
+import TasksList from './components/TasksList';
 
 const App = () => {
   const [notes, setNotes] = createSignal('');
   const [prompt, setPrompt] = createSignal('');
 
-  const handleGeneratePrompt = async () => {
-    const response = await generatePrompt(notes());
-
-    copy(response.prompt)
-      .then(() => {
-        console.log('Prompt copied to clipboard!');
-      })
-      .catch(err => {
-        console.error('Failed to copy prompt: ', err);
-      });
-
-    const htmlPrompt = marked(response.prompt);
-
-    setPrompt(htmlPrompt);
-  };
-
   return (
     <>
       <PromptDescriptorViewer />
-      <input type="text" value={notes()} onInput={e => setNotes(e.target.value)} />
-      <button onClick={handleGeneratePrompt}>Start</button>
-      <div innerHTML={prompt()}></div>
+      <NotesInput notes={notes} setNotes={setNotes} />
+      <StartButton notes={notes} setPrompt={setPrompt} />
+      <PromptDisplay prompt={prompt} />
+      <TasksList />
     </>
   );
 };
@@ -135,15 +88,12 @@ export default App;
 
 # Task
 
-Implement the following feature!
+## Refactor by split
 
-- Write a plan first, only implement after the plan is ready!
-- Create new files when needed!
-- Every js js file should only export a single function!
+A file is too big. We need to split it into parts.
+Identify the possible parts and refactor the code in separate files!
 
-Requirements:
-
-We need a way to select the task. The server should serve a list of tasks on a new endpoint, based on what it finds in the prompt/task directory recursively (list of relative paths). The client should display the list of tasks and allow the user to select one.
+App.jsx is the file. We also need to stop the growth of it!
 
 
 

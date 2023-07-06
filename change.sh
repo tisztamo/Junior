@@ -1,80 +1,30 @@
 #!/bin/bash
 
-cat > ./src/backend/listTasks.js << EOF
-import fs from 'fs';
-import path from 'path';
+# Ensure the frontend/components directory exists
+mkdir -p ./src/frontend/components
 
-function readDirRecursively(dir) {
-    const files = [];
-
-    fs.readdirSync(dir).forEach(file => {
-        const filePath = path.join(dir, file);
-
-        if (fs.statSync(filePath).isDirectory()) {
-            files.push(...readDirRecursively(filePath));
-        } else {
-            files.push(filePath);
-        }
-    });
-
-    return files;
-}
-
-export const listTasks = () => {
-    const tasksDir = path.join(__dirname, '../../prompt/task');
-    return readDirRecursively(tasksDir).map(file => path.relative(tasksDir, file));
-};
-EOF
-
-cat > ./src/backend/server.js << EOF
-import express from 'express';
-import cors from 'cors';
-import { generateHandler, descriptorHandler } from './handlers.js';
-import { listTasks } from './listTasks.js';
-
-const app = express();
-
-app.use(cors());
-app.use(express.json());
-
-app.get('/descriptor', descriptorHandler);
-app.get('/tasks', (req, res) => res.json({ tasks: listTasks() }));
-
-app.post('/generate', generateHandler);
-
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
-});
-EOF
-
-cat > ./src/frontend/fetchTasks.js << EOF
+# Create the NotesInput component
+cat > ./src/frontend/components/NotesInput.jsx << EOL
 import { createSignal } from 'solid-js';
 
-export const fetchTasks = async () => {
-    const [tasks, setTasks] = createSignal([]);
-
-    const response = await fetch('/tasks');
-    const data = await response.json();
-    
-    setTasks(data.tasks);
-
-    return tasks;
+const NotesInput = () => {
+  const [notes, setNotes] = createSignal('');
+  
+  return (
+    <input type="text" value={notes()} onInput={e => setNotes(e.target.value)} />
+  );
 };
-EOF
 
-cat > ./src/frontend/App.jsx << EOF
-import { createSignal } from 'solid-js';
+export default NotesInput;
+EOL
+
+# Create the StartButton component
+cat > ./src/frontend/components/StartButton.jsx << EOL
+import { generatePrompt } from '../generatePrompt';
 import { marked } from 'marked';
 import copy from 'clipboard-copy';
-import { generatePrompt } from './generatePrompt';
-import { fetchTasks } from './fetchTasks';
-import PromptDescriptorViewer from './PromptDescriptorViewer';
 
-const App = () => {
-  const [notes, setNotes] = createSignal('');
-  const [prompt, setPrompt] = createSignal('');
-  const tasks = fetchTasks();
-
+const StartButton = ({notes, setPrompt}) => {
   const handleGeneratePrompt = async () => {
     const response = await generatePrompt(notes());
 
@@ -92,20 +42,68 @@ const App = () => {
   };
 
   return (
+    <button onClick={handleGeneratePrompt}>Start</button>
+  );
+};
+
+export default StartButton;
+EOL
+
+# Create the PromptDisplay component
+cat > ./src/frontend/components/PromptDisplay.jsx << EOL
+const PromptDisplay = ({prompt}) => {
+  return (
+    <div innerHTML={prompt()}></div>
+  );
+};
+
+export default PromptDisplay;
+EOL
+
+# Create the TasksList component
+cat > ./src/frontend/components/TasksList.jsx << EOL
+import { fetchTasks } from '../fetchTasks';
+
+const TasksList = () => {
+  const tasks = fetchTasks();
+
+  return (
+    <div>
+      <label>Tasks:</label>
+      <select>
+        {tasks().map(task => <option value={task}>{task}</option>)}
+      </select>
+    </div>
+  );
+};
+
+export default TasksList;
+EOL
+
+# Update the App.jsx file to use the new components
+cat > ./src/frontend/App.jsx << EOL
+import { createSignal } from 'solid-js';
+import PromptDescriptorViewer from './PromptDescriptorViewer';
+import NotesInput from './components/NotesInput';
+import StartButton from './components/StartButton';
+import PromptDisplay from './components/PromptDisplay';
+import TasksList from './components/TasksList';
+
+const App = () => {
+  const [notes, setNotes] = createSignal('');
+  const [prompt, setPrompt] = createSignal('');
+
+  return (
     <>
       <PromptDescriptorViewer />
-      <input type="text" value={notes()} onInput={e => setNotes(e.target.value)} />
-      <button onClick={handleGeneratePrompt}>Start</button>
-      <div innerHTML={prompt()}></div>
-      <div>
-        <label>Tasks:</label>
-        <select>
-          {tasks().map(task => <option value={task}>{task}</option>)}
-        </select>
-      </div>
+      <NotesInput notes={notes} setNotes={setNotes} />
+      <StartButton notes={notes} setPrompt={setPrompt} />
+      <PromptDisplay prompt={prompt} />
+      <TasksList />
     </>
   );
 };
 
 export default App;
-EOF
+EOL
+

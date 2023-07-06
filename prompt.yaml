@@ -1,13 +1,9 @@
-task: prompt/task/feature/implement.md
+task: prompt/task/refactor/split.md
 attention:
   - ./
-  - prompt/
   - src/
-  - src/backend/server.js
-  - src/backend/handlers.js
+  - src/frontend/
   - src/frontend/App.jsx
 requirements: >
-  We need a way to select the task.
-  The server should serve a list of tasks on a new endpoint, based on what it finds in the prompt/task directory recursively (list of relative paths).
-  The client should display the list of tasks and allow the user to select one.
+  App.jsx is the file. We also need to stop the growth of it!
 format: prompt/format/shell.md
