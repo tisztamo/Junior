@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { generateHandler, descriptorHandler } from './handlers.js';
+import { generateHandler, descriptorHandler, taskUpdateHandler } from './handlers.js';
 import { listTasks } from './listTasks.js';
 
 const app = express();
@@ -12,6 +12,7 @@ app.get('/descriptor', descriptorHandler);
 app.get('/tasks', (req, res) => res.json({ tasks: listTasks() }));
 
 app.post('/generate', generateHandler);
+app.post('/updatetask', taskUpdateHandler);
 
 app.listen(3000, () => {
   console.log('Server is running on port 3000');

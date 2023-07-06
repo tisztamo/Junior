@@ -1,9 +1,8 @@
-task: prompt/task/refactor/split.md
+task: refactor/general.md
 attention:
   - ./
   - src/
-  - src/frontend/
-  - src/frontend/App.jsx
+  - src/frontend/PromptDescriptorViewer.jsx
+  - src/frontend/components/TasksList.jsx
 requirements: >
-  App.jsx is the file. We also need to stop the growth of it!
 format: prompt/format/shell.md
