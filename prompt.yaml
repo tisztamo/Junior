@@ -1,8 +1,8 @@
-task: refactor/general.md
+task: prompt/task/refactor/general.md
 attention:
   - ./
   - src/
   - src/frontend/PromptDescriptorViewer.jsx
   - src/frontend/components/TasksList.jsx
-requirements: >
+requirements: ''
 format: prompt/format/shell.md

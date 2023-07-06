@@ -1,5 +1,5 @@
 import { createSignal } from 'solid-js';
-import PromptDescriptorViewer from './PromptDescriptorViewer';
+import PromptDescriptorViewer from './components/PromptDescriptorViewer'; // updated this line
 import NotesInput from './components/NotesInput';
 import StartButton from './components/StartButton';
 import PromptDisplay from './components/PromptDisplay';

@@ -1,11 +1,11 @@
 import { createSignal, onMount } from 'solid-js';
+import { fetchDescriptor } from '../service/fetchDescriptor';
 
 const PromptDescriptorViewer = () => {
   const [descriptorContent, setDescriptorContent] = createSignal('');
 
   onMount(async () => {
-    const response = await fetch('http://localhost:3000/descriptor');
-    const text = await response.text();
+    const text = await fetchDescriptor();
     setDescriptorContent(text);
   });
 
