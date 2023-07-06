@@ -47,7 +47,27 @@ src/
 ├── vite.config.js
 
 ```
-src/frontend/PromptDescriptorViewer.jsx: err!
+src/frontend/components/PromptDescriptorViewer.jsx:
+```
+import { createSignal, onMount } from 'solid-js';
+import { fetchDescriptor } from '../service/fetchDescriptor';
+
+const PromptDescriptorViewer = () => {
+  const [descriptorContent, setDescriptorContent] = createSignal('');
+
+  onMount(async () => {
+    const text = await fetchDescriptor();
+    setDescriptorContent(text);
+  });
+
+  return (
+    <pre>{descriptorContent()}</pre>
+  );
+};
+
+export default PromptDescriptorViewer;
+
+```
 
 src/frontend/components/TasksList.jsx:
 ```
@@ -55,14 +75,23 @@ import { createSignal, onCleanup, onMount } from 'solid-js';
 import { fetchTasks } from '../fetchTasks';
 import { handleTaskChange } from '../service/handleTaskChange';
 import { fetchDescriptor } from '../service/fetchDescriptor';
+import YAML from 'yaml';
 
 const TasksList = () => {
   const tasks = fetchTasks();
   const [promptDescriptor, setPromptDescriptor] = createSignal('');
+  const [selectedTask, setSelectedTask] = createSignal('');
+
+  const parseYamlAndGetTask = (yamlString) => {
+    const doc = YAML.parse(yamlString);
+    return doc.task;
+  };
 
   onMount(async () => {
     const text = await fetchDescriptor();
+    const task = parseYamlAndGetTask(text);
     setPromptDescriptor(text);
+    setSelectedTask(task);
   });
 
   onCleanup(() => {
@@ -71,8 +100,8 @@ const TasksList = () => {
 
   return (
     <div>
-      <label>Tasks:</label>
-      <select onChange={e => handleTaskChange(e, setPromptDescriptor)}>
+      <label>Task:</label>
+      <select value={selectedTask()} onChange={e => handleTaskChange(e, setPromptDescriptor)}>
         {tasks().map(task => <option value={task}>{task}</option>)}
       </select>
       <pre>{promptDescriptor()}</pre>
@@ -84,12 +113,32 @@ export default TasksList;
 
 ```
 
+src/frontend/service/fetchDescriptor.js:
+```
+export const fetchDescriptor = async () => {
+  const response = await fetch('http://localhost:3000/descriptor');
+  const text = await response.text();
+  return text;
+};
+
+```
+
 
 # Task
 
-First, please write a concise description aka Summary of this pitch deck!
-Then think about how to organize the pitch deck.
-Please come up with 7 slides!
+Implement the following feature!
+
+- Write a plan first, only implement after the plan is ready!
+- Create new files when needed!
+- Every js js file should only export a single function!
+
+Requirements:
+
+- After page open the task selector should show the task that is currently
+  selected. It can be read out from the prompt descriptor, which is a yaml with a task attrobute.
+- And the label should be &#34;Task:&#34;.
+
+
 
 # Output Format
 

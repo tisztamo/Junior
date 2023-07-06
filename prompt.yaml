@@ -1,8 +1,12 @@
-task: prompt/task/refactor/general.md
+task: prompt/task/feature/implement.md
 attention:
   - ./
   - src/
-  - src/frontend/PromptDescriptorViewer.jsx
+  - src/frontend/components/PromptDescriptorViewer.jsx
   - src/frontend/components/TasksList.jsx
-requirements: ''
+  - src/frontend/service/fetchDescriptor.js
+requirements: |
+  - After page open the task selector should show the task that is currently
+    selected. It can be read out from the prompt descriptor, which is a yaml with a task attrobute.
+  - And the label should be "Task:".
 format: prompt/format/shell.md

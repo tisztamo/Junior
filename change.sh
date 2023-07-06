@@ -1,53 +1,28 @@
 #!/bin/bash
 
-# Creating directory for api services
-mkdir -p src/frontend/service
-
-# Creating fetchDescriptor.js in service directory
-cat << EOF > src/frontend/service/fetchDescriptor.js
-export const fetchDescriptor = async () => {
-  const response = await fetch('http://localhost:3000/descriptor');
-  const text = await response.text();
-  return text;
-};
-EOF
-
-# handleTaskChange.js refactor and move to service directory
-cat << EOF > src/frontend/service/handleTaskChange.js
-import { fetchDescriptor } from './fetchDescriptor';
-
-export const handleTaskChange = async (e, setPromptDescriptor) => {
-  const selectedTask = e.target.value;
-
-  const response = await fetch('http://localhost:3000/updatetask', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ task: selectedTask })
-  });
-
-  if (response.ok) {
-    const text = await fetchDescriptor();
-    setPromptDescriptor(text);
-  }
-};
-EOF
-
-# TasksList.jsx refactor with updated import paths
-cat << EOF > src/frontend/components/TasksList.jsx
+# Modify TasksList.jsx to include a function for parsing yaml and setting initial task.
+cat << EOF > ./src/frontend/components/TasksList.jsx
 import { createSignal, onCleanup, onMount } from 'solid-js';
 import { fetchTasks } from '../fetchTasks';
 import { handleTaskChange } from '../service/handleTaskChange';
 import { fetchDescriptor } from '../service/fetchDescriptor';
+import YAML from 'yaml';
 
 const TasksList = () => {
   const tasks = fetchTasks();
   const [promptDescriptor, setPromptDescriptor] = createSignal('');
+  const [selectedTask, setSelectedTask] = createSignal('');
+
+  const parseYamlAndGetTask = (yamlString) => {
+    const doc = YAML.parse(yamlString);
+    return doc.task;
+  };
 
   onMount(async () => {
     const text = await fetchDescriptor();
+    const task = parseYamlAndGetTask(text);
     setPromptDescriptor(text);
+    setSelectedTask(task);
   });
 
   onCleanup(() => {
@@ -56,8 +31,8 @@ const TasksList = () => {
 
   return (
     <div>
-      <label>Tasks:</label>
-      <select onChange={e => handleTaskChange(e, setPromptDescriptor)}>
+      <label>Task:</label>
+      <select value={selectedTask()} onChange={e => handleTaskChange(e, setPromptDescriptor)}>
         {tasks().map(task => <option value={task}>{task}</option>)}
       </select>
       <pre>{promptDescriptor()}</pre>
@@ -68,51 +43,8 @@ const TasksList = () => {
 export default TasksList;
 EOF
 
-# PromptDescriptorViewer.jsx refactor with updated import paths
-cat << EOF > src/frontend/components/PromptDescriptorViewer.jsx
-import { createSignal, onMount } from 'solid-js';
-import { fetchDescriptor } from '../service/fetchDescriptor';
+# Modify TasksList.jsx to update the label
+sed -i '' 's/label>Tasks:/label>Task:/' ./src/frontend/components/TasksList.jsx
 
-const PromptDescriptorViewer = () => {
-  const [descriptorContent, setDescriptorContent] = createSignal('');
-
-  onMount(async () => {
-    const text = await fetchDescriptor();
-    setDescriptorContent(text);
-  });
-
-  return (
-    <pre>{descriptorContent()}</pre>
-  );
-};
-
-export default PromptDescriptorViewer;
-EOF
-
-#!/bin/bash
-
-cat << EOF > src/frontend/App.jsx
-import { createSignal } from 'solid-js';
-import PromptDescriptorViewer from './components/PromptDescriptorViewer'; // updated this line
-import NotesInput from './components/NotesInput';
-import StartButton from './components/StartButton';
-import PromptDisplay from './components/PromptDisplay';
-import TasksList from './components/TasksList';
-
-const App = () => {
-  const [notes, setNotes] = createSignal('');
-  const [prompt, setPrompt] = createSignal('');
-
-  return (
-    <>
-      <PromptDescriptorViewer />
-      <NotesInput notes={notes} setNotes={setNotes} />
-      <StartButton notes={notes} setPrompt={setPrompt} />
-      <PromptDisplay prompt={prompt} />
-      <TasksList />
-    </>
-  );
-};
-
-export default App;
-EOF
+# Run npm install to update the dependencies
+npm install
