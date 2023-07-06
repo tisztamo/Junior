@@ -17,7 +17,7 @@ export const updateTaskHandler = async (req, res) => {
     const document = yaml.load(fileContent);
 
     // assuming 'task' is a field in the yaml document
-    document.task = task;
+    document.task = path.join("prompt/", task);
 
     const newYamlStr = yaml.dump(document);
     await writeFile(filePath, newYamlStr, 'utf-8');
