@@ -47,73 +47,96 @@ src/
 ├── vite.config.js
 
 ```
-package.json:
+src/frontend/components/PromptDescriptorViewer.jsx:
 ```
-{
-  "name": "gpcontrib",
-  "version": "0.0.1",
-  "description": "Build large documents with AI",
-  "type": "module",
-  "main": "src/main.js",
-  "bin": {
-    "contrib": "src/main.js"
-  },
-  "scripts": {
-    "cli": "node src/main.js",
-    "start": "node src/backend/server.js --prompt=prompt.yaml -s & vite src --open "
-  },
-  "keywords": [
-    "cli",
-    "uppercase"
-  ],
-  "author": "",
-  "license": "GPL",
-  "dependencies": {
-    "autoprefixer": "^10.4.14",
-    "chatgpt": "^5.2.4",
-    "clipboard-copy": "^4.0.1",
-    "cors": "^2.8.5",
-    "ejs": "^3.1.9",
-    "express": "^4.18.2",
-    "js-yaml": "^4.1.0",
-    "marked": "^5.1.0",
-    "postcss": "^8.4.24",
-    "solid-js": "^1.7.7",
-    "tailwindcss": "^3.3.2",
-    "vite": "^4.3.9",
-    "vite-plugin-solid": "^2.7.0"
-  },
-  "directories": {
-    "doc": "doc"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/tisztamo/contributor.git"
-  },
-  "bugs": {
-    "url": "https://github.com/tisztamo/contributor/issues"
-  },
-  "homepage": "https://github.com/tisztamo/contributor#readme",
-  "devDependencies": {
-    "babel-preset-solid": "^1.7.7"
-  }
-}
+import { createSignal, onMount } from 'solid-js';
+import { fetchDescriptor } from '../service/fetchDescriptor';
+
+const PromptDescriptorViewer = () => {
+  const [descriptorContent, setDescriptorContent] = createSignal('');
+
+  onMount(async () => {
+    const text = await fetchDescriptor();
+    setDescriptorContent(text);
+  });
+
+  return (
+    <pre>{descriptorContent()}</pre>
+  );
+};
+
+export default PromptDescriptorViewer;
 
 ```
 
-src/server.js: err!
+src/frontend/components/TasksList.jsx:
+```
+import { createSignal, onCleanup, onMount } from 'solid-js';
+import { fetchTasks } from '../fetchTasks';
+import { handleTaskChange } from '../service/handleTaskChange';
+import { fetchDescriptor } from '../service/fetchDescriptor';
+import YAML from 'yaml';
 
-src/servePromptDescriptor.js: err!
+const TasksList = () => {
+  const tasks = fetchTasks();
+  const [promptDescriptor, setPromptDescriptor] = createSignal('');
+  const [selectedTask, setSelectedTask] = createSignal('');
+
+  const parseYamlAndGetTask = (yamlString) => {
+    const doc = YAML.parse(yamlString);
+    return doc.task;
+  };
+
+  onMount(async () => {
+    const text = await fetchDescriptor();
+    const task = parseYamlAndGetTask(text);
+    setPromptDescriptor(text);
+    setSelectedTask(task);
+  });
+
+  onCleanup(() => {
+    setPromptDescriptor('');
+  });
+
+  return (
+    <div>
+      <label>Task:</label>
+      <select value={selectedTask()} onChange={e => handleTaskChange(e, setPromptDescriptor)}>
+        {tasks().map(task => <option value={task}>{task}</option>)}
+      </select>
+      <pre>{promptDescriptor()}</pre>
+    </div>
+  );
+};
+
+export default TasksList;
+
+```
+
+src/frontend/service/fetchDescriptor.js:
+```
+export const fetchDescriptor = async () => {
+  const response = await fetch('http://localhost:3000/descriptor');
+  const text = await response.text();
+  return text;
+};
+
+```
 
 
 # Task
 
-## Refactor by split
+Implement the following feature!
 
-A file is too big. We need to split it into parts.
-Identify the possible parts and refactor the code in separate files!
+- Write a plan first, only implement after the plan is ready!
+- Create new files when needed!
+- Every js js file should only export a single function!
 
-The backend needs its own directory. Move server.js to it and split it into two. Also move servePromptDescriptor.js.
+Requirements:
+
+- After page open the task selector should show the task that is currently
+  selected. It can be read out from the prompt descriptor, which is a yaml with a task attrobute.
+- And the label should be &#34;Task:&#34;.
 
 
 

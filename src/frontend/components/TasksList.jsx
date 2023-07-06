@@ -1,7 +1,3 @@
-#!/bin/bash
-
-# Modify TasksList.jsx to include a function for parsing yaml and setting initial task.
-cat << EOF > ./src/frontend/components/TasksList.jsx
 import { createSignal, onCleanup, onMount } from 'solid-js';
 import { fetchTasks } from '../fetchTasks';
 import { handleTaskChange } from '../service/handleTaskChange';
@@ -41,10 +37,3 @@ const TasksList = () => {
 };
 
 export default TasksList;
-EOF
-
-# Modify TasksList.jsx to update the label
-sed -i '' 's/label>Tasks:/label>Task:/' ./src/frontend/components/TasksList.jsx
-
-# Run npm install to update the dependencies
-npm install

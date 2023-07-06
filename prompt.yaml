@@ -1,12 +1,12 @@
-task: prompt/task/refactor/split.md
+task: prompt/task/feature/implement.md
 attention:
   - ./
   - src/
-  - package.json
-  - src/server.js
-  - src/servePromptDescriptor.js
-requirements: >
-  The backend needs its own directory.
-  Move server.js to it and split it into two.
-  Also move servePromptDescriptor.js.
+  - src/frontend/components/PromptDescriptorViewer.jsx
+  - src/frontend/components/TasksList.jsx
+  - src/frontend/service/fetchDescriptor.js
+requirements: |
+  - After page open the task selector should show the task that is currently
+    selected. It can be read out from the prompt descriptor, which is a yaml with a task attrobute.
+  - And the label should be "Task:".
 format: prompt/format/shell.md

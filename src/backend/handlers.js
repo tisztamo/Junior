@@ -1,5 +1,6 @@
 import processPrompt from '../prompt/promptProcessing.js';
 import { servePromptDescriptor } from './servePromptDescriptor.js';
+import { updateTaskHandler } from './updateTaskHandler.js';
 
 export const generateHandler = async (req, res) => {
   const { notes } = req.body;
@@ -8,3 +9,4 @@ export const generateHandler = async (req, res) => {
 };
 
 export const descriptorHandler = servePromptDescriptor;
+export const taskUpdateHandler = updateTaskHandler;
