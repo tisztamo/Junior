@@ -22,61 +22,6 @@
 ├── tmp/...
 
 ```
-```
-src/interactiveSession/
-├── handleApiResponse.js
-├── printNewtext.js
-├── saveAndSendPrompt.js
-├── startInteractiveSession.js
-
-```
-src/config.js:
-```
-import fs from 'fs/promises';
-import readline from 'readline';
-import { ChatGPTAPI } from 'chatgpt';
-
-// test if -d or --dry-run cli arg is present
-function isDryRun() {
-  return process.argv.includes("-d") || process.argv.includes("--dry-run");
-}
-
-const api = isDryRun() ? {
-    sendMessage: () => { return {id: 42, text: "DRY RUN, NOT SENT"}}
-  } : new ChatGPTAPI({
-  debug: true,
-  apiKey: process.env.OPENAI_API_KEY,
-  systemMessage: await getSystemPrompt(),
-  completionParams: {
-    model: get_model(),
-    stream: true,
-    temperature: 0.5,
-    max_tokens: 2048,
-  }
-});
-
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
-
-function get_model() {
-  const modelArg = process.argv.find(arg => arg.startsWith('--model='));
-  console.log("modelArg", modelArg)
-  console.log("argv", process.argv)
-  if (modelArg) {
-    return modelArg.split('=')[1];
-  }
-  return "gpt-4";
-}
-
-async function getSystemPrompt() {
-  return (await fs.readFile("prompt/system.md", "utf8")).toString()
-}
-export { api, rl, get_model, getSystemPrompt};
-
-```
-
 src/interactiveSession/startInteractiveSession.js:
 ```
 import processPrompt from '../prompt/promptProcessing.js';
@@ -90,29 +35,6 @@ const startInteractiveSession = async (last_command_result = "", parent_message_
 };
 
 export { startInteractiveSession };
-
-```
-
-src/interactiveSession/saveAndSendPrompt.js:
-```
-import { printNewText } from './printNewText.js';
-import { handleApiResponse } from './handleApiResponse.js';
-import processPrompt from '../prompt/promptProcessing.js';
-
-const saveAndSendPrompt = async (task, last_command_result, api, rl, startInteractiveSession) => {
-  let { prompt, parent_message_id } = await processPrompt(task, last_command_result);
-  let lastTextLength = 0;
-  console.log("\x1b[2m");
-  console.debug("Query:", prompt);
-  const res = await api.sendMessage(prompt, { parentMessageId: parent_message_id, onProgress: printNewText(lastTextLength) });
-  parent_message_id = res.id;
-  console.log("\x1b[0m");
-  const msg = res.text.trim();
-  console.log("");
-  handleApiResponse(msg, last_command_result, parent_message_id, rl, api);
-}
-
-export { saveAndSendPrompt };
 
 ```
 
@@ -136,6 +58,55 @@ export { handleApiResponse };
 
 ```
 
+src/execute/extractCode.js:
+```
+
+function extractCode(res) {
+  const match = res.match(/```sh([\s\S]*?)```/);
+  return match ? match[1].trim() : null;
+}
+
+export default extractCode;
+
+```
+
+src/execute/executeCode.js:
+```
+#!/usr/bin/env node
+
+import { startInteractiveSession } from "../interactiveSession/startInteractiveSession.js";
+import { exec } from 'child_process';
+
+const executeCode = async (cod, last_command_result, parent_message_id, rl) => {
+  rl.question('\x1b[1mEXECUTE? [y/n]\x1b[0m ', async (answer) => {
+    console.log("");
+    if (answer.toLowerCase() === 'y' || answer === "") {
+      exec(cod, (error, stdout, stderr) => {
+        if (error) {
+          console.error(`${error.message}`);
+          last_command_result = "Command failed. Output:\n" + error.message + "\n";
+        } else {
+          if (stdout.length > 0) {
+            console.log(`${stdout}`);
+          }
+          if (stderr.length > 0) {
+            console.log(`${stderr}`);
+          }
+          last_command_result = "Command executed. Output:\n" + stdout + "\n" + stderr + "\n";
+        }
+        startInteractiveSession(last_command_result, parent_message_id, rl)
+      });
+    } else {
+      last_command_result = "Command skipped.\n";
+      startInteractiveSession(last_command_result, parent_message_id, rl);
+    }
+  });
+}
+
+export { executeCode };
+
+```
+
 
 # Task
 
@@ -147,7 +118,7 @@ Implement the following feature!
 
 Requirements:
 
-Instead of &#34;npm run cli 4&#34; we want to set the model with --model, like  &#34;npm run cli --model=gpt-4&#34;. The default model should be gpt-4.
+scripts from bash code blocks should also be extracted and executed.
 
 
 
@@ -181,61 +152,6 @@ Assume OSX. npm and jq are installed.
 ├── tmp/...
 
 ```
-```
-src/interactiveSession/
-├── handleApiResponse.js
-├── printNewtext.js
-├── saveAndSendPrompt.js
-├── startInteractiveSession.js
-
-```
-src/config.js:
-```
-import fs from 'fs/promises';
-import readline from 'readline';
-import { ChatGPTAPI } from 'chatgpt';
-
-// test if -d or --dry-run cli arg is present
-function isDryRun() {
-  return process.argv.includes("-d") || process.argv.includes("--dry-run");
-}
-
-const api = isDryRun() ? {
-    sendMessage: () => { return {id: 42, text: "DRY RUN, NOT SENT"}}
-  } : new ChatGPTAPI({
-  debug: true,
-  apiKey: process.env.OPENAI_API_KEY,
-  systemMessage: await getSystemPrompt(),
-  completionParams: {
-    model: get_model(),
-    stream: true,
-    temperature: 0.5,
-    max_tokens: 2048,
-  }
-});
-
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
-
-function get_model() {
-  const modelArg = process.argv.find(arg => arg.startsWith('--model='));
-  console.log("modelArg", modelArg)
-  console.log("argv", process.argv)
-  if (modelArg) {
-    return modelArg.split('=')[1];
-  }
-  return "gpt-4";
-}
-
-async function getSystemPrompt() {
-  return (await fs.readFile("prompt/system.md", "utf8")).toString()
-}
-export { api, rl, get_model, getSystemPrompt};
-
-```
-
 src/interactiveSession/startInteractiveSession.js:
 ```
 import processPrompt from '../prompt/promptProcessing.js';
@@ -249,29 +165,6 @@ const startInteractiveSession = async (last_command_result = "", parent_message_
 };
 
 export { startInteractiveSession };
-
-```
-
-src/interactiveSession/saveAndSendPrompt.js:
-```
-import { printNewText } from './printNewText.js';
-import { handleApiResponse } from './handleApiResponse.js';
-import processPrompt from '../prompt/promptProcessing.js';
-
-const saveAndSendPrompt = async (task, last_command_result, api, rl, startInteractiveSession) => {
-  let { prompt, parent_message_id } = await processPrompt(task, last_command_result);
-  let lastTextLength = 0;
-  console.log("\x1b[2m");
-  console.debug("Query:", prompt);
-  const res = await api.sendMessage(prompt, { parentMessageId: parent_message_id, onProgress: printNewText(lastTextLength) });
-  parent_message_id = res.id;
-  console.log("\x1b[0m");
-  const msg = res.text.trim();
-  console.log("");
-  handleApiResponse(msg, last_command_result, parent_message_id, rl, api);
-}
-
-export { saveAndSendPrompt };
 
 ```
 
@@ -295,6 +188,55 @@ export { handleApiResponse };
 
 ```
 
+src/execute/extractCode.js:
+```
+
+function extractCode(res) {
+  const match = res.match(/```sh([\s\S]*?)```/);
+  return match ? match[1].trim() : null;
+}
+
+export default extractCode;
+
+```
+
+src/execute/executeCode.js:
+```
+#!/usr/bin/env node
+
+import { startInteractiveSession } from "../interactiveSession/startInteractiveSession.js";
+import { exec } from 'child_process';
+
+const executeCode = async (cod, last_command_result, parent_message_id, rl) => {
+  rl.question('\x1b[1mEXECUTE? [y/n]\x1b[0m ', async (answer) => {
+    console.log("");
+    if (answer.toLowerCase() === 'y' || answer === "") {
+      exec(cod, (error, stdout, stderr) => {
+        if (error) {
+          console.error(`${error.message}`);
+          last_command_result = "Command failed. Output:\n" + error.message + "\n";
+        } else {
+          if (stdout.length > 0) {
+            console.log(`${stdout}`);
+          }
+          if (stderr.length > 0) {
+            console.log(`${stderr}`);
+          }
+          last_command_result = "Command executed. Output:\n" + stdout + "\n" + stderr + "\n";
+        }
+        startInteractiveSession(last_command_result, parent_message_id, rl)
+      });
+    } else {
+      last_command_result = "Command skipped.\n";
+      startInteractiveSession(last_command_result, parent_message_id, rl);
+    }
+  });
+}
+
+export { executeCode };
+
+```
+
 
 # Task
 
@@ -306,7 +248,7 @@ Implement the following feature!
 
 Requirements:
 
-Instead of &#34;npm run cli 4&#34; we want to set the model with --model, like  &#34;npm run cli --model=gpt-4&#34;. The default model should be gpt-4.
+scripts from bash code blocks should also be extracted and executed.
 
 
 

@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 
 import { startInteractiveSession } from "../interactiveSession/startInteractiveSession.js";
+import { exec } from 'child_process';
 
 const executeCode = async (cod, last_command_result, parent_message_id, rl) => {
   rl.question('\x1b[1mEXECUTE? [y/n]\x1b[0m ', async (answer) => {
     console.log("");
     if (answer.toLowerCase() === 'y' || answer === "") {
-      process.exec(cod, (error, stdout, stderr) => {
+      exec(cod, (error, stdout, stderr) => {
         if (error) {
           console.error(`${error.message}`);
           last_command_result = "Command failed. Output:\n" + error.message + "\n";

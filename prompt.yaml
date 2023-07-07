@@ -1,12 +1,10 @@
 task: prompt/task/feature/implement.md
 attention:
   - ./
-  - src/interactiveSession/
-  - src/config.js
   - src/interactiveSession/startInteractiveSession.js
-  - src/interactiveSession/saveAndSendPrompt.js
   - src/interactiveSession/handleApiResponse.js
+  - src/execute/extractCode.js
+  - src/execute/executeCode.js
 requirements: >
-  Instead of "npm run cli 4" we want to set the model with --model, like  "npm run cli --model=gpt-4".
-  The default model should be gpt-4.
+  scripts from bash code blocks should also be extracted and executed.
 format: prompt/format/shell.md
