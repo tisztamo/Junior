@@ -25,9 +25,12 @@
 src/interactiveSession/startInteractiveSession.js:
 ```
 import { saveAndSendPrompt } from './saveAndSendPrompt.js';
+import processPrompt from '../prompt/promptProcessing.js';
 
 const startInteractiveSession = async (last_command_result = "", parent_message_id = null, rl, api) => {
   rl.question('Notes: ', async (task) => {
+    let { prompt } = await processPrompt(task, last_command_result);
+    console.log("Your prompt: ", prompt);
     rl.question('Do you want to send this prompt? (yes/no): ', async (confirmation) => {
       if (confirmation.toLowerCase() === 'yes') {
         await saveAndSendPrompt(task, last_command_result, api, rl, startInteractiveSession);
@@ -46,15 +49,11 @@ src/interactiveSession/saveAndSendPrompt.js:
 ```
 import { printNewText } from './printNewText.js';
 import { handleApiResponse } from './handleApiResponse.js';
-import processPrompt from '../prompt/promptProcessing.js';
 
 const saveAndSendPrompt = async (task, last_command_result, api, rl, startInteractiveSession) => {
-  let { prompt, parent_message_id } = await processPrompt(task, last_command_result);
   let lastTextLength = 0;
-  console.log("\x1b[2m");
-  console.debug("Query:", prompt);
-  const res = await api.sendMessage(prompt, { parentMessageId: parent_message_id, onProgress: printNewText(lastTextLength) });
-  parent_message_id = res.id;
+  const res = await api.sendMessage(task, { onProgress: printNewText(lastTextLength) });
+  const parent_message_id = res.id;
   console.log("\x1b[0m");
   const msg = res.text.trim();
   console.log("");
@@ -85,7 +84,7 @@ export default processPrompt;
 
 Fix the following issue!
 
-processPrompt is called twice on the prompt. It shouldn&#39;t.
+Display the prompt before the confirmation!
 
 
 # Output Format
@@ -93,5 +92,14 @@ processPrompt is called twice on the prompt. It shouldn&#39;t.
 ./change.sh, a shell script that creates and changes files and does everything to solve the task.
 Files should be heredoc.
 Assume OSX. npm and jq are installed.
+Example:
 change.sh:
+```sh
+#!/bin/sh
+# Plan:
+# ... plan goes here ...
+
+[Commands solving the task]
+```
+end of Example
 
