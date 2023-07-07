@@ -38,6 +38,29 @@ export { startInteractiveSession };
 
 ```
 
+src/interactiveSession/saveAndSendPrompt.js:
+```
+import { printNewText } from './printNewText.js';
+import { handleApiResponse } from './handleApiResponse.js';
+import processPrompt from '../prompt/promptProcessing.js';
+
+const saveAndSendPrompt = async (task, last_command_result, api, rl, startInteractiveSession) => {
+  let { prompt, parent_message_id } = await processPrompt(task, last_command_result);
+  let lastTextLength = 0;
+  console.log("\x1b[2m");
+  console.debug("Query:", prompt);
+  const res = await api.sendMessage(prompt, { parentMessageId: parent_message_id, onProgress: printNewText(lastTextLength) });
+  parent_message_id = res.id;
+  console.log("\x1b[0m");
+  const msg = res.text.trim();
+  console.log("");
+  handleApiResponse(msg, last_command_result, parent_message_id, rl, api);
+}
+
+export { saveAndSendPrompt };
+
+```
+
 src/interactiveSession/handleApiResponse.js:
 ```
 import { executeCode } from '../execute/executeCode.js';
@@ -58,55 +81,6 @@ export { handleApiResponse };
 
 ```
 
-src/execute/extractCode.js:
-```
-
-function extractCode(res) {
-  const match = res.match(/```sh([\s\S]*?)```/);
-  return match ? match[1].trim() : null;
-}
-
-export default extractCode;
-
-```
-
-src/execute/executeCode.js:
-```
-#!/usr/bin/env node
-
-import { startInteractiveSession } from "../interactiveSession/startInteractiveSession.js";
-import { exec } from 'child_process';
-
-const executeCode = async (cod, last_command_result, parent_message_id, rl) => {
-  rl.question('\x1b[1mEXECUTE? [y/n]\x1b[0m ', async (answer) => {
-    console.log("");
-    if (answer.toLowerCase() === 'y' || answer === "") {
-      exec(cod, (error, stdout, stderr) => {
-        if (error) {
-          console.error(`${error.message}`);
-          last_command_result = "Command failed. Output:\n" + error.message + "\n";
-        } else {
-          if (stdout.length > 0) {
-            console.log(`${stdout}`);
-          }
-          if (stderr.length > 0) {
-            console.log(`${stderr}`);
-          }
-          last_command_result = "Command executed. Output:\n" + stdout + "\n" + stderr + "\n";
-        }
-        startInteractiveSession(last_command_result, parent_message_id, rl)
-      });
-    } else {
-      last_command_result = "Command skipped.\n";
-      startInteractiveSession(last_command_result, parent_message_id, rl);
-    }
-  });
-}
-
-export { executeCode };
-
-```
-
 
 # Task
 
@@ -114,11 +88,12 @@ Implement the following feature!
 
 - Write a plan first, only implement after the plan is ready!
 - Create new files when needed!
-- Every js js file should only export a single function!
+- Every js file should only export a single function!
+- Use ES6 imports!
 
 Requirements:
 
-scripts from bash code blocks should also be extracted and executed.
+The cli prompt printed for user input should be &#34;Notes:&#34; instead of $. When the user entered their notes, create and print the prompt but do not send it, ask the user to confirm the prompt. When the user confirmed the prompt, send it to the server. When not, ask the user to enter their notes again.
 
 
 
@@ -168,6 +143,29 @@ export { startInteractiveSession };
 
 ```
 
+src/interactiveSession/saveAndSendPrompt.js:
+```
+import { printNewText } from './printNewText.js';
+import { handleApiResponse } from './handleApiResponse.js';
+import processPrompt from '../prompt/promptProcessing.js';
+
+const saveAndSendPrompt = async (task, last_command_result, api, rl, startInteractiveSession) => {
+  let { prompt, parent_message_id } = await processPrompt(task, last_command_result);
+  let lastTextLength = 0;
+  console.log("\x1b[2m");
+  console.debug("Query:", prompt);
+  const res = await api.sendMessage(prompt, { parentMessageId: parent_message_id, onProgress: printNewText(lastTextLength) });
+  parent_message_id = res.id;
+  console.log("\x1b[0m");
+  const msg = res.text.trim();
+  console.log("");
+  handleApiResponse(msg, last_command_result, parent_message_id, rl, api);
+}
+
+export { saveAndSendPrompt };
+
+```
+
 src/interactiveSession/handleApiResponse.js:
 ```
 import { executeCode } from '../execute/executeCode.js';
@@ -188,55 +186,6 @@ export { handleApiResponse };
 
 ```
 
-src/execute/extractCode.js:
-```
-
-function extractCode(res) {
-  const match = res.match(/```sh([\s\S]*?)```/);
-  return match ? match[1].trim() : null;
-}
-
-export default extractCode;
-
-```
-
-src/execute/executeCode.js:
-```
-#!/usr/bin/env node
-
-import { startInteractiveSession } from "../interactiveSession/startInteractiveSession.js";
-import { exec } from 'child_process';
-
-const executeCode = async (cod, last_command_result, parent_message_id, rl) => {
-  rl.question('\x1b[1mEXECUTE? [y/n]\x1b[0m ', async (answer) => {
-    console.log("");
-    if (answer.toLowerCase() === 'y' || answer === "") {
-      exec(cod, (error, stdout, stderr) => {
-        if (error) {
-          console.error(`${error.message}`);
-          last_command_result = "Command failed. Output:\n" + error.message + "\n";
-        } else {
-          if (stdout.length > 0) {
-            console.log(`${stdout}`);
-          }
-          if (stderr.length > 0) {
-            console.log(`${stderr}`);
-          }
-          last_command_result = "Command executed. Output:\n" + stdout + "\n" + stderr + "\n";
-        }
-        startInteractiveSession(last_command_result, parent_message_id, rl)
-      });
-    } else {
-      last_command_result = "Command skipped.\n";
-      startInteractiveSession(last_command_result, parent_message_id, rl);
-    }
-  });
-}
-
-export { executeCode };
-
-```
-
 
 # Task
 
@@ -244,11 +193,12 @@ Implement the following feature!
 
 - Write a plan first, only implement after the plan is ready!
 - Create new files when needed!
-- Every js js file should only export a single function!
+- Every js file should only export a single function!
+- Use ES6 imports!
 
 Requirements:
 
-scripts from bash code blocks should also be extracted and executed.
+The cli prompt printed for user input should be &#34;Notes:&#34; instead of $. When the user entered their notes, create and print the prompt but do not send it, ask the user to confirm the prompt. When the user confirmed the prompt, send it to the server. When not, ask the user to enter their notes again.
 
 
 
@@ -258,3 +208,4 @@ scripts from bash code blocks should also be extracted and executed.
 Files should be heredoc.
 Assume OSX. npm and jq are installed.
 
+change.sh:

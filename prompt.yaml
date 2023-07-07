@@ -2,9 +2,12 @@ task: prompt/task/feature/implement.md
 attention:
   - ./
   - src/interactiveSession/startInteractiveSession.js
+  - src/interactiveSession/saveAndSendPrompt.js
   - src/interactiveSession/handleApiResponse.js
-  - src/execute/extractCode.js
-  - src/execute/executeCode.js
 requirements: >
-  scripts from bash code blocks should also be extracted and executed.
+  The cli prompt printed for user input should be "Notes:" instead of $.
+  When the user entered their notes, create and print the prompt but do not
+  send it, ask the user to confirm the prompt.
+  When the user confirmed the prompt, send it to the server.
+  When not, ask the user to enter their notes again.
 format: prompt/format/shell.md
