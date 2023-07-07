@@ -1,9 +1,9 @@
-task: prompt/task/bug/fix.md
+task: prompt/task/refactor/general.md
 attention:
   - ./
   - src/
-  - src/frontend/components/TasksList.jsx
-requirements: >
-  TaskList fails to set the initial value, because the parsed value is prefixed
-  with "prompt/task/". Remove this prefix!
+  - src/frontend/App.jsx
+  - src/frontend/components/PromptDescriptorViewer.jsx
+requirements: |
+  Eliminate PromptDescriptorViewer.jsx, no need for it's functionality anymore!
 format: prompt/format/shell.md

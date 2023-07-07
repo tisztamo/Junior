@@ -47,56 +47,72 @@ src/
 ├── vite.config.js
 
 ```
-src/frontend/components/TasksList.jsx:
+src/frontend/App.jsx:
 ```
-import { createSignal, onCleanup, onMount } from 'solid-js';
-import { fetchTasks } from '../fetchTasks';
-import { handleTaskChange } from '../service/handleTaskChange';
-import { fetchDescriptor } from '../service/fetchDescriptor';
-import YAML from 'yaml';
+import { createSignal } from 'solid-js';
+import PromptDescriptorViewer from './components/PromptDescriptorViewer'; // updated this line
+import NotesInput from './components/NotesInput';
+import StartButton from './components/StartButton';
+import PromptDisplay from './components/PromptDisplay';
+import TasksList from './components/TasksList';
 
-const TasksList = () => {
-  const tasks = fetchTasks();
-  const [promptDescriptor, setPromptDescriptor] = createSignal('');
-  const [selectedTask, setSelectedTask] = createSignal('');
-
-  const parseYamlAndGetTask = (yamlString) => {
-    const doc = YAML.parse(yamlString);
-    return doc.task;
-  };
-
-  onMount(async () => {
-    const text = await fetchDescriptor();
-    const task = parseYamlAndGetTask(text);
-    setPromptDescriptor(text);
-    setSelectedTask(task);
-  });
-
-  onCleanup(() => {
-    setPromptDescriptor('');
-  });
+const App = () => {
+  const [notes, setNotes] = createSignal('');
+  const [prompt, setPrompt] = createSignal('');
 
   return (
-    <div>
-      <label>Task:</label>
-      <select value={selectedTask()} onChange={e => handleTaskChange(e, setPromptDescriptor)}>
-        {tasks().map(task => <option value={task}>{task}</option>)}
-      </select>
-      <pre>{promptDescriptor()}</pre>
-    </div>
+    <>
+      <PromptDescriptorViewer />
+      <NotesInput notes={notes} setNotes={setNotes} />
+      <StartButton notes={notes} setPrompt={setPrompt} />
+      <PromptDisplay prompt={prompt} />
+      <TasksList />
+    </>
   );
 };
 
-export default TasksList;
+export default App;
+
+```
+
+src/frontend/components/PromptDescriptorViewer.jsx:
+```
+import { createSignal, onMount } from 'solid-js';
+import { fetchDescriptor } from '../service/fetchDescriptor';
+
+const PromptDescriptorViewer = () => {
+  const [descriptorContent, setDescriptorContent] = createSignal('');
+
+  onMount(async () => {
+    const text = await fetchDescriptor();
+    setDescriptorContent(text);
+  });
+
+  return (
+    <pre>{descriptorContent()}</pre>
+  );
+};
+
+export default PromptDescriptorViewer;
 
 ```
 
 
 # Task
 
-Fix the following issue!
+Refactor the mentioned files!
 
-TaskList fails to set the initial value, because the parsed value is prefixed with &#34;prompt/task/&#34;. Remove this prefix!
+Look for
+  - unused imports
+  - unneeded comments
+  - ugly names
+  - misplaced files
+  - code repetition
+  - code smell
+
+When a file is bigger than 40 lines, split it: Identify the possible parts and create separate files!
+
+Eliminate PromptDescriptorViewer.jsx, no need for it&#39;s functionality anymore!
 
 
 # Output Format

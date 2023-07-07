@@ -1,5 +1,4 @@
 import { createSignal } from 'solid-js';
-import PromptDescriptorViewer from './components/PromptDescriptorViewer'; // updated this line
 import NotesInput from './components/NotesInput';
 import StartButton from './components/StartButton';
 import PromptDisplay from './components/PromptDisplay';
@@ -11,7 +10,6 @@ const App = () => {
 
   return (
     <>
-      <PromptDescriptorViewer />
       <NotesInput notes={notes} setNotes={setNotes} />
       <StartButton notes={notes} setPrompt={setPrompt} />
       <PromptDisplay prompt={prompt} />
