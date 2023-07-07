@@ -5,5 +5,5 @@ attention:
   - src/interactiveSession/saveAndSendPrompt.js
   - src/prompt/promptProcessing.js
 requirements: |
-  Display the prompt before the confirmation!
+  Seems like the prompt is not being sent to the api.
 format: prompt/format/shell.md

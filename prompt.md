@@ -33,7 +33,7 @@ const startInteractiveSession = async (last_command_result = "", parent_message_
     console.log("Your prompt: ", prompt);
     rl.question('Do you want to send this prompt? (yes/no): ', async (confirmation) => {
       if (confirmation.toLowerCase() === 'yes') {
-        await saveAndSendPrompt(task, last_command_result, api, rl, startInteractiveSession);
+        await saveAndSendPrompt(prompt, task, last_command_result, api, rl, startInteractiveSession);
       } else {
         startInteractiveSession(last_command_result, parent_message_id, rl, api);
       }
@@ -50,9 +50,9 @@ src/interactiveSession/saveAndSendPrompt.js:
 import { printNewText } from './printNewText.js';
 import { handleApiResponse } from './handleApiResponse.js';
 
-const saveAndSendPrompt = async (task, last_command_result, api, rl, startInteractiveSession) => {
+const saveAndSendPrompt = async (prompt, task, last_command_result, api, rl, startInteractiveSession) => {
   let lastTextLength = 0;
-  const res = await api.sendMessage(task, { onProgress: printNewText(lastTextLength) });
+  const res = await api.sendMessage(prompt, { onProgress: printNewText(lastTextLength) });
   const parent_message_id = res.id;
   console.log("\x1b[0m");
   const msg = res.text.trim();
@@ -84,7 +84,7 @@ export default processPrompt;
 
 Fix the following issue!
 
-Display the prompt before the confirmation!
+Seems like the prompt is not being sent to the api.
 
 
 # Output Format
@@ -92,14 +92,15 @@ Display the prompt before the confirmation!
 ./change.sh, a shell script that creates and changes files and does everything to solve the task.
 Files should be heredoc.
 Assume OSX. npm and jq are installed.
-Example:
+EXAMPLE:
 change.sh:
 ```sh
 #!/bin/sh
+# Goal: Display a relevant example output.
 # Plan:
 # ... plan goes here ...
 
 [Commands solving the task]
 ```
-end of Example
+EXAMPLE END
 
