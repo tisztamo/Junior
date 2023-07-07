@@ -1,29 +1,44 @@
 #!/bin/bash
 
-# Remove unused file
-rm ./src/frontend/components/PromptDescriptorViewer.jsx
+cat << EOF > ./src/config.js
+import fs from 'fs/promises';
+import readline from 'readline';
+import { ChatGPTAPI } from 'chatgpt';
 
-# Update App.jsx to eliminate reference to PromptDescriptorViewer.jsx
-cat >./src/frontend/App.jsx <<'EOF'
-import { createSignal } from 'solid-js';
-import NotesInput from './components/NotesInput';
-import StartButton from './components/StartButton';
-import PromptDisplay from './components/PromptDisplay';
-import TasksList from './components/TasksList';
+// test if -d or --dry-run cli arg is present
+function isDryRun() {
+  return process.argv.includes("-d") || process.argv.includes("--dry-run");
+}
 
-const App = () => {
-  const [notes, setNotes] = createSignal('');
-  const [prompt, setPrompt] = createSignal('');
+const api = isDryRun() ? {
+    sendMessage: () => { return {id: 42, text: "DRY RUN, NOT SENT"}}
+  } : new ChatGPTAPI({
+  debug: true,
+  apiKey: process.env.OPENAI_API_KEY,
+  systemMessage: await getSystemPrompt(),
+  completionParams: {
+    model: get_model(),
+    stream: true,
+    temperature: 0.5,
+    max_tokens: 2048,
+  }
+});
 
-  return (
-    <>
-      <NotesInput notes={notes} setNotes={setNotes} />
-      <StartButton notes={notes} setPrompt={setPrompt} />
-      <PromptDisplay prompt={prompt} />
-      <TasksList />
-    </>
-  );
-};
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
 
-export default App;
+function get_model() {
+  const modelArg = process.argv.find(arg => arg.startsWith('--model='));
+  if (modelArg) {
+    return modelArg.split('=')[1];
+  }
+  return "gpt-4";
+}
+
+async function getSystemPrompt() {
+  return (await fs.readFile("prompt/system.md", "utf8")).toString()
+}
+export { api, rl, get_model, getSystemPrompt};
 EOF

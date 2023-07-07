@@ -27,7 +27,11 @@ const rl = readline.createInterface({
 });
 
 function get_model() {
-  return process.argv[2] === "4" ? "gpt-4" : "gpt-3.5-turbo";
+  const modelArg = process.argv.find(arg => arg.startsWith('--model='));
+  if (modelArg) {
+    return modelArg.split('=')[1];
+  }
+  return "gpt-4";
 }
 
 async function getSystemPrompt() {

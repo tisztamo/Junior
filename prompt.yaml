@@ -1,9 +1,12 @@
-task: prompt/task/refactor/general.md
+task: prompt/task/feature/implement.md
 attention:
   - ./
-  - src/
-  - src/frontend/App.jsx
-  - src/frontend/components/PromptDescriptorViewer.jsx
-requirements: |
-  Eliminate PromptDescriptorViewer.jsx, no need for it's functionality anymore!
+  - src/interactiveSession/
+  - src/config.js
+  - src/interactiveSession/startInteractiveSession.js
+  - src/interactiveSession/saveAndSendPrompt.js
+  - src/interactiveSession/handleApiResponse.js
+requirements: >
+  Instead of "npm run cli 4" we want to set the model with --model, like  "npm run cli --model=gpt-4".
+  The default model should be gpt-4.
 format: prompt/format/shell.md
