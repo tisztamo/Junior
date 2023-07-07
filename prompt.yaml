@@ -1,13 +1,9 @@
-task: prompt/task/feature/implement.md
+task: prompt/task/bug/fix.md
 attention:
   - ./
   - src/interactiveSession/startInteractiveSession.js
   - src/interactiveSession/saveAndSendPrompt.js
-  - src/interactiveSession/handleApiResponse.js
-requirements: >
-  The cli prompt printed for user input should be "Notes:" instead of $.
-  When the user entered their notes, create and print the prompt but do not
-  send it, ask the user to confirm the prompt.
-  When the user confirmed the prompt, send it to the server.
-  When not, ask the user to enter their notes again.
+  - src/prompt/promptProcessing.js
+requirements: |
+  processPrompt is called twice on the prompt. It shouldn't.
 format: prompt/format/shell.md
