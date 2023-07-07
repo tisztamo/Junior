@@ -1,22 +1,33 @@
 #!/bin/bash
+set -e
 
-# Modify TasksList.jsx to include a function for parsing yaml and setting initial task.
-cat << EOF > ./src/frontend/components/TasksList.jsx
+# Create a backup before modifying the files
+cp src/frontend/components/TasksList.jsx src/frontend/components/TasksList.jsx.bak
+
+# Create parseYamlAndGetTask.js file in frontend/service with parseYamlAndGetTask function
+cat > src/frontend/service/parseYamlAndGetTask.js << 'EOF'
+import YAML from 'yaml';
+
+export const parseYamlAndGetTask = (yamlString) => {
+  const doc = YAML.parse(yamlString);
+  // Remove 'prompt/task/' prefix
+  const task = doc.task.replace('prompt/task/', '');
+  return task;
+};
+EOF
+
+# Edit the TasksList.jsx file
+cat > src/frontend/components/TasksList.jsx << 'EOF'
 import { createSignal, onCleanup, onMount } from 'solid-js';
 import { fetchTasks } from '../fetchTasks';
 import { handleTaskChange } from '../service/handleTaskChange';
 import { fetchDescriptor } from '../service/fetchDescriptor';
-import YAML from 'yaml';
+import { parseYamlAndGetTask } from '../service/parseYamlAndGetTask';
 
 const TasksList = () => {
   const tasks = fetchTasks();
   const [promptDescriptor, setPromptDescriptor] = createSignal('');
   const [selectedTask, setSelectedTask] = createSignal('');
-
-  const parseYamlAndGetTask = (yamlString) => {
-    const doc = YAML.parse(yamlString);
-    return doc.task;
-  };
 
   onMount(async () => {
     const text = await fetchDescriptor();
@@ -43,8 +54,11 @@ const TasksList = () => {
 export default TasksList;
 EOF
 
-# Modify TasksList.jsx to update the label
-sed -i '' 's/label>Tasks:/label>Task:/' ./src/frontend/components/TasksList.jsx
+# Print out the diff to check the changes
+echo "Changes made in TasksList.jsx:"
+diff src/frontend/components/TasksList.jsx.bak src/frontend/components/TasksList.jsx
 
-# Run npm install to update the dependencies
-npm install
+# Clean up backup file
+rm src/frontend/components/TasksList.jsx.bak
+
+echo "Done!"

@@ -47,28 +47,6 @@ src/
 ├── vite.config.js
 
 ```
-src/frontend/components/PromptDescriptorViewer.jsx:
-```
-import { createSignal, onMount } from 'solid-js';
-import { fetchDescriptor } from '../service/fetchDescriptor';
-
-const PromptDescriptorViewer = () => {
-  const [descriptorContent, setDescriptorContent] = createSignal('');
-
-  onMount(async () => {
-    const text = await fetchDescriptor();
-    setDescriptorContent(text);
-  });
-
-  return (
-    <pre>{descriptorContent()}</pre>
-  );
-};
-
-export default PromptDescriptorViewer;
-
-```
-
 src/frontend/components/TasksList.jsx:
 ```
 import { createSignal, onCleanup, onMount } from 'solid-js';
@@ -113,31 +91,12 @@ export default TasksList;
 
 ```
 
-src/frontend/service/fetchDescriptor.js:
-```
-export const fetchDescriptor = async () => {
-  const response = await fetch('http://localhost:3000/descriptor');
-  const text = await response.text();
-  return text;
-};
-
-```
-
 
 # Task
 
-Implement the following feature!
+Fix the following issue!
 
-- Write a plan first, only implement after the plan is ready!
-- Create new files when needed!
-- Every js js file should only export a single function!
-
-Requirements:
-
-- After page open the task selector should show the task that is currently
-  selected. It can be read out from the prompt descriptor, which is a yaml with a task attrobute.
-- And the label should be &#34;Task:&#34;.
-
+TaskList fails to set the initial value, because the parsed value is prefixed with &#34;prompt/task/&#34;. Remove this prefix!
 
 
 # Output Format

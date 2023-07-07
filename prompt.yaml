@@ -1,12 +1,9 @@
-task: prompt/task/feature/implement.md
+task: prompt/task/bug/fix.md
 attention:
   - ./
   - src/
-  - src/frontend/components/PromptDescriptorViewer.jsx
   - src/frontend/components/TasksList.jsx
-  - src/frontend/service/fetchDescriptor.js
-requirements: |
-  - After page open the task selector should show the task that is currently
-    selected. It can be read out from the prompt descriptor, which is a yaml with a task attrobute.
-  - And the label should be "Task:".
+requirements: >
+  TaskList fails to set the initial value, because the parsed value is prefixed
+  with "prompt/task/". Remove this prefix!
 format: prompt/format/shell.md

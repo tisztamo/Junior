@@ -2,12 +2,17 @@ import { createSignal, onCleanup, onMount } from 'solid-js';
 import { fetchTasks } from '../fetchTasks';
 import { handleTaskChange } from '../service/handleTaskChange';
 import { fetchDescriptor } from '../service/fetchDescriptor';
-import { parseYamlAndGetTask } from '../service/parseYamlAndGetTask';
+import YAML from 'yaml';
 
 const TasksList = () => {
   const tasks = fetchTasks();
   const [promptDescriptor, setPromptDescriptor] = createSignal('');
   const [selectedTask, setSelectedTask] = createSignal('');
+
+  const parseYamlAndGetTask = (yamlString) => {
+    const doc = YAML.parse(yamlString);
+    return doc.task;
+  };
 
   onMount(async () => {
     const text = await fetchDescriptor();
