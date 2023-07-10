@@ -7,10 +7,11 @@ import { getPromptFlag } from './getPromptFlag.js';
 import { getSystemPromptIfNeeded } from './getSystemPromptIfNeeded.js';
 import { resolveTemplateVariables } from './resolveTemplateVariables.js';
 import { extractTemplateVars } from './extractTemplateVars.js';
+import { loadPromptDescriptor } from './loadPromptDescriptor.js';
 const readFile = util.promisify(fs.readFile);
 
 const createPrompt = async (userInput) => {
-  const promptDescriptor = yaml.load(await readFile(getPromptFlag() || "prompt.yaml", "utf8"));
+  const promptDescriptor = yaml.load(await loadPromptDescriptor());
   let templateVars = extractTemplateVars(promptDescriptor);
 
   templateVars = await resolveTemplateVariables(templateVars);
@@ -21,7 +22,7 @@ const createPrompt = async (userInput) => {
   const system = await getSystemPromptIfNeeded();
   const saveto = promptDescriptor.saveto;
   return {
-    prompt: `${system}# Working set\n\n${attention.join("\n")}\n\n# Task\n\n${task}\n\n# Output Format\n\n${format}\n\n${userInput ? userInput : ""}`,
+    prompt: `# Working set\n\n${attention.join("\n")}\n\n# Task\n\n${task}\n\n# Output Format\n\n${format}\n\n${userInput ? userInput : ""}`,
     saveto
   };
 }

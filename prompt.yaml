@@ -1,9 +1,11 @@
-task: prompt/task/bug/fix.md
+task: prompt/task/feature/implement.md
 attention:
   - ./
   - src/interactiveSession/startInteractiveSession.js
-  - src/interactiveSession/saveAndSendPrompt.js
-  - src/prompt/promptProcessing.js
+  - src/interactiveSession/promptProcessing.js
+  - src/prompt/createPrompt.js
 requirements: |
-  y/n is better than yes/no
+  Print the contents of the prompt descriptor file (in its original format) to the console before asking for notes!
+  Avoid "prompt.yaml" to be duplicated in the source code by creating a prompt descriptor loader function
+  that takes an argument "rawPrinter" and if provided, prints the name, a colon, a newline and the content of the file using it!
 format: prompt/format/shell.md

@@ -1,3 +1,13 @@
+You're the 'Contributor', an AI system aiding authors.
+
+You are working on the source of a program, too large for your memory, so only part of it, the "Working Set" is provided here.
+
+You will see a partial directory structure. Ask for the contents of subdirs marked with /... if needed.
+
+Some files are printed in the working set.
+
+Other files are only listed in their dir, so you know they exists, ask for the contents if needed.
+
 # Working set
 
 ```
@@ -31,8 +41,8 @@ const startInteractiveSession = async (last_command_result = "", parent_message_
   rl.question('Notes: ', async (task) => {
     let { prompt } = await processPrompt(task, last_command_result);
     console.log("Your prompt: ", prompt);
-    rl.question('Do you want to send this prompt? (yes/no): ', async (confirmation) => {
-      if (confirmation.toLowerCase() === 'yes') {
+    rl.question('Do you want to send this prompt? (y/n): ', async (confirmation) => {
+      if (confirmation.toLowerCase() === 'y') {
         await saveAndSendPrompt(prompt, task, last_command_result, api, rl, startInteractiveSession);
       } else {
         startInteractiveSession(last_command_result, parent_message_id, rl, api);
@@ -45,56 +55,67 @@ export { startInteractiveSession };
 
 ```
 
-src/interactiveSession/saveAndSendPrompt.js:
-```
-import { printNewText } from './printNewText.js';
-import { handleApiResponse } from './handleApiResponse.js';
+src/interactiveSession/promptProcessing.js: err!
 
-const saveAndSendPrompt = async (prompt, task, last_command_result, api, rl, startInteractiveSession) => {
-  let lastTextLength = 0;
-  const res = await api.sendMessage(prompt, { onProgress: printNewText(lastTextLength) });
-  const parent_message_id = res.id;
-  console.log("\x1b[0m");
-  const msg = res.text.trim();
-  console.log("");
-  handleApiResponse(msg, last_command_result, parent_message_id, rl, api);
+src/prompt/createPrompt.js:
+```
+import { readAttention } from "../attention/readAttention.js"
+import util from 'util';
+import fs from 'fs';
+import yaml from 'js-yaml';
+import ejs from 'ejs';
+import { getPromptFlag } from './getPromptFlag.js';
+import { getSystemPromptIfNeeded } from './getSystemPromptIfNeeded.js';
+import { resolveTemplateVariables } from './resolveTemplateVariables.js';
+import { extractTemplateVars } from './extractTemplateVars.js';
+const readFile = util.promisify(fs.readFile);
+
+const createPrompt = async (userInput) => {
+  const promptDescriptor = yaml.load(await readFile(getPromptFlag() || "prompt.yaml", "utf8"));
+  let templateVars = extractTemplateVars(promptDescriptor);
+
+  templateVars = await resolveTemplateVariables(templateVars);
+
+  const attention = await readAttention(promptDescriptor.attention);
+  const task = await ejs.renderFile(promptDescriptor.task, templateVars, {async: true});
+  const format = await ejs.renderFile(promptDescriptor.format, templateVars, {async: true});
+  const system = await getSystemPromptIfNeeded();
+  const saveto = promptDescriptor.saveto;
+  return {
+    prompt: `${system}# Working set\n\n${attention.join("\n")}\n\n# Task\n\n${task}\n\n# Output Format\n\n${format}\n\n${userInput ? userInput : ""}`,
+    saveto
+  };
 }
 
-export { saveAndSendPrompt };
-
-```
-
-src/prompt/promptProcessing.js:
-```
-import { createPrompt } from './createPrompt.js';
-import fs from 'fs/promises';
-
-const processPrompt = async (task, last_command_result, saveto = 'prompt.md', parent_message_id = null) => {
-  const { prompt, saveto: newSaveto } = await createPrompt(task, last_command_result);
-  await fs.writeFile(newSaveto || saveto, prompt);
-  return { prompt, parent_message_id };
-}
-
-export default processPrompt;
+export { createPrompt };
 
 ```
 
 
 # Task
 
-Fix the following issue!
+Implement the following feature!
 
-y/n is better than yes/no
+- Create a plan!
+- Create new files when needed!
+- Every js file should only export a single function!
+- Use ES6 imports!
+
+Requirements:
+
+Print the contents of the prompt descriptor file (in its original format) to the console before asking for notes!
+Avoid &#34;prompt.yaml&#34; to be duplicated in the source code by creating a prompt descriptor loader function
+that takes an argument &#34;rawPrinter&#34; and if provided, prints the name, a colon, a newline and the content of the file using it!
+
 
 
 # Output Format
 
-Encode and enclose your results as ./change.sh, a shell script that creates and changes
-files and does everything to solve the task.
-Files are small, so prefer to heredoc full files, avoid using sed.
+Encode and enclose your results as ./change.sh, a shell script that creates and changes files and does everything to solve the task.
+Files are small, prefer heredoc-ing full files without substitution.
 Assume OSX.
 npm and jq are installed.
-Avoid any text outside the script!
+Do NOT write any text outside the script (the plan goes into it)!
 
 
 EXAMPLE START
