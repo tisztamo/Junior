@@ -5,8 +5,8 @@ const startInteractiveSession = async (last_command_result = "", parent_message_
   rl.question('Notes: ', async (task) => {
     let { prompt } = await processPrompt(task, last_command_result);
     console.log("Your prompt: ", prompt);
-    rl.question('Do you want to send this prompt? (yes/no): ', async (confirmation) => {
-      if (confirmation.toLowerCase() === 'yes') {
+    rl.question('Do you want to send this prompt? (y/n): ', async (confirmation) => {
+      if (confirmation.toLowerCase() === 'y') {
         await saveAndSendPrompt(prompt, task, last_command_result, api, rl, startInteractiveSession);
       } else {
         startInteractiveSession(last_command_result, parent_message_id, rl, api);

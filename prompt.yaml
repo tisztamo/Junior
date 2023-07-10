@@ -5,5 +5,5 @@ attention:
   - src/interactiveSession/saveAndSendPrompt.js
   - src/prompt/promptProcessing.js
 requirements: |
-  Seems like the prompt is not being sent to the api.
+  y/n is better than yes/no
 format: prompt/format/shell.md

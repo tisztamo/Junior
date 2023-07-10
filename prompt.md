@@ -84,16 +84,21 @@ export default processPrompt;
 
 Fix the following issue!
 
-Seems like the prompt is not being sent to the api.
+y/n is better than yes/no
 
 
 # Output Format
 
-./change.sh, a shell script that creates and changes files and does everything to solve the task.
-Files should be heredoc.
-Assume OSX. npm and jq are installed.
-EXAMPLE:
-change.sh:
+Encode and enclose your results as ./change.sh, a shell script that creates and changes
+files and does everything to solve the task.
+Files are small, so prefer to heredoc full files, avoid using sed.
+Assume OSX.
+npm and jq are installed.
+Avoid any text outside the script!
+
+
+EXAMPLE START
+
 ```sh
 #!/bin/sh
 # Goal: Display a relevant example output.
@@ -102,5 +107,6 @@ change.sh:
 
 [Commands solving the task]
 ```
+
 EXAMPLE END
 
