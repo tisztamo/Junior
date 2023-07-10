@@ -1,13 +1,3 @@
-You're the 'Contributor', an AI system aiding authors.
-
-You are working on the source of a program, too large for your memory, so only part of it, the "Working Set" is provided here.
-
-You will see a partial directory structure. Ask for the contents of subdirs marked with /... if needed.
-
-Some files are printed in the working set.
-
-Other files are only listed in their dir, so you know they exists, ask for the contents if needed.
-
 # Working set
 
 ```
@@ -32,102 +22,64 @@ Other files are only listed in their dir, so you know they exists, ask for the c
 ├── tmp/...
 
 ```
-src/interactiveSession/startInteractiveSession.js:
+./README.md:
 ```
-import { saveAndSendPrompt } from './saveAndSendPrompt.js';
-import processPrompt from '../prompt/promptProcessing.js';
+# The Contributor - Your AI contributor which writes itself.
 
-const startInteractiveSession = async (last_command_result = "", parent_message_id = null, rl, api) => {
-  rl.question('Notes: ', async (task) => {
-    let { prompt } = await processPrompt(task, last_command_result);
-    console.log("Your prompt: ", prompt);
-    rl.question('Do you want to send this prompt? (y/n): ', async (confirmation) => {
-      if (confirmation.toLowerCase() === 'y') {
-        await saveAndSendPrompt(prompt, task, last_command_result, api, rl, startInteractiveSession);
-      } else {
-        startInteractiveSession(last_command_result, parent_message_id, rl, api);
-      }
-    });
-  });
-};
+## Description
 
-export { startInteractiveSession };
+The goal of this exploratory project is to allow programmers to communicate solely with the AI and merely supervise the development process. This is much like how Linus Thorwalds, the creator of Linux Kernel, supervises its development without having to write code himself.
 
+## Getting Started
+
+### The Prompt Descriptor
+
+A prompt descriptor (prompt.yaml) provides details necessary to generate a prompt for the AI model.
+
+For instance, here is an example of a prompt descriptor:
+
+```yaml
+task: prompt/task/feature/implement.md
+attention:
+  - src/interactiveSession/startInteractiveSession.js
+  - src/prompt/createPrompt.js
+  - src/attention/readAttention.js
+  - prompt.yaml
+requirements: >
+  Write a README.md for this _exploratory_ project!
+format: prompt/format/new_file_version.md
 ```
 
-src/interactiveSession/promptProcessing.js: err!
+### Attention Mechanism
 
-src/prompt/createPrompt.js:
-```
-import { readAttention } from "../attention/readAttention.js"
-import util from 'util';
-import fs from 'fs';
-import yaml from 'js-yaml';
-import ejs from 'ejs';
-import { getPromptFlag } from './getPromptFlag.js';
-import { getSystemPromptIfNeeded } from './getSystemPromptIfNeeded.js';
-import { resolveTemplateVariables } from './resolveTemplateVariables.js';
-import { extractTemplateVars } from './extractTemplateVars.js';
-const readFile = util.promisify(fs.readFile);
+The attention mechanism provides the AI model with a working set, a subset of the entire project that's currently in focus. It includes both files and directories.
 
-const createPrompt = async (userInput) => {
-  const promptDescriptor = yaml.load(await readFile(getPromptFlag() || "prompt.yaml", "utf8"));
-  let templateVars = extractTemplateVars(promptDescriptor);
+For files, the content is directly provided to the AI. For directories, a list of files and subdirectories within them is presented. Directories are denoted with a trailing `/`.
 
-  templateVars = await resolveTemplateVariables(templateVars);
+## Contributing and Support
 
-  const attention = await readAttention(promptDescriptor.attention);
-  const task = await ejs.renderFile(promptDescriptor.task, templateVars, {async: true});
-  const format = await ejs.renderFile(promptDescriptor.format, templateVars, {async: true});
-  const system = await getSystemPromptIfNeeded();
-  const saveto = promptDescriptor.saveto;
-  return {
-    prompt: `${system}# Working set\n\n${attention.join("\n")}\n\n# Task\n\n${task}\n\n# Output Format\n\n${format}\n\n${userInput ? userInput : ""}`,
-    saveto
-  };
-}
-
-export { createPrompt };
+Contributions are welcome, but remember, this project writes itself!
 
 ```
 
 
 # Task
 
-Implement the following feature!
+Improve the documentation!
 
-- Create a plan!
-- Create new files when needed!
-- Every js file should only export a single function!
-- Use ES6 imports!
-
-Requirements:
-
-Print the contents of the prompt descriptor file (in its original format) to the console before asking for notes!
-Avoid &#34;prompt.yaml&#34; to be duplicated in the source code by creating a prompt descriptor loader function
-that takes an argument &#34;rawPrinter&#34; and if provided, prints the name, a colon, a newline and the content of the file using it!
-
-
+Include the provided new information (if any).
 
 # Output Format
 
-Encode and enclose your results as ./change.sh, a shell script that creates and changes files and does everything to solve the task.
-Files are small, prefer heredoc-ing full files without substitution.
-Assume OSX.
-npm and jq are installed.
-Do NOT write any text outside the script (the plan goes into it)!
+Provide the new or modified file(s) as code blocks, each prefixed with its path and a colon.
+JS files should only export a single function and be named after the function: e.g. `myFn.js` should export `myFn()`.
+Always output full files, copying unchanged content.
 
+E.g.:
 
-EXAMPLE START
-
-```sh
-#!/bin/sh
-# Goal: Display a relevant example output.
-# Plan:
-# ... plan goes here ...
-
-[Commands solving the task]
+texts/sample.txt:
+```
+A sample text file.
 ```
 
-EXAMPLE END
 

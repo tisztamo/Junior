@@ -1,11 +1,15 @@
-task: prompt/task/feature/implement.md
+task: prompt/task/doc/improve.md
 attention:
   - ./
-  - src/interactiveSession/startInteractiveSession.js
-  - src/interactiveSession/promptProcessing.js
-  - src/prompt/createPrompt.js
+  - ./README.md
 requirements: |
-  Print the contents of the prompt descriptor file (in its original format) to the console before asking for notes!
-  Avoid "prompt.yaml" to be duplicated in the source code by creating a prompt descriptor loader function
-  that takes an argument "rawPrinter" and if provided, prints the name, a colon, a newline and the content of the file using it!
-format: prompt/format/shell.md
+  Add the following new info to the readme:
+    - This readme was _fully_ generated with AI (note at the beginning).
+    - I, the programmer of this project started to communicate only in english. I only read the code, never write it.
+    - npm start starts a local server on port 3000, where you can generate a prompt and auto-copy it to paste to chatgpt.
+    - The cli uses the chatgpt api, so need an api key in OPENAI_API_KEY env var
+    - You need gpt-4 to get meaningful results.
+    - licence: gpl-3.0
+  
+  Be concise!
+format: prompt/format/new_file_version.md

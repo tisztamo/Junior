@@ -9,9 +9,9 @@ EXAMPLE START
 
 ```sh
 #!/bin/sh
-# Goal: Display a relevant example output.
+# Goal: [Task description, max 7 words]
 # Plan:
-# ... plan goes here ...
+# 1. [...]
 
 [Commands solving the task]
 ```
