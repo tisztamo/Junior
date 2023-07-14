@@ -2,14 +2,14 @@ task: prompt/task/doc/improve.md
 attention:
   - ./
   - ./README.md
-requirements: |
+requirements: >
   Add the following new info to the readme:
-    - This readme was _fully_ generated with AI (note at the beginning).
-    - I, the programmer of this project started to communicate only in english. I only read the code, never write it.
-    - npm start starts a local server on port 3000, where you can generate a prompt and auto-copy it to paste to chatgpt.
-    - The cli uses the chatgpt api, so need an api key in OPENAI_API_KEY env var
-    - You need gpt-4 to get meaningful results.
-    - licence: gpl-3.0
+  There is a cli and a web interface.
+  How to install
+  How to run: "npm start" starts a local server on port 3000, where you can generate a prompt and auto-copy it to paste to chatgpt.
+  How to use. What are tasks like "feature/implement" and "bug/fix", "refactor/".
+  The cli uses the chatgpt api, so need an api key in OPENAI_API_KEY env var
+  You need gpt-4 or a better model to get meaningful results (A note at the end).
   
   Be concise!
 format: prompt/format/new_file_version.md
