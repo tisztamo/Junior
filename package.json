@@ -1,7 +1,7 @@
 {
-  "name": "gpcontrib",
+  "name": "@aijunior/dev",
   "version": "0.0.1",
-  "description": "Build large documents with AI",
+  "description": "Your AI Contributor",
   "type": "module",
   "main": "src/main.js",
   "bin": {

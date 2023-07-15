@@ -1,12 +1,8 @@
 task: prompt/task/feature/implement.md
 attention:
   - ./
-  - ./prompt/
+  - ./package.json
   - ./src/
-  - ./src/prompt/
-  - ./src/prompt/loadPromptDescriptor.js
-  - ./src/prompt/createPrompt.js
 requirements: >
-  When loading the task, try to load it relative to the current directory,
-  but if not found, load the file relative to the project root (calculated from the source file location).
+  Rename the project to @aijunior/dev
 format: prompt/format/shell.md

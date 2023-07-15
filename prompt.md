@@ -22,14 +22,60 @@
 ├── tmp/...
 
 ```
+./package.json:
 ```
-./prompt/
-├── archive/...
-├── format/...
-├── system.md
-├── task/...
+{
+  "name": "gpcontrib",
+  "version": "0.0.1",
+  "description": "Build large documents with AI",
+  "type": "module",
+  "main": "src/main.js",
+  "bin": {
+    "contrib": "src/main.js"
+  },
+  "scripts": {
+    "cli": "node src/main.js",
+    "start": "node src/backend/server.js --prompt=prompt.yaml -s & vite src --open "
+  },
+  "keywords": [
+    "cli",
+    "uppercase"
+  ],
+  "author": "",
+  "license": "GPL",
+  "dependencies": {
+    "autoprefixer": "^10.4.14",
+    "chatgpt": "^5.2.4",
+    "clipboard-copy": "^4.0.1",
+    "cors": "^2.8.5",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "js-yaml": "^4.1.0",
+    "marked": "^5.1.0",
+    "postcss": "^8.4.24",
+    "solid-js": "^1.7.7",
+    "tailwindcss": "^3.3.2",
+    "vite": "^4.3.9",
+    "vite-plugin-solid": "^2.7.0"
+  },
+  "directories": {
+    "doc": "doc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tisztamo/contributor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tisztamo/contributor/issues"
+  },
+  "homepage": "https://github.com/tisztamo/contributor#readme",
+  "devDependencies": {
+    "babel-preset-solid": "^1.7.7"
+  }
+}
 
 ```
+
 ```
 ./src/
 ├── attention/...
@@ -44,77 +90,6 @@
 ├── vite.config.js
 
 ```
-```
-./src/prompt/
-├── createPrompt.js
-├── extractTemplateVars.js
-├── getPromptFlag.js
-├── getSystemPromptIfNeeded.js
-├── loadFormatTemplate.js
-├── loadPromptDescriptor.js
-├── loadTaskTemplate.js
-├── promptProcessing.js
-├── resolveTemplateVariables.js
-
-```
-./src/prompt/loadPromptDescriptor.js:
-```
-import fs from 'fs';
-import util from 'util';
-
-const readFile = util.promisify(fs.readFile);
-const descriptorFileName = "prompt.yaml";
-
-const loadPromptDescriptor = async (rawPrinter) => {
-  const descriptorContent = await readFile(descriptorFileName, 'utf8');
-  if (rawPrinter) {
-    rawPrinter(descriptorFileName + ':\n' + descriptorContent);
-  }
-  return descriptorContent;
-};
-
-export { loadPromptDescriptor };
-
-```
-
-./src/prompt/createPrompt.js:
-```
-import { readAttention } from "../attention/readAttention.js"
-import util from 'util';
-import fs from 'fs';
-import yaml from 'js-yaml';
-import ejs from 'ejs';
-import { getPromptFlag } from './getPromptFlag.js';
-import { getSystemPromptIfNeeded } from './getSystemPromptIfNeeded.js';
-import { resolveTemplateVariables } from './resolveTemplateVariables.js';
-import { extractTemplateVars } from './extractTemplateVars.js';
-import { loadPromptDescriptor } from './loadPromptDescriptor.js';
-import { loadTaskTemplate } from './loadTaskTemplate.js';
-import { loadFormatTemplate } from './loadFormatTemplate.js';
-const readFile = util.promisify(fs.readFile);
-
-const createPrompt = async (userInput) => {
-  const promptDescriptor = yaml.load(await loadPromptDescriptor());
-  let templateVars = extractTemplateVars(promptDescriptor);
-
-  templateVars = await resolveTemplateVariables(templateVars);
-
-  const attention = await readAttention(promptDescriptor.attention);
-  const task = await loadTaskTemplate(promptDescriptor.task, templateVars);
-  const format = await loadFormatTemplate(promptDescriptor.format, templateVars);
-  const system = await getSystemPromptIfNeeded();
-  const saveto = promptDescriptor.saveto;
-  return {
-    prompt: `# Working set\n\n${attention.join("\n")}\n\n# Task\n\n${task}\n\n# Output Format\n\n${format}\n\n${userInput ? userInput : ""}`,
-    saveto
-  };
-}
-
-export { createPrompt };
-
-
-```
-
 
 # Task
 
@@ -127,7 +102,7 @@ Implement the following feature!
 
 Requirements:
 
-When loading the task, try to load it relative to the current directory, but if not found, load the file relative to the project root (calculated from the source file location).
+Rename the project to @aijunior/dev
 
 
 
