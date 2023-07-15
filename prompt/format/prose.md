@@ -1,0 +1,1 @@
+Concise english prose with calming rythm.

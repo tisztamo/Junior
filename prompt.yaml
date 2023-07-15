@@ -1,10 +1,7 @@
-task: prompt/task/feature/implement.md
+task: prompt/task/refactor/split.md
 attention:
   - ./
-  - ./package.json
-  - ./README.md
-  - ./src/
-requirements: >
-  The project was renamed to Junior (github: tisztamo/Junior) (npm: @aijunior/dev).
-  Update the package.json, README.md and all the sources!
+  - src/backend/listTasks.js
+requirements: |
+  Create backend/fileutils/readDirRecursively.js!
 format: prompt/format/shell.md

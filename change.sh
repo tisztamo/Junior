@@ -1,20 +1,51 @@
 #!/bin/sh
-
-# Goal: Rename project to Junior
+# Goal: Split a file into parts to enhance manageability
 # Plan:
-# 1. Update package.json
-# 2. Update README.md
-# 3. Scan the source code files in the ./src directory recursively and replace old package name with the new one where found.
+# 1. Identify the reusable functions in the original file.
+# 2. Create the necessary directory for the new file.
+# 3. Create a new file for the reusable function.
+# 4. Write the function in the new file.
+# 5. Import the function in the original file and use it.
 
-# Step 1: Update package.json
-tmp_package_json=$(mktemp)
-jq '.name="@aijunior/dev" | .repository.url="git+https://github.com/tisztamo/Junior.git" | .bugs.url="https://github.com/tisztamo/Junior/issues" | .homepage="https://github.com/tisztamo/Junior#readme"' package.json > "$tmp_package_json" && mv "$tmp_package_json" package.json
+# Create necessary directory if it doesn't exist
+mkdir -p ./src/backend/fileutils
 
-# Step 2: Update README.md
-sed -i '' 's/The Contributor - Your AI contributor which writes itself./The Junior - Your AI Junior which writes itself./g' README.md
+cat > ./src/backend/fileutils/readDirRecursively.js << 'EOF'
+import fs from 'fs';
+import path from 'path';
 
-# Step 3: Scan source code and replace old package name
-find ./src -name '*.js' -print0 | while IFS= read -r -d '' file
-do
-    sed -i '' 's#@aijunior/contributor#@aijunior/dev#g' "$file"
-done
+export const readDirRecursively = (dir) => {
+    const files = [];
+
+    fs.readdirSync(dir).forEach(file => {
+        const filePath = path.join(dir, file);
+
+        if (fs.statSync(filePath).isDirectory()) {
+            files.push(...readDirRecursively(filePath));
+        } else {
+            files.push(filePath);
+        }
+    });
+
+    return files;
+};
+EOF
+
+cat > ./src/backend/listTasks.js << 'EOF'
+import path from 'path';
+
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+import { readDirRecursively } from './fileutils/readDirRecursively.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+export const listTasks = () => {
+    const tasksDir = path.join(__dirname, '../../prompt/task');
+    return readDirRecursively(tasksDir).map(file => path.relative(tasksDir, file));
+};
+EOF
+
+echo "Code has been refactored successfully."
