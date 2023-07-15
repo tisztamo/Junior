@@ -8,6 +8,8 @@ import { getSystemPromptIfNeeded } from './getSystemPromptIfNeeded.js';
 import { resolveTemplateVariables } from './resolveTemplateVariables.js';
 import { extractTemplateVars } from './extractTemplateVars.js';
 import { loadPromptDescriptor } from './loadPromptDescriptor.js';
+import { loadTaskTemplate } from './loadTaskTemplate.js';
+import { loadFormatTemplate } from './loadFormatTemplate.js';
 const readFile = util.promisify(fs.readFile);
 
 const createPrompt = async (userInput) => {
@@ -17,8 +19,8 @@ const createPrompt = async (userInput) => {
   templateVars = await resolveTemplateVariables(templateVars);
 
   const attention = await readAttention(promptDescriptor.attention);
-  const task = await ejs.renderFile(promptDescriptor.task, templateVars, {async: true});
-  const format = await ejs.renderFile(promptDescriptor.format, templateVars, {async: true});
+  const task = await loadTaskTemplate(promptDescriptor.task, templateVars);
+  const format = await loadFormatTemplate(promptDescriptor.format, templateVars);
   const system = await getSystemPromptIfNeeded();
   const saveto = promptDescriptor.saveto;
   return {
@@ -28,3 +30,4 @@ const createPrompt = async (userInput) => {
 }
 
 export { createPrompt };
+

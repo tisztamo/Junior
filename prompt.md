@@ -22,57 +22,95 @@
 ├── tmp/...
 
 ```
-./README.md:
 ```
-Warn: This README is AI generated, just like all the source files of this project.
+./prompt/
+├── archive/...
+├── format/...
+├── system.md
+├── task/...
 
-# The Contributor - Your AI contributor which writes itself.
+```
+```
+./src/
+├── attention/...
+├── backend/...
+├── config.js
+├── execute/...
+├── frontend/...
+├── index.html
+├── interactiveSession/...
+├── main.js
+├── prompt/...
+├── vite.config.js
 
-## Description
+```
+```
+./src/prompt/
+├── createPrompt.js
+├── extractTemplateVars.js
+├── getPromptFlag.js
+├── getSystemPromptIfNeeded.js
+├── loadFormatTemplate.js
+├── loadPromptDescriptor.js
+├── loadTaskTemplate.js
+├── promptProcessing.js
+├── resolveTemplateVariables.js
 
-The Contributor is an exploratory project aimed at revolutionizing the way programmers interact with the development process. Much like how Linus Thorwalds, the creator of the Linux Kernel, supervises its development without having to write code himself, this project allows developers to solely communicate with the AI and supervise the development process.
+```
+./src/prompt/loadPromptDescriptor.js:
+```
+import fs from 'fs';
+import util from 'util';
 
-By detailing the specifics of a task in a prompt descriptor and highlighting the relevant parts of your project, you can delegate the implementation of code, documentation, tests, and more to your AI Contributor.
+const readFile = util.promisify(fs.readFile);
+const descriptorFileName = "prompt.yaml";
 
-## Getting Started
+const loadPromptDescriptor = async (rawPrinter) => {
+  const descriptorContent = await readFile(descriptorFileName, 'utf8');
+  if (rawPrinter) {
+    rawPrinter(descriptorFileName + ':\n' + descriptorContent);
+  }
+  return descriptorContent;
+};
 
-### The Prompt Descriptor
+export { loadPromptDescriptor };
 
-A prompt descriptor is a YAML file (`prompt.yaml`) that outlines the necessary details for generating a task prompt for the AI model.
-
-Here is an example of a prompt descriptor:
-
-```yaml
-task: prompt/task/feature/implement.md
-attention:
-  - src/interactiveSession/startInteractiveSession.js
-  - src/prompt/createPrompt.js
-  - src/attention/readAttention.js
-  - prompt.yaml
-requirements: >
-  Write a README.md for this _exploratory_ project!
-format: prompt/format/new_file_version.md
 ```
 
-Each element in the descriptor serves a specific purpose:
-- `task`: Describes the task type and scope. For example, you can check out the [prompt/task/implement.md](prompt/task/implement.md) file as an example.
-- `attention`: Lists the files and directories that are most relevant to the task.
-- `requirements`: Describes the actual task in a human-readable format.
-- `format`: Determines how the output will be formatted. You can refer to the [prompt/format/new_file_version.md](prompt/format/new_file_version.md) file for an example.
+./src/prompt/createPrompt.js:
+```
+import { readAttention } from "../attention/readAttention.js"
+import util from 'util';
+import fs from 'fs';
+import yaml from 'js-yaml';
+import ejs from 'ejs';
+import { getPromptFlag } from './getPromptFlag.js';
+import { getSystemPromptIfNeeded } from './getSystemPromptIfNeeded.js';
+import { resolveTemplateVariables } from './resolveTemplateVariables.js';
+import { extractTemplateVars } from './extractTemplateVars.js';
+import { loadPromptDescriptor } from './loadPromptDescriptor.js';
+import { loadTaskTemplate } from './loadTaskTemplate.js';
+import { loadFormatTemplate } from './loadFormatTemplate.js';
+const readFile = util.promisify(fs.readFile);
 
-### Attention Mechanism
+const createPrompt = async (userInput) => {
+  const promptDescriptor = yaml.load(await loadPromptDescriptor());
+  let templateVars = extractTemplateVars(promptDescriptor);
 
-The attention mechanism is an important part of this project. It guides the AI model by providing it with a working set, which helps overcome the limited working memory of large language models.
+  templateVars = await resolveTemplateVariables(templateVars);
 
-This working set is a subset of the entire project that's currently in focus. It includes both files and directories.
+  const attention = await readAttention(promptDescriptor.attention);
+  const task = await loadTaskTemplate(promptDescriptor.task, templateVars);
+  const format = await loadFormatTemplate(promptDescriptor.format, templateVars);
+  const system = await getSystemPromptIfNeeded();
+  const saveto = promptDescriptor.saveto;
+  return {
+    prompt: `# Working set\n\n${attention.join("\n")}\n\n# Task\n\n${task}\n\n# Output Format\n\n${format}\n\n${userInput ? userInput : ""}`,
+    saveto
+  };
+}
 
-For files, the content is directly provided to the AI. For directories, a brief list of files and subdirectories within them is presented. Directories are denoted with a trailing `/`.
-
-## Contributing and Support
-
-Contributions are welcome! However, please keep in mind that this project is designed to write itself. Your main role will be to oversee the work, provide detailed prompts, and review the outcomes.
-
-For support, please create an issue in the GitHub repository and the community will help you out.
+export { createPrompt };
 
 
 ```
@@ -80,23 +118,38 @@ For support, please create an issue in the GitHub repository and the community w
 
 # Task
 
-Improve the documentation!
+Implement the following feature!
 
-Add the following new info to the readme: There is a cli and a web interface. How to install How to run: &#34;npm start&#34; starts a local server on port 3000, where you can generate a prompt and auto-copy it to paste to chatgpt. How to use. What are tasks like &#34;feature/implement&#34; and &#34;bug/fix&#34;, &#34;refactor/&#34;. The cli uses the chatgpt api, so need an api key in OPENAI_API_KEY env var You need gpt-4 or a better model to get meaningful results (A note at the end).
-Be concise!
+- Create a plan!
+- Create new files when needed!
+- Every js file should only export a single function!
+- Use ES6 imports!
+
+Requirements:
+
+When loading the task, try to load it relative to the current directory, but if not found, load the file relative to the project root (calculated from the source file location).
+
 
 
 # Output Format
 
-Provide the new or modified file(s) as code blocks, each prefixed with its path and a colon.
-JS files should only export a single function and be named after the function: e.g. `myFn.js` should export `myFn()`.
-Always output full files, copying unchanged content.
+Encode and enclose your results as ./change.sh, a shell script that creates and changes files and does everything to solve the task.
+Files are small, prefer heredoc-ing full files without substitution.
+Assume OSX.
+npm and jq are installed.
+Do NOT write any text outside the script (the plan goes into it)!
 
-E.g.:
 
-texts/sample.txt:
+EXAMPLE START
+
+```sh
+#!/bin/sh
+# Goal: [Task description, max 7 words]
+# Plan:
+# 1. [...]
+
+[Commands solving the task]
 ```
-A sample text file.
-```
 
+EXAMPLE END
 

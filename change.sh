@@ -1,33 +1,36 @@
 #!/bin/sh
-# Goal: Print the contents of the prompt descriptor file (in its original format) to the console before asking for notes!
-# Avoid "prompt.yaml" to be duplicated in the source code by creating a prompt descriptor loader function
-# that takes an argument "rawPrinter" and if provided, prints the name, a colon, a newline and the content of the file using it!
+# Goal: Load task file relative to current or project root directory
 # Plan:
-# 1. Create a new file called loadPromptDescriptor.js that will be responsible for loading the prompt descriptor file.
-# 2. In loadPromptDescriptor.js, create a function that accepts a "rawPrinter" argument. If "rawPrinter" is provided, the function should print the filename, a colon, a newline, and the content of the file.
-# 3. Replace the direct call to readFile for prompt.yaml in createPrompt.js with the call to our new function.
-# 4. Adjust startInteractiveSession.js to call the new function before asking for notes.
+# 1. Extract existing `createPrompt` function from `createPrompt.js` file to a new `loadTaskTemplate.js` file
+# 2. Update the `createPrompt` function in `createPrompt.js` to import the new `loadTaskTemplate` function
+# 3. Update `loadTaskTemplate` function to first try loading the file relative to the current directory, if not found, load it from the project root directory
 
-cat > src/prompt/loadPromptDescriptor.js << EOF
-import fs from 'fs';
+# Step 1: Extract existing `createPrompt` function to a new `loadTaskTemplate.js` file
+cat << 'EOF' > ./src/prompt/loadTaskTemplate.js
 import util from 'util';
+import fs from 'fs';
+import path from 'path';
+import ejs from 'ejs';
 
 const readFile = util.promisify(fs.readFile);
-const descriptorFileName = "prompt.yaml";
 
-const loadPromptDescriptor = async (rawPrinter) => {
-  const descriptorContent = await readFile(descriptorFileName, 'utf8');
-  if (rawPrinter) {
-    rawPrinter(descriptorFileName + ':\n' + descriptorContent);
+const loadTaskTemplate = async (taskTemplatePath, templateVars) => {
+  try {
+    // Try to read the file relative to the current directory
+    return await ejs.renderFile(taskTemplatePath, templateVars, {async: true});
+  } catch (err) {
+    // If the file doesn't exist, try reading it from the project root directory
+    const rootPath = path.resolve(__dirname, '../../', taskTemplatePath);
+    return await ejs.renderFile(rootPath, templateVars, {async: true});
   }
-  return descriptorContent;
 };
 
-export { loadPromptDescriptor };
+export { loadTaskTemplate };
+
 EOF
 
-# Update createPrompt.js to use the new function
-cat > src/prompt/createPrompt.js << EOF
+# Step 2: Update `createPrompt` function in `createPrompt.js` to import the new `loadTaskTemplate` function
+cat << 'EOF' > ./src/prompt/createPrompt.js
 import { readAttention } from "../attention/readAttention.js"
 import util from 'util';
 import fs from 'fs';
@@ -38,6 +41,7 @@ import { getSystemPromptIfNeeded } from './getSystemPromptIfNeeded.js';
 import { resolveTemplateVariables } from './resolveTemplateVariables.js';
 import { extractTemplateVars } from './extractTemplateVars.js';
 import { loadPromptDescriptor } from './loadPromptDescriptor.js';
+import { loadTaskTemplate } from './loadTaskTemplate.js';
 const readFile = util.promisify(fs.readFile);
 
 const createPrompt = async (userInput) => {
@@ -47,39 +51,83 @@ const createPrompt = async (userInput) => {
   templateVars = await resolveTemplateVariables(templateVars);
 
   const attention = await readAttention(promptDescriptor.attention);
-  const task = await ejs.renderFile(promptDescriptor.task, templateVars, {async: true});
+  const task = await loadTaskTemplate(promptDescriptor.task, templateVars);
   const format = await ejs.renderFile(promptDescriptor.format, templateVars, {async: true});
   const system = await getSystemPromptIfNeeded();
   const saveto = promptDescriptor.saveto;
   return {
-    prompt: \`${system}# Working set\n\n\${attention.join("\n")}\n\n# Task\n\n\${task}\n\n# Output Format\n\n\${format}\n\n\${userInput ? userInput : ""}\`,
+    prompt: `# Working set\n\n${attention.join("\n")}\n\n# Task\n\n${task}\n\n# Output Format\n\n${format}\n\n${userInput ? userInput : ""}`,
     saveto
   };
 }
 
 export { createPrompt };
+
 EOF
 
-# Adjust startInteractiveSession.js to use new function
-cat > src/interactiveSession/startInteractiveSession.js << EOF
-import { saveAndSendPrompt } from './saveAndSendPrompt.js';
-import processPrompt from '../prompt/promptProcessing.js';
-import { loadPromptDescriptor } from '../prompt/loadPromptDescriptor.js';
+#!/bin/sh
+# Goal: Load task and format files relative to current or project root directory
+# Plan:
+# 1. Create new `loadFormatTemplate.js` file with similar logic as `loadTaskTemplate.js`
+# 2. Update `createPrompt` function in `createPrompt.js` to import and use the new `loadFormatTemplate` function
 
-const startInteractiveSession = async (last_command_result = "", parent_message_id = null, rl, api) => {
-  await loadPromptDescriptor(console.log);
-  rl.question('Notes: ', async (task) => {
-    let { prompt } = await processPrompt(task, last_command_result);
-    console.log("Your prompt: ", prompt);
-    rl.question('Do you want to send this prompt? (y/n): ', async (confirmation) => {
-      if (confirmation.toLowerCase() === 'y') {
-        await saveAndSendPrompt(prompt, task, last_command_result, api, rl, startInteractiveSession);
-      } else {
-        startInteractiveSession(last_command_result, parent_message_id, rl, api);
-      }
-    });
-  });
+# Step 1: Create new `loadFormatTemplate.js` file with similar logic as `loadTaskTemplate.js`
+cat << 'EOF' > ./src/prompt/loadFormatTemplate.js
+import util from 'util';
+import fs from 'fs';
+import path from 'path';
+import ejs from 'ejs';
+
+const readFile = util.promisify(fs.readFile);
+
+const loadFormatTemplate = async (formatTemplatePath, templateVars) => {
+  try {
+    // Try to read the file relative to the current directory
+    return await ejs.renderFile(formatTemplatePath, templateVars, {async: true});
+  } catch (err) {
+    // If the file doesn't exist, try reading it from the project root directory
+    const rootPath = path.resolve(__dirname, '../../', formatTemplatePath);
+    return await ejs.renderFile(rootPath, templateVars, {async: true});
+  }
 };
 
-export { startInteractiveSession };
+export { loadFormatTemplate };
+
+EOF
+
+# Step 2: Update `createPrompt` function in `createPrompt.js` to import and use the new `loadFormatTemplate` function
+cat << 'EOF' > ./src/prompt/createPrompt.js
+import { readAttention } from "../attention/readAttention.js"
+import util from 'util';
+import fs from 'fs';
+import yaml from 'js-yaml';
+import ejs from 'ejs';
+import { getPromptFlag } from './getPromptFlag.js';
+import { getSystemPromptIfNeeded } from './getSystemPromptIfNeeded.js';
+import { resolveTemplateVariables } from './resolveTemplateVariables.js';
+import { extractTemplateVars } from './extractTemplateVars.js';
+import { loadPromptDescriptor } from './loadPromptDescriptor.js';
+import { loadTaskTemplate } from './loadTaskTemplate.js';
+import { loadFormatTemplate } from './loadFormatTemplate.js';
+const readFile = util.promisify(fs.readFile);
+
+const createPrompt = async (userInput) => {
+  const promptDescriptor = yaml.load(await loadPromptDescriptor());
+  let templateVars = extractTemplateVars(promptDescriptor);
+
+  templateVars = await resolveTemplateVariables(templateVars);
+
+  const attention = await readAttention(promptDescriptor.attention);
+  const task = await loadTaskTemplate(promptDescriptor.task, templateVars);
+  const format = await loadFormatTemplate(promptDescriptor.format, templateVars);
+  const system = await getSystemPromptIfNeeded();
+  const saveto = promptDescriptor.saveto;
+  return {
+    prompt: `# Working set\n\n${attention.join("\n")}\n\n# Task\n\n${task}\n\n# Output Format\n\n${format}\n\n${userInput ? userInput : ""}`,
+    saveto
+  };
+}
+
+export { createPrompt };
+
 EOF

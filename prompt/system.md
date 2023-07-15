@@ -6,4 +6,4 @@ You will see a partial directory structure. Ask for the contents of subdirs mark
 
 Some files are printed in the working set.
 
-Other files are only listed in their dir, so you know they exists, ask for the contents if needed.
+Other files are only listed in their dir, so you know they exists. Do not edit files without knowing their current content, ask for their contents instead!

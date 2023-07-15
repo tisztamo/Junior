@@ -1,15 +1,12 @@
-task: prompt/task/doc/improve.md
+task: prompt/task/feature/implement.md
 attention:
   - ./
-  - ./README.md
+  - ./prompt/
+  - ./src/
+  - ./src/prompt/
+  - ./src/prompt/loadPromptDescriptor.js
+  - ./src/prompt/createPrompt.js
 requirements: >
-  Add the following new info to the readme:
-  There is a cli and a web interface.
-  How to install
-  How to run: "npm start" starts a local server on port 3000, where you can generate a prompt and auto-copy it to paste to chatgpt.
-  How to use. What are tasks like "feature/implement" and "bug/fix", "refactor/".
-  The cli uses the chatgpt api, so need an api key in OPENAI_API_KEY env var
-  You need gpt-4 or a better model to get meaningful results (A note at the end).
-  
-  Be concise!
-format: prompt/format/new_file_version.md
+  When loading the task, try to load it relative to the current directory,
+  but if not found, load the file relative to the project root (calculated from the source file location).
+format: prompt/format/shell.md
