@@ -2,7 +2,9 @@ task: prompt/task/feature/implement.md
 attention:
   - ./
   - ./package.json
+  - ./README.md
   - ./src/
 requirements: >
-  Rename the project to @aijunior/dev
+  The project was renamed to Junior (github: tisztamo/Junior) (npm: @aijunior/dev).
+  Update the package.json, README.md and all the sources!
 format: prompt/format/shell.md

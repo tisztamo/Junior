@@ -1,6 +1,6 @@
 Warn: This README is AI generated, just like all the source files of this project.
 
-# The Contributor - Your AI contributor which writes itself.
+# The Junior - Your AI contributor which writes itself.
 
 ## Description
 

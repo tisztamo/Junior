@@ -37,12 +37,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tisztamo/contributor.git"
+    "url": "git+https://github.com/tisztamo/Junior.git"
   },
   "bugs": {
-    "url": "https://github.com/tisztamo/contributor/issues"
+    "url": "https://github.com/tisztamo/Junior/issues"
   },
-  "homepage": "https://github.com/tisztamo/contributor#readme",
+  "homepage": "https://github.com/tisztamo/Junior#readme",
   "devDependencies": {
     "babel-preset-solid": "^1.7.7"
   }

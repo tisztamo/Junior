@@ -1,12 +1,20 @@
 #!/bin/sh
-# Goal: Rename the project to @aijunior/dev and change description
+
+# Goal: Rename project to Junior
 # Plan:
-# 1. Change the name field in package.json to "@aijunior/dev".
-# 2. Change the description field in package.json to "Your AI Contributor".
-# 3. No new files are needed for this task.
+# 1. Update package.json
+# 2. Update README.md
+# 3. Scan the source code files in the ./src directory recursively and replace old package name with the new one where found.
 
-# Updating package.json with new project name and description
-jq '.name = "@aijunior/dev"' package.json > package_temp.json && mv package_temp.json package.json
-jq '.description = "Your AI Contributor"' package.json > package_temp.json && mv package_temp.json package.json
+# Step 1: Update package.json
+tmp_package_json=$(mktemp)
+jq '.name="@aijunior/dev" | .repository.url="git+https://github.com/tisztamo/Junior.git" | .bugs.url="https://github.com/tisztamo/Junior/issues" | .homepage="https://github.com/tisztamo/Junior#readme"' package.json > "$tmp_package_json" && mv "$tmp_package_json" package.json
 
-echo "Project renamed to @aijunior/dev and description changed to 'Your AI Contributor' successfully"
+# Step 2: Update README.md
+sed -i '' 's/The Contributor - Your AI contributor which writes itself./The Junior - Your AI Junior which writes itself./g' README.md
+
+# Step 3: Scan source code and replace old package name
+find ./src -name '*.js' -print0 | while IFS= read -r -d '' file
+do
+    sed -i '' 's#@aijunior/contributor#@aijunior/dev#g' "$file"
+done
