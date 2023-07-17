@@ -1,16 +1,11 @@
 import { readAttention } from "../attention/readAttention.js"
-import util from 'util';
-import fs from 'fs';
 import yaml from 'js-yaml';
-import ejs from 'ejs';
-import { getPromptFlag } from './getPromptFlag.js';
 import { getSystemPromptIfNeeded } from './getSystemPromptIfNeeded.js';
 import { resolveTemplateVariables } from './resolveTemplateVariables.js';
 import { extractTemplateVars } from './extractTemplateVars.js';
 import { loadPromptDescriptor } from './loadPromptDescriptor.js';
 import { loadTaskTemplate } from './loadTaskTemplate.js';
 import { loadFormatTemplate } from './loadFormatTemplate.js';
-const readFile = util.promisify(fs.readFile);
 
 const createPrompt = async (userInput) => {
   const promptDescriptor = yaml.load(await loadPromptDescriptor());
