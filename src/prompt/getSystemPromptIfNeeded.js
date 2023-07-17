@@ -1,4 +1,4 @@
-import { getSystemPrompt } from "../config.js";
+import { getSystemPrompt } from "./getSystemPrompt.js";
 
 async function getSystemPromptIfNeeded() {
   if (process.argv.includes("--system-prompt") || process.argv.includes("-s")) {

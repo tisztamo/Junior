@@ -2,14 +2,11 @@
 
 ```
 ./
-├── .DS_Store
 ├── .git/...
 ├── .gitignore
-├── .vscode/...
 ├── README.md
 ├── babel.config.js
 ├── change.sh
-├── dist/...
 ├── doc/...
 ├── node_modules/...
 ├── package-lock.json
@@ -19,60 +16,115 @@
 ├── prompt.yaml
 ├── secret.sh
 ├── src/...
-├── tmp/...
 
 ```
-./package.json:
+./src/prompt/loadFormatTemplate.js:
 ```
-{
-  "name": "@aijunior/dev",
-  "version": "0.0.1",
-  "description": "Your AI Contributor",
-  "type": "module",
-  "main": "src/main.js",
-  "bin": {
-    "contrib": "src/main.js"
-  },
-  "scripts": {
-    "cli": "node src/main.js",
-    "start": "node src/backend/server.js --prompt=prompt.yaml -s & vite src --open "
-  },
-  "keywords": [
-    "cli",
-    "uppercase"
-  ],
-  "author": "",
-  "license": "GPL",
-  "dependencies": {
-    "autoprefixer": "^10.4.14",
-    "chatgpt": "^5.2.4",
-    "clipboard-copy": "^4.0.1",
-    "cors": "^2.8.5",
-    "ejs": "^3.1.9",
-    "express": "^4.18.2",
-    "js-yaml": "^4.1.0",
-    "marked": "^5.1.0",
-    "postcss": "^8.4.24",
-    "solid-js": "^1.7.7",
-    "tailwindcss": "^3.3.2",
-    "vite": "^4.3.9",
-    "vite-plugin-solid": "^2.7.0"
-  },
-  "directories": {
-    "doc": "doc"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/tisztamo/Junior.git"
-  },
-  "bugs": {
-    "url": "https://github.com/tisztamo/Junior/issues"
-  },
-  "homepage": "https://github.com/tisztamo/Junior#readme",
-  "devDependencies": {
-    "babel-preset-solid": "^1.7.7"
+import util from 'util';
+import fs from 'fs';
+import path from 'path';
+import ejs from 'ejs';
+
+const readFile = util.promisify(fs.readFile);
+
+const loadFormatTemplate = async (formatTemplatePath, templateVars) => {
+  try {
+    // Try to read the file relative to the current directory
+    return await ejs.renderFile(formatTemplatePath, templateVars, {async: true});
+  } catch (err) {
+    // If the file doesn't exist, try reading it from the project root directory
+    const rootPath = path.resolve(__dirname, '../../', formatTemplatePath);
+    return await ejs.renderFile(rootPath, templateVars, {async: true});
   }
+};
+
+export { loadFormatTemplate };
+
+
+```
+
+./src/prompt/loadTaskTemplate.js:
+```
+import util from 'util';
+import fs from 'fs';
+import path from 'path';
+import ejs from 'ejs';
+
+const readFile = util.promisify(fs.readFile);
+
+const loadTaskTemplate = async (taskTemplatePath, templateVars) => {
+  try {
+    // Try to read the file relative to the current directory
+    return await ejs.renderFile(taskTemplatePath, templateVars, {async: true});
+  } catch (err) {
+    // If the file doesn't exist, try reading it from the project root directory
+    const rootPath = path.resolve(__dirname, '../../', taskTemplatePath);
+    return await ejs.renderFile(rootPath, templateVars, {async: true});
+  }
+};
+
+export { loadTaskTemplate };
+
+
+```
+
+./src/config.js:
+```
+import fs from 'fs/promises';
+import readline from 'readline';
+import { ChatGPTAPI } from 'chatgpt';
+
+// test if -d or --dry-run cli arg is present
+function isDryRun() {
+  return process.argv.includes("-d") || process.argv.includes("--dry-run");
 }
+
+const api = isDryRun() ? {
+    sendMessage: () => { return {id: 42, text: "DRY RUN, NOT SENT"}}
+  } : new ChatGPTAPI({
+  debug: true,
+  apiKey: process.env.OPENAI_API_KEY,
+  systemMessage: await getSystemPrompt(),
+  completionParams: {
+    model: get_model(),
+    stream: true,
+    temperature: 0.5,
+    max_tokens: 2048,
+  }
+});
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+function get_model() {
+  const modelArg = process.argv.find(arg => arg.startsWith('--model='));
+  if (modelArg) {
+    return modelArg.split('=')[1];
+  }
+  return "gpt-4";
+}
+
+async function getSystemPrompt() {
+  return (await fs.readFile("prompt/system.md", "utf8")).toString()
+}
+export { api, rl, get_model, getSystemPrompt};
+
+```
+
+src/prompt/getSystemPromptIfNeeded.js:
+```
+import { getSystemPrompt } from "../config.js";
+
+async function getSystemPromptIfNeeded() {
+  if (process.argv.includes("--system-prompt") || process.argv.includes("-s")) {
+    return `${await getSystemPrompt()}\n`;
+  }
+  return "";
+}
+
+export { getSystemPromptIfNeeded };
 
 ```
 
@@ -88,8 +140,9 @@ Implement the following feature!
 
 Requirements:
 
-Rename the contrib bin command to junior, and add another one, &#34;junior-web&#34;
-which does the same as &#34;npm start&#34;
+When running from another dir, I get [Error: ENOENT: no such file or directory, open &#39;prompt/system.md&#39;]
+The system prompt should be loaded using the same logic that is used for the format prompt.
+Refactor the code so that 1. this logic is extracted to src/prompt/loadPromptFile.js and 2. getSystemPrompt is extracted to src/prompt/
 
 
 

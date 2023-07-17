@@ -1,6 +1,6 @@
-import fs from 'fs/promises';
 import readline from 'readline';
 import { ChatGPTAPI } from 'chatgpt';
+import { getSystemPrompt } from "./prompt/getSystemPrompt.js";
 
 // test if -d or --dry-run cli arg is present
 function isDryRun() {
@@ -34,7 +34,4 @@ function get_model() {
   return "gpt-4";
 }
 
-async function getSystemPrompt() {
-  return (await fs.readFile("prompt/system.md", "utf8")).toString()
-}
-export { api, rl, get_model, getSystemPrompt};
+export { api, rl, get_model };

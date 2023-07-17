@@ -24,10 +24,9 @@ const createPrompt = async (userInput) => {
   const system = await getSystemPromptIfNeeded();
   const saveto = promptDescriptor.saveto;
   return {
-    prompt: `# Working set\n\n${attention.join("\n")}\n\n# Task\n\n${task}\n\n# Output Format\n\n${format}\n\n${userInput ? userInput : ""}`,
+    prompt: `${system}# Working set\n\n${attention.join("\n")}\n\n# Task\n\n${task}\n\n# Output Format\n\n${format}\n\n${userInput ? userInput : ""}`,
     saveto
   };
 }
 
 export { createPrompt };
-
