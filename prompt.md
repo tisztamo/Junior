@@ -1,13 +1,3 @@
-You're the 'Contributor', an AI system aiding authors.
-
-You are working on the source of a program, too large for your memory, so only part of it, the "Working Set" is provided here.
-
-You will see a partial directory structure. Ask for the contents of subdirs marked with /... if needed.
-
-Some files are printed in the working set.
-
-Other files are only listed in their dir, so you know they exists. Do not edit files without knowing their current content, ask for their contents instead!
-
 # Working set
 
 ```
@@ -42,7 +32,7 @@ package.json:
   },
   "scripts": {
     "cli": "node src/main.js",
-    "start": "node src/backend/server.js --prompt=prompt.yaml -s & vite src --open "
+    "start": "node src/web.js"
   },
   "keywords": [
     "cli",
@@ -83,6 +73,43 @@ package.json:
 
 ```
 
+src/main.js:
+```
+#!/usr/bin/env node
+
+import { startInteractiveSession } from './interactiveSession/startInteractiveSession.js';
+import { api, get_model, rl } from './config.js';
+import { getSystemPrompt } from './prompt/getSystemPrompt.js';
+
+console.log("Welcome to Contributor. Model: " + get_model() + "\n");
+console.log("System prompt:", await getSystemPrompt())
+
+startInteractiveSession("", null, rl, api);
+
+export { startInteractiveSession };
+
+```
+
+src/web.js:
+```
+import { startServer } from './startServer.js';
+import { startVite } from './startVite.js';
+
+startServer();
+startVite();
+
+```
+
+src/startServer.js:
+```
+import { startServer as startBackendServer } from './backend/server.js';
+
+export function startServer() {
+  startBackendServer();
+}
+
+```
+
 src/backend/server.js:
 ```
 import express from 'express';
@@ -90,20 +117,22 @@ import cors from 'cors';
 import { generateHandler, descriptorHandler, taskUpdateHandler } from './handlers.js';
 import { listTasks } from './listTasks.js';
 
-const app = express();
+export function startServer() {
+  const app = express();
 
-app.use(cors());
-app.use(express.json());
+  app.use(cors());
+  app.use(express.json());
 
-app.get('/descriptor', descriptorHandler);
-app.get('/tasks', (req, res) => res.json({ tasks: listTasks() }));
+  app.get('/descriptor', descriptorHandler);
+  app.get('/tasks', (req, res) => res.json({ tasks: listTasks() }));
 
-app.post('/generate', generateHandler);
-app.post('/updatetask', taskUpdateHandler);
+  app.post('/generate', generateHandler);
+  app.post('/updatetask', taskUpdateHandler);
 
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
-});
+  app.listen(3000, () => {
+    console.log('Server is running on port 3000');
+  });
+}
 
 ```
 
@@ -119,7 +148,7 @@ Implement the following feature!
 
 Requirements:
 
-A single js file called web.js is needed that starts both the server and vite, so that the &#34;start&#34; script can look like &#34;start&#34;: &#34;node src/web.js&#34;. Both the server and vite runs indefinitely, their output needs to be forwarded to the console of the &#34;node web.js&#34; process and they should be stopped when that process stops. Separate the start of them to files startServer.js and startVite.js.
+&#34;npx junior-web&#34; from dependent projects should work, starting web.js.
 
 
 

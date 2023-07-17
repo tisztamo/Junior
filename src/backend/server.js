@@ -4,6 +4,7 @@ import { generateHandler, descriptorHandler, taskUpdateHandler } from './handler
 import { listTasks } from './listTasks.js';
 
 export function startServer() {
+  console.log(process.cwd())
   const app = express();
 
   app.use(cors());

@@ -2,10 +2,10 @@ task: prompt/task/feature/implement.md
 attention:
   - ./
   - package.json
+  - src/main.js
+  - src/web.js
+  - src/startServer.js
   - src/backend/server.js
 requirements: >
-  A single js file called web.js is needed that starts both the server and vite,
-  so that the "start" script can look like "start": "node src/web.js".
-  Both the server and vite runs indefinitely, their output needs to be forwarded to the console of the "node web.js" process and they should be stopped when that process stops.
-  Separate the start of them to files startServer.js and startVite.js.
+  "npx junior-web" from dependent projects should work, starting web.js.
 format: prompt/format/shell.md

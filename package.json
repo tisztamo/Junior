@@ -6,7 +6,7 @@
   "main": "src/main.js",
   "bin": {
     "junior": "src/main.js",
-    "junior-web": "npm start"
+    "junior-web": "src/web.js"
   },
   "scripts": {
     "cli": "node src/main.js",
