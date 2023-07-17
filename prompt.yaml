@@ -1,7 +1,8 @@
-task: prompt/task/refactor/split.md
+task: prompt/task/feature/implement.md
 attention:
   - ./
-  - src/backend/listTasks.js
+  - ./package.json
 requirements: |
-  Create backend/fileutils/readDirRecursively.js!
+  Rename the contrib bin command to junior, and add another one, "junior-web"
+  which does the same as "npm start"
 format: prompt/format/shell.md

@@ -5,7 +5,8 @@
   "type": "module",
   "main": "src/main.js",
   "bin": {
-    "contrib": "src/main.js"
+    "junior": "src/main.js",
+    "junior-web": "npm start"
   },
   "scripts": {
     "cli": "node src/main.js",

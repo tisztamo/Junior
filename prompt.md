@@ -22,34 +22,74 @@
 ├── tmp/...
 
 ```
-src/backend/listTasks.js:
+./package.json:
 ```
-import path from 'path';
-
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-
-import { readDirRecursively } from './fileutils/readDirRecursively.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-export const listTasks = () => {
-    const tasksDir = path.join(__dirname, '../../prompt/task');
-    return readDirRecursively(tasksDir).map(file => path.relative(tasksDir, file));
-};
+{
+  "name": "@aijunior/dev",
+  "version": "0.0.1",
+  "description": "Your AI Contributor",
+  "type": "module",
+  "main": "src/main.js",
+  "bin": {
+    "contrib": "src/main.js"
+  },
+  "scripts": {
+    "cli": "node src/main.js",
+    "start": "node src/backend/server.js --prompt=prompt.yaml -s & vite src --open "
+  },
+  "keywords": [
+    "cli",
+    "uppercase"
+  ],
+  "author": "",
+  "license": "GPL",
+  "dependencies": {
+    "autoprefixer": "^10.4.14",
+    "chatgpt": "^5.2.4",
+    "clipboard-copy": "^4.0.1",
+    "cors": "^2.8.5",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "js-yaml": "^4.1.0",
+    "marked": "^5.1.0",
+    "postcss": "^8.4.24",
+    "solid-js": "^1.7.7",
+    "tailwindcss": "^3.3.2",
+    "vite": "^4.3.9",
+    "vite-plugin-solid": "^2.7.0"
+  },
+  "directories": {
+    "doc": "doc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tisztamo/Junior.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tisztamo/Junior/issues"
+  },
+  "homepage": "https://github.com/tisztamo/Junior#readme",
+  "devDependencies": {
+    "babel-preset-solid": "^1.7.7"
+  }
+}
 
 ```
 
 
 # Task
 
-## Refactor by split
+Implement the following feature!
 
-A file is too big. We need to split it into parts.
-Identify the possible parts and refactor the code in separate files!
+- Create a plan!
+- Create new files when needed!
+- Every js file should only export a single function!
+- Use ES6 imports!
 
-Create backend/fileutils/readDirRecursively.js!
+Requirements:
+
+Rename the contrib bin command to junior, and add another one, &#34;junior-web&#34;
+which does the same as &#34;npm start&#34;
 
 
 
