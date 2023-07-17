@@ -10,7 +10,7 @@
   },
   "scripts": {
     "cli": "node src/main.js",
-    "start": "node src/backend/server.js --prompt=prompt.yaml -s & vite src --open "
+    "start": "node src/web.js"
   },
   "keywords": [
     "cli",

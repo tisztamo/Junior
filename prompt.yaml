@@ -1,18 +1,11 @@
 task: prompt/task/feature/implement.md
 attention:
   - ./
-  - ./src/prompt/loadFormatTemplate.js
-  - ./src/prompt/loadTaskTemplate.js
-  - ./src/config.js
-  - src/prompt/getSystemPromptIfNeeded.js
+  - package.json
+  - src/backend/server.js
 requirements: >
-  When running from another dir, I get [Error: ENOENT: no such file or
-  directory, open 'prompt/system.md']
-
-  The system prompt should be loaded using the same logic that is used for the
-  format prompt.
-
-  Refactor the code so that 1. this logic is extracted to
-  src/prompt/loadPromptFile.js and 2. getSystemPrompt is extracted to
-  src/prompt/
+  A single js file called web.js is needed that starts both the server and vite,
+  so that the "start" script can look like "start": "node src/web.js".
+  Both the server and vite runs indefinitely, their output needs to be forwarded to the console of the "node web.js" process and they should be stopped when that process stops.
+  Separate the start of them to files startServer.js and startVite.js.
 format: prompt/format/shell.md
