@@ -5,7 +5,7 @@ src/backend/server.js:
 import express from 'express';
 import cors from 'cors';
 import { createServer } from 'http';
-import WebSocket from 'ws';
+import { WebSocketServer } from 'ws';
 import { generateHandler, descriptorHandler, taskUpdateHandler } from './handlers.js';
 import { listTasks } from './listTasks.js';
 import { notifyOnFileChange } from './notifyOnFileChange.js';
@@ -18,7 +18,7 @@ export function startServer() {
   app.use(express.json());
 
   const server = createServer(app);
-  const wss = new WebSocket.Server({ server });
+  const wss = new WebSocketServer({ server });
 
   notifyOnFileChange(wss);
 
@@ -35,16 +35,35 @@ export function startServer() {
 
 ```
 
+src/backend/handlers.js:
+```
+import processPrompt from '../prompt/promptProcessing.js';
+import { servePromptDescriptor } from './servePromptDescriptor.js';
+import { updateTaskHandler } from './updateTaskHandler.js';
+
+export const generateHandler = async (req, res) => {
+  const { notes } = req.body;
+  const { prompt } = await processPrompt(notes);
+  res.json({ prompt: prompt });
+};
+
+export const descriptorHandler = servePromptDescriptor;
+export const taskUpdateHandler = updateTaskHandler;
+
+```
+
 
 # Task
 
-Fix the following issue!
+## Refactor by split
 
-file:///Users/ko/projects-new/Junior/src/backend/server.js:17 const wss = new WebSocket.Server({ server });
-            ^
-TypeError: WebSocket.Server is not a constructor
-The api is correctly called like follows:
-import { WebSocketServer } from &#39;ws&#39;; ... const wss = new WebSocketServer({ server });
+A file is too big. We need to split it into parts.
+Identify the possible parts and refactor the code in separate files!
+
+routing should be separated to setupRoutes.js
+handlers.js should be deleted
+generateHandler -&gt; separate file.
+
 
 
 # Output Format

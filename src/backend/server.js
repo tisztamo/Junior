@@ -2,8 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { createServer } from 'http';
 import { WebSocketServer } from 'ws';
-import { generateHandler, descriptorHandler, taskUpdateHandler } from './handlers.js';
-import { listTasks } from './listTasks.js';
+import { setupRoutes } from './setupRoutes.js';
 import { notifyOnFileChange } from './notifyOnFileChange.js';
 
 export function startServer() {
@@ -18,11 +17,7 @@ export function startServer() {
 
   notifyOnFileChange(wss);
 
-  app.get('/descriptor', descriptorHandler);
-  app.get('/tasks', (req, res) => res.json({ tasks: listTasks() }));
-
-  app.post('/generate', generateHandler);
-  app.post('/updatetask', taskUpdateHandler);
+  setupRoutes(app);
 
   server.listen(3000, () => {
     console.log('Server is running on port 3000');

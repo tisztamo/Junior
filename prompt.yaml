@@ -1,16 +1,9 @@
-task: prompt/task/bug/fix.md
+task: prompt/task/refactor/split.md
 attention:
   - src/backend/server.js
-requirements: >
-  file:///Users/ko/projects-new/Junior/src/backend/server.js:17
-  const wss = new WebSocket.Server({ server });
-              ^
-  TypeError: WebSocket.Server is not a constructor
-
-  The api is correctly called like follows:
-
-  import { WebSocketServer } from 'ws';
-  ...
-  const wss = new WebSocketServer({ server });
-
+  - src/backend/handlers.js
+requirements: |
+  routing should be separated to setupRoutes.js
+  handlers.js should be deleted
+  generateHandler -> separate file.
 format: prompt/format/shell.md
