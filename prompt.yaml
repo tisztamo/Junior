@@ -2,6 +2,13 @@ task: prompt/task/feature/implement.md
 attention:
   - ./
   - src/main.js
+  - src/config.js
+  - src/interactiveSession/
+  - src/interactiveSession/startInteractiveSession.js
+  - src/interactiveSession/saveAndSendPrompt.js
+  - src/interactiveSession/handleApiResponse.js
+  - src/execute/executeCode.js
+  - src/execute/executeAndForwardOutput.js
 requirements: >
-  Do not print the system prompt at startup
+  Do not pass rl, import from the config whenever needed.
 format: prompt/format/shell.md

@@ -2,7 +2,6 @@ import readline from 'readline';
 import { ChatGPTAPI } from 'chatgpt';
 import { getSystemPrompt } from "./prompt/getSystemPrompt.js";
 
-// test if -d or --dry-run cli arg is present
 function isDryRun() {
   return process.argv.includes("-d") || process.argv.includes("--dry-run");
 }

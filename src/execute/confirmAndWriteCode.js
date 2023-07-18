@@ -1,17 +1,12 @@
-import { writeFile } from 'fs';
-import { executeAndForwardOutput } from './executeAndForwardOutput.js';
+import { rl } from '../config.js';
 
-function confirmAndWriteCode(code, rl, execute) {
+function confirmAndWriteCode(code, next) {
   rl.question('\x1b[1mEXECUTE? [y/n]\x1b[0m ', (answer) => {
-    console.log("");
-    if (answer.toLowerCase() === 'y' || answer === "") {
-      writeFile('./change.sh', code, (err) => {
-        if (err) {
-          console.error(err.message);
-          return;
-        }
-        execute();
-      });
+    if (answer.toLowerCase() === 'y') {
+      console.log("\x1b[33mExecuting...\x1b[0m");
+      next();
+    } else {
+      console.log("\x1b[33mNot executing.\x1b[0m");
     }
   });
 }
