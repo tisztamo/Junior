@@ -1,89 +1,114 @@
 # Working set
 
+src/backend/server.js:
 ```
-./
-├── .git/...
-├── .gitignore
-├── README.md
-├── babel.config.js
-├── change.sh
-├── doc/...
-├── node_modules/...
-├── package-lock.json
-├── package.json
-├── prompt/...
-├── prompt.md
-├── prompt.yaml
-├── secret.sh
-├── src/...
+import express from 'express';
+import cors from 'cors';
+import { generateHandler, descriptorHandler, taskUpdateHandler } from './handlers.js';
+import { listTasks } from './listTasks.js';
 
-```
-src/main.js:
-```
-#!/usr/bin/env node
+export function startServer() {
+  console.log(process.cwd())
+  const app = express();
 
-import { startInteractiveSession } from './interactiveSession/startInteractiveSession.js';
-import { api, get_model, rl } from './config.js';
+  app.use(cors());
+  app.use(express.json());
 
-console.log("Welcome to Contributor. Model: " + get_model() + "\n");
+  app.get('/descriptor', descriptorHandler);
+  app.get('/tasks', (req, res) => res.json({ tasks: listTasks() }));
 
-startInteractiveSession(rl, api);
+  app.post('/generate', generateHandler);
+  app.post('/updatetask', taskUpdateHandler);
 
-export { startInteractiveSession };
+  app.listen(3000, () => {
+    console.log('Server is running on port 3000');
+  });
+}
 
 ```
 
+src/backend/servePromptDescriptor.js:
 ```
-src/interactiveSession/
-├── handleApiResponse.js
-├── printNewtext.js
-├── saveAndSendPrompt.js
-├── startInteractiveSession.js
+import { readFile } from 'fs/promises';
+import path from 'path';
+
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+export const servePromptDescriptor = async (req, res) => {
+  const file = await readFile(path.resolve(__dirname, '../../prompt.yaml'), 'utf-8');
+  res.send(file);
+};
 
 ```
-src/interactiveSession/startInteractiveSession.js:
-```
-import { saveAndSendPrompt } from './saveAndSendPrompt.js';
-import processPrompt from '../prompt/promptProcessing.js';
-import { loadPromptDescriptor } from '../prompt/loadPromptDescriptor.js';
-import { rl } from '../config.js';
 
-const startInteractiveSession = async () => {
-  await loadPromptDescriptor(console.log);
-  rl.question('Notes: ', async (task) => {
-    let { prompt } = await processPrompt(task);
-    console.log("Your prompt: ", prompt);
-    rl.question('Do you want to send this prompt? (y/n): ', async (confirmation) => {
-      if (confirmation.toLowerCase() === 'y') {
-        await saveAndSendPrompt(prompt, task);
-      } else {
-        startInteractiveSession();
-      }
-    });
+src/prompt/watchPromptDescriptor.js:
+```
+import fs from 'fs';
+import { loadPromptDescriptor } from './loadPromptDescriptor.js';
+import { descriptorFileName } from './promptDescriptorConfig.js';
+
+const watchPromptDescriptor = (rawPrinter) => {
+  fs.watchFile(descriptorFileName, async (curr, prev) => {
+    if (curr.mtime !== prev.mtime) {
+      await loadPromptDescriptor(rawPrinter);
+    }
   });
 };
 
-export { startInteractiveSession };
+export default watchPromptDescriptor;
 
 ```
 
-src/prompt/loadPromptDescriptor.js:
+src/frontend/components/TasksList.jsx:
 ```
-import fs from 'fs';
-import util from 'util';
+import { createSignal, onCleanup, onMount } from 'solid-js';
+import { fetchTasks } from '../fetchTasks';
+import { handleTaskChange } from '../service/handleTaskChange';
+import { fetchDescriptor } from '../service/fetchDescriptor';
+import { parseYamlAndGetTask } from '../service/parseYamlAndGetTask';
 
-const readFile = util.promisify(fs.readFile);
-const descriptorFileName = "prompt.yaml";
+const TasksList = () => {
+  const tasks = fetchTasks();
+  const [promptDescriptor, setPromptDescriptor] = createSignal('');
+  const [selectedTask, setSelectedTask] = createSignal('');
 
-const loadPromptDescriptor = async (rawPrinter) => {
-  const descriptorContent = await readFile(descriptorFileName, 'utf8');
-  if (rawPrinter) {
-    rawPrinter(descriptorFileName + ':\n' + descriptorContent);
-  }
-  return descriptorContent;
+  onMount(async () => {
+    const text = await fetchDescriptor();
+    const task = parseYamlAndGetTask(text);
+    setPromptDescriptor(text);
+    setSelectedTask(task);
+  });
+
+  onCleanup(() => {
+    setPromptDescriptor('');
+  });
+
+  return (
+    <div>
+      <label>Task:</label>
+      <select value={selectedTask()} onChange={e => handleTaskChange(e, setPromptDescriptor)}>
+        {tasks().map(task => <option value={task}>{task}</option>)}
+      </select>
+      <pre>{promptDescriptor()}</pre>
+    </div>
+  );
 };
 
-export { loadPromptDescriptor };
+export default TasksList;
+
+```
+
+src/frontend/service/fetchDescriptor.js:
+```
+export const fetchDescriptor = async () => {
+  const response = await fetch('http://localhost:3000/descriptor');
+  const text = await response.text();
+  return text;
+};
 
 ```
 
@@ -99,7 +124,7 @@ Implement the following feature!
 
 Requirements:
 
-During the interactive session, whenever the prompt descriptor file changes, reprint it! Avoid new dependencies if possible!
+During the web session, whenever the prompt descriptor file changes, update it on the screen!
 
 
 

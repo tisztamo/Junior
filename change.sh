@@ -1,41 +1,125 @@
 #!/bin/sh
-# Goal: Reprint prompt descriptor on changes
+# Goal: Update prompt descriptor on file change
 # Plan:
-# 1. We are going to use the Node.js 'fs' module's 'watchFile' function to monitor changes to the prompt descriptor file.
-# 2. For this, we will create a new file "watchPromptDescriptor.js" in the "prompt" directory.
-# 3. This file will export a function 'watchPromptDescriptor' which takes 'rawPrinter' as an argument, similar to 'loadPromptDescriptor'.
-# 4. Inside this function, we will set up a watcher for the prompt descriptor file, and on any changes, we will invoke 'loadPromptDescriptor' to reprint the content.
-# 5. To avoid filename duplication, we will create a new file "promptDescriptorConfig.js" in the "prompt" directory to store the filename.
-# 6. Finally, in 'startInteractiveSession', we will invoke 'watchPromptDescriptor' to begin monitoring changes to the prompt descriptor file.
+# 1. Implement a WebSocket on the backend to notify the frontend of file changes.
+# 2. Use the "watchPromptDescriptor.js" module to send a message through this WebSocket when the descriptor file changes.
+# 3. On the frontend, set up a WebSocket connection and listen for messages about file changes.
+# 4. When a message is received, make a request to fetch the new descriptor and update the state in the "TasksList.jsx" component.
 
-# Create promptDescriptorConfig.js to store the filename
-cat > ./src/prompt/promptDescriptorConfig.js << 'EOF'
-export const descriptorFileName = "prompt.yaml";
-EOF
+cat <<EOF >src/backend/notifyOnFileChange.js
+import WebSocket from 'ws';
+import { watchPromptDescriptor } from '../prompt/watchPromptDescriptor.js';
 
-# Modify loadPromptDescriptor.js to import the filename from promptDescriptorConfig.js
-sed -i '' 's#const descriptorFileName = "prompt.yaml";#import { descriptorFileName } from "./promptDescriptorConfig.js";#g' ./src/prompt/loadPromptDescriptor.js
-
-# Create watchPromptDescriptor.js
-cat > ./src/prompt/watchPromptDescriptor.js << 'EOF'
-import fs from 'fs';
-import { loadPromptDescriptor } from './loadPromptDescriptor.js';
-import { descriptorFileName } from './promptDescriptorConfig.js';
-
-const watchPromptDescriptor = (rawPrinter) => {
-  fs.watchFile(descriptorFileName, async (curr, prev) => {
-    if (curr.mtime !== prev.mtime) {
-      await loadPromptDescriptor(rawPrinter);
-    }
+export const notifyOnFileChange = (wss) => {
+  watchPromptDescriptor(() => {
+    wss.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send('update');
+      }
+    });
   });
 };
-
-export default watchPromptDescriptor;
 EOF
 
-# Modify the startInteractiveSession.js file to import and use watchPromptDescriptor function
-sed -i '' 's#import { loadPromptDescriptor } from '\''../prompt/loadPromptDescriptor.js'\'';#import { loadPromptDescriptor } from '\''../prompt/loadPromptDescriptor.js'\'';\
-import watchPromptDescriptor from '\''../prompt/watchPromptDescriptor.js'\'';#g' ./src/interactiveSession/startInteractiveSession.js
+cat <<EOF >src/backend/server.js
+import express from 'express';
+import cors from 'cors';
+import { createServer } from 'http';
+import WebSocket from 'ws';
+import { generateHandler, descriptorHandler, taskUpdateHandler } from './handlers.js';
+import { listTasks } from './listTasks.js';
+import { notifyOnFileChange } from './notifyOnFileChange.js';
 
-sed -i '' 's#await loadPromptDescriptor(console.log);#await loadPromptDescriptor(console.log);\
-watchPromptDescriptor(console.log);#g' ./src/interactiveSession/startInteractiveSession.js
+export function startServer() {
+  console.log(process.cwd())
+  const app = express();
+
+  app.use(cors());
+  app.use(express.json());
+
+  const server = createServer(app);
+  const wss = new WebSocket.Server({ server });
+
+  notifyOnFileChange(wss);
+
+  app.get('/descriptor', descriptorHandler);
+  app.get('/tasks', (req, res) => res.json({ tasks: listTasks() }));
+
+  app.post('/generate', generateHandler);
+  app.post('/updatetask', taskUpdateHandler);
+
+  server.listen(3000, () => {
+    console.log('Server is running on port 3000');
+  });
+}
+EOF
+
+cat <<EOF >src/frontend/service/useWebsocket.js
+import { createEffect } from 'solid-js';
+
+export const useWebsocket = (url, onMessage) => {
+  let socket = new WebSocket(url);
+
+  socket.onopen = () => console.log('WebSocket is connected');
+  socket.onmessage = onMessage;
+  socket.onerror = (error) => console.log('WebSocket error:', error);
+
+  createEffect(() => {
+    if (!socket || socket.readyState === WebSocket.CLOSED) {
+      socket = new WebSocket(url);
+      socket.onmessage = onMessage;
+    }
+  });
+
+  return () => {
+    if (socket && socket.readyState === WebSocket.OPEN) {
+      socket.close();
+    }
+  };
+};
+EOF
+
+cat <<EOF >src/frontend/components/TasksList.jsx
+import { createSignal, onCleanup, onMount } from 'solid-js';
+import { fetchTasks } from '../fetchTasks';
+import { handleTaskChange } from '../service/handleTaskChange';
+import { fetchDescriptor } from '../service/fetchDescriptor';
+import { parseYamlAndGetTask } from '../service/parseYamlAndGetTask';
+import { useWebsocket } from '../service/useWebsocket';
+
+const TasksList = () => {
+  const tasks = fetchTasks();
+  const [promptDescriptor, setPromptDescriptor] = createSignal('');
+  const [selectedTask, setSelectedTask] = createSignal('');
+
+  onMount(async () => {
+    const text = await fetchDescriptor();
+    const task = parseYamlAndGetTask(text);
+    setPromptDescriptor(text);
+    setSelectedTask(task);
+  });
+
+  useWebsocket('ws://localhost:3000', async (e) => {
+    if (e.data === 'update') {
+      const text = await fetchDescriptor();
+      setPromptDescriptor(text);
+    }
+  });
+
+  onCleanup(() => {
+    setPromptDescriptor('');
+  });
+
+  return (
+    <div>
+      <label>Task:</label>
+      <select value={selectedTask()} onChange={e => handleTaskChange(e, setPromptDescriptor)}>
+        {tasks().map(task => <option value={task}>{task}</option>)}
+      </select>
+      <pre>{promptDescriptor()}</pre>
+    </div>
+  );
+};
+
+export default TasksList;
+EOF

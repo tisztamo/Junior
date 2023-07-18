@@ -1,11 +1,10 @@
 task: prompt/task/feature/implement.md
 attention:
-  - ./
-  - src/main.js
-  - src/interactiveSession/
-  - src/interactiveSession/startInteractiveSession.js
-  - src/prompt/loadPromptDescriptor.js
+  - src/backend/server.js
+  - src/backend/servePromptDescriptor.js
+  - src/prompt/watchPromptDescriptor.js
+  - src/frontend/components/TasksList.jsx
+  - src/frontend/service/fetchDescriptor.js
 requirements: >
-  During the interactive session, whenever the prompt descriptor file changes, reprint it!
-  Avoid new dependencies if possible!
+  During the web session, whenever the prompt descriptor file changes, update it on the screen!
 format: prompt/format/shell.md

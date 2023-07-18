@@ -3,6 +3,7 @@ import { fetchTasks } from '../fetchTasks';
 import { handleTaskChange } from '../service/handleTaskChange';
 import { fetchDescriptor } from '../service/fetchDescriptor';
 import { parseYamlAndGetTask } from '../service/parseYamlAndGetTask';
+import { useWebsocket } from '../service/useWebsocket';
 
 const TasksList = () => {
   const tasks = fetchTasks();
@@ -14,6 +15,13 @@ const TasksList = () => {
     const task = parseYamlAndGetTask(text);
     setPromptDescriptor(text);
     setSelectedTask(task);
+  });
+
+  useWebsocket('ws://localhost:3000', async (e) => {
+    if (e.data === 'update') {
+      const text = await fetchDescriptor();
+      setPromptDescriptor(text);
+    }
   });
 
   onCleanup(() => {

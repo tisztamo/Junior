@@ -1,7 +1,10 @@
 import express from 'express';
 import cors from 'cors';
+import { createServer } from 'http';
+import WebSocket from 'ws';
 import { generateHandler, descriptorHandler, taskUpdateHandler } from './handlers.js';
 import { listTasks } from './listTasks.js';
+import { notifyOnFileChange } from './notifyOnFileChange.js';
 
 export function startServer() {
   console.log(process.cwd())
@@ -10,13 +13,18 @@ export function startServer() {
   app.use(cors());
   app.use(express.json());
 
+  const server = createServer(app);
+  const wss = new WebSocket.Server({ server });
+
+  notifyOnFileChange(wss);
+
   app.get('/descriptor', descriptorHandler);
   app.get('/tasks', (req, res) => res.json({ tasks: listTasks() }));
 
   app.post('/generate', generateHandler);
   app.post('/updatetask', taskUpdateHandler);
 
-  app.listen(3000, () => {
+  server.listen(3000, () => {
     console.log('Server is running on port 3000');
   });
 }
