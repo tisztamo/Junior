@@ -2,13 +2,10 @@ task: prompt/task/feature/implement.md
 attention:
   - ./
   - src/main.js
-  - src/config.js
   - src/interactiveSession/
   - src/interactiveSession/startInteractiveSession.js
-  - src/interactiveSession/saveAndSendPrompt.js
-  - src/interactiveSession/handleApiResponse.js
-  - src/execute/executeCode.js
-  - src/execute/executeAndForwardOutput.js
+  - src/prompt/loadPromptDescriptor.js
 requirements: >
-  Do not pass rl, import from the config whenever needed.
+  During the interactive session, whenever the prompt descriptor file changes, reprint it!
+  Avoid new dependencies if possible!
 format: prompt/format/shell.md

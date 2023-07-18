@@ -2,7 +2,7 @@ import fs from 'fs';
 import util from 'util';
 
 const readFile = util.promisify(fs.readFile);
-const descriptorFileName = "prompt.yaml";
+import { descriptorFileName } from "./promptDescriptorConfig.js";
 
 const loadPromptDescriptor = async (rawPrinter) => {
   const descriptorContent = await readFile(descriptorFileName, 'utf8');
