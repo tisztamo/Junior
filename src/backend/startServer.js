@@ -4,9 +4,9 @@ import { createServer } from 'http';
 import { WebSocketServer } from 'ws';
 import { setupRoutes } from './setupRoutes.js';
 import { notifyOnFileChange } from './notifyOnFileChange.js';
+import { getServerPort } from './serverConfig.js';
 
 export function startServer() {
-  console.log(process.cwd())
   const app = express();
 
   app.use(cors());
@@ -19,7 +19,8 @@ export function startServer() {
 
   setupRoutes(app);
 
-  server.listen(3000, () => {
-    console.log('Server is running on port 3000');
+  const port = getServerPort();
+  server.listen(port, () => {
+    console.log('Server is running on port', port);
   });
 }

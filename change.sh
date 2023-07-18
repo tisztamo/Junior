@@ -1,51 +1,40 @@
 #!/bin/sh
-# Goal: Refactor code by splitting into separate files
+# Goal: Refactor server.js, add port configuration
 # Plan:
-# 1. Create a new file setupRoutes.js and move all the routing logic from server.js to this new file.
-# 2. Delete handlers.js file as it's no longer needed.
-# 3. Create a new file generateHandler.js and move the generateHandler function from handlers.js to this new file.
+# 1. Create a new file `serverConfig.js` that exports a function to get the server port, either from environment variable JUNIOR_SERVER_PORT, or from command line argument --server-port=, or default to 10101 if neither are provided.
+# 2. Modify the `startServer()` function in `server.js` to use this new function to get the port number.
+# 3. Create a new file `startServer.js` in `backend` that imports `serverConfig.js` and implements the logic that was previously in `server.js`.
+# 4. Update `web.js` to import `startServer.js` from `backend` instead of `server.js`.
+# 5. Remove the `startServer.js` in `src` folder.
+# 6. Remove the `server.js` in `backend` folder.
 
-# Step 1: Create setupRoutes.js and move routing logic
-cat << EOF > src/backend/setupRoutes.js
-import { generateHandler } from './generateHandler.js';
-import { servePromptDescriptor } from './servePromptDescriptor.js';
-import { updateTaskHandler } from './updateTaskHandler.js';
-import { listTasks } from './listTasks.js';
+cat > src/backend/serverConfig.js << 'EOF'
+import process from 'process';
 
-export function setupRoutes(app) {
-  app.get('/descriptor', servePromptDescriptor);
-  app.get('/tasks', (req, res) => res.json({ tasks: listTasks() }));
-
-  app.post('/generate', generateHandler);
-  app.post('/updatetask', updateTaskHandler);
+export function getServerPort() {
+  const portArg = process.argv.find(arg => arg.startsWith('--server-port='));
+  if (portArg) {
+    return Number(portArg.split('=')[1]);
+  }
+  
+  if (process.env.JUNIOR_SERVER_PORT) {
+    return Number(process.env.JUNIOR_SERVER_PORT);
+  }
+  
+  return 10101;
 }
 EOF
 
-# Step 2: Delete handlers.js
-rm src/backend/handlers.js
-
-# Step 3: Create generateHandler.js and move generateHandler function
-cat << EOF > src/backend/generateHandler.js
-import processPrompt from '../prompt/promptProcessing.js';
-
-export const generateHandler = async (req, res) => {
-  const { notes } = req.body;
-  const { prompt } = await processPrompt(notes);
-  res.json({ prompt: prompt });
-};
-EOF
-
-# Update server.js to use setupRoutes.js
-cat << EOF > src/backend/server.js
+cat > src/backend/startServer.js << 'EOF'
 import express from 'express';
 import cors from 'cors';
 import { createServer } from 'http';
 import { WebSocketServer } from 'ws';
 import { setupRoutes } from './setupRoutes.js';
 import { notifyOnFileChange } from './notifyOnFileChange.js';
+import { getServerPort } from './serverConfig.js';
 
 export function startServer() {
-  console.log(process.cwd())
   const app = express();
 
   app.use(cors());
@@ -58,8 +47,14 @@ export function startServer() {
 
   setupRoutes(app);
 
-  server.listen(3000, () => {
-    console.log('Server is running on port 3000');
+  const port = getServerPort();
+  server.listen(port, () => {
+    console.log('Server is running on port', port);
   });
 }
 EOF
+
+sed -i.bak 's/\.\/startServer\.js/\.\/backend\/startServer\.js/' src/web.js && rm src/web.js.bak
+
+rm src/startServer.js
+rm src/backend/server.js

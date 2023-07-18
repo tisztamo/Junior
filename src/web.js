@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { startServer } from './startServer.js';
+import { startServer } from './backend/startServer.js';
 import { startVite } from './startVite.js';
 
 startServer();

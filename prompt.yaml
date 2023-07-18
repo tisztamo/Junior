@@ -1,9 +1,18 @@
-task: prompt/task/refactor/split.md
+task: prompt/task/feature/implement.md
 attention:
+  - src/config.js
   - src/backend/server.js
-  - src/backend/handlers.js
-requirements: |
-  routing should be separated to setupRoutes.js
-  handlers.js should be deleted
-  generateHandler -> separate file.
+  - src/startServer.js
+  - src/web.js
+  - src/backend/setupRoutes.js
+requirements: >
+  Move the server to port 10101, and allow configuration through the
+  JUNIOR_SERVER_PORT environment variable or the --server-port=10101
+  command line argument.
+  Create a new file in backend for handling this config,
+  and reexport the functionality from config.js
+
+  Also refactor by moving the logic from backend/server.js to backend/startServer.js, and
+  using src/backend/startServer.js from web.js instead of the current, outer one.
+  Delete server.js and src/startServer.js
 format: prompt/format/shell.md
