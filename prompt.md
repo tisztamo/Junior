@@ -18,37 +18,92 @@
 ├── src/...
 
 ```
+src/main.js:
 ```
-src/
-├── attention/...
-├── backend/...
-├── config.js
-├── execute/...
-├── frontend/...
-├── index.html
-├── interactiveSession/...
-├── main.js
-├── prompt/...
-├── startServer.js
-├── startVite.js
-├── vite.config.js
-├── web.js
+#!/usr/bin/env node
+
+import { startInteractiveSession } from './interactiveSession/startInteractiveSession.js';
+import { api, get_model, rl } from './config.js';
+import { getSystemPrompt } from './prompt/getSystemPrompt.js';
+
+console.log("Welcome to Contributor. Model: " + get_model() + "\n");
+console.log("System prompt:", await getSystemPrompt())
+
+startInteractiveSession("", null, rl, api);
+
+export { startInteractiveSession };
 
 ```
-```
-src/execute/
-├── executeCode.js
-├── extractCode.js
 
 ```
-src/execute/extractCode.js:
+src/interactiveSession/
+├── handleApiResponse.js
+├── printNewtext.js
+├── saveAndSendPrompt.js
+├── startInteractiveSession.js
+
 ```
-function extractCode(res) {
-  const match = res.match(/```(sh|bash)([\s\S]*?)```/);
-  return match ? match[2].trim() : null;
+src/interactiveSession/startInteractiveSession.js:
+```
+import { saveAndSendPrompt } from './saveAndSendPrompt.js';
+import processPrompt from '../prompt/promptProcessing.js';
+import { loadPromptDescriptor } from '../prompt/loadPromptDescriptor.js';
+
+const startInteractiveSession = async (last_command_result = "", parent_message_id = null, rl, api) => {
+  await loadPromptDescriptor(console.log);
+  rl.question('Notes: ', async (task) => {
+    let { prompt } = await processPrompt(task, last_command_result);
+    console.log("Your prompt: ", prompt);
+    rl.question('Do you want to send this prompt? (y/n): ', async (confirmation) => {
+      if (confirmation.toLowerCase() === 'y') {
+        await saveAndSendPrompt(prompt, task, last_command_result, api, rl, startInteractiveSession);
+      } else {
+        startInteractiveSession(last_command_result, parent_message_id, rl, api);
+      }
+    });
+  });
+};
+
+export { startInteractiveSession };
+
+```
+
+src/interactiveSession/saveAndSendPrompt.js:
+```
+import { printNewText } from './printNewText.js';
+import { handleApiResponse } from './handleApiResponse.js';
+
+const saveAndSendPrompt = async (prompt, task, last_command_result, api, rl, startInteractiveSession) => {
+  let lastTextLength = 0;
+  const res = await api.sendMessage(prompt, { onProgress: printNewText(lastTextLength) });
+  const parent_message_id = res.id;
+  console.log("\x1b[0m");
+  const msg = res.text.trim();
+  console.log("");
+  handleApiResponse(msg, last_command_result, parent_message_id, rl, api);
 }
 
-export { extractCode };
+export { saveAndSendPrompt };
+
+```
+
+src/interactiveSession/handleApiResponse.js:
+```
+import { executeCode } from '../execute/executeCode.js';
+import { extractCode } from '../execute/extractCode.js';
+import { startInteractiveSession } from './startInteractiveSession.js';
+
+const handleApiResponse = (msg, last_command_result, parent_message_id, rl, api) => {
+  const cod = extractCode(msg);
+  if (cod) {
+    executeCode(cod, last_command_result, parent_message_id, rl, api);
+  } else {
+    last_command_result = "";
+    startInteractiveSession(last_command_result, parent_message_id, rl, api);
+  }
+}
+
+export { handleApiResponse };
 
 ```
 
@@ -56,36 +111,47 @@ src/execute/executeCode.js:
 ```
 #!/usr/bin/env node
 
-import { startInteractiveSession } from "../interactiveSession/startInteractiveSession.js";
-import { exec } from 'child_process';
+import { confirmAndWriteCode } from './confirmAndWriteCode.js';
+import { executeAndForwardOutput } from './executeAndForwardOutput.js';
 
-const executeCode = async (cod, last_command_result, parent_message_id, rl) => {
-  rl.question('\x1b[1mEXECUTE? [y/n]\x1b[0m ', async (answer) => {
-    console.log("");
-    if (answer.toLowerCase() === 'y' || answer === "") {
-      exec(cod, (error, stdout, stderr) => {
-        if (error) {
-          console.error(`${error.message}`);
-          last_command_result = "Command failed. Output:\n" + error.message + "\n";
-        } else {
-          if (stdout.length > 0) {
-            console.log(`${stdout}`);
-          }
-          if (stderr.length > 0) {
-            console.log(`${stderr}`);
-          }
-          last_command_result = "Command executed. Output:\n" + stdout + "\n" + stderr + "\n";
-        }
-        startInteractiveSession(last_command_result, parent_message_id, rl)
-      });
-    } else {
-      last_command_result = "Command skipped.\n";
-      startInteractiveSession(last_command_result, parent_message_id, rl);
-    }
-  });
+const executeCode = async (code, last_command_result, parent_message_id, rl) => {
+  confirmAndWriteCode(code, rl, () => executeAndForwardOutput(code, last_command_result, parent_message_id, rl));
 }
 
 export { executeCode };
+
+```
+
+src/execute/executeAndForwardOutput.js:
+```
+import { spawn } from 'child_process';
+import { startInteractiveSession } from "../interactiveSession/startInteractiveSession.js";
+
+function executeAndForwardOutput(code, last_command_result, parent_message_id, rl) {
+  const child = spawn(code, { shell: true });
+
+  child.stdout.on('data', (data) => {
+    console.log(`${data}`);
+    last_command_result += data;
+  });
+
+  child.stderr.on('data', (data) => {
+    console.error(`${data}`);
+    last_command_result += data;
+  });
+
+  child.on('close', (code) => {
+    if (code !== 0) {
+      console.log(`child process exited with code ${code}`);
+      last_command_result = "Command failed. Output:\n" + last_command_result;
+    } else {
+      last_command_result = "Command executed. Output:\n" + last_command_result;
+    }
+    startInteractiveSession(last_command_result, parent_message_id, rl)
+  });
+}
+
+export { executeAndForwardOutput };
 
 ```
 
@@ -101,7 +167,7 @@ Implement the following feature!
 
 Requirements:
 
-1. The executed code should be written to ./change.sh before executing. 2. While executing the code, I do not see output in the terminal. Forward it! 3. executeCode.js is too big. We need to split in two logically.
+We do not need to send the result of previous command and the last message id to the api, so last_command_result and parent_message_id should be eliminated from function signatures.
 
 
 

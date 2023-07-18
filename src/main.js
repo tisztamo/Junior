@@ -7,6 +7,6 @@ import { getSystemPrompt } from './prompt/getSystemPrompt.js';
 console.log("Welcome to Contributor. Model: " + get_model() + "\n");
 console.log("System prompt:", await getSystemPrompt())
 
-startInteractiveSession("", null, rl, api);
+startInteractiveSession(rl, api);
 
 export { startInteractiveSession };

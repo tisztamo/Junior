@@ -1,12 +1,14 @@
 task: prompt/task/feature/implement.md
 attention:
   - ./
-  - src/
-  - src/execute/
-  - src/execute/extractCode.js
+  - src/main.js
+  - src/interactiveSession/
+  - src/interactiveSession/startInteractiveSession.js
+  - src/interactiveSession/saveAndSendPrompt.js
+  - src/interactiveSession/handleApiResponse.js
   - src/execute/executeCode.js
+  - src/execute/executeAndForwardOutput.js
 requirements: >
-  1. The executed code should be written to ./change.sh before executing.
-  2. While executing the code, I do not see output in the terminal. Forward it!
-  3. executeCode.js is too big. We need to split in two logically.
+  We do not need to send the result of previous command and the last message id to the api,
+  so last_command_result and parent_message_id should be eliminated from function signatures.
 format: prompt/format/shell.md
