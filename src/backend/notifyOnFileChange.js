@@ -1,5 +1,5 @@
 import WebSocket from 'ws';
-import { watchPromptDescriptor } from '../prompt/watchPromptDescriptor.js';
+import watchPromptDescriptor from '../prompt/watchPromptDescriptor.js';
 
 export const notifyOnFileChange = (wss) => {
   watchPromptDescriptor(() => {

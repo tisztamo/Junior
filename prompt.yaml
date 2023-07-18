@@ -1,10 +1,10 @@
-task: prompt/task/feature/implement.md
+task: prompt/task/bug/fix.md
 attention:
-  - src/backend/server.js
-  - src/backend/servePromptDescriptor.js
   - src/prompt/watchPromptDescriptor.js
-  - src/frontend/components/TasksList.jsx
-  - src/frontend/service/fetchDescriptor.js
+  - src/backend/notifyOnFileChange.js
 requirements: >
-  During the web session, whenever the prompt descriptor file changes, update it on the screen!
+  file:///Users/ko/projects-new/Junior/src/backend/notifyOnFileChange.js:2
+  import { watchPromptDescriptor } from '../prompt/watchPromptDescriptor.js';
+           ^^^^^^^^^^^^^^^^^^^^^
+  SyntaxError: The requested module '../prompt/watchPromptDescriptor.js' does not provide an export named 'watchPromptDescriptor'
 format: prompt/format/shell.md

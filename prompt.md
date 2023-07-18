@@ -1,50 +1,5 @@
 # Working set
 
-src/backend/server.js:
-```
-import express from 'express';
-import cors from 'cors';
-import { generateHandler, descriptorHandler, taskUpdateHandler } from './handlers.js';
-import { listTasks } from './listTasks.js';
-
-export function startServer() {
-  console.log(process.cwd())
-  const app = express();
-
-  app.use(cors());
-  app.use(express.json());
-
-  app.get('/descriptor', descriptorHandler);
-  app.get('/tasks', (req, res) => res.json({ tasks: listTasks() }));
-
-  app.post('/generate', generateHandler);
-  app.post('/updatetask', taskUpdateHandler);
-
-  app.listen(3000, () => {
-    console.log('Server is running on port 3000');
-  });
-}
-
-```
-
-src/backend/servePromptDescriptor.js:
-```
-import { readFile } from 'fs/promises';
-import path from 'path';
-
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-export const servePromptDescriptor = async (req, res) => {
-  const file = await readFile(path.resolve(__dirname, '../../prompt.yaml'), 'utf-8');
-  res.send(file);
-};
-
-```
-
 src/prompt/watchPromptDescriptor.js:
 ```
 import fs from 'fs';
@@ -63,51 +18,19 @@ export default watchPromptDescriptor;
 
 ```
 
-src/frontend/components/TasksList.jsx:
+src/backend/notifyOnFileChange.js:
 ```
-import { createSignal, onCleanup, onMount } from 'solid-js';
-import { fetchTasks } from '../fetchTasks';
-import { handleTaskChange } from '../service/handleTaskChange';
-import { fetchDescriptor } from '../service/fetchDescriptor';
-import { parseYamlAndGetTask } from '../service/parseYamlAndGetTask';
+import WebSocket from 'ws';
+import { watchPromptDescriptor } from '../prompt/watchPromptDescriptor.js';
 
-const TasksList = () => {
-  const tasks = fetchTasks();
-  const [promptDescriptor, setPromptDescriptor] = createSignal('');
-  const [selectedTask, setSelectedTask] = createSignal('');
-
-  onMount(async () => {
-    const text = await fetchDescriptor();
-    const task = parseYamlAndGetTask(text);
-    setPromptDescriptor(text);
-    setSelectedTask(task);
+export const notifyOnFileChange = (wss) => {
+  watchPromptDescriptor(() => {
+    wss.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send('update');
+      }
+    });
   });
-
-  onCleanup(() => {
-    setPromptDescriptor('');
-  });
-
-  return (
-    <div>
-      <label>Task:</label>
-      <select value={selectedTask()} onChange={e => handleTaskChange(e, setPromptDescriptor)}>
-        {tasks().map(task => <option value={task}>{task}</option>)}
-      </select>
-      <pre>{promptDescriptor()}</pre>
-    </div>
-  );
-};
-
-export default TasksList;
-
-```
-
-src/frontend/service/fetchDescriptor.js:
-```
-export const fetchDescriptor = async () => {
-  const response = await fetch('http://localhost:3000/descriptor');
-  const text = await response.text();
-  return text;
 };
 
 ```
@@ -115,17 +38,11 @@ export const fetchDescriptor = async () => {
 
 # Task
 
-Implement the following feature!
+Fix the following issue!
 
-- Create a plan!
-- Create new files when needed!
-- Every js file should only export a single function!
-- Use ES6 imports!
-
-Requirements:
-
-During the web session, whenever the prompt descriptor file changes, update it on the screen!
-
+file:///Users/ko/projects-new/Junior/src/backend/notifyOnFileChange.js:2 import { watchPromptDescriptor } from &#39;../prompt/watchPromptDescriptor.js&#39;;
+         ^^^^^^^^^^^^^^^^^^^^^
+SyntaxError: The requested module &#39;../prompt/watchPromptDescriptor.js&#39; does not provide an export named &#39;watchPromptDescriptor&#39;
 
 
 # Output Format
