@@ -1,11 +1,12 @@
 task: prompt/task/feature/implement.md
 attention:
   - ./
-  - package.json
-  - src/main.js
-  - src/web.js
-  - src/startServer.js
-  - src/backend/server.js
+  - src/
+  - src/execute/
+  - src/execute/extractCode.js
+  - src/execute/executeCode.js
 requirements: >
-  "npx junior-web" from dependent projects should work, starting web.js.
+  1. The executed code should be written to ./change.sh before executing.
+  2. While executing the code, I do not see output in the terminal. Forward it!
+  3. executeCode.js is too big. We need to split in two logically.
 format: prompt/format/shell.md
