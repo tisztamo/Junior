@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import { createServer } from 'http';
-import WebSocket from 'ws';
+import { WebSocketServer } from 'ws';
 import { generateHandler, descriptorHandler, taskUpdateHandler } from './handlers.js';
 import { listTasks } from './listTasks.js';
 import { notifyOnFileChange } from './notifyOnFileChange.js';
@@ -14,7 +14,7 @@ export function startServer() {
   app.use(express.json());
 
   const server = createServer(app);
-  const wss = new WebSocket.Server({ server });
+  const wss = new WebSocketServer({ server });
 
   notifyOnFileChange(wss);
 

@@ -1,10 +1,16 @@
 task: prompt/task/bug/fix.md
 attention:
-  - src/prompt/watchPromptDescriptor.js
-  - src/backend/notifyOnFileChange.js
+  - src/backend/server.js
 requirements: >
-  file:///Users/ko/projects-new/Junior/src/backend/notifyOnFileChange.js:2
-  import { watchPromptDescriptor } from '../prompt/watchPromptDescriptor.js';
-           ^^^^^^^^^^^^^^^^^^^^^
-  SyntaxError: The requested module '../prompt/watchPromptDescriptor.js' does not provide an export named 'watchPromptDescriptor'
+  file:///Users/ko/projects-new/Junior/src/backend/server.js:17
+  const wss = new WebSocket.Server({ server });
+              ^
+  TypeError: WebSocket.Server is not a constructor
+
+  The api is correctly called like follows:
+
+  import { WebSocketServer } from 'ws';
+  ...
+  const wss = new WebSocketServer({ server });
+
 format: prompt/format/shell.md

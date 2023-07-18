@@ -1,37 +1,37 @@
 # Working set
 
-src/prompt/watchPromptDescriptor.js:
+src/backend/server.js:
 ```
-import fs from 'fs';
-import { loadPromptDescriptor } from './loadPromptDescriptor.js';
-import { descriptorFileName } from './promptDescriptorConfig.js';
-
-const watchPromptDescriptor = (rawPrinter) => {
-  fs.watchFile(descriptorFileName, async (curr, prev) => {
-    if (curr.mtime !== prev.mtime) {
-      await loadPromptDescriptor(rawPrinter);
-    }
-  });
-};
-
-export default watchPromptDescriptor;
-
-```
-
-src/backend/notifyOnFileChange.js:
-```
+import express from 'express';
+import cors from 'cors';
+import { createServer } from 'http';
 import WebSocket from 'ws';
-import { watchPromptDescriptor } from '../prompt/watchPromptDescriptor.js';
+import { generateHandler, descriptorHandler, taskUpdateHandler } from './handlers.js';
+import { listTasks } from './listTasks.js';
+import { notifyOnFileChange } from './notifyOnFileChange.js';
 
-export const notifyOnFileChange = (wss) => {
-  watchPromptDescriptor(() => {
-    wss.clients.forEach((client) => {
-      if (client.readyState === WebSocket.OPEN) {
-        client.send('update');
-      }
-    });
+export function startServer() {
+  console.log(process.cwd())
+  const app = express();
+
+  app.use(cors());
+  app.use(express.json());
+
+  const server = createServer(app);
+  const wss = new WebSocket.Server({ server });
+
+  notifyOnFileChange(wss);
+
+  app.get('/descriptor', descriptorHandler);
+  app.get('/tasks', (req, res) => res.json({ tasks: listTasks() }));
+
+  app.post('/generate', generateHandler);
+  app.post('/updatetask', taskUpdateHandler);
+
+  server.listen(3000, () => {
+    console.log('Server is running on port 3000');
   });
-};
+}
 
 ```
 
@@ -40,9 +40,11 @@ export const notifyOnFileChange = (wss) => {
 
 Fix the following issue!
 
-file:///Users/ko/projects-new/Junior/src/backend/notifyOnFileChange.js:2 import { watchPromptDescriptor } from &#39;../prompt/watchPromptDescriptor.js&#39;;
-         ^^^^^^^^^^^^^^^^^^^^^
-SyntaxError: The requested module &#39;../prompt/watchPromptDescriptor.js&#39; does not provide an export named &#39;watchPromptDescriptor&#39;
+file:///Users/ko/projects-new/Junior/src/backend/server.js:17 const wss = new WebSocket.Server({ server });
+            ^
+TypeError: WebSocket.Server is not a constructor
+The api is correctly called like follows:
+import { WebSocketServer } from &#39;ws&#39;; ... const wss = new WebSocketServer({ server });
 
 
 # Output Format
