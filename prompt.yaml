@@ -2,13 +2,6 @@ task: prompt/task/feature/implement.md
 attention:
   - ./
   - src/main.js
-  - src/interactiveSession/
-  - src/interactiveSession/startInteractiveSession.js
-  - src/interactiveSession/saveAndSendPrompt.js
-  - src/interactiveSession/handleApiResponse.js
-  - src/execute/executeCode.js
-  - src/execute/executeAndForwardOutput.js
 requirements: >
-  We do not need to send the result of previous command and the last message id to the api,
-  so last_command_result and parent_message_id should be eliminated from function signatures.
+  Do not print the system prompt at startup
 format: prompt/format/shell.md
