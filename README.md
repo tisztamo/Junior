@@ -45,7 +45,7 @@ format: prompt/format/new_file_version.md
 ```
 
 Each element in the descriptor serves a specific purpose:
-- `task`: Describes the task type and scope. For example, `feature/implement`, `bug/fix`, or `refactor/`. You can check out the [prompt/task/implement.md](prompt/task/implement.md) file as an example.
+- `task`: Describes the task type and scope. For example, `feature/implement`, `bug/fix`, or `refactor/`. You can check out the [prompt/task/feature/implement.md](prompt/task/feature/implement.md) file as an example.
 - `attention`: Lists the files and directories most relevant to the task.
 - `requirements`: Describes the actual task in a human-readable format.
 - `format`: Determines how the output will be formatted.
@@ -58,7 +58,7 @@ The working set is a subset of the entire project that's currently in focus. It 
 
 ## Contributing and Support
 
-Contributions are welcome! Please remember that this project is designed to write itself. Your main role will be to oversee the work, provide detailed prompts, and review the outcomes.
+Contributions are welcome! Remember, we eat our own dog food in this project. This project is designed to write itself. Your main role will be to oversee the work, provide detailed prompts, and review the outcomes.
 
 For support, please create an issue in the GitHub repository.
 

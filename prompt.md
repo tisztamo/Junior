@@ -1,112 +1,72 @@
 # Working set
 
-src/config.js:
+README.md:
 ```
-import readline from 'readline';
-import { ChatGPTAPI } from 'chatgpt';
-import { getSystemPrompt } from "./prompt/getSystemPrompt.js";
+Warn: This README is AI generated, just like all the source files of this project.
 
-function isDryRun() {
-  return process.argv.includes("-d") || process.argv.includes("--dry-run");
-}
+# The Junior - Your AI contributor which writes itself.
 
-const api = isDryRun() ? {
-    sendMessage: () => { return {id: 42, text: "DRY RUN, NOT SENT"}}
-  } : new ChatGPTAPI({
-  debug: true,
-  apiKey: process.env.OPENAI_API_KEY,
-  systemMessage: await getSystemPrompt(),
-  completionParams: {
-    model: get_model(),
-    stream: true,
-    temperature: 0.5,
-    max_tokens: 2048,
-  }
-});
+## Description
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
+The Contributor is an exploratory project aimed at revolutionizing the way programmers interact with the development process. Just like how Linus Torvalds oversees the Linux Kernel development without coding himself, this project allows developers to communicate with the AI and supervise the development process.
 
-function get_model() {
-  const modelArg = process.argv.find(arg => arg.startsWith('--model='));
-  if (modelArg) {
-    return modelArg.split('=')[1];
-  }
-  return "gpt-4";
-}
+By providing specific task details in a prompt descriptor and highlighting the relevant parts of your project, you can delegate code implementation, documentation, testing, and more to your AI Contributor.
 
-export { api, rl, get_model };
+## Getting Started
 
-```
+### Installation
 
-src/backend/server.js:
-```
-import express from 'express';
-import cors from 'cors';
-import { createServer } from 'http';
-import { WebSocketServer } from 'ws';
-import { setupRoutes } from './setupRoutes.js';
-import { notifyOnFileChange } from './notifyOnFileChange.js';
+To install, clone the repository and run `npm install` in the root directory.
 
-export function startServer() {
-  console.log(process.cwd())
-  const app = express();
+### Usage
 
-  app.use(cors());
-  app.use(express.json());
+There are two ways to use this project: a command-line interface (CLI) and a web interface.
 
-  const server = createServer(app);
-  const wss = new WebSocketServer({ server });
+#### Command-line interface (CLI)
 
-  notifyOnFileChange(wss);
+To start the CLI, use `npm run cli`. This mode uses the ChatGPT API, and you'll need an API key stored in the `OPENAI_API_KEY` environment variable.
 
-  setupRoutes(app);
+#### Web Interface
 
-  server.listen(3000, () => {
-    console.log('Server is running on port 3000');
-  });
-}
+Run the application with `npm start` to start a local server on port 3000, where you can generate a prompt and automatically copy it to paste into ChatGPT. The web interface is designed for use with ChatGPT Pro and doesn't require an API key.
 
+### The Prompt Descriptor
+
+A prompt descriptor is a YAML file (`prompt.yaml`) outlining the details necessary for generating a task prompt for the AI model.
+
+Here's an example of a prompt descriptor:
+
+```yaml
+task: prompt/task/feature/implement.md
+attention:
+  - src/interactiveSession/startInteractiveSession.js
+  - src/prompt/createPrompt.js
+  - src/attention/readAttention.js
+  - prompt.yaml
+requirements: >
+  Write a README.md for this _exploratory_ project!
+format: prompt/format/new_file_version.md
 ```
 
-src/startServer.js:
-```
-import { startServer as startBackendServer } from './backend/server.js';
+Each element in the descriptor serves a specific purpose:
+- `task`: Describes the task type and scope. For example, `feature/implement`, `bug/fix`, or `refactor/`. You can check out the [prompt/task/implement.md](prompt/task/implement.md) file as an example.
+- `attention`: Lists the files and directories most relevant to the task.
+- `requirements`: Describes the actual task in a human-readable format.
+- `format`: Determines how the output will be formatted.
 
-export function startServer() {
-  startBackendServer();
-}
+### Attention Mechanism
 
-```
+The attention mechanism guides the AI model by providing it with a working set. It helps overcome the limited working memory of large language models.
 
-src/web.js:
-```
-#!/usr/bin/env node
-import { startServer } from './startServer.js';
-import { startVite } from './startVite.js';
+The working set is a subset of the entire project that's currently in focus. It includes both files and directories. For files, the content is directly provided to the AI. For directories, a brief list of files and subdirectories within them is presented.
 
-startServer();
-startVite();
+## Contributing and Support
 
-```
+Contributions are welcome! Please remember that this project is designed to write itself. Your main role will be to oversee the work, provide detailed prompts, and review the outcomes.
 
-src/backend/setupRoutes.js:
-```
-import { generateHandler } from './generateHandler.js';
-import { servePromptDescriptor } from './servePromptDescriptor.js';
-import { updateTaskHandler } from './updateTaskHandler.js';
-import { listTasks } from './listTasks.js';
+For support, please create an issue in the GitHub repository.
 
-export function setupRoutes(app) {
-  app.get('/descriptor', servePromptDescriptor);
-  app.get('/tasks', (req, res) => res.json({ tasks: listTasks() }));
-
-  app.post('/generate', generateHandler);
-  app.post('/updatetask', updateTaskHandler);
-}
-
+**Note:** For meaningful results, it's recommended to use the GPT-4 model or a more recent version.
 ```
 
 
@@ -121,8 +81,7 @@ Implement the following feature!
 
 Requirements:
 
-Move the server to port 10101, and allow configuration through the JUNIOR_SERVER_PORT environment variable or the --server-port=10101 command line argument. Create a new file in backend for handling this config, and reexport the functionality from config.js
-Also refactor by moving the logic from backend/server.js to backend/startServer.js, and using src/backend/startServer.js from web.js instead of the current, outer one. Delete server.js and src/startServer.js
+1. Readme.md contains a broken link, &#34;check out the prompt/task/implement.md file as an example.&#34; (refers https://github.com/tisztamo/Junior/blob/main/prompt/task/implement.md) The correct path is prompt/task/feature/implement.md 2. Reword &#34;Please remember that this project is designed to write itself.&#34; to say that we eat our own dog food.
 
 
 
