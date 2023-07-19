@@ -1,7 +1,14 @@
 task: prompt/task/feature/implement.md
 attention:
-  - ./
+  - integrations/vscode/
+  - integrations/vscode/package.json
+  - integrations/vscode/src/extension.ts
 requirements: |
-  I need a vscode extension that reacts to a hotkey.
-  Scaffold it in src/integrations/vscode
+  Provide a command "junior.writeAttention" that
+  - Checks if there is a prompt.yaml file in the project root
+  - If finds it, overwrites its "attention" field with a list
+    of relative paths to the currenty opened windows and saved back the file.
+
+  Also eliminate trivial comments.
+
 format: prompt/format/shell.md
