@@ -1,76 +1,28 @@
 #!/bin/sh
-# Goal: Use createWebSocket to decide the url
+# Goal: Scaffold a vscode extension
 # Plan:
-# 1. Update useWebsocket.js to use createWebSocket for WebSocket creation.
-# 2. Update TasksList.jsx to pass the onMessage callback to useWebsocket without the url.
+# 1. Install Yeoman and VS Code Extension generator globally.
+# 2. Use the generator to create the VS Code extension in the desired directory.
 
-cat << 'EOF' > src/frontend/service/useWebsocket.js
-import { createEffect } from 'solid-js';
-import { createWebSocket } from './createWebSocket.js';
+# Step 1: Install Yeoman and VS Code Extension generator globally
+npm install -g yo generator-code
 
-export const useWebsocket = (onMessage) => {
-  let socket = createWebSocket();
+# Step 2: Use the generator to create the VS Code extension in the desired directory
+mkdir -p src/integrations
+cd src/integrations
+yo code
 
-  socket.onopen = () => console.log('WebSocket is connected');
-  socket.onmessage = onMessage;
-  socket.onerror = (error) => console.log('WebSocket error:', error);
+# Note: Running "yo code" will prompt a series of questions to configure your extension. Please follow the instructions.
 
-  createEffect(() => {
-    if (!socket || socket.readyState === WebSocket.CLOSED) {
-      socket = createWebSocket();
-      socket.onmessage = onMessage;
-    }
-  });
+#!/bin/sh
+# Goal: Add .gitignore file to vscode extension
+# Plan:
+# 1. Add a .gitignore file in src/integrations/vscode directory
 
-  return () => {
-    if (socket && socket.readyState === WebSocket.OPEN) {
-      socket.close();
-    }
-  };
-};
-EOF
-
-cat << 'EOF' > src/frontend/components/TasksList.jsx
-import { createSignal, onCleanup, onMount } from 'solid-js';
-import { fetchTasks } from '../fetchTasks';
-import { handleTaskChange } from '../service/handleTaskChange';
-import { fetchDescriptor } from '../service/fetchDescriptor';
-import { parseYamlAndGetTask } from '../service/parseYamlAndGetTask';
-import { useWebsocket } from '../service/useWebsocket';
-
-const TasksList = () => {
-  const tasks = fetchTasks();
-  const [promptDescriptor, setPromptDescriptor] = createSignal('');
-  const [selectedTask, setSelectedTask] = createSignal('');
-
-  onMount(async () => {
-    const text = await fetchDescriptor();
-    const task = parseYamlAndGetTask(text);
-    setPromptDescriptor(text);
-    setSelectedTask(task);
-  });
-
-  useWebsocket(async (e) => {
-    if (e.data === 'update') {
-      const text = await fetchDescriptor();
-      setPromptDescriptor(text);
-    }
-  });
-
-  onCleanup(() => {
-    setPromptDescriptor('');
-  });
-
-  return (
-    <div>
-      <label>Task:</label>
-      <select value={selectedTask()} onChange={e => handleTaskChange(e, setPromptDescriptor)}>
-        {tasks().map(task => <option value={task}>{task}</option>)}
-      </select>
-      <pre>{promptDescriptor()}</pre>
-    </div>
-  );
-};
-
-export default TasksList;
-EOF
+# Step 1: Add a .gitignore file in src/integrations/vscode directory
+cat > src/integrations/vscode/.gitignore <<- EOM
+node_modules
+out
+*.vsix
+.vscode-test
+EOM

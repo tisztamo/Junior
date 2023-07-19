@@ -1,8 +1,7 @@
-task: prompt/task/bug/fix.md
+task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/service/createWebSocket.js
-  - src/frontend/service/useWebsocket.js
-  - src/frontend/components/TasksList.jsx
+  - ./
 requirements: |
-  Use createWebSocket! Let it decide the url!
+  I need a vscode extension that reacts to a hotkey.
+  Scaffold it in src/integrations/vscode
 format: prompt/format/shell.md
