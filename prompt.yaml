@@ -1,8 +1,8 @@
-task: prompt/task/feature/implement.md
+task: prompt/task/bug/fix.md
 attention:
-  - src/frontend/getBaseUrl.js
-  - src/frontend/service/createWebSocket.js
+  - src/index.html
+  - src/main.js
+  - prompt/system.md
 requirements: |
-  Use getBaseUrl instead of hardcoding the URL.
-  Derive the correct ws protocol from the base url!
+  The project was renamed to Junior.
 format: prompt/format/shell.md

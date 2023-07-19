@@ -1,41 +1,56 @@
 # Working set
 
-src/frontend/getBaseUrl.js:
+src/index.html:
 ```
-export const getBaseUrl = () => {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const baseUrl = urlParams.get('baseUrl');
-
-    return baseUrl || 'http://localhost:10101';
-};
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Contributor</title>
+</head>
+<body>
+  <div id="app"></div>
+  <script type="module" src="/frontend/index.jsx"></script>
+</body>
+</html>
 
 ```
 
-src/frontend/service/createWebSocket.js:
+src/main.js:
 ```
-export const createWebSocket = () => {
-  const ws = new WebSocket('ws://localhost:3000');
-  return ws;
-};
+#!/usr/bin/env node
+
+import { startInteractiveSession } from './interactiveSession/startInteractiveSession.js';
+import { api, get_model, rl } from './config.js';
+
+console.log("Welcome to Contributor. Model: " + get_model() + "\n");
+
+startInteractiveSession(rl, api);
+
+export { startInteractiveSession };
+
+```
+
+prompt/system.md:
+```
+You're the 'Contributor', an AI system aiding authors.
+
+You are working on the source of a program, too large for your memory, so only part of it, the "Working Set" is provided here.
+
+You will see a partial directory structure. Ask for the contents of subdirs marked with /... if needed.
+
+Some files are printed in the working set.
+
+Other files are only listed in their dir, so you know they exists. Do not edit files without knowing their current content, ask for their contents instead!
 
 ```
 
 
 # Task
 
-Implement the following feature!
+Fix the following issue!
 
-- Create a plan!
-- Create new files when needed!
-- Every js file should only export a single function!
-- Use ES6 imports!
-
-Requirements:
-
-Use getBaseUrl instead of hardcoding the URL.
-Derive the correct ws protocol from the base url!
-
+The project was renamed to Junior.
 
 
 # Output Format
