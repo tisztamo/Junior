@@ -1,9 +1,10 @@
 task: prompt/task/feature/implement.md
 attention:
+  - src/frontend/getBaseUrl.js
   - src/frontend/fetchTasks.js
-requirements: >
-  The server port is now configurable, update the client!
-  Default port changed to 10101.
-  Create frontend/getBaseUrl.js!
-  When the user adds baseUrl=http://server:port to the query string, use that.
+  - src/frontend/generatePrompt.js
+  - src/frontend/service/fetchDescriptor.js
+  - src/frontend/service/handleTaskChange.js
+requirements: |
+  Use getBaseUrl!
 format: prompt/format/shell.md

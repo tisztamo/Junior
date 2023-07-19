@@ -1,9 +1,11 @@
+import { getBaseUrl } from '../getBaseUrl';
 import { fetchDescriptor } from './fetchDescriptor';
 
 export const handleTaskChange = async (e, setPromptDescriptor) => {
+  const baseUrl = getBaseUrl();
   const selectedTask = e.target.value;
 
-  const response = await fetch('http://localhost:3000/updatetask', {
+  const response = await fetch(`${baseUrl}/updatetask`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

@@ -1,16 +1,22 @@
 # Working set
 
-src/frontend/fetchTasks.js:
+src/frontend/getBaseUrl.js:
 ```
-import { createSignal } from 'solid-js';
+export const getBaseUrl = () => {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const baseUrl = urlParams.get('baseUrl');
 
-export const fetchTasks = () => {
-    const [tasks, setTasks] = createSignal([]);
+    return baseUrl || 'http://localhost:10101';
+};
 
-    const response = fetch('http://localhost:3000/tasks');
-    response.then(r => r.json()).then(data => setTasks(data.tasks));
+```
 
-    return tasks;
+src/frontend/service/createWebSocket.js:
+```
+export const createWebSocket = () => {
+  const ws = new WebSocket('ws://localhost:3000');
+  return ws;
 };
 
 ```
@@ -27,7 +33,8 @@ Implement the following feature!
 
 Requirements:
 
-The server port is now configurable, update the client! Default port changed to 10101. Create frontend/getBaseUrl.js! When the user adds baseUrl=http://server:port to the query string, use that.
+Use getBaseUrl instead of hardcoding the URL.
+Derive the correct ws protocol from the base url!
 
 
 

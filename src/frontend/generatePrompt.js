@@ -1,5 +1,8 @@
+import { getBaseUrl } from './getBaseUrl';
+
 const generatePrompt = async (notes) => {
-  const response = await fetch('http://localhost:3000/generate', {
+  const baseUrl = getBaseUrl();
+  const response = await fetch(`${baseUrl}/generate`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ notes })

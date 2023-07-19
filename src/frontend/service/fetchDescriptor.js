@@ -1,5 +1,8 @@
+import { getBaseUrl } from '../getBaseUrl';
+
 export const fetchDescriptor = async () => {
-  const response = await fetch('http://localhost:3000/descriptor');
+  const baseUrl = getBaseUrl();
+  const response = await fetch(`${baseUrl}/descriptor`);
   const text = await response.text();
   return text;
 };
