@@ -1,11 +1,28 @@
 task: prompt/task/feature/implement.md
 attention:
-  - integrations/vscode/
-  - integrations/vscode/package.json
-  - integrations/vscode/src/writeAttention.ts
-requirements: |
-  src/writeAttention.ts:4:23 - error TS7016: Could not find a declaration file for module 'js-yaml'. '/Users/ko/projects-new/Junior/integrations/vscode/node_modules/js-yaml/index.js' implicitly has an 'any' type.
-  Try `npm i --save-dev @types/js-yaml` if it exists or add a new declaration (.d.ts) file containing `declare module 'js-yaml';`
-  4 import * as yaml from 'js-yaml';
-                        ~~~~~~~~~
+  - ./
+  - package.json
+requirements: >
+  ko@MacBook-Pro-5 Junior % npm start
+
+  > @aijunior/dev@0.0.1 start
+  > node src/web.js
+
+  node:internal/errors:477
+      ErrorCaptureStackTrace(err);
+      ^
+
+  Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'ws' imported from /Users/ko/projects-new/Junior/src/backend/startServer.js
+      at new NodeError (node:internal/errors:388:5)
+      at packageResolve (node:internal/modules/esm/resolve:910:9)
+      at moduleResolve (node:internal/modules/esm/resolve:959:20)
+      at defaultResolve (node:internal/modules/esm/resolve:1174:11)
+      at ESMLoader.resolve (node:internal/modules/esm/loader:605:30)
+      at ESMLoader.getModuleJob (node:internal/modules/esm/loader:318:18)
+      at ModuleWrap.<anonymous> (node:internal/modules/esm/module_job:80:40)
+      at link (node:internal/modules/esm/module_job:78:36) {
+    code: 'ERR_MODULE_NOT_FOUND'
+  }
+
+  Node.js v18.5.0
 format: prompt/format/shell.md
