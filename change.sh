@@ -1,9 +1,33 @@
 #!/bin/sh
+# Goal: Make server port configurable in the client
+# Plan:
+# 1. Create a new file getBaseUrl.js which fetches the base URL from the query string.
+# 2. Update fetchTasks.js to use the new getBaseUrl function.
 
-# Fix broken link
-sed -i '' 's|\[prompt/task/implement.md\](prompt/task/implement.md)|\[prompt/task/feature/implement.md\](prompt/task/feature/implement.md)|' README.md
+mkdir -p src/frontend
 
-# Reword the statement
-sed -i '' 's|Please remember that this project is designed to write itself.|Remember, we eat our own dog food in this project. This project is designed to write itself.|' README.md
+# Step 1: Create getBaseUrl.js
+cat > src/frontend/getBaseUrl.js << 'EOF'
+export const getBaseUrl = () => {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const baseUrl = urlParams.get('baseUrl');
 
-echo "Changes applied to README.md"
+    return baseUrl || 'http://localhost:10101';
+};
+EOF
+
+# Step 2: Update fetchTasks.js
+cat > src/frontend/fetchTasks.js << 'EOF'
+import { createSignal } from 'solid-js';
+import { getBaseUrl } from './getBaseUrl';
+
+export const fetchTasks = () => {
+    const [tasks, setTasks] = createSignal([]);
+    const baseUrl = getBaseUrl();
+    const response = fetch(`${baseUrl}/tasks`);
+    response.then(r => r.json()).then(data => setTasks(data.tasks));
+
+    return tasks;
+};
+EOF

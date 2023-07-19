@@ -1,7 +1,9 @@
 task: prompt/task/feature/implement.md
 attention:
-  - README.md
+  - src/frontend/fetchTasks.js
 requirements: >
-  1. Readme.md contains a broken link, "check out the prompt/task/implement.md file as an example." (refers https://github.com/tisztamo/Junior/blob/main/prompt/task/implement.md) The correct path is prompt/task/feature/implement.md
-  2. Reword "Please remember that this project is designed to write itself." to say that we eat our own dog food.
+  The server port is now configurable, update the client!
+  Default port changed to 10101.
+  Create frontend/getBaseUrl.js!
+  When the user adds baseUrl=http://server:port to the query string, use that.
 format: prompt/format/shell.md
