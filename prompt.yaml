@@ -1,10 +1,8 @@
 task: prompt/task/feature/implement.md
 attention:
   - src/frontend/getBaseUrl.js
-  - src/frontend/fetchTasks.js
-  - src/frontend/generatePrompt.js
-  - src/frontend/service/fetchDescriptor.js
-  - src/frontend/service/handleTaskChange.js
+  - src/frontend/service/createWebSocket.js
 requirements: |
-  Use getBaseUrl!
+  Use getBaseUrl instead of hardcoding the URL.
+  Derive the correct ws protocol from the base url!
 format: prompt/format/shell.md

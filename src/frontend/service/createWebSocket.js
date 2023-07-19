@@ -1,4 +1,8 @@
+import { getBaseUrl } from '../getBaseUrl.js';
+
 export const createWebSocket = () => {
-  const ws = new WebSocket('ws://localhost:3000');
+  const baseUrl = getBaseUrl();
+  const wsUrl = baseUrl.replace(/^http/, 'ws');
+  const ws = new WebSocket(wsUrl);
   return ws;
 };
