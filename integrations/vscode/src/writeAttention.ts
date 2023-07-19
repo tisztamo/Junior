@@ -14,8 +14,9 @@ export const writeAttention = async () => {
     try {
         if (fs.existsSync(promptFilePath)) {
             const currentWindows = vscode.workspace.textDocuments.map(doc => path.relative(rootFolder, doc.fileName));
+            const filteredWindows = currentWindows.filter(windowPath => !windowPath.endsWith('.git'));
             const promptFile = yaml.load(fs.readFileSync(promptFilePath, 'utf8'));
-            promptFile.attention = currentWindows;
+            promptFile.attention = filteredWindows;
             fs.writeFileSync(promptFilePath, yaml.dump(promptFile), 'utf8');
             vscode.window.showInformationMessage('Prompt file updated successfully!');
         } else {
