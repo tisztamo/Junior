@@ -2,13 +2,10 @@ task: prompt/task/feature/implement.md
 attention:
   - integrations/vscode/
   - integrations/vscode/package.json
-  - integrations/vscode/src/extension.ts
+  - integrations/vscode/src/writeAttention.ts
 requirements: |
-  Provide a command "junior.writeAttention" that
-  - Checks if there is a prompt.yaml file in the project root
-  - If finds it, overwrites its "attention" field with a list
-    of relative paths to the currenty opened windows and saved back the file.
-
-  Also eliminate trivial comments.
-
+  src/writeAttention.ts:4:23 - error TS7016: Could not find a declaration file for module 'js-yaml'. '/Users/ko/projects-new/Junior/integrations/vscode/node_modules/js-yaml/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/js-yaml` if it exists or add a new declaration (.d.ts) file containing `declare module 'js-yaml';`
+  4 import * as yaml from 'js-yaml';
+                        ~~~~~~~~~
 format: prompt/format/shell.md

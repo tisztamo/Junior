@@ -37,6 +37,10 @@ integrations/vscode/package.json:
       {
         "command": "junior.helloWorld",
         "title": "Hello World"
+      },
+      {
+        "command": "junior.writeAttention",
+        "title": "Write Attention"
       }
     ]
   },
@@ -49,50 +53,54 @@ integrations/vscode/package.json:
     "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
-    "@types/vscode": "^1.80.0",
     "@types/glob": "^8.1.0",
     "@types/mocha": "^10.0.1",
     "@types/node": "20.2.5",
+    "@types/vscode": "^1.80.0",
     "@typescript-eslint/eslint-plugin": "^5.59.8",
     "@typescript-eslint/parser": "^5.59.8",
+    "@vscode/test-electron": "^2.3.2",
     "eslint": "^8.41.0",
     "glob": "^8.1.0",
     "mocha": "^10.2.0",
-    "typescript": "^5.1.3",
-    "@vscode/test-electron": "^2.3.2"
+    "typescript": "^5.1.3"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0"
   }
 }
 
 ```
 
-integrations/vscode/src/extension.ts:
+integrations/vscode/src/writeAttention.ts:
 ```
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import * as fs from 'fs';
+import * as path from 'path';
+import * as yaml from 'js-yaml';
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
-
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "junior" is now active!');
-
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('junior.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from Junior!');
-	});
-
-	context.subscriptions.push(disposable);
-}
-
-// This method is called when your extension is deactivated
-export function deactivate() {}
+export const writeAttention = async () => {
+    const workspaceFolders = vscode.workspace.workspaceFolders;
+    if (workspaceFolders === undefined) {
+        return;
+    }
+    
+    const rootFolder = workspaceFolders[0].uri.fsPath;
+    const promptFilePath = path.join(rootFolder, 'prompt.yaml');
+    try {
+        if (fs.existsSync(promptFilePath)) {
+            const currentWindows = vscode.workspace.textDocuments.map(doc => path.relative(rootFolder, doc.fileName));
+            const promptFile = yaml.load(fs.readFileSync(promptFilePath, 'utf8'));
+            promptFile.attention = currentWindows;
+            fs.writeFileSync(promptFilePath, yaml.dump(promptFile), 'utf8');
+            vscode.window.showInformationMessage('Prompt file updated successfully!');
+        } else {
+            vscode.window.showErrorMessage('No prompt.yaml file found in the project root!');
+        }
+    } catch (error) {
+        vscode.window.showErrorMessage('Error updating the prompt.yaml file!');
+    }
+};
 
 ```
 
@@ -108,12 +116,10 @@ Implement the following feature!
 
 Requirements:
 
-Provide a command &#34;junior.writeAttention&#34; that
-- Checks if there is a prompt.yaml file in the project root
-- If finds it, overwrites its &#34;attention&#34; field with a list
-  of relative paths to the currenty opened windows and saved back the file.
-
-Also eliminate trivial comments.
+src/writeAttention.ts:4:23 - error TS7016: Could not find a declaration file for module &#39;js-yaml&#39;. &#39;/Users/ko/projects-new/Junior/integrations/vscode/node_modules/js-yaml/index.js&#39; implicitly has an &#39;any&#39; type.
+Try `npm i --save-dev @types/js-yaml` if it exists or add a new declaration (.d.ts) file containing `declare module &#39;js-yaml&#39;;`
+4 import * as yaml from &#39;js-yaml&#39;;
+                      ~~~~~~~~~
 
 
 
