@@ -1,7 +1,8 @@
 import { createEffect } from 'solid-js';
+import { createWebSocket } from './createWebSocket.js';
 
-export const useWebsocket = (url, onMessage) => {
-  let socket = new WebSocket(url);
+export const useWebsocket = (onMessage) => {
+  let socket = createWebSocket();
 
   socket.onopen = () => console.log('WebSocket is connected');
   socket.onmessage = onMessage;
@@ -9,7 +10,7 @@ export const useWebsocket = (url, onMessage) => {
 
   createEffect(() => {
     if (!socket || socket.readyState === WebSocket.CLOSED) {
-      socket = new WebSocket(url);
+      socket = createWebSocket();
       socket.onmessage = onMessage;
     }
   });

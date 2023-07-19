@@ -1,8 +1,8 @@
 task: prompt/task/bug/fix.md
 attention:
-  - src/index.html
-  - src/main.js
-  - prompt/system.md
+  - src/frontend/service/createWebSocket.js
+  - src/frontend/service/useWebsocket.js
+  - src/frontend/components/TasksList.jsx
 requirements: |
-  The project was renamed to Junior.
+  Use createWebSocket! Let it decide the url!
 format: prompt/format/shell.md

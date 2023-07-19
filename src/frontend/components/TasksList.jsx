@@ -17,7 +17,7 @@ const TasksList = () => {
     setSelectedTask(task);
   });
 
-  useWebsocket('ws://localhost:3000', async (e) => {
+  useWebsocket(async (e) => {
     if (e.data === 'update') {
       const text = await fetchDescriptor();
       setPromptDescriptor(text);

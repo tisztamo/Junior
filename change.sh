@@ -1,35 +1,76 @@
 #!/bin/sh
-# Goal: Rename project from "Contributor" to "Junior" and update system.md
+# Goal: Use createWebSocket to decide the url
 # Plan:
-# 1. Rename the title tag in index.html
-# 2. Replace all occurrences of the word "Contributor" with "Junior" in main.js
-# 3. Update the description in system.md
-# 4. Test changes to ensure they don't break anything.
+# 1. Update useWebsocket.js to use createWebSocket for WebSocket creation.
+# 2. Update TasksList.jsx to pass the onMessage callback to useWebsocket without the url.
 
-cat > src/index.html << 'EOF'
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Junior</title>
-</head>
-<body>
-  <div id="app"></div>
-  <script type="module" src="/frontend/index.jsx"></script>
-</body>
-</html>
+cat << 'EOF' > src/frontend/service/useWebsocket.js
+import { createEffect } from 'solid-js';
+import { createWebSocket } from './createWebSocket.js';
+
+export const useWebsocket = (onMessage) => {
+  let socket = createWebSocket();
+
+  socket.onopen = () => console.log('WebSocket is connected');
+  socket.onmessage = onMessage;
+  socket.onerror = (error) => console.log('WebSocket error:', error);
+
+  createEffect(() => {
+    if (!socket || socket.readyState === WebSocket.CLOSED) {
+      socket = createWebSocket();
+      socket.onmessage = onMessage;
+    }
+  });
+
+  return () => {
+    if (socket && socket.readyState === WebSocket.OPEN) {
+      socket.close();
+    }
+  };
+};
 EOF
 
-sed -i '' 's/Contributor/Junior/g' src/main.js
+cat << 'EOF' > src/frontend/components/TasksList.jsx
+import { createSignal, onCleanup, onMount } from 'solid-js';
+import { fetchTasks } from '../fetchTasks';
+import { handleTaskChange } from '../service/handleTaskChange';
+import { fetchDescriptor } from '../service/fetchDescriptor';
+import { parseYamlAndGetTask } from '../service/parseYamlAndGetTask';
+import { useWebsocket } from '../service/useWebsocket';
 
-cat > prompt/system.md << 'EOF'
-You're the 'Junior', an AI system aiding authors.
+const TasksList = () => {
+  const tasks = fetchTasks();
+  const [promptDescriptor, setPromptDescriptor] = createSignal('');
+  const [selectedTask, setSelectedTask] = createSignal('');
 
-You are working on the source of a program, too large for your memory, so only part of it, the "Working Set" is provided here.
+  onMount(async () => {
+    const text = await fetchDescriptor();
+    const task = parseYamlAndGetTask(text);
+    setPromptDescriptor(text);
+    setSelectedTask(task);
+  });
 
-You will see a partial directory structure. Ask for the contents of subdirs marked with /... if needed.
+  useWebsocket(async (e) => {
+    if (e.data === 'update') {
+      const text = await fetchDescriptor();
+      setPromptDescriptor(text);
+    }
+  });
 
-Some files are printed in the working set.
+  onCleanup(() => {
+    setPromptDescriptor('');
+  });
 
-Other files are only listed in their dir, so you know they exists. Do not edit files without knowing their current content, ask for their contents instead!
+  return (
+    <div>
+      <label>Task:</label>
+      <select value={selectedTask()} onChange={e => handleTaskChange(e, setPromptDescriptor)}>
+        {tasks().map(task => <option value={task}>{task}</option>)}
+      </select>
+      <pre>{promptDescriptor()}</pre>
+    </div>
+  );
+};
+
+export default TasksList;
 EOF

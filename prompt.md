@@ -1,47 +1,89 @@
 # Working set
 
-src/index.html:
+src/frontend/service/createWebSocket.js:
 ```
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Contributor</title>
-</head>
-<body>
-  <div id="app"></div>
-  <script type="module" src="/frontend/index.jsx"></script>
-</body>
-</html>
+import { getBaseUrl } from '../getBaseUrl.js';
+
+export const createWebSocket = () => {
+  const baseUrl = getBaseUrl();
+  const wsUrl = baseUrl.replace(/^http/, 'ws');
+  const ws = new WebSocket(wsUrl);
+  return ws;
+};
 
 ```
 
-src/main.js:
+src/frontend/service/useWebsocket.js:
 ```
-#!/usr/bin/env node
+import { createEffect } from 'solid-js';
 
-import { startInteractiveSession } from './interactiveSession/startInteractiveSession.js';
-import { api, get_model, rl } from './config.js';
+export const useWebsocket = (url, onMessage) => {
+  let socket = new WebSocket(url);
 
-console.log("Welcome to Contributor. Model: " + get_model() + "\n");
+  socket.onopen = () => console.log('WebSocket is connected');
+  socket.onmessage = onMessage;
+  socket.onerror = (error) => console.log('WebSocket error:', error);
 
-startInteractiveSession(rl, api);
+  createEffect(() => {
+    if (!socket || socket.readyState === WebSocket.CLOSED) {
+      socket = new WebSocket(url);
+      socket.onmessage = onMessage;
+    }
+  });
 
-export { startInteractiveSession };
+  return () => {
+    if (socket && socket.readyState === WebSocket.OPEN) {
+      socket.close();
+    }
+  };
+};
 
 ```
 
-prompt/system.md:
+src/frontend/components/TasksList.jsx:
 ```
-You're the 'Contributor', an AI system aiding authors.
+import { createSignal, onCleanup, onMount } from 'solid-js';
+import { fetchTasks } from '../fetchTasks';
+import { handleTaskChange } from '../service/handleTaskChange';
+import { fetchDescriptor } from '../service/fetchDescriptor';
+import { parseYamlAndGetTask } from '../service/parseYamlAndGetTask';
+import { useWebsocket } from '../service/useWebsocket';
 
-You are working on the source of a program, too large for your memory, so only part of it, the "Working Set" is provided here.
+const TasksList = () => {
+  const tasks = fetchTasks();
+  const [promptDescriptor, setPromptDescriptor] = createSignal('');
+  const [selectedTask, setSelectedTask] = createSignal('');
 
-You will see a partial directory structure. Ask for the contents of subdirs marked with /... if needed.
+  onMount(async () => {
+    const text = await fetchDescriptor();
+    const task = parseYamlAndGetTask(text);
+    setPromptDescriptor(text);
+    setSelectedTask(task);
+  });
 
-Some files are printed in the working set.
+  useWebsocket('ws://localhost:3000', async (e) => {
+    if (e.data === 'update') {
+      const text = await fetchDescriptor();
+      setPromptDescriptor(text);
+    }
+  });
 
-Other files are only listed in their dir, so you know they exists. Do not edit files without knowing their current content, ask for their contents instead!
+  onCleanup(() => {
+    setPromptDescriptor('');
+  });
+
+  return (
+    <div>
+      <label>Task:</label>
+      <select value={selectedTask()} onChange={e => handleTaskChange(e, setPromptDescriptor)}>
+        {tasks().map(task => <option value={task}>{task}</option>)}
+      </select>
+      <pre>{promptDescriptor()}</pre>
+    </div>
+  );
+};
+
+export default TasksList;
 
 ```
 
@@ -50,7 +92,7 @@ Other files are only listed in their dir, so you know they exists. Do not edit f
 
 Fix the following issue!
 
-The project was renamed to Junior.
+Use createWebSocket! Let it decide the url!
 
 
 # Output Format
