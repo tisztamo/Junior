@@ -13,7 +13,7 @@ import { setPrompt } from './stores/prompt';
 
 const App = () => {
   return (
-    <div class="max-w-desktop lg:mx-auto lg:w-desktop m-4 flex flex-col items-center space-y-8 sm:p-0">
+    <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
       <NavBar />
       <TasksList />
       <PromptDescriptor />
@@ -34,6 +34,7 @@ module.exports = {
   content: ['./src/**/*.html', './src/**/*.js', './src/**/*.jsx', './src/**/*.tsx', './src/**/*.ts'],
   theme: {
     screens: {
+      'xs': '320px',
       'sm': '640px',
       'md': '768px',
       'lg': '1024px',
@@ -57,7 +58,7 @@ module.exports = {
       },
       // Extend the maxWidth for desktop container
       maxWidth: {
-        'desktop': '320px',
+        'desktop': '640px',
       },
     },
   },
@@ -85,6 +86,7 @@ src/index.html:
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Junior</title>
 </head>
 <body>
@@ -108,6 +110,8 @@ Implement the following feature!
 Requirements:
 
 Make it mobile friendly!
+Also add necessary headers to the html!
+It is a solidjs app
 
 
 

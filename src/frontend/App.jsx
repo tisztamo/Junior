@@ -9,7 +9,7 @@ import { setPrompt } from './stores/prompt';
 
 const App = () => {
   return (
-    <div class="max-w-desktop lg:mx-auto lg:w-desktop m-4 flex flex-col items-center space-y-8 sm:p-0">
+    <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
       <NavBar />
       <TasksList />
       <PromptDescriptor />

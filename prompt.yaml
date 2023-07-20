@@ -5,4 +5,6 @@ attention:
   - src/frontend/index.jsx
   - src/index.html
 requirements: |
-  Do not allow any component to be wider than the content area.
+  Make it mobile friendly!
+  Also add necessary headers to the html!
+  It is a solidjs app
