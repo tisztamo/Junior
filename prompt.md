@@ -13,7 +13,7 @@ import { setPrompt } from './stores/prompt';
 
 const App = () => {
   return (
-    <div class="lg:m-8 m-4 flex flex-col items-center space-y-8 sm:p-0 lg:max-w-desktop mx-auto">
+    <div class="max-w-desktop lg:mx-auto lg:w-desktop m-4 flex flex-col items-center space-y-8 sm:p-0">
       <NavBar />
       <TasksList />
       <PromptDescriptor />
@@ -57,7 +57,7 @@ module.exports = {
       },
       // Extend the maxWidth for desktop container
       maxWidth: {
-        'desktop': '1000px',
+        'desktop': '320px',
       },
     },
   },
@@ -107,7 +107,7 @@ Implement the following feature!
 
 Requirements:
 
-On desktop, center the content on the screen (currently it is on the left) and change max width to 640px.
+Make it mobile friendly!
 
 
 

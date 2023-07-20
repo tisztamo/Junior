@@ -1,10 +1,10 @@
 #!/bin/sh
-# Goal: Center the content on desktop and change max-width
+# Goal: Limit the width of all components
 # Plan:
-# 1. Update the App.jsx to add a container with the class "mx-auto" to center the content.
-# 2. Update tailwind.config.js to change the max-width for 'desktop' to '640px'.
+# 1. Modify the "App" component to use the maxWidth class from tailwind CSS.
+# 2. Set the maxWidth class in the App component's container div.
 
-cat >src/frontend/App.jsx <<'EOF'
+cat > src/frontend/App.jsx << EOF
 import NotesInput from './components/NotesInput';
 import StartButton from './components/StartButton';
 import PromptDisplay from './components/PromptDisplay';
@@ -16,7 +16,7 @@ import { setPrompt } from './stores/prompt';
 
 const App = () => {
   return (
-    <div class="lg:mx-auto lg:w-desktop m-4 flex flex-col items-center space-y-8 sm:p-0">
+    <div class="max-w-desktop lg:mx-auto lg:w-desktop m-4 flex flex-col items-center space-y-8 sm:p-0">
       <NavBar />
       <TasksList />
       <PromptDescriptor />
@@ -28,43 +28,4 @@ const App = () => {
 };
 
 export default App;
-EOF
-
-cat >tailwind.config.js <<'EOF'
-module.exports = {
-  content: ['./src/**/*.html', './src/**/*.js', './src/**/*.jsx', './src/**/*.tsx', './src/**/*.ts'],
-  theme: {
-    screens: {
-      'sm': '640px',
-      'md': '768px',
-      'lg': '1024px',
-      'xl': '1280px',
-      '2xl': '1536px',
-    },
-    extend: {
-      // Extend the spacing for larger gaps
-      spacing: {
-        '72': '18rem',
-        '84': '21rem',
-        '96': '24rem',
-        '128': '32rem',
-      },
-      // Extend the button styles for larger buttons
-      fontSize: {
-        'btn': '1.5rem',
-      },
-      padding: {
-        'btn': '1.5rem',
-      },
-      // Extend the maxWidth for desktop container
-      maxWidth: {
-        'desktop': '640px',
-      },
-    },
-  },
-  variants: {
-    extend: {},
-  },
-  plugins: [],
-}
 EOF

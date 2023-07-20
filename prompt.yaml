@@ -4,6 +4,5 @@ attention:
   - tailwind.config.js
   - src/frontend/index.jsx
   - src/index.html
-requirements: >
-  On desktop, center the content on the screen (currently it is on the left)
-  and change max width to 640px.
+requirements: |
+  Do not allow any component to be wider than the content area.
