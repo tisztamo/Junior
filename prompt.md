@@ -28,72 +28,39 @@ export default App;
 
 ```
 
-tailwind.config.js:
+src/frontend/components/PromptDescriptor.jsx:
 ```
-module.exports = {
-  content: ['./src/**/*.html', './src/**/*.js', './src/**/*.jsx', './src/**/*.tsx', './src/**/*.ts'],
-  theme: {
-    screens: {
-      'xs': '320px',
-      'sm': '640px',
-      'md': '768px',
-      'lg': '1024px',
-      'xl': '1280px',
-      '2xl': '1536px',
-    },
-    extend: {
-      // Extend the spacing for larger gaps
-      spacing: {
-        '72': '18rem',
-        '84': '21rem',
-        '96': '24rem',
-        '128': '32rem',
-      },
-      // Extend the button styles for larger buttons
-      fontSize: {
-        'btn': '1.5rem',
-      },
-      padding: {
-        'btn': '1.5rem',
-      },
-      // Extend the maxWidth for desktop container
-      maxWidth: {
-        'desktop': '640px',
-      },
-    },
-  },
-  variants: {
-    extend: {},
-  },
-  plugins: [],
-}
+import { onMount, onCleanup } from 'solid-js';
+import { fetchDescriptor } from '../service/fetchDescriptor';
+import { useWebsocket } from '../service/useWebsocket';
+import { promptDescriptor, setPromptDescriptor } from '../stores/promptDescriptor';
 
-```
+const PromptDescriptor = () => {
 
-src/frontend/index.jsx:
-```
-import "./styles/styles.css";
-import { render } from 'solid-js/web';
-import App from './App';
+  onMount(async () => {
+    const text = await fetchDescriptor();
+    setPromptDescriptor(text);
+  });
 
-render(App, document.getElementById('app'));
+  useWebsocket(async (e) => {
+    if (e.data === 'update') {
+      const text = await fetchDescriptor();
+      setPromptDescriptor(text);
+    }
+  });
 
-```
+  onCleanup(() => {
+    setPromptDescriptor('');
+  });
 
-src/index.html:
-```
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>Junior</title>
-</head>
-<body>
-  <div id="app"></div>
-  <script type="module" src="/frontend/index.jsx"></script>
-</body>
-</html>
+  return (
+    <div class="overflow-auto max-w-full">
+      <pre>{promptDescriptor()}</pre>
+    </div>
+  );
+};
+
+export default PromptDescriptor;
 
 ```
 
@@ -109,9 +76,10 @@ Implement the following feature!
 
 Requirements:
 
-Make it mobile friendly!
-Also add necessary headers to the html!
-It is a solidjs app
+The pre in PromptDescriptor should never be wider than the screen.
+Allow horizontal scrolling of it!
+add an extra div if needed.
+Use tailwind utility classes.
 
 
 
