@@ -7,15 +7,14 @@ import StartButton from './components/StartButton';
 import PromptDisplay from './components/PromptDisplay';
 import TasksList from './components/TasksList';
 import PromptDescriptor from './components/PromptDescriptor';
+import NavBar from './components/NavBar';
 import { notes, setNotes } from './stores/notes';
 import { setPrompt } from './stores/prompt';
 
 const App = () => {
   return (
-    // Added margins between the components
-    // Applied maxWidth for desktop view and mx-auto to center the content
-    // Applied padding on small screens to use the whole screen
     <div class="lg:m-8 m-4 flex flex-col items-center space-y-8 sm:p-0 lg:max-w-desktop mx-auto">
+      <NavBar />
       <TasksList />
       <PromptDescriptor />
       <NotesInput notes={notes} setNotes={setNotes} />
@@ -29,6 +28,8 @@ export default App;
 
 ```
 
+src/frontend/components/TitleDisplay.jsx: err!
+
 
 # Task
 
@@ -41,10 +42,10 @@ Implement the following feature!
 
 Requirements:
 
-Legyen a képernyő tetején egy felirat: &#34;Junior&#34;
-
-Do not use jq, write out the whole the file!
-It is a solidjs project
+Rename TitleDisplay to NavBar!
+Eliminate the signal, use a constant instead.
+Add a subtitle: &#34;Your AI contributor&#34;.
+The subtitle should be visibly clickable and link to https://github.com/tisztamo/Junior
 
 
 

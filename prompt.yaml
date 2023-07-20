@@ -1,8 +1,13 @@
 task: prompt/task/feature/implement.md
 attention:
   - src/frontend/App.jsx
-requirements: |
-  Legyen a képernyő tetején egy felirat: "Junior"
+  - src/frontend/components/TitleDisplay.jsx
+requirements: >
+  Rename TitleDisplay to NavBar!
 
-  Do not use jq, write out the whole the file!
-  It is a solidjs project
+  Eliminate the signal, use a constant instead.
+
+  Add a subtitle: "Your AI contributor".
+
+  The subtitle should be visibly clickable and link to
+  https://github.com/tisztamo/Junior
