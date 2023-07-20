@@ -1,8 +1,11 @@
-task: prompt/task/bug/fix.md
+task: prompt/task/feature/implement.md
 attention:
   - integrations/vscode/src/writeAttention.ts
+  - integrations/vscode/src/extension.ts
+  - integrations/vscode/package.json
 requirements: >
-  Extra .git elements appear in the list for every opened file, e.g.: -
-  src/backend/servePromptDescriptor.js -
-  src/backend/servePromptDescriptor.js.git
+  - Instead of excluding .git - ending elements, only include existing files in
+  the attention. - Also exclude prompt.yaml and prompt.md - Plus allow an
+  attention exclude list (list of globs) as a configuration - Remove the
+  helloworld command
 format: prompt/format/shell.md

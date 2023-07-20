@@ -14,14 +14,21 @@
   "contributes": {
     "commands": [
       {
-        "command": "junior.helloWorld",
-        "title": "Hello World"
-      },
-      {
         "command": "junior.writeAttention",
         "title": "Write Attention"
       }
-    ]
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Junior",
+      "properties": {
+        "junior.attentionExcludeList": {
+          "type": "array",
+          "default": [],
+          "description": "List of file patterns to exclude from attention"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

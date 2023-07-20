@@ -18,8 +18,9 @@ export const writeAttention = async () => {
     try {
         if (fs.existsSync(promptFilePath)) {
             const currentWindows = vscode.workspace.textDocuments.map(doc => path.relative(rootFolder, doc.fileName));
+            const filteredWindows = currentWindows.filter(windowPath => !windowPath.endsWith('.git'));
             const promptFile = yaml.load(fs.readFileSync(promptFilePath, 'utf8'));
-            promptFile.attention = currentWindows;
+            promptFile.attention = filteredWindows;
             fs.writeFileSync(promptFilePath, yaml.dump(promptFile), 'utf8');
             vscode.window.showInformationMessage('Prompt file updated successfully!');
         } else {
@@ -32,12 +33,97 @@ export const writeAttention = async () => {
 
 ```
 
+integrations/vscode/src/extension.ts:
+```
+import * as vscode from 'vscode';
+import { writeAttention } from './writeAttention';
+
+export function activate(context: vscode.ExtensionContext) {
+	console.log('Junior extension is now active!');
+
+	let helloWorldDisposable = vscode.commands.registerCommand('junior.helloWorld', () => {
+		vscode.window.showInformationMessage('Hello World from Junior!');
+	});
+
+	let writeAttentionDisposable = vscode.commands.registerCommand('junior.writeAttention', writeAttention);
+
+	context.subscriptions.push(helloWorldDisposable);
+	context.subscriptions.push(writeAttentionDisposable);
+}
+
+export function deactivate() {}
+
+```
+
+integrations/vscode/package.json:
+```
+{
+  "name": "junior",
+  "displayName": "Junior",
+  "description": "Your AI contributor",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "junior.helloWorld",
+        "title": "Hello World"
+      },
+      {
+        "command": "junior.writeAttention",
+        "title": "Write Attention"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "20.2.5",
+    "@types/vscode": "^1.80.0",
+    "@typescript-eslint/eslint-plugin": "^5.59.8",
+    "@typescript-eslint/parser": "^5.59.8",
+    "@vscode/test-electron": "^2.3.2",
+    "eslint": "^8.41.0",
+    "glob": "^8.1.0",
+    "mocha": "^10.2.0",
+    "typescript": "^5.1.3"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  }
+}
+
+```
+
 
 # Task
 
-Fix the following issue!
+Implement the following feature!
 
-Extra .git elements appear in the list for every opened file, e.g.: - src/backend/servePromptDescriptor.js - src/backend/servePromptDescriptor.js.git
+- Create a plan!
+- Create new files when needed!
+- Every js file should only export a single function!
+- Use ES6 imports!
+
+Requirements:
+
+- Instead of excluding .git - ending elements, only include existing files in the attention. - Also exclude prompt.yaml and prompt.md - Plus allow an attention exclude list (list of globs) as a configuration - Remove the helloworld command
+
 
 
 # Output Format
