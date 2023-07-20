@@ -1,8 +1,10 @@
-task: prompt/task/refactor/general.md
+task: prompt/task/bug/fix.md
 attention:
   - src/frontend/App.jsx
   - src/frontend/components/TasksList.jsx
 requirements: >
-  Create a dir "src/frontend/stores" and move all the signals and stores there.
-  Create separate files for each signal and store.
+  TaskList also displays the prompt descriptor. Refactor by creating a separate
+  component for displaying the prompt desriptor and use it in App, not in
+  taskslist! Also delete the unneeded src/frontend/components/TasksList.jsx.bak
+  file!
 format: prompt/format/shell.md

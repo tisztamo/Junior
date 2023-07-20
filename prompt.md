@@ -2,16 +2,14 @@
 
 src/frontend/App.jsx:
 ```
-import { createSignal } from 'solid-js';
 import NotesInput from './components/NotesInput';
 import StartButton from './components/StartButton';
 import PromptDisplay from './components/PromptDisplay';
 import TasksList from './components/TasksList';
+import { notes, setNotes } from './stores/notes';
+import { prompt, setPrompt } from './stores/prompt';
 
 const App = () => {
-  const [notes, setNotes] = createSignal('');
-  const [prompt, setPrompt] = createSignal('');
-
   return (
     <>
       <NotesInput notes={notes} setNotes={setNotes} />
@@ -28,17 +26,17 @@ export default App;
 
 src/frontend/components/TasksList.jsx:
 ```
-import { createSignal, onCleanup, onMount } from 'solid-js';
+import { onCleanup, onMount } from 'solid-js';
 import { fetchTasks } from '../fetchTasks';
 import { handleTaskChange } from '../service/handleTaskChange';
 import { fetchDescriptor } from '../service/fetchDescriptor';
 import { parseYamlAndGetTask } from '../service/parseYamlAndGetTask';
 import { useWebsocket } from '../service/useWebsocket';
+import { promptDescriptor, setPromptDescriptor } from '../stores/promptDescriptor';
+import { selectedTask, setSelectedTask } from '../stores/selectedTask';
 
 const TasksList = () => {
   const tasks = fetchTasks();
-  const [promptDescriptor, setPromptDescriptor] = createSignal('');
-  const [selectedTask, setSelectedTask] = createSignal('');
 
   onMount(async () => {
     const text = await fetchDescriptor();
@@ -76,9 +74,17 @@ export default TasksList;
 
 # Task
 
-Refactor!
+Implement the following feature!
 
-Create a dir &#34;src/frontend/stores&#34; and move all the signals and stores there. Create separate files for each signal and store.
+- Create a plan!
+- Create new files when needed!
+- Every js file should only export a single function!
+- Use ES6 imports!
+
+Requirements:
+
+TaskList also displays the prompt descriptor. Refactor by creating a separate component for displaying the prompt desriptor and use it in App, not in taskslist! Also delete the unneeded src/frontend/components/TasksList.jsx.bak file!
+
 
 
 # Output Format
