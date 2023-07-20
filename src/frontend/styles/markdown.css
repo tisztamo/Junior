@@ -1,0 +1,17 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+.markdown {
+  & h1 {
+    @apply text-4xl font-bold mb-4;
+  }
+
+  & p {
+    @apply text-base font-normal mb-4;
+  }
+
+  & pre {
+    @apply bg-gray-100 p-4 font-mono;
+  }
+}

@@ -1,122 +1,52 @@
 #!/bin/sh
-# Goal: Refactor to separate prompt descriptor into a new component
+# Goal: Style markdown content with tailwind classes
 # Plan:
-# 1. Create a new file `src/frontend/components/PromptDescriptor.jsx` for the new PromptDescriptor component.
-# 2. Remove the rendering of the prompt descriptor and related hooks from `TasksList.jsx`
-# 3. Update `App.jsx` to use the new `PromptDescriptor` component.
-# 4. Delete the unneeded `src/frontend/components/TasksList.jsx.bak` file.
-# 5. Update `src/frontend/service/handleTaskChange.js` to import `setPromptDescriptor` from the store.
+# 1. Create markdown.css file
+# 2. Add tailwind classes for h1, p and pre tags in markdown.css
+# 3. Move styles.css to styles directory and update its import in index.jsx
+# 4. Update PromptDisplay.jsx to use Solid's innerHTML directive
 
-# Step 1: Create a new file `src/frontend/components/PromptDescriptor.jsx` for the new PromptDescriptor component.
-cat > src/frontend/components/PromptDescriptor.jsx << EOF
-import { onMount, onCleanup } from 'solid-js';
-import { fetchDescriptor } from '../service/fetchDescriptor';
-import { useWebsocket } from '../service/useWebsocket';
-import { promptDescriptor, setPromptDescriptor } from '../stores/promptDescriptor';
+mkdir -p src/frontend/styles
 
-const PromptDescriptor = () => {
+cat << 'EOF' > src/frontend/styles/markdown.css
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
-  onMount(async () => {
-    const text = await fetchDescriptor();
-    setPromptDescriptor(text);
-  });
-
-  useWebsocket(async (e) => {
-    if (e.data === 'update') {
-      const text = await fetchDescriptor();
-      setPromptDescriptor(text);
-    }
-  });
-
-  onCleanup(() => {
-    setPromptDescriptor('');
-  });
-
-  return (
-    <pre>{promptDescriptor()}</pre>
-  );
-};
-
-export default PromptDescriptor;
-EOF
-
-# Step 2: Remove the rendering of the prompt descriptor and related hooks from `TasksList.jsx`
-cat > src/frontend/components/TasksList.jsx << EOF
-import { onMount } from 'solid-js';
-import { fetchTasks } from '../fetchTasks';
-import { handleTaskChange } from '../service/handleTaskChange';
-import { selectedTask, setSelectedTask } from '../stores/selectedTask';
-
-const TasksList = () => {
-  const tasks = fetchTasks();
-
-  onMount(async () => {
-    const task = tasks[0]; // Set default task to the first in the list
-    setSelectedTask(task);
-  });
-
-  return (
-    <div>
-      <label>Task:</label>
-      <select value={selectedTask()} onChange={e => handleTaskChange(e)}>
-        {tasks().map(task => <option value={task}>{task}</option>)}
-      </select>
-    </div>
-  );
-};
-
-export default TasksList;
-EOF
-
-# Step 3: Update `App.jsx` to use the new `PromptDescriptor` component.
-cat > src/frontend/App.jsx << EOF
-import NotesInput from './components/NotesInput';
-import StartButton from './components/StartButton';
-import PromptDisplay from './components/PromptDisplay';
-import TasksList from './components/TasksList';
-import PromptDescriptor from './components/PromptDescriptor';
-import { notes, setNotes } from './stores/notes';
-import { prompt, setPrompt } from './stores/prompt';
-
-const App = () => {
-  return (
-    <>
-      <NotesInput notes={notes} setNotes={setNotes} />
-      <StartButton notes={notes} setPrompt={setPrompt} />
-      <PromptDisplay prompt={prompt} />
-      <TasksList />
-      <PromptDescriptor />
-    </>
-  );
-};
-
-export default App;
-EOF
-
-# Step 4: Delete the unneeded `src/frontend/components/TasksList.jsx.bak` file.
-rm src/frontend/components/TasksList.jsx.bak
-
-# Step 5: Update `src/frontend/service/handleTaskChange.js` to import `setPromptDescriptor` from the store.
-cat > src/frontend/service/handleTaskChange.js << EOF
-import { getBaseUrl } from '../getBaseUrl';
-import { fetchDescriptor } from './fetchDescriptor';
-import { setPromptDescriptor } from '../stores/promptDescriptor';
-
-export const handleTaskChange = async (e) => {
-  const baseUrl = getBaseUrl();
-  const selectedTask = e.target.value;
-
-  const response = await fetch(\`\${baseUrl}/updatetask\`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ task: selectedTask })
-  });
-
-  if (response.ok) {
-    const text = await fetchDescriptor();
-    setPromptDescriptor(text);
+.markdown {
+  & h1 {
+    @apply text-4xl font-bold mb-4;
   }
-};
+
+  & p {
+    @apply text-base font-normal mb-4;
+  }
+
+  & pre {
+    @apply bg-gray-100 p-4 font-mono;
+  }
+}
 EOF
+
+mv src/frontend/styles.css src/frontend/styles/styles.css
+echo "@import './markdown.css';" >> src/frontend/styles/styles.css
+
+cat << 'EOF' > src/frontend/components/PromptDisplay.jsx
+import { createSignal, onMount } from "solid-js";
+
+const PromptDisplay = ({prompt}) => {
+  let div;
+  onMount(() => {
+    div.innerHTML = prompt();
+  });
+
+  return (
+    <div className="markdown" ref={div}></div>
+  );
+};
+
+export default PromptDisplay;
+EOF
+
+# Updating import of styles.css in index.jsx
+sed -i '' 's/import ".\/styles.css";/import ".\/styles\/styles.css";/g' src/frontend/index.jsx

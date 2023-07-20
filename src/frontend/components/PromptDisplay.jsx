@@ -1,6 +1,13 @@
+import { createSignal, onMount } from "solid-js";
+
 const PromptDisplay = ({prompt}) => {
+  let div;
+  onMount(() => {
+    div.innerHTML = prompt();
+  });
+
   return (
-    <div innerHTML={prompt()}></div>
+    <div className="markdown" ref={div}></div>
   );
 };
 
