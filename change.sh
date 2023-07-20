@@ -1,52 +1,42 @@
 #!/bin/sh
-# Goal: Style markdown content with tailwind classes
+# Goal: Fix path validation error in prompt processing
 # Plan:
-# 1. Create markdown.css file
-# 2. Add tailwind classes for h1, p and pre tags in markdown.css
-# 3. Move styles.css to styles directory and update its import in index.jsx
-# 4. Update PromptDisplay.jsx to use Solid's innerHTML directive
+# 1. Ensure a default value for `promptDescriptor.format` in `createPrompt()` function.
+# 2. Add the new changes to 'createPrompt.js' file using a heredoc.
 
-mkdir -p src/frontend/styles
+cat << 'EOF' > ./src/prompt/createPrompt.js
+import { readAttention } from "../attention/readAttention.js"
+import yaml from 'js-yaml';
+import { getSystemPromptIfNeeded } from './getSystemPromptIfNeeded.js';
+import { resolveTemplateVariables } from './resolveTemplateVariables.js';
+import { extractTemplateVars } from './extractTemplateVars.js';
+import { loadPromptDescriptor } from './loadPromptDescriptor.js';
+import { loadTaskTemplate } from './loadTaskTemplate.js';
+import { loadFormatTemplate } from './loadFormatTemplate.js';
 
-cat << 'EOF' > src/frontend/styles/markdown.css
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+const createPrompt = async (userInput) => {
+  const promptDescriptor = yaml.load(await loadPromptDescriptor());
+  let templateVars = extractTemplateVars(promptDescriptor);
 
-.markdown {
-  & h1 {
-    @apply text-4xl font-bold mb-4;
+  templateVars = await resolveTemplateVariables(templateVars);
+
+  const attention = await readAttention(promptDescriptor.attention);
+  const task = await loadTaskTemplate(promptDescriptor.task, templateVars);
+  
+  // Check if promptDescriptor.format is undefined. If it is, assign a default value
+  if(!promptDescriptor.format) {
+    promptDescriptor.format = "prompt/format/shell.md";
   }
-
-  & p {
-    @apply text-base font-normal mb-4;
-  }
-
-  & pre {
-    @apply bg-gray-100 p-4 font-mono;
-  }
+  
+  const format = await loadFormatTemplate(promptDescriptor.format, templateVars);
+  const system = await getSystemPromptIfNeeded();
+  const saveto = promptDescriptor.saveto;
+  return {
+    prompt: `${system}# Working set\n\n${attention.join("\n")}\n\n# Task\n\n${task}\n\n# Output Format\n\n${format}\n\n${userInput ? userInput : ""}`,
+    saveto
+  };
 }
+
+export { createPrompt };
+
 EOF
-
-mv src/frontend/styles.css src/frontend/styles/styles.css
-echo "@import './markdown.css';" >> src/frontend/styles/styles.css
-
-cat << 'EOF' > src/frontend/components/PromptDisplay.jsx
-import { createSignal, onMount } from "solid-js";
-
-const PromptDisplay = ({prompt}) => {
-  let div;
-  onMount(() => {
-    div.innerHTML = prompt();
-  });
-
-  return (
-    <div className="markdown" ref={div}></div>
-  );
-};
-
-export default PromptDisplay;
-EOF
-
-# Updating import of styles.css in index.jsx
-sed -i '' 's/import ".\/styles.css";/import ".\/styles\/styles.css";/g' src/frontend/index.jsx

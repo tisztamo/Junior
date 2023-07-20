@@ -15,6 +15,12 @@ const createPrompt = async (userInput) => {
 
   const attention = await readAttention(promptDescriptor.attention);
   const task = await loadTaskTemplate(promptDescriptor.task, templateVars);
+  
+  // Check if promptDescriptor.format is undefined. If it is, assign a default value
+  if(!promptDescriptor.format) {
+    promptDescriptor.format = "prompt/format/shell.md";
+  }
+  
   const format = await loadFormatTemplate(promptDescriptor.format, templateVars);
   const system = await getSystemPromptIfNeeded();
   const saveto = promptDescriptor.saveto;
@@ -25,3 +31,4 @@ const createPrompt = async (userInput) => {
 }
 
 export { createPrompt };
+

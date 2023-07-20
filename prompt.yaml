@@ -1,76 +1,24 @@
 task: prompt/task/bug/fix.md
 attention:
-  - src/frontend/App.jsx
-  - src/frontend/components/PromptDisplay.jsx
-  - src/frontend/styles.css
-  - src/frontend/generatePrompt.js
+  - src/prompt/loadPromptFile.js
+  - src/prompt/createPrompt.js
+  - src/prompt/promptProcessing.js
+  - src/backend/generateHandler.js
+  - tailwind.config.js
+  - src/prompt/loadPromptDescriptor.js
+  - src/prompt/loadFormatTemplate.js
 requirements: >
-  Since introducing tailwind, the prompt display (A markdown) has no meaningful
-  style.
-
-  We need to introduce classes for this.
-
-
-  Create a meaningful styleset for the following html (generated from a markdown
-  file)!
-
-  Find a place in the folder structure where it fits. Create the dir if missing.
-
-  Build on tailwind only if it makes it much easier.
-
-
-  <div><h1 id="working-set">Working set</h1>
-
-  <p>src/frontend/App.jsx:</p>
-
-  <pre><code>import NotesInput from './components/NotesInput';
-
-  import StartButton from './components/StartButton';
-
-  ...
-
-  export default App;
-
-  </code></pre>
-
-  <h1 id="task">Task</h1>
-
-  <p>Fix the following issue!</p>
-
-  <p>TaskList also displays the prompt descriptor. Refactor by creating a
-  separate component for displaying the prompt desriptor and use it in App, not
-  in taskslist! Also delete the unneeded
-  src/frontend/components/TasksList.jsx.bak file!</p>
-
-  <h1 id="output-format">Output Format</h1>
-
-  <p>Encode and enclose your results as ./change.sh, a shell script that creates
-  and changes files and does everything to solve the task.
-
-  Files are small, prefer heredoc-ing full files without substitution.
-
-  Assume OSX.
-
-  npm and jq are installed.
-
-  Do NOT write any text outside the script (the plan goes into it)!</p>
-
-  <p>EXAMPLE START</p>
-
-  <pre><code class="language-sh">#!/bin/sh
-
-  # Goal: [Task description, max 7 words]
-
-  # Plan:
-
-  # 1. [...]
-
-
-  [Commands solving the task]
-
-  </code></pre>
-
-  <p>EXAMPLE END</p>
-
-  </div>
+  node:internal/errors:477
+    ErrorCaptureStackTrace(err);
+    ^
+  TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string.
+  Received undefined
+    at new NodeError (node:internal/errors:388:5)
+    at validateString (node:internal/validators:114:11)
+    at Object.resolve (node:path:1098:7)
+    at loadPromptFile (file:///Users/ko/projects-new/Junior/src/prompt/loadPromptFile.js:14:27)
+    at async loadFormatTemplate (file:///Users/ko/projects-new/Junior/src/prompt/loadFormatTemplate.js:4:10)
+    at async createPrompt (file:///Users/ko/projects-new/Junior/src/prompt/createPrompt.js:18:18)
+    at async processPrompt (file:///Users/ko/projects-new/Junior/src/prompt/promptProcessing.js:5:41)
+    at async generateHandler (file:///Users/ko/projects-new/Junior/src/backend/generateHandler.js:5:22) {
 format: prompt/format/shell.md
