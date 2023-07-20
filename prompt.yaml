@@ -1,19 +1,13 @@
-task: prompt/task/bug/fix.md
+task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/
+  - src/frontend/components/StartButton.jsx
   - src/frontend/App.jsx
+  - src/frontend/components/TasksList.jsx
   - tailwind.config.js
-requirements: >
-  We need margins on large screens and a responsive layout.
-
-  When looking at the page, after loading (empty prompt, prompt descriptor
-  loaded), the prompt descriptor (A yaml file) should be the first element
-  catching our eyes.
-
-  Under that the notes input, and the start button so that it is easy to click
-  after entering the notes.
-
-  Over the prompt descriptor is the task list (a html select).
-
-  When we click the button, the prompt is generated and displayed. It's a
-  markdown. Display at the bottom.
+requirements: |
+  In a solid app:
+  The Start button should have the label "Generate & Copy Prompt"
+  and should be a bit too large enough to be easily clicked.
+  The tasklist should also be easier to find, and having a bg color.
+  Also align the tasklist to the left, but use the given single-column layout.
+  And add some space between the components.

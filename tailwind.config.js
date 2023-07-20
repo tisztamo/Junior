@@ -8,7 +8,22 @@ module.exports = {
       'xl': '1280px',
       '2xl': '1536px',
     },
-    extend: {},
+    extend: {
+      // Extend the spacing for larger gaps
+      spacing: {
+        '72': '18rem',
+        '84': '21rem',
+        '96': '24rem',
+        '128': '32rem',
+      },
+      // Extend the button styles for larger buttons
+      fontSize: {
+        'btn': '1.5rem',
+      },
+      padding: {
+        'btn': '1.5rem',
+      },
+    },
   },
   variants: {
     extend: {},

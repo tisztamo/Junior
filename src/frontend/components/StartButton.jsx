@@ -20,7 +20,8 @@ const StartButton = ({notes, setPrompt}) => {
   };
 
   return (
-    <button onClick={handleGeneratePrompt}>Start</button>
+    // Updated button label and added tailwind classes for larger button size
+    <button class="px-8 py-4 bg-blue-500 text-white rounded" onClick={handleGeneratePrompt}>Generate & Copy Prompt</button>
   );
 };
 

@@ -12,9 +12,10 @@ const TasksList = () => {
   });
 
   return (
-    <div>
-      <label>Task:</label>
-      <select value={selectedTask()} onChange={e => handleTaskChange(e)}>
+    // Align the tasklist to the left within a single column layout and add background color
+    <div class="w-full flex justify-start bg-gray-100 p-2 rounded">
+      <label class="mr-2">Task:</label>
+      <select class="w-full" value={selectedTask()} onChange={e => handleTaskChange(e)}>
         {tasks().map(task => <option value={task}>{task}</option>)}
       </select>
     </div>
