@@ -1,10 +1,8 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/components/StartButton.jsx
   - src/frontend/App.jsx
-  - src/frontend/components/TasksList.jsx
-  - tailwind.config.js
 requirements: |
-  We need a responsive layout.
-  On mobile, use the whole screen
-  On desktop, center the content and limit its width to 1000px
+  Legyen a képernyő tetején egy felirat: "Junior"
+
+  Do not use jq, write out the whole the file!
+  It is a solidjs project
