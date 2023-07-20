@@ -1,9 +1,16 @@
-task: prompt/task/bug/fix.md
+task: prompt/task/feature/implement.md
 attention:
   - ./
-  - integrations/vscode/
-  - integrations/vscode/package.json
+  - src/frontend/
+  - src/frontend/App.jsx
+  - src/frontend/index.jsx
+  - src/vite.config.js
+  - babel.config.js
+  - package.json
 requirements: >
-  We need to move glob and its types from devdeps to deps in order for vsce to
-  package it.
+  We want to use tailwindcss in our project. When configuring PostCSS plugin,
+  the configuration expects an array, not an object.
+  The project is configured to use es6 module imports without extension.
+  Every js file is a module and uses .js extension. No need to install esm, node handles it.
+  Remember: Always use ES6 exports and imports!
 format: prompt/format/shell.md

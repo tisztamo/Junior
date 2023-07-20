@@ -21,80 +21,127 @@
 
 ```
 ```
-integrations/vscode/
-├── .eslintrc.json
-├── .gitignore
-├── .vscode/...
-├── .vscodeignore
-├── CHANGELOG.md
-├── README.md
-├── junior-0.0.1.vsix
-├── node_modules/...
-├── out/...
-├── package-lock.json
-├── package.json
-├── src/...
-├── tsconfig.json
-├── vsc-extension-quickstart.md
+src/frontend/
+├── App.jsx
+├── components/...
+├── fetchTasks.js
+├── generatePrompt.js
+├── getBaseUrl.js
+├── index.jsx
+├── service/...
 
 ```
-integrations/vscode/package.json:
+src/frontend/App.jsx:
+```
+import { createSignal } from 'solid-js';
+import NotesInput from './components/NotesInput';
+import StartButton from './components/StartButton';
+import PromptDisplay from './components/PromptDisplay';
+import TasksList from './components/TasksList';
+
+const App = () => {
+  const [notes, setNotes] = createSignal('');
+  const [prompt, setPrompt] = createSignal('');
+
+  return (
+    <>
+      <NotesInput notes={notes} setNotes={setNotes} />
+      <StartButton notes={notes} setPrompt={setPrompt} />
+      <PromptDisplay prompt={prompt} />
+      <TasksList />
+    </>
+  );
+};
+
+export default App;
+
+```
+
+src/frontend/index.jsx:
+```
+import { render } from 'solid-js/web';
+import App from './App';
+
+render(App, document.getElementById('app'));
+
+```
+
+src/vite.config.js:
+```
+import { defineConfig } from 'vite'
+import solidPlugin from 'vite-plugin-solid'
+
+export default defineConfig({
+  plugins: [solidPlugin()],
+  build: {
+    target: 'esnext',
+  },
+})
+
+```
+
+babel.config.js:
+```
+module.exports = {
+  presets: [
+    ["solid", { "generate": "dom", "hydratable": true, "delegateEvents": true }]
+  ]
+}
+
+```
+
+package.json:
 ```
 {
-  "name": "junior",
-  "displayName": "Junior",
-  "description": "Your AI contributor",
+  "name": "@aijunior/dev",
   "version": "0.0.1",
-  "engines": {
-    "vscode": "^1.80.0"
-  },
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [],
-  "main": "./out/extension.js",
-  "contributes": {
-    "commands": [
-      {
-        "command": "junior.writeAttention",
-        "title": "Write Attention"
-      }
-    ],
-    "configuration": {
-      "type": "object",
-      "title": "Junior",
-      "properties": {
-        "junior.attentionExcludeList": {
-          "type": "array",
-          "default": [],
-          "description": "List of file patterns to exclude from attention"
-        }
-      }
-    }
+  "description": "Your AI Contributor",
+  "type": "module",
+  "main": "src/main.js",
+  "bin": {
+    "junior": "src/main.js",
+    "junior-web": "src/web.js"
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "pretest": "npm run compile && npm run lint",
-    "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js"
+    "cli": "node src/main.js",
+    "start": "node src/web.js"
   },
-  "devDependencies": {
-    "@types/glob": "^8.1.0",
-    "@types/mocha": "^10.0.1",
-    "@types/node": "20.2.5",
-    "@types/vscode": "^1.80.0",
-    "@typescript-eslint/eslint-plugin": "^5.59.8",
-    "@typescript-eslint/parser": "^5.59.8",
-    "@vscode/test-electron": "^2.3.2",
-    "eslint": "^8.41.0",
-    "glob": "^8.1.0",
-    "mocha": "^10.2.0",
-    "typescript": "^5.1.3"
-  },
+  "keywords": [
+    "cli",
+    "uppercase"
+  ],
+  "author": "",
+  "license": "GPL",
   "dependencies": {
-    "js-yaml": "^4.1.0"
+    "autoprefixer": "^10.4.14",
+    "chatgpt": "^5.2.4",
+    "clipboard-copy": "^4.0.1",
+    "cors": "^2.8.5",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "js-yaml": "^4.1.0",
+    "marked": "^5.1.0",
+    "postcss": "^8.4.24",
+    "solid-js": "^1.7.7",
+    "tailwindcss": "^3.3.2",
+    "vite": "^4.3.9",
+    "vite-plugin-solid": "^2.7.0",
+    "ws": "^8.13.0"
+  },
+  "directories": {
+    "doc": "doc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tisztamo/Junior.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tisztamo/Junior/issues"
+  },
+  "homepage": "https://github.com/tisztamo/Junior#readme",
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.5",
+    "babel-preset-solid": "^1.7.7"
   }
 }
 
@@ -103,9 +150,17 @@ integrations/vscode/package.json:
 
 # Task
 
-Fix the following issue!
+Implement the following feature!
 
-We need to move glob and its types from devdeps to deps in order for vsce to package it.
+- Create a plan!
+- Create new files when needed!
+- Every js file should only export a single function!
+- Use ES6 imports!
+
+Requirements:
+
+We want to use tailwindcss in our project. When configuring PostCSS plugin, the configuration expects an array, not an object. The project is configured to use es6 module imports without extension. Every js file is a module and uses .js extension. No need to install esm, node handles it. Remember: Always use ES6 exports and imports!
+
 
 
 # Output Format
