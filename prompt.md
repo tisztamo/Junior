@@ -139,12 +139,9 @@ Implement the following feature!
 
 Requirements:
 
-In a solid app:
-The Start button should have the label &#34;Generate &amp; Copy Prompt&#34;
-and should be a bit too large enough to be easily clicked.
-The tasklist should also be easier to find, and having a bg color.
-Also align the tasklist to the left, but use the given single-column layout.
-And add some space between the components.
+We need a responsive layout.
+On mobile, use the whole screen
+On desktop, center the content and limit its width to 1000px
 
 
 

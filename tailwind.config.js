@@ -23,6 +23,10 @@ module.exports = {
       padding: {
         'btn': '1.5rem',
       },
+      // Extend the maxWidth for desktop container
+      maxWidth: {
+        'desktop': '1000px',
+      },
     },
   },
   variants: {
