@@ -1,16 +1,9 @@
-task: prompt/task/feature/implement.md
+task: prompt/task/bug/fix.md
 attention:
-  - ./
-  - src/frontend/
-  - src/frontend/App.jsx
-  - src/frontend/index.jsx
   - src/vite.config.js
-  - babel.config.js
-  - package.json
+  - postcss.config.js
 requirements: >
-  We want to use tailwindcss in our project. When configuring PostCSS plugin,
-  the configuration expects an array, not an object.
-  The project is configured to use es6 module imports without extension.
-  Every js file is a module and uses .js extension. No need to install esm, node handles it.
-  Remember: Always use ES6 exports and imports!
+  warn - The `content` option in your Tailwind CSS configuration is missing or
+  empty. warn - Configure your content sources or your generated CSS will be
+  missing styles. warn - https://tailwindcss.com/docs/content-configuration
 format: prompt/format/shell.md

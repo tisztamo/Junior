@@ -1,41 +1,20 @@
 #!/bin/sh
-# Goal: Integrate tailwindcss with PostCSS in project
+# Goal: Optimize Tailwind CSS v3.0 configuration
 # Plan:
-# 1. Install tailwindcss, postcss, autoprefixer using npm.
-# 2. Create a new file 'postcss.config.js' at the root of the project with the required configurations for tailwindcss, postcss, and autoprefixer.
-# 3. Update 'package.json' to include a new script to build css.
-# 4. Create a new 'styles.css' file under 'src/frontend' where tailwindcss classes will be used.
-# 5. Update 'index.jsx' to import 'styles.css'.
+# 1. The `content` option should include only relevant source files to optimize the build process.
+# 2. Update the `content` paths in the tailwind.config.js file to include only the `src` directory.
 
-# Step 1: Install necessary dependencies
-npm install -D tailwindcss postcss autoprefixer
-
-# Step 2: Create 'postcss.config.js' with necessary configurations
-cat >./postcss.config.js <<EOF
-import tailwindcss from 'tailwindcss';
-import autoprefixer from 'autoprefixer';
-
-export default function postCssConfig() {
-  return {
-    plugins: [
-      tailwindcss(),
-      autoprefixer()
-    ]
-  }
+cat << 'EOF' > tailwind.config.js
+export default {
+  content: ['./src/**/*.html', './src/**/*.js', './src/**/*.jsx', './src/**/*.tsx', './src/**/*.ts'],
+  theme: {
+    extend: {},
+  },
+  variants: {
+    extend: {},
+  },
+  plugins: [],
 }
 EOF
 
-# Step 3: Update 'package.json' to include a new script to build css
-jq '.scripts += {"build:css": "postcss ./src/frontend/styles.css -o ./dist/styles.css"}' package.json > package.json.tmp && mv package.json.tmp package.json
-
-# Step 4: Create a 'styles.css' file under 'src/frontend' to use tailwindcss classes
-cat >./src/frontend/styles.css <<EOF
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
-EOF
-
-# Step 5: Update 'index.jsx' to import 'styles.css'
-echo 'import "./styles.css";' | cat - ./src/frontend/index.jsx > temp && mv temp ./src/frontend/index.jsx
-
-# End of Script
+echo "Tailwind CSS configuration has been optimized for faster builds. The content option now includes only the source files in the 'src' directory."
