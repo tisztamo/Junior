@@ -1,41 +1,84 @@
 # Working set
 
-src/vite.config.js:
+src/frontend/App.jsx:
 ```
-import { defineConfig } from 'vite'
-import solidPlugin from 'vite-plugin-solid'
+import { createSignal } from 'solid-js';
+import NotesInput from './components/NotesInput';
+import StartButton from './components/StartButton';
+import PromptDisplay from './components/PromptDisplay';
+import TasksList from './components/TasksList';
 
-export default defineConfig({
-  plugins: [solidPlugin()],
-  build: {
-    target: 'esnext',
-  },
-})
+const App = () => {
+  const [notes, setNotes] = createSignal('');
+  const [prompt, setPrompt] = createSignal('');
+
+  return (
+    <>
+      <NotesInput notes={notes} setNotes={setNotes} />
+      <StartButton notes={notes} setPrompt={setPrompt} />
+      <PromptDisplay prompt={prompt} />
+      <TasksList />
+    </>
+  );
+};
+
+export default App;
 
 ```
 
-postcss.config.js:
+src/frontend/components/TasksList.jsx:
 ```
-import tailwindcss from 'tailwindcss';
-import autoprefixer from 'autoprefixer';
+import { createSignal, onCleanup, onMount } from 'solid-js';
+import { fetchTasks } from '../fetchTasks';
+import { handleTaskChange } from '../service/handleTaskChange';
+import { fetchDescriptor } from '../service/fetchDescriptor';
+import { parseYamlAndGetTask } from '../service/parseYamlAndGetTask';
+import { useWebsocket } from '../service/useWebsocket';
 
-export default function postCssConfig() {
-  return {
-    plugins: [
-      tailwindcss(),
-      autoprefixer()
-    ]
-  }
-}
+const TasksList = () => {
+  const tasks = fetchTasks();
+  const [promptDescriptor, setPromptDescriptor] = createSignal('');
+  const [selectedTask, setSelectedTask] = createSignal('');
+
+  onMount(async () => {
+    const text = await fetchDescriptor();
+    const task = parseYamlAndGetTask(text);
+    setPromptDescriptor(text);
+    setSelectedTask(task);
+  });
+
+  useWebsocket(async (e) => {
+    if (e.data === 'update') {
+      const text = await fetchDescriptor();
+      setPromptDescriptor(text);
+    }
+  });
+
+  onCleanup(() => {
+    setPromptDescriptor('');
+  });
+
+  return (
+    <div>
+      <label>Task:</label>
+      <select value={selectedTask()} onChange={e => handleTaskChange(e, setPromptDescriptor)}>
+        {tasks().map(task => <option value={task}>{task}</option>)}
+      </select>
+      <pre>{promptDescriptor()}</pre>
+    </div>
+  );
+};
+
+export default TasksList;
 
 ```
 
 
 # Task
 
-Fix the following issue!
+Refactor!
 
-warn - The `content` option in your Tailwind CSS configuration is missing or empty. warn - Configure your content sources or your generated CSS will be missing styles. warn - https://tailwindcss.com/docs/content-configuration
+Create a dir &#34;src/frontend/stores&#34; and move all the signals and stores there. Create separate files for each signal and store.
 
 
 # Output Format

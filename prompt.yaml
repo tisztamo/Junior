@@ -1,9 +1,8 @@
-task: prompt/task/bug/fix.md
+task: prompt/task/refactor/general.md
 attention:
-  - src/vite.config.js
-  - postcss.config.js
+  - src/frontend/App.jsx
+  - src/frontend/components/TasksList.jsx
 requirements: >
-  warn - The `content` option in your Tailwind CSS configuration is missing or
-  empty. warn - Configure your content sources or your generated CSS will be
-  missing styles. warn - https://tailwindcss.com/docs/content-configuration
+  Create a dir "src/frontend/stores" and move all the signals and stores there.
+  Create separate files for each signal and store.
 format: prompt/format/shell.md

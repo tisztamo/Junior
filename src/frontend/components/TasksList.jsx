@@ -1,14 +1,14 @@
-import { createSignal, onCleanup, onMount } from 'solid-js';
+import { onCleanup, onMount } from 'solid-js';
 import { fetchTasks } from '../fetchTasks';
 import { handleTaskChange } from '../service/handleTaskChange';
 import { fetchDescriptor } from '../service/fetchDescriptor';
 import { parseYamlAndGetTask } from '../service/parseYamlAndGetTask';
 import { useWebsocket } from '../service/useWebsocket';
+import { promptDescriptor, setPromptDescriptor } from '../stores/promptDescriptor';
+import { selectedTask, setSelectedTask } from '../stores/selectedTask';
 
 const TasksList = () => {
   const tasks = fetchTasks();
-  const [promptDescriptor, setPromptDescriptor] = createSignal('');
-  const [selectedTask, setSelectedTask] = createSignal('');
 
   onMount(async () => {
     const text = await fetchDescriptor();
