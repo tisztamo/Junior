@@ -1,29 +1,70 @@
 #!/bin/sh
-# Goal: Refactor TitleDisplay to NavBar, introduce subtitle and clickable link.
+# Goal: Center the content on desktop and change max-width
 # Plan:
-# 1. Rename TitleDisplay.jsx to NavBar.jsx.
-# 2. Refactor NavBar component to use a constant for the title instead of the solid-js signal.
-# 3. Add a new subtitle "Your AI contributor".
-# 4. Make the subtitle clickable and link to https://github.com/tisztamo/Junior.
-# 5. Update App.jsx to import NavBar instead of TitleDisplay.
+# 1. Update the App.jsx to add a container with the class "mx-auto" to center the content.
+# 2. Update tailwind.config.js to change the max-width for 'desktop' to '640px'.
 
-mv src/frontend/components/TitleDisplay.jsx src/frontend/components/NavBar.jsx
+cat >src/frontend/App.jsx <<'EOF'
+import NotesInput from './components/NotesInput';
+import StartButton from './components/StartButton';
+import PromptDisplay from './components/PromptDisplay';
+import TasksList from './components/TasksList';
+import PromptDescriptor from './components/PromptDescriptor';
+import NavBar from './components/NavBar';
+import { notes, setNotes } from './stores/notes';
+import { setPrompt } from './stores/prompt';
 
-cat <<'EOF' > src/frontend/components/NavBar.jsx
-import { createSignal } from 'solid-js';
-
-const NavBar = () => {
-  const title = 'Junior';
-
+const App = () => {
   return (
-    <div>
-      <h1 class="text-center text-3xl mt-6">{title}</h1>
-      <a href="https://github.com/tisztamo/Junior" class="text-center text-xl underline cursor-pointer">Your AI contributor</a>
+    <div class="lg:mx-auto lg:w-desktop m-4 flex flex-col items-center space-y-8 sm:p-0">
+      <NavBar />
+      <TasksList />
+      <PromptDescriptor />
+      <NotesInput notes={notes} setNotes={setNotes} />
+      <StartButton notes={notes} setPrompt={setPrompt} />
+      <PromptDisplay />
     </div>
   );
 };
 
-export default NavBar;
+export default App;
 EOF
 
-sed -i '' 's/TitleDisplay/NavBar/g' src/frontend/App.jsx
+cat >tailwind.config.js <<'EOF'
+module.exports = {
+  content: ['./src/**/*.html', './src/**/*.js', './src/**/*.jsx', './src/**/*.tsx', './src/**/*.ts'],
+  theme: {
+    screens: {
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px',
+      'xl': '1280px',
+      '2xl': '1536px',
+    },
+    extend: {
+      // Extend the spacing for larger gaps
+      spacing: {
+        '72': '18rem',
+        '84': '21rem',
+        '96': '24rem',
+        '128': '32rem',
+      },
+      // Extend the button styles for larger buttons
+      fontSize: {
+        'btn': '1.5rem',
+      },
+      padding: {
+        'btn': '1.5rem',
+      },
+      // Extend the maxWidth for desktop container
+      maxWidth: {
+        'desktop': '640px',
+      },
+    },
+  },
+  variants: {
+    extend: {},
+  },
+  plugins: [],
+}
+EOF

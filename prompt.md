@@ -28,7 +28,72 @@ export default App;
 
 ```
 
-src/frontend/components/TitleDisplay.jsx: err!
+tailwind.config.js:
+```
+module.exports = {
+  content: ['./src/**/*.html', './src/**/*.js', './src/**/*.jsx', './src/**/*.tsx', './src/**/*.ts'],
+  theme: {
+    screens: {
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px',
+      'xl': '1280px',
+      '2xl': '1536px',
+    },
+    extend: {
+      // Extend the spacing for larger gaps
+      spacing: {
+        '72': '18rem',
+        '84': '21rem',
+        '96': '24rem',
+        '128': '32rem',
+      },
+      // Extend the button styles for larger buttons
+      fontSize: {
+        'btn': '1.5rem',
+      },
+      padding: {
+        'btn': '1.5rem',
+      },
+      // Extend the maxWidth for desktop container
+      maxWidth: {
+        'desktop': '1000px',
+      },
+    },
+  },
+  variants: {
+    extend: {},
+  },
+  plugins: [],
+}
+
+```
+
+src/frontend/index.jsx:
+```
+import "./styles/styles.css";
+import { render } from 'solid-js/web';
+import App from './App';
+
+render(App, document.getElementById('app'));
+
+```
+
+src/index.html:
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Junior</title>
+</head>
+<body>
+  <div id="app"></div>
+  <script type="module" src="/frontend/index.jsx"></script>
+</body>
+</html>
+
+```
 
 
 # Task
@@ -42,10 +107,7 @@ Implement the following feature!
 
 Requirements:
 
-Rename TitleDisplay to NavBar!
-Eliminate the signal, use a constant instead.
-Add a subtitle: &#34;Your AI contributor&#34;.
-The subtitle should be visibly clickable and link to https://github.com/tisztamo/Junior
+On desktop, center the content on the screen (currently it is on the left) and change max width to 640px.
 
 
 

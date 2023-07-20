@@ -1,13 +1,9 @@
 task: prompt/task/feature/implement.md
 attention:
   - src/frontend/App.jsx
-  - src/frontend/components/TitleDisplay.jsx
+  - tailwind.config.js
+  - src/frontend/index.jsx
+  - src/index.html
 requirements: >
-  Rename TitleDisplay to NavBar!
-
-  Eliminate the signal, use a constant instead.
-
-  Add a subtitle: "Your AI contributor".
-
-  The subtitle should be visibly clickable and link to
-  https://github.com/tisztamo/Junior
+  On desktop, center the content on the screen (currently it is on the left)
+  and change max width to 640px.

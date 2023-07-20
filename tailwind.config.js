@@ -25,7 +25,7 @@ module.exports = {
       },
       // Extend the maxWidth for desktop container
       maxWidth: {
-        'desktop': '1000px',
+        'desktop': '640px',
       },
     },
   },
