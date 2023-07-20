@@ -1,50 +1,25 @@
 #!/bin/sh
-# Goal: Fix the issue of prompt display
+# Goal: Fix Nested CSS Detection Issue with Vite and Tailwind CSS
 # Plan:
-# 1. Import prompt from the store directly into the PromptDisplay component instead of passing it from the App component.
-# 2. Add a createEffect in PromptDisplay to listen to changes in the prompt and update the display accordingly.
+# 1. Install postcss-nested package using npm
+# 2. Modify postcss.config.js file to include postcss-nested before tailwindcss
 
-cat << EOF > src/frontend/components/PromptDisplay.jsx
-import { createSignal, onMount, createEffect } from "solid-js";
-import { prompt } from '../stores/prompt';
+# Step 1: Install postcss-nested package using npm
+npm install postcss-nested
 
-const PromptDisplay = () => {
-  let div;
+# Step 2: Modify postcss.config.js
+cat << EOF > ./postcss.config.js
+import tailwindcss from 'tailwindcss';
+import autoprefixer from 'autoprefixer';
+import postcssNested from 'postcss-nested';
 
-  createEffect(() => {
-    if (div) {
-      div.innerHTML = prompt();
-    }
-  });
-
-  return (
-    <div className="markdown" ref={div}></div>
-  );
-};
-
-export default PromptDisplay;
-EOF
-
-cat << EOF > src/frontend/App.jsx
-import NotesInput from './components/NotesInput';
-import StartButton from './components/StartButton';
-import PromptDisplay from './components/PromptDisplay';
-import TasksList from './components/TasksList';
-import PromptDescriptor from './components/PromptDescriptor';
-import { notes, setNotes } from './stores/notes';
-import { setPrompt } from './stores/prompt';
-
-const App = () => {
-  return (
-    <>
-      <NotesInput notes={notes} setNotes={setNotes} />
-      <StartButton notes={notes} setPrompt={setPrompt} />
-      <PromptDisplay />
-      <TasksList />
-      <PromptDescriptor />
-    </>
-  );
-};
-
-export default App;
+export default function postCssConfig() {
+  return {
+    plugins: [
+      postcssNested(),
+      tailwindcss(),
+      autoprefixer()
+    ]
+  }
+}
 EOF

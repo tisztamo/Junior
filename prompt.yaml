@@ -1,13 +1,10 @@
 task: prompt/task/bug/fix.md
 attention:
-  - src/frontend/generatePrompt.js
-  - src/frontend/App.jsx
-  - src/frontend/stores/prompt.js
-  - src/frontend/components/PromptDisplay.jsx
+  - tailwind.config.js
+  - src/vite.config.js
+  - postcss.config.js
 requirements: >
-  The generated prompt is copied to the clipboard, but the display fails to show
-  anything.
-
-  The prompt signal should not be passed from app to display anyway. import it
-  from the display too.
-format: prompt/format/shell.md
+  [vite:css] Nested CSS was detected, but CSS nesting has not been configured
+  correctly. Please enable a CSS nesting plugin *before* Tailwind in your
+  configuration. See how here:
+  https://tailwindcss.com/docs/using-with-preprocessors#nesting

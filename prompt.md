@@ -1,76 +1,49 @@
 # Working set
 
-src/frontend/generatePrompt.js:
+tailwind.config.js:
 ```
-import { getBaseUrl } from './getBaseUrl';
-
-const generatePrompt = async (notes) => {
-  const baseUrl = getBaseUrl();
-  const response = await fetch(`${baseUrl}/generate`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ notes })
-  });
-
-  const data = await response.json();
-
-  return data;
-};
-
-export { generatePrompt };
+export default {
+  content: ['./src/**/*.html', './src/**/*.js', './src/**/*.jsx', './src/**/*.tsx', './src/**/*.ts'],
+  theme: {
+    extend: {},
+  },
+  variants: {
+    extend: {},
+  },
+  plugins: [],
+}
 
 ```
 
-src/frontend/App.jsx:
+src/vite.config.js:
 ```
-import NotesInput from './components/NotesInput';
-import StartButton from './components/StartButton';
-import PromptDisplay from './components/PromptDisplay';
-import TasksList from './components/TasksList';
-import PromptDescriptor from './components/PromptDescriptor';
-import { notes, setNotes } from './stores/notes';
-import { prompt, setPrompt } from './stores/prompt';
+import { defineConfig } from 'vite'
+import solidPlugin from 'vite-plugin-solid'
 
-const App = () => {
-  return (
-    <>
-      <NotesInput notes={notes} setNotes={setNotes} />
-      <StartButton notes={notes} setPrompt={setPrompt} />
-      <PromptDisplay prompt={prompt} />
-      <TasksList />
-      <PromptDescriptor />
-    </>
-  );
-};
-
-export default App;
+export default defineConfig({
+  plugins: [solidPlugin()],
+  build: {
+    target: 'esnext',
+  },
+})
 
 ```
 
-src/frontend/stores/prompt.js:
+postcss.config.js:
 ```
-import { createSignal } from 'solid-js';
+import tailwindcss from 'tailwindcss';
+import autoprefixer from 'autoprefixer';
+import postcssNested from 'postcss-nested';
 
-export const [prompt, setPrompt] = createSignal('');
-
-```
-
-src/frontend/components/PromptDisplay.jsx:
-```
-import { createSignal, onMount } from "solid-js";
-
-const PromptDisplay = ({prompt}) => {
-  let div;
-  onMount(() => {
-    div.innerHTML = prompt();
-  });
-
-  return (
-    <div className="markdown" ref={div}></div>
-  );
-};
-
-export default PromptDisplay;
+export default function postCssConfig() {
+  return {
+    plugins: [
+      postcssNested(),
+      tailwindcss(),
+      autoprefixer()
+    ]
+  }
+}
 
 ```
 
@@ -79,8 +52,7 @@ export default PromptDisplay;
 
 Fix the following issue!
 
-The generated prompt is copied to the clipboard, but the display fails to show anything.
-The prompt signal should not be passed from app to display anyway. import it from the display too.
+[vite:css] Nested CSS was detected, but CSS nesting has not been configured correctly. Please enable a CSS nesting plugin *before* Tailwind in your configuration. See how here: https://tailwindcss.com/docs/using-with-preprocessors#nesting
 
 
 # Output Format
