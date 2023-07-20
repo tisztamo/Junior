@@ -11,7 +11,7 @@ const PromptDisplay = () => {
   });
 
   return (
-    <div className="markdown" ref={div}></div>
+    <div className="w-full max-w-screen overflow-x-auto whitespace-normal markdown" ref={div}></div>
   );
 };
 

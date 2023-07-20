@@ -1,10 +1,9 @@
 task: prompt/task/feature/implement.md
 attention:
   - src/frontend/App.jsx
-  - src/frontend/components/PromptDescriptor.jsx
+  - src/frontend/components/PromptDisplay.jsx
 requirements: |
-  The pre in PromptDescriptor should never be wider than the screen.
-  Allow horizontal scrolling of it!
+  The div in PromptDisplay should never be wider than the screen.
+  Allow wrapping of the text!
   add an extra div if needed.
   Use tailwind utility classes.
-

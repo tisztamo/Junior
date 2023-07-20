@@ -28,39 +28,26 @@ export default App;
 
 ```
 
-src/frontend/components/PromptDescriptor.jsx:
+src/frontend/components/PromptDisplay.jsx:
 ```
-import { onMount, onCleanup } from 'solid-js';
-import { fetchDescriptor } from '../service/fetchDescriptor';
-import { useWebsocket } from '../service/useWebsocket';
-import { promptDescriptor, setPromptDescriptor } from '../stores/promptDescriptor';
+import { createSignal, onMount, createEffect } from "solid-js";
+import { prompt } from '../stores/prompt';
 
-const PromptDescriptor = () => {
+const PromptDisplay = () => {
+  let div;
 
-  onMount(async () => {
-    const text = await fetchDescriptor();
-    setPromptDescriptor(text);
-  });
-
-  useWebsocket(async (e) => {
-    if (e.data === 'update') {
-      const text = await fetchDescriptor();
-      setPromptDescriptor(text);
+  createEffect(() => {
+    if (div) {
+      div.innerHTML = prompt();
     }
   });
 
-  onCleanup(() => {
-    setPromptDescriptor('');
-  });
-
   return (
-    <div class="overflow-auto max-w-full">
-      <pre>{promptDescriptor()}</pre>
-    </div>
+    <div className="w-full max-w-screen overflow-x-auto whitespace-normal markdown" ref={div}></div>
   );
 };
 
-export default PromptDescriptor;
+export default PromptDisplay;
 
 ```
 
@@ -76,8 +63,8 @@ Implement the following feature!
 
 Requirements:
 
-The pre in PromptDescriptor should never be wider than the screen.
-Allow horizontal scrolling of it!
+The div in PromptDisplay should never be wider than the screen.
+Allow wrapping of the text!
 add an extra div if needed.
 Use tailwind utility classes.
 
