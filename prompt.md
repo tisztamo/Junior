@@ -1,5 +1,44 @@
 # Working set
 
+```
+src/frontend/
+├── App.jsx
+├── components/...
+├── fetchTasks.js
+├── generatePrompt.js
+├── getBaseUrl.js
+├── index.jsx
+├── service/...
+├── stores/...
+├── styles/...
+
+```
+src/frontend/App.jsx:
+```
+import NotesInput from './components/NotesInput';
+import StartButton from './components/StartButton';
+import PromptDisplay from './components/PromptDisplay';
+import TasksList from './components/TasksList';
+import PromptDescriptor from './components/PromptDescriptor';
+import { notes, setNotes } from './stores/notes';
+import { setPrompt } from './stores/prompt';
+
+const App = () => {
+  return (
+    <>
+      <NotesInput notes={notes} setNotes={setNotes} />
+      <StartButton notes={notes} setPrompt={setPrompt} />
+      <PromptDisplay />
+      <TasksList />
+      <PromptDescriptor />
+    </>
+  );
+};
+
+export default App;
+
+```
+
 tailwind.config.js:
 ```
 export default {
@@ -15,44 +54,16 @@ export default {
 
 ```
 
-src/vite.config.js:
-```
-import { defineConfig } from 'vite'
-import solidPlugin from 'vite-plugin-solid'
-
-export default defineConfig({
-  plugins: [solidPlugin()],
-  build: {
-    target: 'esnext',
-  },
-})
-
-```
-
-postcss.config.js:
-```
-import tailwindcss from 'tailwindcss';
-import autoprefixer from 'autoprefixer';
-import postcssNested from 'postcss-nested';
-
-export default function postCssConfig() {
-  return {
-    plugins: [
-      postcssNested(),
-      tailwindcss(),
-      autoprefixer()
-    ]
-  }
-}
-
-```
-
 
 # Task
 
 Fix the following issue!
 
-[vite:css] Nested CSS was detected, but CSS nesting has not been configured correctly. Please enable a CSS nesting plugin *before* Tailwind in your configuration. See how here: https://tailwindcss.com/docs/using-with-preprocessors#nesting
+We need margins on large screens and a responsive layout.
+When looking at the page, after loading (empty prompt, prompt descriptor loaded), the prompt descriptor (A yaml file) should be the first element catching our eyes.
+Under that the notes input, and the start button so that it is easy to click after entering the notes.
+Over the prompt descriptor is the task list (a html select).
+When we click the button, the prompt is generated and displayed. It&#39;s a markdown. Display at the bottom.
 
 
 # Output Format
