@@ -6,6 +6,7 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as yaml from 'js-yaml';
+import * as glob from 'glob';
 
 export const writeAttention = async () => {
     const workspaceFolders = vscode.workspace.workspaceFolders;
@@ -15,10 +16,13 @@ export const writeAttention = async () => {
     
     const rootFolder = workspaceFolders[0].uri.fsPath;
     const promptFilePath = path.join(rootFolder, 'prompt.yaml');
+    const excludeList = vscode.workspace.getConfiguration('junior').get('attentionExcludeList', []);
     try {
         if (fs.existsSync(promptFilePath)) {
             const currentWindows = vscode.workspace.textDocuments.map(doc => path.relative(rootFolder, doc.fileName));
-            const filteredWindows = currentWindows.filter(windowPath => !windowPath.endsWith('.git'));
+            const filteredWindows = currentWindows.filter(windowPath => {
+                return !windowPath.endsWith('.git') && windowPath !== 'prompt.yaml' && windowPath !== 'prompt.md' && !excludeList.some((pattern: string) => glob.sync(pattern, { cwd: rootFolder }).includes(windowPath)) && fs.existsSync(path.join(rootFolder, windowPath));
+            });
             const promptFile = yaml.load(fs.readFileSync(promptFilePath, 'utf8'));
             promptFile.attention = filteredWindows;
             fs.writeFileSync(promptFilePath, yaml.dump(promptFile), 'utf8');
@@ -30,83 +34,6 @@ export const writeAttention = async () => {
         vscode.window.showErrorMessage('Error updating the prompt.yaml file!');
     }
 };
-
-```
-
-integrations/vscode/src/extension.ts:
-```
-import * as vscode from 'vscode';
-import { writeAttention } from './writeAttention';
-
-export function activate(context: vscode.ExtensionContext) {
-	console.log('Junior extension is now active!');
-
-	let helloWorldDisposable = vscode.commands.registerCommand('junior.helloWorld', () => {
-		vscode.window.showInformationMessage('Hello World from Junior!');
-	});
-
-	let writeAttentionDisposable = vscode.commands.registerCommand('junior.writeAttention', writeAttention);
-
-	context.subscriptions.push(helloWorldDisposable);
-	context.subscriptions.push(writeAttentionDisposable);
-}
-
-export function deactivate() {}
-
-```
-
-integrations/vscode/package.json:
-```
-{
-  "name": "junior",
-  "displayName": "Junior",
-  "description": "Your AI contributor",
-  "version": "0.0.1",
-  "engines": {
-    "vscode": "^1.80.0"
-  },
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [],
-  "main": "./out/extension.js",
-  "contributes": {
-    "commands": [
-      {
-        "command": "junior.helloWorld",
-        "title": "Hello World"
-      },
-      {
-        "command": "junior.writeAttention",
-        "title": "Write Attention"
-      }
-    ]
-  },
-  "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "pretest": "npm run compile && npm run lint",
-    "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js"
-  },
-  "devDependencies": {
-    "@types/glob": "^8.1.0",
-    "@types/mocha": "^10.0.1",
-    "@types/node": "20.2.5",
-    "@types/vscode": "^1.80.0",
-    "@typescript-eslint/eslint-plugin": "^5.59.8",
-    "@typescript-eslint/parser": "^5.59.8",
-    "@vscode/test-electron": "^2.3.2",
-    "eslint": "^8.41.0",
-    "glob": "^8.1.0",
-    "mocha": "^10.2.0",
-    "typescript": "^5.1.3"
-  },
-  "dependencies": {
-    "js-yaml": "^4.1.0"
-  }
-}
 
 ```
 
@@ -122,7 +49,7 @@ Implement the following feature!
 
 Requirements:
 
-- Instead of excluding .git - ending elements, only include existing files in the attention. - Also exclude prompt.yaml and prompt.md - Plus allow an attention exclude list (list of globs) as a configuration - Remove the helloworld command
+Also exclude &#34;change.sh&#34;!
 
 
 
