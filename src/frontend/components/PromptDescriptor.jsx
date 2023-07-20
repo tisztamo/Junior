@@ -23,7 +23,9 @@ const PromptDescriptor = () => {
 
   return (
     <div class="overflow-auto max-w-full">
-      <pre>{promptDescriptor()}</pre>
+      <div class="whitespace-pre-wrap overflow-x-scroll overflow-y-auto font-mono">
+        {promptDescriptor()}
+      </div>
     </div>
   );
 };

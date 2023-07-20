@@ -1,25 +1,41 @@
 #!/bin/sh
-# Goal: Limit width of div in PromptDisplay to screen size and allow text wrap
+# Goal: Replace pre tag with monospace font
 # Plan:
-# 1. Add tailwind utility classes to the div in PromptDisplay.jsx to make the div responsive and allow text wrapping
+# 1. Replace the pre tag in PromptDescriptor.jsx with a div tag.
+# 2. Add the Tailwind CSS class "font-mono" to the new div to apply monospace font.
 
-cat << 'EOF' > ./src/frontend/components/PromptDisplay.jsx
-import { createSignal, onMount, createEffect } from "solid-js";
-import { prompt } from '../stores/prompt';
+cat << EOF > ./src/frontend/components/PromptDescriptor.jsx
+import { onMount, onCleanup } from 'solid-js';
+import { fetchDescriptor } from '../service/fetchDescriptor';
+import { useWebsocket } from '../service/useWebsocket';
+import { promptDescriptor, setPromptDescriptor } from '../stores/promptDescriptor';
 
-const PromptDisplay = () => {
-  let div;
+const PromptDescriptor = () => {
 
-  createEffect(() => {
-    if (div) {
-      div.innerHTML = prompt();
+  onMount(async () => {
+    const text = await fetchDescriptor();
+    setPromptDescriptor(text);
+  });
+
+  useWebsocket(async (e) => {
+    if (e.data === 'update') {
+      const text = await fetchDescriptor();
+      setPromptDescriptor(text);
     }
   });
 
+  onCleanup(() => {
+    setPromptDescriptor('');
+  });
+
   return (
-    <div className="w-full max-w-screen overflow-x-auto whitespace-normal markdown" ref={div}></div>
+    <div class="overflow-auto max-w-full">
+      <div class="whitespace-pre-wrap overflow-x-scroll overflow-y-auto font-mono">
+        {promptDescriptor()}
+      </div>
+    </div>
   );
 };
 
-export default PromptDisplay;
+export default PromptDescriptor;
 EOF
