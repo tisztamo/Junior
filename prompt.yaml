@@ -1,24 +1,13 @@
 task: prompt/task/bug/fix.md
 attention:
-  - src/prompt/loadPromptFile.js
-  - src/prompt/createPrompt.js
-  - src/prompt/promptProcessing.js
-  - src/backend/generateHandler.js
-  - tailwind.config.js
-  - src/prompt/loadPromptDescriptor.js
-  - src/prompt/loadFormatTemplate.js
+  - src/frontend/generatePrompt.js
+  - src/frontend/App.jsx
+  - src/frontend/stores/prompt.js
+  - src/frontend/components/PromptDisplay.jsx
 requirements: >
-  node:internal/errors:477
-    ErrorCaptureStackTrace(err);
-    ^
-  TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string.
-  Received undefined
-    at new NodeError (node:internal/errors:388:5)
-    at validateString (node:internal/validators:114:11)
-    at Object.resolve (node:path:1098:7)
-    at loadPromptFile (file:///Users/ko/projects-new/Junior/src/prompt/loadPromptFile.js:14:27)
-    at async loadFormatTemplate (file:///Users/ko/projects-new/Junior/src/prompt/loadFormatTemplate.js:4:10)
-    at async createPrompt (file:///Users/ko/projects-new/Junior/src/prompt/createPrompt.js:18:18)
-    at async processPrompt (file:///Users/ko/projects-new/Junior/src/prompt/promptProcessing.js:5:41)
-    at async generateHandler (file:///Users/ko/projects-new/Junior/src/backend/generateHandler.js:5:22) {
+  The generated prompt is copied to the clipboard, but the display fails to show
+  anything.
+
+  The prompt signal should not be passed from app to display anyway. import it
+  from the display too.
 format: prompt/format/shell.md

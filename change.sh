@@ -1,42 +1,50 @@
 #!/bin/sh
-# Goal: Fix path validation error in prompt processing
+# Goal: Fix the issue of prompt display
 # Plan:
-# 1. Ensure a default value for `promptDescriptor.format` in `createPrompt()` function.
-# 2. Add the new changes to 'createPrompt.js' file using a heredoc.
+# 1. Import prompt from the store directly into the PromptDisplay component instead of passing it from the App component.
+# 2. Add a createEffect in PromptDisplay to listen to changes in the prompt and update the display accordingly.
 
-cat << 'EOF' > ./src/prompt/createPrompt.js
-import { readAttention } from "../attention/readAttention.js"
-import yaml from 'js-yaml';
-import { getSystemPromptIfNeeded } from './getSystemPromptIfNeeded.js';
-import { resolveTemplateVariables } from './resolveTemplateVariables.js';
-import { extractTemplateVars } from './extractTemplateVars.js';
-import { loadPromptDescriptor } from './loadPromptDescriptor.js';
-import { loadTaskTemplate } from './loadTaskTemplate.js';
-import { loadFormatTemplate } from './loadFormatTemplate.js';
+cat << EOF > src/frontend/components/PromptDisplay.jsx
+import { createSignal, onMount, createEffect } from "solid-js";
+import { prompt } from '../stores/prompt';
 
-const createPrompt = async (userInput) => {
-  const promptDescriptor = yaml.load(await loadPromptDescriptor());
-  let templateVars = extractTemplateVars(promptDescriptor);
+const PromptDisplay = () => {
+  let div;
 
-  templateVars = await resolveTemplateVariables(templateVars);
+  createEffect(() => {
+    if (div) {
+      div.innerHTML = prompt();
+    }
+  });
 
-  const attention = await readAttention(promptDescriptor.attention);
-  const task = await loadTaskTemplate(promptDescriptor.task, templateVars);
-  
-  // Check if promptDescriptor.format is undefined. If it is, assign a default value
-  if(!promptDescriptor.format) {
-    promptDescriptor.format = "prompt/format/shell.md";
-  }
-  
-  const format = await loadFormatTemplate(promptDescriptor.format, templateVars);
-  const system = await getSystemPromptIfNeeded();
-  const saveto = promptDescriptor.saveto;
-  return {
-    prompt: `${system}# Working set\n\n${attention.join("\n")}\n\n# Task\n\n${task}\n\n# Output Format\n\n${format}\n\n${userInput ? userInput : ""}`,
-    saveto
-  };
-}
+  return (
+    <div className="markdown" ref={div}></div>
+  );
+};
 
-export { createPrompt };
+export default PromptDisplay;
+EOF
 
+cat << EOF > src/frontend/App.jsx
+import NotesInput from './components/NotesInput';
+import StartButton from './components/StartButton';
+import PromptDisplay from './components/PromptDisplay';
+import TasksList from './components/TasksList';
+import PromptDescriptor from './components/PromptDescriptor';
+import { notes, setNotes } from './stores/notes';
+import { setPrompt } from './stores/prompt';
+
+const App = () => {
+  return (
+    <>
+      <NotesInput notes={notes} setNotes={setNotes} />
+      <StartButton notes={notes} setPrompt={setPrompt} />
+      <PromptDisplay />
+      <TasksList />
+      <PromptDescriptor />
+    </>
+  );
+};
+
+export default App;
 EOF

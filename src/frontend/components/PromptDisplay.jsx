@@ -1,9 +1,13 @@
-import { createSignal, onMount } from "solid-js";
+import { createSignal, onMount, createEffect } from "solid-js";
+import { prompt } from '../stores/prompt';
 
-const PromptDisplay = ({prompt}) => {
+const PromptDisplay = () => {
   let div;
-  onMount(() => {
-    div.innerHTML = prompt();
+
+  createEffect(() => {
+    if (div) {
+      div.innerHTML = prompt();
+    }
   });
 
   return (
