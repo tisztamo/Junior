@@ -1,73 +1,24 @@
 #!/bin/sh
-# Goal: Implement Reset Git button
+# Goal: Fix file path issue in the resetGit function
 # Plan:
-# 1. Create a new ResetButton.jsx component in the components directory.
-# 2. In the ResetButton.jsx file, implement a handleReset function to call the reset git service, and a button that triggers this function when clicked.
-# 3. Implement the resetGit function in a new resetGit.js file in the service directory that sends a POST request to the '/reset' endpoint.
-# 4. Import the new ResetButton component in App.jsx and include it in the rendered JSX.
+# 1. Update the path to the prompt.yaml file in the resetGit function.
+# 2. The path should be fixed as './prompt.yaml'.
 
-cat << EOF > ./src/frontend/components/ResetButton.jsx
-import { resetGit } from '../service/resetGit';
+cat > ./src/git/resetGit.js << 'EOF'
+import git from 'simple-git';
 
-const ResetButton = () => {
-  const handleReset = async () => {
-    const response = await resetGit();
+export default async function resetGit() {
+  const gitInstance = git();
 
-    console.log(response.message);
-  };
+  // Stash changes in prompt.yaml
+  await gitInstance.add('./prompt.yaml');
+  await gitInstance.stash();
 
-  return (
-    <button class="px-8 py-4 bg-red-300 text-white rounded" onClick={handleReset}>Reset Git</button>
-  );
-};
+  // Clean the repository and reset to the latest commit
+  await gitInstance.clean('f', ['-d']);
+  await gitInstance.reset('hard');
 
-export default ResetButton;
-EOF
-
-cat << EOF > ./src/frontend/service/resetGit.js
-import { getBaseUrl } from '../getBaseUrl';
-
-const resetGit = async () => {
-  const baseUrl = getBaseUrl();
-  const response = await fetch(\`\${baseUrl}/reset\`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-  });
-
-  const data = await response.json();
-
-  return data;
-};
-
-export { resetGit };
-EOF
-
-cat << EOF > ./src/frontend/App.jsx
-import NotesInput from './components/NotesInput';
-import StartButton from './components/StartButton';
-import ExecuteButton from './components/ExecuteButton';
-import ResetButton from './components/ResetButton';
-import PromptDisplay from './components/PromptDisplay';
-import TasksList from './components/TasksList';
-import PromptDescriptor from './components/PromptDescriptor';
-import NavBar from './components/NavBar';
-import { notes, setNotes } from './stores/notes';
-import { setPrompt } from './stores/prompt';
-
-const App = () => {
-  return (
-    <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
-      <NavBar />
-      <TasksList />
-      <PromptDescriptor />
-      <NotesInput notes={notes} setNotes={setNotes} />
-      <StartButton notes={notes} setPrompt={setPrompt} />
-      <ExecuteButton />
-      <ResetButton />
-      <PromptDisplay />
-    </div>
-  );
-};
-
-export default App;
+  // Apply stashed changes to prompt.yaml
+  await gitInstance.stash(['pop']);
+}
 EOF

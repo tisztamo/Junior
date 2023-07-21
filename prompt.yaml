@@ -1,9 +1,6 @@
-task: prompt/task/feature/implement.md
+task: prompt/task/bug/fix.md
 attention:
+  - src/git/resetGit.js
   - src/backend/handlers/resetGitHandler.js
-  - src/backend/setupRoutes.js
-  - src/frontend/App.jsx
-  - src/frontend/components/ExecuteButton.jsx
-  - src/frontend/service/executeChange.js
 requirements: |
-  Create a new button for the reset git feature.
+  File path is ./prompt.yaml
