@@ -1,6 +1,7 @@
 task: prompt/task/bug/fix.md
 attention:
   - src/git/resetGit.js
-  - src/backend/handlers/resetGitHandler.js
 requirements: |
-  File path is ./prompt.yaml
+  Resetgit correctly deletes every new files,
+  and correctly leaves prompt.yaml untouched,
+  but it fails to reset other modified files.

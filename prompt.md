@@ -8,7 +8,7 @@ export default async function resetGit() {
   const gitInstance = git();
 
   // Stash changes in prompt.yaml
-  await gitInstance.add('./src/prompt.yaml');
+  await gitInstance.add('./prompt.yaml');
   await gitInstance.stash();
 
   // Clean the repository and reset to the latest commit
@@ -21,27 +21,14 @@ export default async function resetGit() {
 
 ```
 
-src/backend/handlers/resetGitHandler.js:
-```
-import resetGit from '../../git/resetGit.js';
-
-export default async function resetGitHandler(req, res) {
-  try {
-    await resetGit();
-    res.status(200).send({ message: 'Git successfully reset' });
-  } catch (error) {
-    res.status(500).send({ message: 'Error in resetting Git', error });
-  }
-}
-
-```
-
 
 # Task
 
 Fix the following issue!
 
-File path is ./prompt.yaml
+Resetgit correctly deletes every new files,
+and correctly leaves prompt.yaml untouched,
+but it fails to reset other modified files.
 
 
 # Output Format
