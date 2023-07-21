@@ -4,7 +4,7 @@ export default async function resetGit() {
   const gitInstance = git();
 
   // Stash changes in prompt.yaml
-  await gitInstance.add('./prompt.yaml');
+  await gitInstance.add('./src/prompt.yaml');
   await gitInstance.stash();
 
   // Clean the repository and reset to the latest commit

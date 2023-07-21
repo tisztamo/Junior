@@ -1,14 +1,10 @@
 task: prompt/task/feature/implement.md
 attention:
   - ./
-  - ./src/
-  - ./src/backend/
-requirements: >
-  Create a function that resets a git repository fully,
-  restoring everything and deleting new unstaged files,
-  except the change of prompt.yaml
-
-  What is a good name for it?
-
-  Create a new dir in our project if you think this functionality
-  needs its own place.
+  - src
+  - src/backend
+  - src/backend/setupRoutes.js
+  - git/resetGit.js
+requirements: |
+  Move the git directory to src/ !
+  Then create a new route that calls resetGit

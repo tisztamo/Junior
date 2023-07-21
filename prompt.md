@@ -9,6 +9,7 @@
 ├── babel.config.js
 ├── change.sh
 ├── doc/...
+├── git/...
 ├── integrations/...
 ├── node_modules/...
 ├── package-lock.json
@@ -22,35 +23,50 @@
 ├── tailwind.config.js
 
 ```
+src: err!
+
+src/backend: err!
+
+src/backend/setupRoutes.js:
 ```
-./src/
-├── .DS_Store
-├── attention/...
-├── backend/...
-├── config.js
-├── execute/...
-├── frontend/...
-├── index.html
-├── interactiveSession/...
-├── main.js
-├── prompt/...
-├── startVite.js
-├── vite.config.js
-├── web.js
+import { generateHandler } from './handlers/generateHandler.js';
+import { servePromptDescriptor } from './handlers/servePromptDescriptor.js';
+import { updateTaskHandler } from './handlers/updateTaskHandler.js';
+import { listTasks } from './handlers/listTasks.js';
+import { executeHandler } from './handlers/executeHandler.js';
+
+export function setupRoutes(app) {
+  app.get('/descriptor', servePromptDescriptor);
+  app.get('/tasks', (req, res) => res.json({ tasks: listTasks() }));
+
+  app.post('/generate', generateHandler);
+  app.post('/updatetask', updateTaskHandler);
+app.post('/execute', executeHandler);
+}
 
 ```
+
+git/resetGit.js:
 ```
-./src/backend/
-├── fileutils/...
-├── getServerPort.js
-├── handlers/...
-├── notifyOnFileChange.js
-├── serverConfig.js
-├── setupRoutes.js
-├── startServer.js
-├── watchPromptDescriptor.js
+import git from 'simple-git';
+
+export default async function resetGit() {
+  const gitInstance = git();
+
+  // Stash changes in prompt.yaml
+  await gitInstance.add('./prompt.yaml');
+  await gitInstance.stash();
+
+  // Clean the repository and reset to the latest commit
+  await gitInstance.clean('f', ['-d']);
+  await gitInstance.reset('hard');
+
+  // Apply stashed changes to prompt.yaml
+  await gitInstance.stash(['pop']);
+}
 
 ```
+
 
 # Task
 
@@ -63,9 +79,8 @@ Implement the following feature!
 
 Requirements:
 
-Create a function that resets a git repository fully, restoring everything and deleting new unstaged files, except the change of prompt.yaml
-What is a good name for it?
-Create a new dir in our project if you think this functionality needs its own place.
+Move the git directory to src/ !
+Then create a new route that calls resetGit
 
 
 
