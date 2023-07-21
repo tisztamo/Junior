@@ -1,123 +1,91 @@
 # Working set
 
+src/execute/executeCode.js:
 ```
-src/backend/
-├── fileutils/...
-├── getServerPort.js
-├── handlers/...
-├── listTasks.js
-├── notifyOnFileChange.js
-├── servePromptDescriptor.js
-├── serverConfig.js
-├── setupRoutes.js
-├── startServer.js
-├── updateTaskHandler.js
-├── watchPromptDescriptor.js
+import { confirmAndWriteCode } from './confirmAndWriteCode.js';
+import { executeAndForwardOutput } from './executeAndForwardOutput.js';
 
-```
-src/backend/setupRoutes.js:
-```
-import { generateHandler } from './handlers/generateHandler.js';
-import { servePromptDescriptor } from './servePromptDescriptor.js';
-import { updateTaskHandler } from './updateTaskHandler.js';
-import { listTasks } from './listTasks.js';
-
-export function setupRoutes(app) {
-  app.get('/descriptor', servePromptDescriptor);
-  app.get('/tasks', (req, res) => res.json({ tasks: listTasks() }));
-
-  app.post('/generate', generateHandler);
-  app.post('/updatetask', updateTaskHandler);
+const executeCode = async (code) => {
+  confirmAndWriteCode(code, () => executeAndForwardOutput(code));
 }
 
-```
-
-src/backend/servePromptDescriptor.js:
-```
-import { readFile } from 'fs/promises';
-import path from 'path';
-
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-export const servePromptDescriptor = async (req, res) => {
-  const file = await readFile(path.resolve(__dirname, '../../prompt.yaml'), 'utf-8');
-  res.send(file);
-};
+export { executeCode };
 
 ```
 
-src/backend/updateTaskHandler.js:
+src/execute/executeAndForwardOutput.js:
 ```
-import { readFile, writeFile } from 'fs/promises';
-import path from 'path';
-import yaml from 'js-yaml';
+import { spawn } from 'child_process';
+import { startInteractiveSession } from "../interactiveSession/startInteractiveSession.js";
+import { rl } from '../config.js';
 
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+function executeAndForwardOutput(code) {
+  const child = spawn(code, { shell: true });
+  let last_command_result = '';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+  child.stdout.on('data', (data) => {
+    console.log(`${data}`);
+    last_command_result += data;
+  });
 
-export const updateTaskHandler = async (req, res) => {
-  const task = req.body.task;
-  const filePath = path.resolve(__dirname, '../../prompt.yaml');
+  child.stderr.on('data', (data) => {
+    console.error(`${data}`);
+    last_command_result += data;
+  });
 
-  try {
-    const fileContent = await readFile(filePath, 'utf-8');
-    const document = yaml.load(fileContent);
+  child.on('close', (code) => {
+    if (code !== 0) {
+      console.log(`child process exited with code ${code}`);
+      last_command_result = "Command failed. Output:\n" + last_command_result;
+    } else {
+      last_command_result = "Command executed. Output:\n" + last_command_result;
+    }
+    startInteractiveSession()
+  });
+}
 
-    // assuming 'task' is a field in the yaml document
-    document.task = path.join("prompt", "task", task);
-
-    const newYamlStr = yaml.dump(document);
-    await writeFile(filePath, newYamlStr, 'utf-8');
-    
-    res.status(200).json({ message: "Task updated successfully" });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-};
+export { executeAndForwardOutput };
 
 ```
 
-src/backend/listTasks.js:
+src/execute/confirmAndWriteCode.js:
 ```
-import path from 'path';
+import { rl } from '../config.js';
 
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+function confirmAndWriteCode(code, next) {
+  rl.question('\x1b[1mEXECUTE? [y/n]\x1b[0m ', (answer) => {
+    if (answer.toLowerCase() === 'y') {
+      console.log("\x1b[33mExecuting...\x1b[0m");
+      next();
+    } else {
+      console.log("\x1b[33mNot executing.\x1b[0m");
+    }
+  });
+}
 
-import { readDirRecursively } from './fileutils/readDirRecursively.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-export const listTasks = () => {
-    const tasksDir = path.join(__dirname, '../../prompt/task');
-    return readDirRecursively(tasksDir).map(file => path.relative(tasksDir, file));
-};
+export { confirmAndWriteCode };
 
 ```
 
 
 # Task
 
-Move the following files to the specified target dirs!
+Refactor the mentioned files!
 
-Find out the best target dir if it is not specified!
+Look for
+  - unused imports
+  - unneeded comments
+  - ugly names
+  - misplaced files
+  - code repetition
+  - code smell
 
-You need to follow dependencies to maintain coherence.
+When a file is bigger than 40 lines, split it: Identify the possible parts and create separate files!
 
-Before executing, write a concise plan! The plan should show:
- - How do you avoid breaking other parts of the code.
- - If you had to choose, your way of thinking.
-
-Move the files except setupRoutes to the handlers dir!
+1. Rename confirmAndWriteCode.js to confirmExecution.js
+Maintain dependencies and imports!
+2. executeAndForwardOutput should not import startInteractiveSession,
+give it a &#34;next&#34; continuation instead.
 
 
 # Output Format

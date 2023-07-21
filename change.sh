@@ -1,98 +1,73 @@
 #!/bin/sh
-# Goal: Move files to handlers directory without breaking dependencies
+# Goal: Refactor the mentioned files
 # Plan:
-# 1. Move all the files except setupRoutes.js to the handlers directory.
-# 2. Update the import paths in setupRoutes.js to reflect the new locations of the moved files.
-# 3. Update the import paths in the moved files to reflect their new locations and maintain their dependencies.
+# 1. Rename confirmAndWriteCode.js to confirmExecution.js
+# 2. Remove the import of startInteractiveSession from executeAndForwardOutput.js and replace it with a "next" continuation
+# 3. Update executeCode.js to pass startInteractiveSession as a continuation to executeAndForwardOutput
 
-# Step 1: Move files
-mv src/backend/servePromptDescriptor.js src/backend/handlers/
-mv src/backend/updateTaskHandler.js src/backend/handlers/
-mv src/backend/listTasks.js src/backend/handlers/
+# Step 1: Rename confirmAndWriteCode.js to confirmExecution.js
+mv src/execute/confirmAndWriteCode.js src/execute/confirmExecution.js
 
-# Step 2: Update import paths in setupRoutes.js
-cat << EOF > src/backend/setupRoutes.js
-import { generateHandler } from './handlers/generateHandler.js';
-import { servePromptDescriptor } from './handlers/servePromptDescriptor.js';
-import { updateTaskHandler } from './handlers/updateTaskHandler.js';
-import { listTasks } from './handlers/listTasks.js';
+# Step 2: Update the contents of confirmExecution.js
+cat << 'EOF' > src/execute/confirmExecution.js
+import { rl } from '../config.js';
 
-export function setupRoutes(app) {
-  app.get('/descriptor', servePromptDescriptor);
-  app.get('/tasks', (req, res) => res.json({ tasks: listTasks() }));
-
-  app.post('/generate', generateHandler);
-  app.post('/updatetask', updateTaskHandler);
+function confirmExecution(code, next) {
+  rl.question('\x1b[1mEXECUTE? [y/n]\x1b[0m ', (answer) => {
+    if (answer.toLowerCase() === 'y') {
+      console.log("\x1b[33mExecuting...\x1b[0m");
+      next();
+    } else {
+      console.log("\x1b[33mNot executing.\x1b[0m");
+    }
+  });
 }
+
+export { confirmExecution };
 EOF
 
-# Step 3: Update import paths in moved files
+# Step 3: Update the contents of executeAndForwardOutput.js
+cat << 'EOF' > src/execute/executeAndForwardOutput.js
+import { spawn } from 'child_process';
+import { rl } from '../config.js';
 
-# servePromptDescriptor.js
-cat << EOF > src/backend/handlers/servePromptDescriptor.js
-import { readFile } from 'fs/promises';
-import path from 'path';
+function executeAndForwardOutput(code, next) {
+  const child = spawn(code, { shell: true });
+  let last_command_result = '';
 
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+  child.stdout.on('data', (data) => {
+    console.log(`${data}`);
+    last_command_result += data;
+  });
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+  child.stderr.on('data', (data) => {
+    console.error(`${data}`);
+    last_command_result += data;
+  });
 
-export const servePromptDescriptor = async (req, res) => {
-  const file = await readFile(path.resolve(__dirname, '../../../prompt.yaml'), 'utf-8');
-  res.send(file);
-};
+  child.on('close', (code) => {
+    if (code !== 0) {
+      console.log(`child process exited with code ${code}`);
+      last_command_result = "Command failed. Output:\n" + last_command_result;
+    } else {
+      last_command_result = "Command executed. Output:\n" + last_command_result;
+    }
+    next();
+  });
+}
+
+export { executeAndForwardOutput };
 EOF
 
-# updateTaskHandler.js
-cat << EOF > src/backend/handlers/updateTaskHandler.js
-import { readFile, writeFile } from 'fs/promises';
-import path from 'path';
-import yaml from 'js-yaml';
+# Step 4: Update the contents of executeCode.js
+cat << 'EOF' > src/execute/executeCode.js
+import { confirmExecution } from './confirmExecution.js';
+import { executeAndForwardOutput } from './executeAndForwardOutput.js';
+import { startInteractiveSession } from "../interactiveSession/startInteractiveSession.js";
 
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+const executeCode = async (code) => {
+  confirmExecution(code, () => executeAndForwardOutput(code, startInteractiveSession));
+}
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-export const updateTaskHandler = async (req, res) => {
-  const task = req.body.task;
-  const filePath = path.resolve(__dirname, '../../../prompt.yaml');
-
-  try {
-    const fileContent = await readFile(filePath, 'utf-8');
-    const document = yaml.load(fileContent);
-
-    // assuming 'task' is a field in the yaml document
-    document.task = path.join("prompt", "task", task);
-
-    const newYamlStr = yaml.dump(document);
-    await writeFile(filePath, newYamlStr, 'utf-8');
-    
-    res.status(200).json({ message: "Task updated successfully" });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-};
-EOF
-
-# listTasks.js
-cat << EOF > src/backend/handlers/listTasks.js
-import path from 'path';
-
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-
-import { readDirRecursively } from '../fileutils/readDirRecursively.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-export const listTasks = () => {
-    const tasksDir = path.join(__dirname, '../../../prompt/task');
-    return readDirRecursively(tasksDir).map(file => path.relative(tasksDir, file));
-};
+export { executeCode };
 EOF

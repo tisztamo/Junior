@@ -1,9 +1,10 @@
-task: prompt/task/refactor/move_files.md
+task: prompt/task/refactor/general.md
 attention:
-  - src/backend/
-  - src/backend/setupRoutes.js
-  - src/backend/servePromptDescriptor.js
-  - src/backend/updateTaskHandler.js
-  - src/backend/listTasks.js
+  - src/execute/executeCode.js
+  - src/execute/executeAndForwardOutput.js
+  - src/execute/confirmAndWriteCode.js
 requirements: |
-  Move the files except setupRoutes to the handlers dir!
+  1. Rename confirmAndWriteCode.js to confirmExecution.js
+  Maintain dependencies and imports!
+  2. executeAndForwardOutput should not import startInteractiveSession,
+  give it a "next" continuation instead.

@@ -1,8 +1,9 @@
-import { confirmAndWriteCode } from './confirmAndWriteCode.js';
+import { confirmExecution } from './confirmExecution.js';
 import { executeAndForwardOutput } from './executeAndForwardOutput.js';
+import { startInteractiveSession } from "../interactiveSession/startInteractiveSession.js";
 
 const executeCode = async (code) => {
-  confirmAndWriteCode(code, () => executeAndForwardOutput(code));
+  confirmExecution(code, () => executeAndForwardOutput(code, startInteractiveSession));
 }
 
 export { executeCode };

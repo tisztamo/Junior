@@ -1,8 +1,7 @@
 import { spawn } from 'child_process';
-import { startInteractiveSession } from "../interactiveSession/startInteractiveSession.js";
 import { rl } from '../config.js';
 
-function executeAndForwardOutput(code) {
+function executeAndForwardOutput(code, next) {
   const child = spawn(code, { shell: true });
   let last_command_result = '';
 
@@ -23,7 +22,7 @@ function executeAndForwardOutput(code) {
     } else {
       last_command_result = "Command executed. Output:\n" + last_command_result;
     }
-    startInteractiveSession()
+    next();
   });
 }
 
