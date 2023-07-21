@@ -1,4 +1,4 @@
-import { generateHandler } from './generateHandler.js';
+import { generateHandler } from './handlers/generateHandler.js';
 import { servePromptDescriptor } from './servePromptDescriptor.js';
 import { updateTaskHandler } from './updateTaskHandler.js';
 import { listTasks } from './listTasks.js';

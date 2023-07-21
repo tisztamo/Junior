@@ -1,16 +1,7 @@
-task: prompt/task/feature/implement.md
+task: prompt/task/refactor/move_files.md
 attention:
-  - src/frontend/
-  - src/frontend/service/
-  - src/frontend/App.jsx
-  - src/frontend/components/StartButton.jsx
-  - src/frontend/generatePrompt.js
-requirements: >
-  Add a secondary button: "Paste & Execute change"
-
-  When clicked, it should paste the change from the clipboard and
-
-  send it to the backend for execution.
-
-  Create src/frontend/service/executeChange.js for sending the change to the
-  backend.
+  - src/backend/
+  - src/backend/setupRoutes.js
+  - src/backend/generateHandler.js
+requirements: |
+  Create a new directory for handlers and move generateHandler to it.

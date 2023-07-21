@@ -1,4 +1,4 @@
-import processPrompt from '../prompt/promptProcessing.js';
+import processPrompt from '../../prompt/promptProcessing.js';
 
 export const generateHandler = async (req, res) => {
   const { notes } = req.body;

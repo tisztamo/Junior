@@ -1,129 +1,63 @@
 # Working set
 
 ```
-src/frontend/
-├── App.jsx
-├── components/...
-├── fetchTasks.js
-├── generatePrompt.js
-├── getBaseUrl.js
-├── index.jsx
-├── service/...
-├── stores/...
-├── styles/...
+src/backend/
+├── fileutils/...
+├── generateHandler.js
+├── getServerPort.js
+├── listTasks.js
+├── notifyOnFileChange.js
+├── servePromptDescriptor.js
+├── serverConfig.js
+├── setupRoutes.js
+├── startServer.js
+├── updateTaskHandler.js
+├── watchPromptDescriptor.js
 
 ```
+src/backend/setupRoutes.js:
 ```
-src/frontend/service/
-├── createWebSocket.js
-├── executeChange.js
-├── fetchDescriptor.js
-├── handleTaskChange.js
-├── parseYamlAndGetTask.js
-├── useWebsocket.js
+import { generateHandler } from './generateHandler.js';
+import { servePromptDescriptor } from './servePromptDescriptor.js';
+import { updateTaskHandler } from './updateTaskHandler.js';
+import { listTasks } from './listTasks.js';
+
+export function setupRoutes(app) {
+  app.get('/descriptor', servePromptDescriptor);
+  app.get('/tasks', (req, res) => res.json({ tasks: listTasks() }));
+
+  app.post('/generate', generateHandler);
+  app.post('/updatetask', updateTaskHandler);
+}
 
 ```
-src/frontend/App.jsx:
-```
-import NotesInput from './components/NotesInput';
-import StartButton from './components/StartButton';
-import ExecuteButton from './components/ExecuteButton';
-import PromptDisplay from './components/PromptDisplay';
-import TasksList from './components/TasksList';
-import PromptDescriptor from './components/PromptDescriptor';
-import NavBar from './components/NavBar';
-import { notes, setNotes } from './stores/notes';
-import { setPrompt } from './stores/prompt';
 
-const App = () => {
-  return (
-    <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
-      <NavBar />
-      <TasksList />
-      <PromptDescriptor />
-      <NotesInput notes={notes} setNotes={setNotes} />
-      <StartButton notes={notes} setPrompt={setPrompt} />
-      <ExecuteButton />
-      <PromptDisplay />
-    </div>
-  );
+src/backend/generateHandler.js:
+```
+import processPrompt from '../prompt/promptProcessing.js';
+
+export const generateHandler = async (req, res) => {
+  const { notes } = req.body;
+  const { prompt } = await processPrompt(notes);
+  res.json({ prompt: prompt });
 };
-
-export default App;
-
-```
-
-src/frontend/components/StartButton.jsx:
-```
-import { generatePrompt } from '../generatePrompt';
-import { marked } from 'marked';
-import copy from 'clipboard-copy';
-
-const StartButton = ({notes, setPrompt}) => {
-  const handleGeneratePrompt = async () => {
-    const response = await generatePrompt(notes());
-
-    copy(response.prompt)
-      .then(() => {
-        console.log('Prompt copied to clipboard!');
-      })
-      .catch(err => {
-        console.error('Failed to copy prompt: ', err);
-      });
-
-    const htmlPrompt = marked(response.prompt);
-
-    setPrompt(htmlPrompt);
-  };
-
-  return (
-    // Updated button label and added tailwind classes for larger button size
-    <button class="px-8 py-4 bg-blue-500 text-white rounded" onClick={handleGeneratePrompt}>Generate & Copy Prompt</button>
-  );
-};
-
-export default StartButton;
-
-```
-
-src/frontend/generatePrompt.js:
-```
-import { getBaseUrl } from './getBaseUrl';
-
-const generatePrompt = async (notes) => {
-  const baseUrl = getBaseUrl();
-  const response = await fetch(`${baseUrl}/generate`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ notes })
-  });
-
-  const data = await response.json();
-
-  return data;
-};
-
-export { generatePrompt };
 
 ```
 
 
 # Task
 
-Implement the following feature!
+Move the following files to the specified target dirs!
 
-- Create a plan!
-- Create new files when needed!
-- Every js file should only export a single function!
-- Use ES6 imports!
+Find out the best target dir if it is not specified!
 
-Requirements:
+You need to follow dependencies to maintain coherence.
 
-Add a secondary button: &#34;Paste &amp; Execute change&#34;
-When clicked, it should paste the change from the clipboard and
-send it to the backend for execution.
-Create src/frontend/service/executeChange.js for sending the change to the backend.
+Before executing, write a concise plan! The plan should show:
+ - How do you avoid breaking other parts of the code.
+ - If you had to choose, your way of thinking.
 
+Create a new directory for handlers and move generateHandler to it.
 
 
 # Output Format
