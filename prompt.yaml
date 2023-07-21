@@ -1,10 +1,9 @@
 task: prompt/task/feature/implement.md
 attention:
-  - ./
-  - src
-  - src/backend
+  - src/backend/handlers/resetGitHandler.js
   - src/backend/setupRoutes.js
-  - git/resetGit.js
+  - src/frontend/App.jsx
+  - src/frontend/components/ExecuteButton.jsx
+  - src/frontend/service/executeChange.js
 requirements: |
-  Move the git directory to src/ !
-  Then create a new route that calls resetGit
+  Create a new button for the reset git feature.

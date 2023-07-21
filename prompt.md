@@ -1,31 +1,19 @@
 # Working set
 
+src/backend/handlers/resetGitHandler.js:
 ```
-./
-├── .DS_Store
-├── .git/...
-├── .gitignore
-├── README.md
-├── babel.config.js
-├── change.sh
-├── doc/...
-├── git/...
-├── integrations/...
-├── node_modules/...
-├── package-lock.json
-├── package.json
-├── postcss.config.js
-├── prompt/...
-├── prompt.md
-├── prompt.yaml
-├── secret.sh
-├── src/...
-├── tailwind.config.js
+import resetGit from '../../git/resetGit.js';
+
+export default async function resetGitHandler(req, res) {
+  try {
+    await resetGit();
+    res.status(200).send({ message: 'Git successfully reset' });
+  } catch (error) {
+    res.status(500).send({ message: 'Error in resetting Git', error });
+  }
+}
 
 ```
-src: err!
-
-src/backend: err!
 
 src/backend/setupRoutes.js:
 ```
@@ -34,6 +22,7 @@ import { servePromptDescriptor } from './handlers/servePromptDescriptor.js';
 import { updateTaskHandler } from './handlers/updateTaskHandler.js';
 import { listTasks } from './handlers/listTasks.js';
 import { executeHandler } from './handlers/executeHandler.js';
+import resetGitHandler from './handlers/resetGitHandler.js';
 
 export function setupRoutes(app) {
   app.get('/descriptor', servePromptDescriptor);
@@ -41,29 +30,82 @@ export function setupRoutes(app) {
 
   app.post('/generate', generateHandler);
   app.post('/updatetask', updateTaskHandler);
-app.post('/execute', executeHandler);
+  app.post('/execute', executeHandler);
+  app.post('/reset', resetGitHandler);
 }
 
 ```
 
-git/resetGit.js:
+src/frontend/App.jsx:
 ```
-import git from 'simple-git';
+import NotesInput from './components/NotesInput';
+import StartButton from './components/StartButton';
+import ExecuteButton from './components/ExecuteButton';
+import PromptDisplay from './components/PromptDisplay';
+import TasksList from './components/TasksList';
+import PromptDescriptor from './components/PromptDescriptor';
+import NavBar from './components/NavBar';
+import { notes, setNotes } from './stores/notes';
+import { setPrompt } from './stores/prompt';
 
-export default async function resetGit() {
-  const gitInstance = git();
+const App = () => {
+  return (
+    <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
+      <NavBar />
+      <TasksList />
+      <PromptDescriptor />
+      <NotesInput notes={notes} setNotes={setNotes} />
+      <StartButton notes={notes} setPrompt={setPrompt} />
+      <ExecuteButton />
+      <PromptDisplay />
+    </div>
+  );
+};
 
-  // Stash changes in prompt.yaml
-  await gitInstance.add('./prompt.yaml');
-  await gitInstance.stash();
+export default App;
 
-  // Clean the repository and reset to the latest commit
-  await gitInstance.clean('f', ['-d']);
-  await gitInstance.reset('hard');
+```
 
-  // Apply stashed changes to prompt.yaml
-  await gitInstance.stash(['pop']);
-}
+src/frontend/components/ExecuteButton.jsx:
+```
+import { executeChange } from '../service/executeChange';
+
+const ExecuteButton = () => {
+  const handleExecuteChange = async () => {
+    const change = await navigator.clipboard.readText();
+    const response = await executeChange(change);
+
+    console.log(response.message);
+  };
+
+  return (
+    // Updated button color to a less flashy orange
+    <button class="px-8 py-4 bg-orange-300 text-white rounded" onClick={handleExecuteChange}>Paste & Execute Change</button>
+  );
+};
+
+export default ExecuteButton;
+
+```
+
+src/frontend/service/executeChange.js:
+```
+import { getBaseUrl } from '../getBaseUrl';
+
+const executeChange = async (change) => {
+  const baseUrl = getBaseUrl();
+  const response = await fetch(`${baseUrl}/execute`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ change })
+  });
+
+  const data = await response.json();
+
+  return data;
+};
+
+export { executeChange };
 
 ```
 
@@ -79,8 +121,7 @@ Implement the following feature!
 
 Requirements:
 
-Move the git directory to src/ !
-Then create a new route that calls resetGit
+Create a new button for the reset git feature.
 
 
 
