@@ -3,5 +3,5 @@ attention:
   - src/git/resetGit.js
 requirements: |
   Resetgit correctly deletes every new files,
-  and correctly leaves prompt.yaml untouched,
+  and correctly leavddes prompt.yaml untouched,
   but it fails to reset other modified files.
