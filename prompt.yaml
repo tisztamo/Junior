@@ -2,6 +2,8 @@ task: prompt/task/refactor/move_files.md
 attention:
   - src/backend/
   - src/backend/setupRoutes.js
-  - src/backend/generateHandler.js
+  - src/backend/servePromptDescriptor.js
+  - src/backend/updateTaskHandler.js
+  - src/backend/listTasks.js
 requirements: |
-  Create a new directory for handlers and move generateHandler to it.
+  Move the files except setupRoutes to the handlers dir!

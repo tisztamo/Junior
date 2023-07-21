@@ -1,7 +1,7 @@
 import { generateHandler } from './handlers/generateHandler.js';
-import { servePromptDescriptor } from './servePromptDescriptor.js';
-import { updateTaskHandler } from './updateTaskHandler.js';
-import { listTasks } from './listTasks.js';
+import { servePromptDescriptor } from './handlers/servePromptDescriptor.js';
+import { updateTaskHandler } from './handlers/updateTaskHandler.js';
+import { listTasks } from './handlers/listTasks.js';
 
 export function setupRoutes(app) {
   app.get('/descriptor', servePromptDescriptor);

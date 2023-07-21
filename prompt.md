@@ -3,8 +3,8 @@
 ```
 src/backend/
 ├── fileutils/...
-├── generateHandler.js
 ├── getServerPort.js
+├── handlers/...
 ├── listTasks.js
 ├── notifyOnFileChange.js
 ├── servePromptDescriptor.js
@@ -17,7 +17,7 @@ src/backend/
 ```
 src/backend/setupRoutes.js:
 ```
-import { generateHandler } from './generateHandler.js';
+import { generateHandler } from './handlers/generateHandler.js';
 import { servePromptDescriptor } from './servePromptDescriptor.js';
 import { updateTaskHandler } from './updateTaskHandler.js';
 import { listTasks } from './listTasks.js';
@@ -32,14 +32,74 @@ export function setupRoutes(app) {
 
 ```
 
-src/backend/generateHandler.js:
+src/backend/servePromptDescriptor.js:
 ```
-import processPrompt from '../prompt/promptProcessing.js';
+import { readFile } from 'fs/promises';
+import path from 'path';
 
-export const generateHandler = async (req, res) => {
-  const { notes } = req.body;
-  const { prompt } = await processPrompt(notes);
-  res.json({ prompt: prompt });
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+export const servePromptDescriptor = async (req, res) => {
+  const file = await readFile(path.resolve(__dirname, '../../prompt.yaml'), 'utf-8');
+  res.send(file);
+};
+
+```
+
+src/backend/updateTaskHandler.js:
+```
+import { readFile, writeFile } from 'fs/promises';
+import path from 'path';
+import yaml from 'js-yaml';
+
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+export const updateTaskHandler = async (req, res) => {
+  const task = req.body.task;
+  const filePath = path.resolve(__dirname, '../../prompt.yaml');
+
+  try {
+    const fileContent = await readFile(filePath, 'utf-8');
+    const document = yaml.load(fileContent);
+
+    // assuming 'task' is a field in the yaml document
+    document.task = path.join("prompt", "task", task);
+
+    const newYamlStr = yaml.dump(document);
+    await writeFile(filePath, newYamlStr, 'utf-8');
+    
+    res.status(200).json({ message: "Task updated successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+```
+
+src/backend/listTasks.js:
+```
+import path from 'path';
+
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+import { readDirRecursively } from './fileutils/readDirRecursively.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+export const listTasks = () => {
+    const tasksDir = path.join(__dirname, '../../prompt/task');
+    return readDirRecursively(tasksDir).map(file => path.relative(tasksDir, file));
 };
 
 ```
@@ -57,7 +117,7 @@ Before executing, write a concise plan! The plan should show:
  - How do you avoid breaking other parts of the code.
  - If you had to choose, your way of thinking.
 
-Create a new directory for handlers and move generateHandler to it.
+Move the files except setupRoutes to the handlers dir!
 
 
 # Output Format

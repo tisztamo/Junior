@@ -10,7 +10,7 @@ const __dirname = dirname(__filename);
 
 export const updateTaskHandler = async (req, res) => {
   const task = req.body.task;
-  const filePath = path.resolve(__dirname, '../../prompt.yaml');
+  const filePath = path.resolve(__dirname, '../../../prompt.yaml');
 
   try {
     const fileContent = await readFile(filePath, 'utf-8');
