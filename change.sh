@@ -1,12 +1,12 @@
 #!/bin/sh
-# Goal: Fix resetGit.js to properly reset modified files.
+# Goal: Exclude prompt.yaml from the git reset operation
 # Plan:
-# 1. Stash all changes including untracked files.
-# 2. Clean the repository and reset it to the latest commit.
-# 3. Checkout only prompt.yaml from stash.
+# 1. Modify the resetGit function to stash prompt.yaml separately.
+# 2. Then, reset the git repository to the latest commit.
+# 3. After the reset, checkout prompt.yaml from the separate stash.
 # 4. Drop the stash.
 
-cat > src/git/resetGit.js << 'EOF'
+cat << 'EOF' > src/git/resetGit.js
 import git from 'simple-git';
 
 export default async function resetGit() {
@@ -19,10 +19,14 @@ export default async function resetGit() {
   await gitInstance.clean('f', ['-d']);
   await gitInstance.reset('hard');
 
-  // Checkout only prompt.yaml from stash
+  // Checkout prompt.yaml from stash
   await gitInstance.checkout('stash@{0} -- prompt.yaml');
 
   // Drop the stash
   await gitInstance.stash(['drop']);
 }
 EOF
+
+# Restart the server to apply changes
+killall node
+npm start

@@ -10,7 +10,7 @@ export default async function resetGit() {
   await gitInstance.clean('f', ['-d']);
   await gitInstance.reset('hard');
 
-  // Checkout only prompt.yaml from stash
+  // Checkout prompt.yaml from stash
   await gitInstance.checkout('stash@{0} -- prompt.yaml');
 
   // Drop the stash
