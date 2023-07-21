@@ -1,5 +1,6 @@
 import NotesInput from './components/NotesInput';
 import StartButton from './components/StartButton';
+import ExecuteButton from './components/ExecuteButton';
 import PromptDisplay from './components/PromptDisplay';
 import TasksList from './components/TasksList';
 import PromptDescriptor from './components/PromptDescriptor';
@@ -15,6 +16,7 @@ const App = () => {
       <PromptDescriptor />
       <NotesInput notes={notes} setNotes={setNotes} />
       <StartButton notes={notes} setPrompt={setPrompt} />
+      <ExecuteButton />
       <PromptDisplay />
     </div>
   );

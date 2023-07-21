@@ -1,9 +1,16 @@
 task: prompt/task/feature/implement.md
 attention:
+  - src/frontend/
+  - src/frontend/service/
   - src/frontend/App.jsx
-  - src/frontend/components/PromptDescriptor.jsx
-requirements: |
-  The pre should not be wider than the screen.
-  Allow wrapping of the text!
-  add an extra div if needed.
-  Use tailwind utility classes.
+  - src/frontend/components/StartButton.jsx
+  - src/frontend/generatePrompt.js
+requirements: >
+  Add a secondary button: "Paste & Execute change"
+
+  When clicked, it should paste the change from the clipboard and
+
+  send it to the backend for execution.
+
+  Create src/frontend/service/executeChange.js for sending the change to the
+  backend.

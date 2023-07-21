@@ -1,9 +1,33 @@
 # Working set
 
+```
+src/frontend/
+├── App.jsx
+├── components/...
+├── fetchTasks.js
+├── generatePrompt.js
+├── getBaseUrl.js
+├── index.jsx
+├── service/...
+├── stores/...
+├── styles/...
+
+```
+```
+src/frontend/service/
+├── createWebSocket.js
+├── executeChange.js
+├── fetchDescriptor.js
+├── handleTaskChange.js
+├── parseYamlAndGetTask.js
+├── useWebsocket.js
+
+```
 src/frontend/App.jsx:
 ```
 import NotesInput from './components/NotesInput';
 import StartButton from './components/StartButton';
+import ExecuteButton from './components/ExecuteButton';
 import PromptDisplay from './components/PromptDisplay';
 import TasksList from './components/TasksList';
 import PromptDescriptor from './components/PromptDescriptor';
@@ -19,6 +43,7 @@ const App = () => {
       <PromptDescriptor />
       <NotesInput notes={notes} setNotes={setNotes} />
       <StartButton notes={notes} setPrompt={setPrompt} />
+      <ExecuteButton />
       <PromptDisplay />
     </div>
   );
@@ -28,41 +53,57 @@ export default App;
 
 ```
 
-src/frontend/components/PromptDescriptor.jsx:
+src/frontend/components/StartButton.jsx:
 ```
-import { onMount, onCleanup } from 'solid-js';
-import { fetchDescriptor } from '../service/fetchDescriptor';
-import { useWebsocket } from '../service/useWebsocket';
-import { promptDescriptor, setPromptDescriptor } from '../stores/promptDescriptor';
+import { generatePrompt } from '../generatePrompt';
+import { marked } from 'marked';
+import copy from 'clipboard-copy';
 
-const PromptDescriptor = () => {
+const StartButton = ({notes, setPrompt}) => {
+  const handleGeneratePrompt = async () => {
+    const response = await generatePrompt(notes());
 
-  onMount(async () => {
-    const text = await fetchDescriptor();
-    setPromptDescriptor(text);
-  });
+    copy(response.prompt)
+      .then(() => {
+        console.log('Prompt copied to clipboard!');
+      })
+      .catch(err => {
+        console.error('Failed to copy prompt: ', err);
+      });
 
-  useWebsocket(async (e) => {
-    if (e.data === 'update') {
-      const text = await fetchDescriptor();
-      setPromptDescriptor(text);
-    }
-  });
+    const htmlPrompt = marked(response.prompt);
 
-  onCleanup(() => {
-    setPromptDescriptor('');
-  });
+    setPrompt(htmlPrompt);
+  };
 
   return (
-    <div class="overflow-auto max-w-full">
-      <div class="whitespace-pre-wrap overflow-x-scroll overflow-y-auto font-mono">
-        {promptDescriptor()}
-      </div>
-    </div>
+    // Updated button label and added tailwind classes for larger button size
+    <button class="px-8 py-4 bg-blue-500 text-white rounded" onClick={handleGeneratePrompt}>Generate & Copy Prompt</button>
   );
 };
 
-export default PromptDescriptor;
+export default StartButton;
+
+```
+
+src/frontend/generatePrompt.js:
+```
+import { getBaseUrl } from './getBaseUrl';
+
+const generatePrompt = async (notes) => {
+  const baseUrl = getBaseUrl();
+  const response = await fetch(`${baseUrl}/generate`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ notes })
+  });
+
+  const data = await response.json();
+
+  return data;
+};
+
+export { generatePrompt };
 
 ```
 
@@ -78,10 +119,10 @@ Implement the following feature!
 
 Requirements:
 
-The pre should not be wider than the screen.
-Allow wrapping of the text!
-add an extra div if needed.
-Use tailwind utility classes.
+Add a secondary button: &#34;Paste &amp; Execute change&#34;
+When clicked, it should paste the change from the clipboard and
+send it to the backend for execution.
+Create src/frontend/service/executeChange.js for sending the change to the backend.
 
 
 
