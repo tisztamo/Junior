@@ -1,77 +1,56 @@
 # Working set
 
-src/execute/executeAndForwardOutput.js:
 ```
-import { spawn } from 'child_process';
-import { rl } from '../config.js';
-
-function executeAndForwardOutput(code, next) {
-  const child = spawn(code, { shell: true });
-  let last_command_result = '';
-
-  child.stdout.on('data', (data) => {
-    console.log(`${data}`);
-    last_command_result += data;
-  });
-
-  child.stderr.on('data', (data) => {
-    console.error(`${data}`);
-    last_command_result += data;
-  });
-
-  child.on('close', (code) => {
-    if (code !== 0) {
-      console.log(`child process exited with code ${code}`);
-      last_command_result = "Command failed. Output:\n" + last_command_result;
-    } else {
-      last_command_result = "Command executed. Output:\n" + last_command_result;
-    }
-    next();
-  });
-}
-
-export { executeAndForwardOutput };
+./
+├── .DS_Store
+├── .git/...
+├── .gitignore
+├── README.md
+├── babel.config.js
+├── change.sh
+├── doc/...
+├── integrations/...
+├── node_modules/...
+├── package-lock.json
+├── package.json
+├── postcss.config.js
+├── prompt/...
+├── prompt.md
+├── prompt.yaml
+├── secret.sh
+├── src/...
+├── tailwind.config.js
 
 ```
-
-src/frontend/service/executeChange.js:
 ```
-import { getBaseUrl } from '../getBaseUrl';
-
-const executeChange = async (change) => {
-  const baseUrl = getBaseUrl();
-  const response = await fetch(`${baseUrl}/execute`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ change })
-  });
-
-  const data = await response.json();
-
-  return data;
-};
-
-export { executeChange };
+./src/
+├── .DS_Store
+├── attention/...
+├── backend/...
+├── config.js
+├── execute/...
+├── frontend/...
+├── index.html
+├── interactiveSession/...
+├── main.js
+├── prompt/...
+├── startVite.js
+├── vite.config.js
+├── web.js
 
 ```
-
-src/backend/setupRoutes.js:
 ```
-import { generateHandler } from './handlers/generateHandler.js';
-import { servePromptDescriptor } from './handlers/servePromptDescriptor.js';
-import { updateTaskHandler } from './handlers/updateTaskHandler.js';
-import { listTasks } from './handlers/listTasks.js';
-
-export function setupRoutes(app) {
-  app.get('/descriptor', servePromptDescriptor);
-  app.get('/tasks', (req, res) => res.json({ tasks: listTasks() }));
-
-  app.post('/generate', generateHandler);
-  app.post('/updatetask', updateTaskHandler);
-}
+./src/backend/
+├── fileutils/...
+├── getServerPort.js
+├── handlers/...
+├── notifyOnFileChange.js
+├── serverConfig.js
+├── setupRoutes.js
+├── startServer.js
+├── watchPromptDescriptor.js
 
 ```
-
 
 # Task
 
@@ -84,7 +63,9 @@ Implement the following feature!
 
 Requirements:
 
-Create new backend endpoint &#34;execute&#34; that will call executeAndForwardOutput on the posted data.
+Create a function that resets a git repository fully, restoring everything and deleting new unstaged files, except the change of prompt.yaml
+What is a good name for it?
+Create a new dir in our project if you think this functionality needs its own place.
 
 
 

@@ -1,8 +1,14 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/execute/executeAndForwardOutput.js
-  - src/frontend/service/executeChange.js
-  - src/backend/setupRoutes.js
+  - ./
+  - ./src/
+  - ./src/backend/
 requirements: >
-  Create new backend endpoint "execute" that will call executeAndForwardOutput
-  on the posted data.
+  Create a function that resets a git repository fully,
+  restoring everything and deleting new unstaged files,
+  except the change of prompt.yaml
+
+  What is a good name for it?
+
+  Create a new dir in our project if you think this functionality
+  needs its own place.

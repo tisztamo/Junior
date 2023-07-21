@@ -28,6 +28,7 @@
     "js-yaml": "^4.1.0",
     "marked": "^5.1.0",
     "postcss-nested": "^6.0.1",
+    "simple-git": "^3.19.1",
     "solid-js": "^1.7.7",
     "vite": "^4.3.9",
     "vite-plugin-solid": "^2.7.0",
