@@ -1,73 +1,28 @@
 #!/bin/sh
-# Goal: Refactor the mentioned files
+# Goal: Implement "execute" endpoint in backend
 # Plan:
-# 1. Rename confirmAndWriteCode.js to confirmExecution.js
-# 2. Remove the import of startInteractiveSession from executeAndForwardOutput.js and replace it with a "next" continuation
-# 3. Update executeCode.js to pass startInteractiveSession as a continuation to executeAndForwardOutput
+# 1. Create a new file "executeHandler.js" in the "handlers" directory.
+# 2. In "executeHandler.js", import the "executeAndForwardOutput" function from "executeAndForwardOutput.js".
+# 3. Define a function "executeHandler" that takes "req" and "res" as parameters.
+# 4. In "executeHandler", call "executeAndForwardOutput" with "req.body.change" as the argument and a callback function that sends the response with the result.
+# 5. Export "executeHandler" from "executeHandler.js".
+# 6. In "setupRoutes.js", import "executeHandler" from "executeHandler.js".
+# 7. Add a new POST route "/execute" that uses "executeHandler".
 
-# Step 1: Rename confirmAndWriteCode.js to confirmExecution.js
-mv src/execute/confirmAndWriteCode.js src/execute/confirmExecution.js
+cat << EOF > ./src/backend/handlers/executeHandler.js
+import { executeAndForwardOutput } from '../../execute/executeAndForwardOutput.js';
 
-# Step 2: Update the contents of confirmExecution.js
-cat << 'EOF' > src/execute/confirmExecution.js
-import { rl } from '../config.js';
-
-function confirmExecution(code, next) {
-  rl.question('\x1b[1mEXECUTE? [y/n]\x1b[0m ', (answer) => {
-    if (answer.toLowerCase() === 'y') {
-      console.log("\x1b[33mExecuting...\x1b[0m");
-      next();
-    } else {
-      console.log("\x1b[33mNot executing.\x1b[0m");
-    }
+function executeHandler(req, res) {
+  executeAndForwardOutput(req.body.change, (result) => {
+    res.json({ result });
   });
 }
 
-export { confirmExecution };
+export { executeHandler };
 EOF
 
-# Step 3: Update the contents of executeAndForwardOutput.js
-cat << 'EOF' > src/execute/executeAndForwardOutput.js
-import { spawn } from 'child_process';
-import { rl } from '../config.js';
+sed -i '' 's/import { listTasks } from '\''.\/handlers\/listTasks.js'\'';/import { listTasks } from '\''.\/handlers\/listTasks.js'\'';\
+import { executeHandler } from '\''.\/handlers\/executeHandler.js'\'';/g' ./src/backend/setupRoutes.js
 
-function executeAndForwardOutput(code, next) {
-  const child = spawn(code, { shell: true });
-  let last_command_result = '';
-
-  child.stdout.on('data', (data) => {
-    console.log(`${data}`);
-    last_command_result += data;
-  });
-
-  child.stderr.on('data', (data) => {
-    console.error(`${data}`);
-    last_command_result += data;
-  });
-
-  child.on('close', (code) => {
-    if (code !== 0) {
-      console.log(`child process exited with code ${code}`);
-      last_command_result = "Command failed. Output:\n" + last_command_result;
-    } else {
-      last_command_result = "Command executed. Output:\n" + last_command_result;
-    }
-    next();
-  });
-}
-
-export { executeAndForwardOutput };
-EOF
-
-# Step 4: Update the contents of executeCode.js
-cat << 'EOF' > src/execute/executeCode.js
-import { confirmExecution } from './confirmExecution.js';
-import { executeAndForwardOutput } from './executeAndForwardOutput.js';
-import { startInteractiveSession } from "../interactiveSession/startInteractiveSession.js";
-
-const executeCode = async (code) => {
-  confirmExecution(code, () => executeAndForwardOutput(code, startInteractiveSession));
-}
-
-export { executeCode };
-EOF
+sed -i '' 's/app.post('\''\/updatetask'\'', updateTaskHandler);/app.post('\''\/updatetask'\'', updateTaskHandler);\
+app.post('\''\/execute'\'', executeHandler);/g' ./src/backend/setupRoutes.js

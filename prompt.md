@@ -1,25 +1,11 @@
 # Working set
 
-src/execute/executeCode.js:
-```
-import { confirmAndWriteCode } from './confirmAndWriteCode.js';
-import { executeAndForwardOutput } from './executeAndForwardOutput.js';
-
-const executeCode = async (code) => {
-  confirmAndWriteCode(code, () => executeAndForwardOutput(code));
-}
-
-export { executeCode };
-
-```
-
 src/execute/executeAndForwardOutput.js:
 ```
 import { spawn } from 'child_process';
-import { startInteractiveSession } from "../interactiveSession/startInteractiveSession.js";
 import { rl } from '../config.js';
 
-function executeAndForwardOutput(code) {
+function executeAndForwardOutput(code, next) {
   const child = spawn(code, { shell: true });
   let last_command_result = '';
 
@@ -40,7 +26,7 @@ function executeAndForwardOutput(code) {
     } else {
       last_command_result = "Command executed. Output:\n" + last_command_result;
     }
-    startInteractiveSession()
+    next();
   });
 }
 
@@ -48,44 +34,58 @@ export { executeAndForwardOutput };
 
 ```
 
-src/execute/confirmAndWriteCode.js:
+src/frontend/service/executeChange.js:
 ```
-import { rl } from '../config.js';
+import { getBaseUrl } from '../getBaseUrl';
 
-function confirmAndWriteCode(code, next) {
-  rl.question('\x1b[1mEXECUTE? [y/n]\x1b[0m ', (answer) => {
-    if (answer.toLowerCase() === 'y') {
-      console.log("\x1b[33mExecuting...\x1b[0m");
-      next();
-    } else {
-      console.log("\x1b[33mNot executing.\x1b[0m");
-    }
+const executeChange = async (change) => {
+  const baseUrl = getBaseUrl();
+  const response = await fetch(`${baseUrl}/execute`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ change })
   });
-}
 
-export { confirmAndWriteCode };
+  const data = await response.json();
+
+  return data;
+};
+
+export { executeChange };
+
+```
+
+src/backend/setupRoutes.js:
+```
+import { generateHandler } from './handlers/generateHandler.js';
+import { servePromptDescriptor } from './handlers/servePromptDescriptor.js';
+import { updateTaskHandler } from './handlers/updateTaskHandler.js';
+import { listTasks } from './handlers/listTasks.js';
+
+export function setupRoutes(app) {
+  app.get('/descriptor', servePromptDescriptor);
+  app.get('/tasks', (req, res) => res.json({ tasks: listTasks() }));
+
+  app.post('/generate', generateHandler);
+  app.post('/updatetask', updateTaskHandler);
+}
 
 ```
 
 
 # Task
 
-Refactor the mentioned files!
+Implement the following feature!
 
-Look for
-  - unused imports
-  - unneeded comments
-  - ugly names
-  - misplaced files
-  - code repetition
-  - code smell
+- Create a plan!
+- Create new files when needed!
+- Every js file should only export a single function!
+- Use ES6 imports!
 
-When a file is bigger than 40 lines, split it: Identify the possible parts and create separate files!
+Requirements:
 
-1. Rename confirmAndWriteCode.js to confirmExecution.js
-Maintain dependencies and imports!
-2. executeAndForwardOutput should not import startInteractiveSession,
-give it a &#34;next&#34; continuation instead.
+Create new backend endpoint &#34;execute&#34; that will call executeAndForwardOutput on the posted data.
+
 
 
 # Output Format

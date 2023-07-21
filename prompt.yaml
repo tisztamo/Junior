@@ -1,10 +1,8 @@
-task: prompt/task/refactor/general.md
+task: prompt/task/feature/implement.md
 attention:
-  - src/execute/executeCode.js
   - src/execute/executeAndForwardOutput.js
-  - src/execute/confirmAndWriteCode.js
-requirements: |
-  1. Rename confirmAndWriteCode.js to confirmExecution.js
-  Maintain dependencies and imports!
-  2. executeAndForwardOutput should not import startInteractiveSession,
-  give it a "next" continuation instead.
+  - src/frontend/service/executeChange.js
+  - src/backend/setupRoutes.js
+requirements: >
+  Create new backend endpoint "execute" that will call executeAndForwardOutput
+  on the posted data.
