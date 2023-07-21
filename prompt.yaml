@@ -2,7 +2,3 @@ task: prompt/task/bug/fix.md
 attention:
   - src/git/resetGit.js
 requirements: |
-  Resetgit correctly deletes every new files,
-  and correctly reset other modified files,
-  but it fails to leave prompt.yaml untouched.
-  prompt.yaml should be excluded from the reset.

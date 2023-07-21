@@ -1,18 +1,39 @@
-import git from 'simple-git';
+import { exec } from 'child_process';
 
-export default async function resetGit() {
-  const gitInstance = git();
-
+export default function resetGit() {
   // Stash all changes including untracked files
-  await gitInstance.stash(['-u']);
+  exec('git stash -u', (err, stdout, stderr) => {
+    if (err) {
+      console.error(`exec error: ${err}`);
+      return;
+    }
+    console.log(`stdout: ${stdout}`);
 
-  // Clean the repository and reset to the latest commit
-  await gitInstance.clean('f', ['-d']);
-  await gitInstance.reset('hard');
+    // Clean the repository and reset to the latest commit
+    exec('git clean -f -d && git reset --hard', (err, stdout, stderr) => {
+      if (err) {
+        console.error(`exec error: ${err}`);
+        return;
+      }
+      console.log(`stdout: ${stdout}`);
 
-  // Checkout prompt.yaml from stash
-  await gitInstance.checkout('stash@{0} -- prompt.yaml');
+      // Checkout prompt.yaml from stash
+      exec('git checkout stash@{0} -- prompt.yaml', (err, stdout, stderr) => {
+        if (err) {
+          console.error(`exec error: ${err}`);
+          return;
+        }
+        console.log(`stdout: ${stdout}`);
 
-  // Drop the stash
-  await gitInstance.stash(['drop']);
+        // Drop the stash
+        exec('git stash drop', (err, stdout, stderr) => {
+          if (err) {
+            console.error(`exec error: ${err}`);
+            return;
+          }
+          console.log(`stdout: ${stdout}`);
+        });
+      });
+    });
+  });
 }
