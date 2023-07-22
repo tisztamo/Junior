@@ -1,54 +1,92 @@
 #!/bin/sh
-# Goal: Exclude prompt.yaml from the git reset operation
+# Goal: Fix issues in index.html and adjust button styles
 # Plan:
-# 1. Modify the resetGit function to call the git cli directly.
-# 2. Stash all changes including untracked files.
-# 3. Clean the repository and reset to the latest commit.
-# 4. Checkout prompt.yaml from stash.
-# 5. Drop the stash.
+# 1. Remove 'xxx' from index.html.
+# 2. Update button styles in the corresponding component files to ensure uniform width and vivid color for the reset button.
 
-cat << 'EOF' > src/git/resetGit.js
-import { exec } from 'child_process';
-
-export default function resetGit() {
-  // Stash all changes including untracked files
-  exec('git stash -u', (err, stdout, stderr) => {
-    if (err) {
-      console.error(`exec error: ${err}`);
-      return;
-    }
-    console.log(`stdout: ${stdout}`);
-
-    // Clean the repository and reset to the latest commit
-    exec('git clean -f -d && git reset --hard', (err, stdout, stderr) => {
-      if (err) {
-        console.error(`exec error: ${err}`);
-        return;
-      }
-      console.log(`stdout: ${stdout}`);
-
-      // Checkout prompt.yaml from stash
-      exec('git checkout stash@{0} -- prompt.yaml', (err, stdout, stderr) => {
-        if (err) {
-          console.error(`exec error: ${err}`);
-          return;
-        }
-        console.log(`stdout: ${stdout}`);
-
-        // Drop the stash
-        exec('git stash drop', (err, stdout, stderr) => {
-          if (err) {
-            console.error(`exec error: ${err}`);
-            return;
-          }
-          console.log(`stdout: ${stdout}`);
-        });
-      });
-    });
-  });
-}
+# Step 1: Remove 'xxx' from index.html
+cat > src/index.html << 'EOF'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Junior</title>
+</head>
+<body>
+  <div id="app"></div>
+  <script type="module" src="/frontend/index.jsx"></script>
+</body>
+</html>
 EOF
 
-# Restart the server to apply changes
-killall node
-npm start
+# Step 2: Update button styles to ensure a uniform width and a vivid color for the reset button.
+# I'll increase the button width to 'w-64' (16rem), which should be sufficient for the longest label.
+# The reset button color will be changed to 'bg-red-700' for a more vivid appearance.
+
+cat > src/frontend/components/ResetButton.jsx << 'EOF'
+import { resetGit } from '../service/resetGit';
+
+const ResetButton = () => {
+  const handleReset = async () => {
+    const response = await resetGit();
+
+    console.log(response.message);
+  };
+
+  return (
+    <button class="w-64 px-4 py-4 bg-red-700 text-white rounded" onClick={handleReset}>Reset Git</button>
+  );
+};
+
+export default ResetButton;
+EOF
+
+cat > src/frontend/components/ExecuteButton.jsx << 'EOF'
+import { executeChange } from '../service/executeChange';
+
+const ExecuteButton = () => {
+  const handleExecuteChange = async () => {
+    const change = await navigator.clipboard.readText();
+    const response = await executeChange(change);
+
+    console.log(response.message);
+  };
+
+  return (
+    <button class="w-64 px-4 py-4 bg-orange-300 text-white rounded" onClick={handleExecuteChange}>Paste & Execute Change</button>
+  );
+};
+
+export default ExecuteButton;
+EOF
+
+cat > src/frontend/components/StartButton.jsx << 'EOF'
+import { generatePrompt } from '../generatePrompt';
+import { marked } from 'marked';
+import copy from 'clipboard-copy';
+
+const StartButton = ({notes, setPrompt}) => {
+  const handleGeneratePrompt = async () => {
+    const response = await generatePrompt(notes());
+
+    copy(response.prompt)
+      .then(() => {
+        console.log('Prompt copied to clipboard!');
+      })
+      .catch(err => {
+        console.error('Failed to copy prompt: ', err);
+      });
+
+    const htmlPrompt = marked(response.prompt);
+
+    setPrompt(htmlPrompt);
+  };
+
+  return (
+    <button class="w-64 px-4 py-4 bg-blue-500 text-white rounded" onClick={handleGeneratePrompt}>Generate & Copy Prompt</button>
+  );
+};
+
+export default StartButton;
+EOF

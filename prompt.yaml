@@ -1,4 +1,11 @@
 task: prompt/task/bug/fix.md
 attention:
-  - src/git/resetGit.js
+  - src/index.html
+  - src/frontend/App.jsx
+  - src/frontend/components/ResetButton.jsx
+  - src/frontend/components/ExecuteButton.jsx
+  - src/frontend/components/StartButton.jsx
 requirements: |
+  I accidentally added xxx to index.html, remove it.
+  All button width should be the same. Select a width the longest label of the three.
+  The reset button's color should be more vivid.

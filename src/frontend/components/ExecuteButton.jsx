@@ -9,8 +9,7 @@ const ExecuteButton = () => {
   };
 
   return (
-    // Updated button color to a less flashy orange
-    <button class="px-8 py-4 bg-orange-300 text-white rounded" onClick={handleExecuteChange}>Paste & Execute Change</button>
+    <button class="w-64 px-4 py-4 bg-orange-300 text-white rounded" onClick={handleExecuteChange}>Paste & Execute Change</button>
   );
 };
 
