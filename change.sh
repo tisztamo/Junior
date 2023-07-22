@@ -1,5 +1,26 @@
 #!/bin/sh
-# Add the doc build script to package.json scripts
+# Goal: Setup documentation with GitHub Pages
+# Plan:
+# 1. Remove everything from the doc directory
+# 2. Create a new directory hierarchy for the documentation
+# 3. Install documentation tools
+# 4. Add markdown examples
+# 5. Configure GitHub Pages
+# 6. Run build process to generate HTML from markdown
+
+# Step 1: Remove everything from the doc directory
+rm -rf ./doc/*
+
+# Step 2: Create a new directory hierarchy for the documentation
+mkdir -p ./doc/api ./doc/getting-started ./doc/examples
+
+# Step 3: Install documentation tools
+# We'll use markdown-it for converting markdown to HTML,
+# and highlight.js for code highlighting in the generated HTML
+
+npm install --save-dev markdown-it highlight.js
+
+# Create a script to convert the markdown files to HTML
 cat << EOF > ./doc/build.js
 import { readFileSync, writeFileSync, readdirSync, statSync } from 'fs';
 import { join, extname } from 'path';
@@ -16,7 +37,6 @@ const md = new MarkdownIt({
         return hljs.highlight(str, { language: lang }).value;
       } catch (__) {}
     }
-
     return ''; 
   }
 });
@@ -39,16 +59,12 @@ const convertDirectory = (dir) => {
 convertDirectory('./doc');
 EOF
 
-# Change the permission of the script to make it executable
-chmod +x ./doc/build.js
-
 # Add the doc build script to package.json scripts
 jq '.scripts += {"build:docs": "node ./doc/build.js"}' package.json > package.json.temp
 mv package.json.temp package.json
 
-#!/bin/sh
+# Step 4: Add markdown examples
 
-# Add markdown examples
 cat << EOF > ./doc/introduction.md
 # Introduction
 This is the introduction to our documentation. Check out our [example](example.html) for more details.
@@ -58,3 +74,30 @@ cat << EOF > ./doc/example.md
 # Example
 This is an example of our documentation.
 EOF
+
+# Step 5: Configure GitHub Pages
+# GitHub Pages will serve files from the doc directory on the gh-pages branch
+# We can configure this in the repository settings on GitHub
+
+echo "Please configure GitHub Pages in your repository settings to serve files from the 'doc' directory on the 'gh-pages' branch."
+
+# Create an empty .nojekyll file to tell GitHub Pages not to use Jekyll
+touch ./doc/.nojekyll
+
+# Step 6: Add index.html
+cat << EOF > ./doc/index.html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Documentation</title>
+  </head>
+  <body>
+    <h1>Welcome to our documentation!</h1>
+    <p>Start with the <a href="introduction.html">introduction</a>.</p>
+  </body>
+</html>
+EOF
+
+# Run build process to generate HTML from markdown
+npm run build:docs
