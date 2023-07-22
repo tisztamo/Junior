@@ -11,7 +11,8 @@
   "scripts": {
     "cli": "node src/main.js",
     "start": "node src/web.js",
-    "build:css": "postcss ./src/frontend/styles.css -o ./dist/styles.css"
+    "build:css": "postcss ./src/frontend/styles.css -o ./dist/styles.css",
+    "build:docs": "node ./doc/build.js"
   },
   "keywords": [
     "cli",
@@ -49,6 +50,8 @@
     "@types/js-yaml": "^4.0.5",
     "autoprefixer": "^10.4.14",
     "babel-preset-solid": "^1.7.7",
+    "highlight.js": "^11.8.0",
+    "markdown-it": "^13.0.1",
     "postcss": "^8.4.26",
     "tailwindcss": "^3.3.3"
   }

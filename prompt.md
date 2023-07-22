@@ -1,137 +1,119 @@
 # Working set
 
-src/index.html:
 ```
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>Junior</title>
-</head>
-<body>
-  <div id="app"></div>
-  <script type="module" src="/frontend/index.jsx"></script>
-</body>
-</html>
-
-```
-
-src/frontend/App.jsx:
-```
-import NotesInput from './components/NotesInput';
-import StartButton from './components/StartButton';
-import ExecuteButton from './components/ExecuteButton';
-import ResetButton from './components/ResetButton';
-import PromptDisplay from './components/PromptDisplay';
-import TasksList from './components/TasksList';
-import PromptDescriptor from './components/PromptDescriptor';
-import NavBar from './components/NavBar';
-import { notes, setNotes } from './stores/notes';
-import { setPrompt } from './stores/prompt';
-
-const App = () => {
-  return (
-    <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
-      <NavBar />
-      <TasksList />
-      <PromptDescriptor />
-      <NotesInput notes={notes} setNotes={setNotes} />
-      <StartButton notes={notes} setPrompt={setPrompt} />
-      <ExecuteButton />
-      <ResetButton />
-      <PromptDisplay />
-    </div>
-  );
-};
-
-export default App;
+./
+├── .DS_Store
+├── .git/...
+├── .gitignore
+├── README.md
+├── babel.config.js
+├── change.sh
+├── doc/...
+├── integrations/...
+├── node_modules/...
+├── package-lock.json
+├── package.json
+├── postcss.config.js
+├── prompt/...
+├── prompt.md
+├── prompt.yaml
+├── secret.sh
+├── src/...
+├── tailwind.config.js
 
 ```
-
-src/frontend/components/ResetButton.jsx:
+./package.json:
 ```
-import { resetGit } from '../service/resetGit';
-
-const ResetButton = () => {
-  const handleReset = async () => {
-    const response = await resetGit();
-
-    console.log(response.message);
-  };
-
-  return (
-    <button class="w-full px-8 py-4 bg-red-600 text-white rounded" onClick={handleReset}>Reset Git</button>
-  );
-};
-
-export default ResetButton;
-
-```
-
-src/frontend/components/ExecuteButton.jsx:
-```
-import { executeChange } from '../service/executeChange';
-
-const ExecuteButton = () => {
-  const handleExecuteChange = async () => {
-    const change = await navigator.clipboard.readText();
-    const response = await executeChange(change);
-
-    console.log(response.message);
-  };
-
-  return (
-    // Updated button color to a less flashy orange
-    <button class="px-8 py-4 bg-orange-300 text-white rounded" onClick={handleExecuteChange}>Paste & Execute Change</button>
-  );
-};
-
-export default ExecuteButton;
+{
+  "name": "@aijunior/dev",
+  "version": "0.0.1",
+  "description": "Your AI Contributor",
+  "type": "module",
+  "main": "src/main.js",
+  "bin": {
+    "junior": "src/main.js",
+    "junior-web": "src/web.js"
+  },
+  "scripts": {
+    "cli": "node src/main.js",
+    "start": "node src/web.js",
+    "build:css": "postcss ./src/frontend/styles.css -o ./dist/styles.css"
+  },
+  "keywords": [
+    "cli",
+    "uppercase"
+  ],
+  "author": "",
+  "license": "GPL",
+  "dependencies": {
+    "chatgpt": "^5.2.4",
+    "clipboard-copy": "^4.0.1",
+    "cors": "^2.8.5",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "js-yaml": "^4.1.0",
+    "marked": "^5.1.0",
+    "postcss-nested": "^6.0.1",
+    "simple-git": "^3.19.1",
+    "solid-js": "^1.7.7",
+    "vite": "^4.3.9",
+    "vite-plugin-solid": "^2.7.0",
+    "ws": "^8.13.0"
+  },
+  "directories": {
+    "doc": "doc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tisztamo/Junior.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tisztamo/Junior/issues"
+  },
+  "homepage": "https://github.com/tisztamo/Junior#readme",
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.5",
+    "autoprefixer": "^10.4.14",
+    "babel-preset-solid": "^1.7.7",
+    "postcss": "^8.4.26",
+    "tailwindcss": "^3.3.3"
+  }
+}
 
 ```
 
-src/frontend/components/StartButton.jsx:
 ```
-import { generatePrompt } from '../generatePrompt';
-import { marked } from 'marked';
-import copy from 'clipboard-copy';
-
-const StartButton = ({notes, setPrompt}) => {
-  const handleGeneratePrompt = async () => {
-    const response = await generatePrompt(notes());
-
-    copy(response.prompt)
-      .then(() => {
-        console.log('Prompt copied to clipboard!');
-      })
-      .catch(err => {
-        console.error('Failed to copy prompt: ', err);
-      });
-
-    const htmlPrompt = marked(response.prompt);
-
-    setPrompt(htmlPrompt);
-  };
-
-  return (
-    // Updated button label and added tailwind classes for larger button size
-    <button class="px-8 py-4 bg-blue-500 text-white rounded" onClick={handleGeneratePrompt}>Generate & Copy Prompt</button>
-  );
-};
-
-export default StartButton;
+./src/
+├── .DS_Store
+├── attention/...
+├── backend/...
+├── config.js
+├── execute/...
+├── frontend/...
+├── git/...
+├── index.html
+├── interactiveSession/...
+├── main.js
+├── prompt/...
+├── startVite.js
+├── vite.config.js
+├── web.js
 
 ```
-
 
 # Task
 
 Fix the following issue!
 
-I accidentally added xxx to index.html, remove it.
-All button width should be the same. Select a width the longest label of the three.
-The reset button&#39;s color should be more vivid.
+Remove everything from the doc directory, we restart our documentation
+This is a monorepo, everything we ever write as documentation of this project, will go here
+So we need a hierarchy of directories. Create it!
+
+We want to write the docs in markdown, and generate html now and later other formats.
+
+We will use some documentation tools, so we need to select and install them.
+
+It would be great to host it on github pages, so we need to configure it.
 
 
 # Output Format
