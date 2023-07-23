@@ -1,34 +1,64 @@
 # Working set
 
-src/doc/buildDoc.js:
+./package.json:
 ```
-import convertDirectory from './convertDirectory';
-import createMarkdownRenderer from './createMarkdownRenderer';
-
-const md = createMarkdownRenderer();
-convertDirectory('./doc', md);
-
-```
-
-src/doc/convertDirectory.js:
-```
-import { readFileSync, writeFileSync, readdirSync, statSync } from 'fs';
-import { join, extname } from 'path';
-import createMarkdownRenderer from './createMarkdownRenderer';
-
-export default function convertDirectory(dir, md = createMarkdownRenderer()) {
-    const files = readdirSync(dir);
-    files.forEach(file => {
-        const filePath = join(dir, file);
-        const stats = statSync(filePath);
-        if (stats.isDirectory()) {
-            convertDirectory(filePath, md);
-        } else if (extname(file) === '.md') {
-            const markdown = readFileSync(filePath, 'utf8');
-            const html = md.render(markdown);
-            writeFileSync(filePath.replace('.md', '.html'), html);
-        }
-    });
+{
+  "name": "@aijunior/dev",
+  "version": "0.0.1",
+  "description": "Your AI Contributor",
+  "type": "module",
+  "main": "src/main.js",
+  "bin": {
+    "junior": "src/main.js",
+    "junior-web": "src/web.js"
+  },
+  "scripts": {
+    "cli": "node src/main.js",
+    "start": "node src/web.js",
+    "build:css": "postcss ./src/frontend/styles.css -o ./dist/styles.css",
+    "build:docs": "node ./src/doc/buildDoc.js"
+  },
+  "keywords": [
+    "cli",
+    "uppercase"
+  ],
+  "author": "",
+  "license": "GPL",
+  "dependencies": {
+    "chatgpt": "^5.2.4",
+    "clipboard-copy": "^4.0.1",
+    "cors": "^2.8.5",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "js-yaml": "^4.1.0",
+    "marked": "^5.1.0",
+    "postcss-nested": "^6.0.1",
+    "simple-git": "^3.19.1",
+    "solid-js": "^1.7.7",
+    "vite": "^4.3.9",
+    "vite-plugin-solid": "^2.7.0",
+    "ws": "^8.13.0"
+  },
+  "directories": {
+    "doc": "doc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tisztamo/Junior.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tisztamo/Junior/issues"
+  },
+  "homepage": "https://github.com/tisztamo/Junior#readme",
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.5",
+    "autoprefixer": "^10.4.14",
+    "babel-preset-solid": "^1.7.7",
+    "highlight.js": "^11.8.0",
+    "markdown-it": "^13.0.1",
+    "postcss": "^8.4.26",
+    "tailwindcss": "^3.3.3"
+  }
 }
 
 ```
@@ -38,7 +68,7 @@ export default function convertDirectory(dir, md = createMarkdownRenderer()) {
 
 Fix the following issue!
 
-Fix relative imports by adding .js to the end of the path.
+Rename build:docs to build:doc
 
 
 # Output Format

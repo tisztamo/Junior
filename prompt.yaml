@@ -1,6 +1,5 @@
 task: prompt/task/bug/fix.md
 attention:
-  - src/doc/buildDoc.js
-  - src/doc/convertDirectory.js
+  - ./package.json
 requirements: |
-  Fix relative imports by adding .js to the end of the path.
+  Rename build:docs to build:doc
