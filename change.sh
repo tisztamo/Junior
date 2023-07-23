@@ -1,7 +1,7 @@
 #!/bin/sh
-# Goal: Rename build:docs to build:doc in package.json
+# Goal: Remove all .nojekyll files
 # Plan:
-# 1. Use jq to rename the "build:docs" property to "build:doc" in the "scripts" object of the package.json file.
-# 2. Save the modified JSON back to package.json.
+# 1. Use the find command to search for files named .nojekyll in the current directory and all subdirectories.
+# 2. Use the -delete option of find command to remove these files.
 
-jq '.scripts |= with_entries(if .key == "build:docs" then .key = "build:doc" else . end)' ./package.json > temp.json && mv temp.json package.json
+find . -name ".nojekyll" -type f -delete

@@ -1,74 +1,47 @@
 # Working set
 
-./package.json:
 ```
-{
-  "name": "@aijunior/dev",
-  "version": "0.0.1",
-  "description": "Your AI Contributor",
-  "type": "module",
-  "main": "src/main.js",
-  "bin": {
-    "junior": "src/main.js",
-    "junior-web": "src/web.js"
-  },
-  "scripts": {
-    "cli": "node src/main.js",
-    "start": "node src/web.js",
-    "build:css": "postcss ./src/frontend/styles.css -o ./dist/styles.css",
-    "build:docs": "node ./src/doc/buildDoc.js"
-  },
-  "keywords": [
-    "cli",
-    "uppercase"
-  ],
-  "author": "",
-  "license": "GPL",
-  "dependencies": {
-    "chatgpt": "^5.2.4",
-    "clipboard-copy": "^4.0.1",
-    "cors": "^2.8.5",
-    "ejs": "^3.1.9",
-    "express": "^4.18.2",
-    "js-yaml": "^4.1.0",
-    "marked": "^5.1.0",
-    "postcss-nested": "^6.0.1",
-    "simple-git": "^3.19.1",
-    "solid-js": "^1.7.7",
-    "vite": "^4.3.9",
-    "vite-plugin-solid": "^2.7.0",
-    "ws": "^8.13.0"
-  },
-  "directories": {
-    "doc": "doc"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/tisztamo/Junior.git"
-  },
-  "bugs": {
-    "url": "https://github.com/tisztamo/Junior/issues"
-  },
-  "homepage": "https://github.com/tisztamo/Junior#readme",
-  "devDependencies": {
-    "@types/js-yaml": "^4.0.5",
-    "autoprefixer": "^10.4.14",
-    "babel-preset-solid": "^1.7.7",
-    "highlight.js": "^11.8.0",
-    "markdown-it": "^13.0.1",
-    "postcss": "^8.4.26",
-    "tailwindcss": "^3.3.3"
-  }
-}
+./
+├── .DS_Store
+├── .git/...
+├── .github/...
+├── .gitignore
+├── README.md
+├── babel.config.js
+├── change.sh
+├── doc/...
+├── integrations/...
+├── node_modules/...
+├── package-lock.json
+├── package.json
+├── postcss.config.js
+├── prompt/...
+├── prompt.md
+├── prompt.yaml
+├── secret.sh
+├── src/...
+├── tailwind.config.js
 
 ```
+```
+doc/
+├── .nojekyll
+├── api/...
+├── example.html
+├── example.md
+├── examples/...
+├── getting-started/...
+├── index.html
+├── introduction.html
+├── introduction.md
 
+```
 
 # Task
 
 Fix the following issue!
 
-Rename build:docs to build:doc
+Remove .nojekyll files
 
 
 # Output Format

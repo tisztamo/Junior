@@ -1,5 +1,6 @@
 task: prompt/task/bug/fix.md
 attention:
-  - ./package.json
+  - ./
+  - doc/
 requirements: |
-  Rename build:docs to build:doc
+  Remove .nojekyll files
