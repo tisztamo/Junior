@@ -12,7 +12,7 @@
     "cli": "node src/main.js",
     "start": "node src/web.js",
     "build:css": "postcss ./src/frontend/styles.css -o ./dist/styles.css",
-    "build:docs": "node ./doc/build.js"
+    "build:docs": "node ./src/doc/buildDoc.js"
   },
   "keywords": [
     "cli",

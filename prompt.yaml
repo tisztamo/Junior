@@ -1,16 +1,13 @@
-task: prompt/task/bug/fix.md
+task: prompt/task/refactor/move_files.md
 attention:
   - ./
-  - ./doc
-  - ./doc/build.js
+  - ./doc/
+  - ./src/
+  - doc/buildDoc.js
+  - doc/convertDirectory.js
+  - doc/createMarkdownRenderer.js
 requirements: |
-  Rename build.js dor buildDoc.js
-  Factor the md = new MarkdownIt creation to createMarkdownRenderer.js
-  Similarly create convertDirectory.js
-
-
-
-
-
-
-
+  Move every .js file from doc to src/doc
+  update the line
+  "build:docs": "node ./doc/build.js" 
+  in package.json accordingly
