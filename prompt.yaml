@@ -1,22 +1,5 @@
 task: prompt/task/bug/fix.md
 attention:
-  - ./
   - ./package.json
-  - ./src/
 requirements: |
-  Remove everything from the doc directory, we restart our documentation
-  This is a monorepo, everything we ever write as documentation of this project, will go here
-  So we need a hierarchy of directories. Create it!
-
-  We want to write the docs in markdown, and generate html now and later other formats.
-
-  We will use some documentation tools, so we need to select and install them.
-
-  It would be great to host it on github pages, so we need to configure it.
-
-
-
-
-
-
-
+  Rename build:docs to build:doc

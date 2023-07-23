@@ -1,27 +1,5 @@
 # Working set
 
-```
-./
-├── .DS_Store
-├── .git/...
-├── .gitignore
-├── README.md
-├── babel.config.js
-├── change.sh
-├── doc/...
-├── integrations/...
-├── node_modules/...
-├── package-lock.json
-├── package.json
-├── postcss.config.js
-├── prompt/...
-├── prompt.md
-├── prompt.yaml
-├── secret.sh
-├── src/...
-├── tailwind.config.js
-
-```
 ./package.json:
 ```
 {
@@ -37,7 +15,8 @@
   "scripts": {
     "cli": "node src/main.js",
     "start": "node src/web.js",
-    "build:css": "postcss ./src/frontend/styles.css -o ./dist/styles.css"
+    "build:css": "postcss ./src/frontend/styles.css -o ./dist/styles.css",
+    "build:docs": "node ./src/doc/buildDoc.js"
   },
   "keywords": [
     "cli",
@@ -75,6 +54,8 @@
     "@types/js-yaml": "^4.0.5",
     "autoprefixer": "^10.4.14",
     "babel-preset-solid": "^1.7.7",
+    "highlight.js": "^11.8.0",
+    "markdown-it": "^13.0.1",
     "postcss": "^8.4.26",
     "tailwindcss": "^3.3.3"
   }
@@ -82,38 +63,12 @@
 
 ```
 
-```
-./src/
-├── .DS_Store
-├── attention/...
-├── backend/...
-├── config.js
-├── execute/...
-├── frontend/...
-├── git/...
-├── index.html
-├── interactiveSession/...
-├── main.js
-├── prompt/...
-├── startVite.js
-├── vite.config.js
-├── web.js
-
-```
 
 # Task
 
 Fix the following issue!
 
-Remove everything from the doc directory, we restart our documentation
-This is a monorepo, everything we ever write as documentation of this project, will go here
-So we need a hierarchy of directories. Create it!
-
-We want to write the docs in markdown, and generate html now and later other formats.
-
-We will use some documentation tools, so we need to select and install them.
-
-It would be great to host it on github pages, so we need to configure it.
+Rename build:docs to build:doc
 
 
 # Output Format
