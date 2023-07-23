@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync, readdirSync, statSync } from 'fs';
 import { join, extname } from 'path';
-import createMarkdownRenderer from './createMarkdownRenderer';
+import createMarkdownRenderer from './createMarkdownRenderer.js';
 
 export default function convertDirectory(dir, md = createMarkdownRenderer()) {
     const files = readdirSync(dir);

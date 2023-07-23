@@ -1,73 +1,16 @@
 # Working set
 
+src/doc/buildDoc.js:
 ```
-./
-├── .DS_Store
-├── .git/...
-├── .github/...
-├── .gitignore
-├── README.md
-├── babel.config.js
-├── change.sh
-├── doc/...
-├── integrations/...
-├── node_modules/...
-├── package-lock.json
-├── package.json
-├── postcss.config.js
-├── prompt/...
-├── prompt.md
-├── prompt.yaml
-├── secret.sh
-├── src/...
-├── tailwind.config.js
-
-```
-```
-./doc/
-├── .nojekyll
-├── api/...
-├── buildDoc.js
-├── convertDirectory.js
-├── createMarkdownRenderer.js
-├── example.html
-├── example.md
-├── examples/...
-├── getting-started/...
-├── index.html
-├── introduction.html
-├── introduction.md
-
-```
-```
-./src/
-├── .DS_Store
-├── attention/...
-├── backend/...
-├── config.js
-├── execute/...
-├── frontend/...
-├── git/...
-├── index.html
-├── interactiveSession/...
-├── main.js
-├── prompt/...
-├── startVite.js
-├── vite.config.js
-├── web.js
-
-```
-doc/buildDoc.js:
-```
-import createMarkdownRenderer from './createMarkdownRenderer';
 import convertDirectory from './convertDirectory';
+import createMarkdownRenderer from './createMarkdownRenderer';
 
 const md = createMarkdownRenderer();
 convertDirectory('./doc', md);
 
 ```
 
-doc/convertDirectory.js:
+src/doc/convertDirectory.js:
 ```
 import { readFileSync, writeFileSync, readdirSync, statSync } from 'fs';
 import { join, extname } from 'path';
@@ -90,46 +33,12 @@ export default function convertDirectory(dir, md = createMarkdownRenderer()) {
 
 ```
 
-doc/createMarkdownRenderer.js:
-```
-import MarkdownIt from 'markdown-it';
-import hljs from 'highlight.js';
-
-export default function createMarkdownRenderer() {
-    return new MarkdownIt({
-        html: true,
-        linkify: true,
-        typographer: true,
-        highlight: function (str, lang) {
-            if (lang && hljs.getLanguage(lang)) {
-                try {
-                    return hljs.highlight(str, { language: lang }).value;
-                } catch (__) {}
-            }
-            return ''; 
-        }
-    });
-}
-
-```
-
 
 # Task
 
-Move the following files to the specified target dirs!
+Fix the following issue!
 
-Find out the best target dir if it is not specified!
-
-You need to follow dependencies to maintain coherence.
-
-Before executing, write a concise plan! The plan should show:
- - How do you avoid breaking other parts of the code.
- - If you had to choose, your way of thinking.
-
-Move every .js file from doc to src/doc
-update the line
-&#34;build:docs&#34;: &#34;node ./doc/build.js&#34; 
-in package.json accordingly
+Fix relative imports by adding .js to the end of the path.
 
 
 # Output Format

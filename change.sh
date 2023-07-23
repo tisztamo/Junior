@@ -1,18 +1,35 @@
 #!/bin/sh
-# Goal: Move .js files from doc to src/doc and update package.json accordingly
+# Goal: Fix relative imports by adding .js
 # Plan:
-# 1. Create the src/doc directory if it doesn't exist.
-# 2. Move all .js files from doc to src/doc using the mv command. 
-# 3. Update the script command in package.json to refer to the new location.
-#    a. Use jq to perform the package.json update. 
-# 4. Assumption: there are no name conflicts in src/doc and we do not overwrite existing files.
+# 1. Modify the src/doc/buildDoc.js file to correct the relative imports by adding '.js'
+# 2. Modify the src/doc/convertDirectory.js file to correct the relative imports by adding '.js'
 
+cat > src/doc/buildDoc.js << 'EOF'
+import convertDirectory from './convertDirectory.js';
+import createMarkdownRenderer from './createMarkdownRenderer.js';
 
-# Create the target directory if it does not exist
-mkdir -p ./src/doc
+const md = createMarkdownRenderer();
+convertDirectory('./doc', md);
+EOF
 
-# Move all JavaScript files
-mv ./doc/*.js ./src/doc/
+cat > src/doc/convertDirectory.js << 'EOF'
+import { readFileSync, writeFileSync, readdirSync, statSync } from 'fs';
+import { join, extname } from 'path';
+import createMarkdownRenderer from './createMarkdownRenderer.js';
 
-# Update the "build:docs" line in package.json
-jq '.scripts["build:docs"] = "node ./src/doc/buildDoc.js"' package.json > package.temp.json && mv package.temp.json package.json
+export default function convertDirectory(dir, md = createMarkdownRenderer()) {
+    const files = readdirSync(dir);
+    files.forEach(file => {
+        const filePath = join(dir, file);
+        const stats = statSync(filePath);
+        if (stats.isDirectory()) {
+            convertDirectory(filePath, md);
+        } else if (extname(file) === '.md') {
+            const markdown = readFileSync(filePath, 'utf8');
+            const html = md.render(markdown);
+            writeFileSync(filePath.replace('.md', '.html'), html);
+        }
+    });
+}
+EOF
+

@@ -1,13 +1,6 @@
-task: prompt/task/refactor/move_files.md
+task: prompt/task/bug/fix.md
 attention:
-  - ./
-  - ./doc/
-  - ./src/
-  - doc/buildDoc.js
-  - doc/convertDirectory.js
-  - doc/createMarkdownRenderer.js
+  - src/doc/buildDoc.js
+  - src/doc/convertDirectory.js
 requirements: |
-  Move every .js file from doc to src/doc
-  update the line
-  "build:docs": "node ./doc/build.js" 
-  in package.json accordingly
+  Fix relative imports by adding .js to the end of the path.
