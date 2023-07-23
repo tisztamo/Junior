@@ -4,6 +4,7 @@
 ./
 ├── .DS_Store
 ├── .git/...
+├── .github/...
 ├── .gitignore
 ├── README.md
 ├── babel.config.js
@@ -22,98 +23,56 @@
 ├── tailwind.config.js
 
 ```
-./package.json:
+./doc: err!
+
+./doc/build.js:
 ```
-{
-  "name": "@aijunior/dev",
-  "version": "0.0.1",
-  "description": "Your AI Contributor",
-  "type": "module",
-  "main": "src/main.js",
-  "bin": {
-    "junior": "src/main.js",
-    "junior-web": "src/web.js"
-  },
-  "scripts": {
-    "cli": "node src/main.js",
-    "start": "node src/web.js",
-    "build:css": "postcss ./src/frontend/styles.css -o ./dist/styles.css"
-  },
-  "keywords": [
-    "cli",
-    "uppercase"
-  ],
-  "author": "",
-  "license": "GPL",
-  "dependencies": {
-    "chatgpt": "^5.2.4",
-    "clipboard-copy": "^4.0.1",
-    "cors": "^2.8.5",
-    "ejs": "^3.1.9",
-    "express": "^4.18.2",
-    "js-yaml": "^4.1.0",
-    "marked": "^5.1.0",
-    "postcss-nested": "^6.0.1",
-    "simple-git": "^3.19.1",
-    "solid-js": "^1.7.7",
-    "vite": "^4.3.9",
-    "vite-plugin-solid": "^2.7.0",
-    "ws": "^8.13.0"
-  },
-  "directories": {
-    "doc": "doc"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/tisztamo/Junior.git"
-  },
-  "bugs": {
-    "url": "https://github.com/tisztamo/Junior/issues"
-  },
-  "homepage": "https://github.com/tisztamo/Junior#readme",
-  "devDependencies": {
-    "@types/js-yaml": "^4.0.5",
-    "autoprefixer": "^10.4.14",
-    "babel-preset-solid": "^1.7.7",
-    "postcss": "^8.4.26",
-    "tailwindcss": "^3.3.3"
+import { readFileSync, writeFileSync, readdirSync, statSync } from 'fs';
+import { join, extname } from 'path';
+import MarkdownIt from 'markdown-it';
+import hljs from 'highlight.js';
+
+const md = new MarkdownIt({
+  html: true,
+  linkify: true,
+  typographer: true,
+  highlight: function (str, lang) {
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return hljs.highlight(str, { language: lang }).value;
+      } catch (__) {}
+    }
+    return ''; 
   }
+});
+
+const convertDirectory = (dir) => {
+  const files = readdirSync(dir);
+  files.forEach(file => {
+    const filePath = join(dir, file);
+    const stats = statSync(filePath);
+    if (stats.isDirectory()) {
+      convertDirectory(filePath);
+    } else if (extname(file) === '.md') {
+      const markdown = readFileSync(filePath, 'utf8');
+      const html = md.render(markdown);
+      writeFileSync(filePath.replace('.md', '.html'), html);
+    }
+  });
 }
 
-```
+convertDirectory('./doc');
 
 ```
-./src/
-├── .DS_Store
-├── attention/...
-├── backend/...
-├── config.js
-├── execute/...
-├── frontend/...
-├── git/...
-├── index.html
-├── interactiveSession/...
-├── main.js
-├── prompt/...
-├── startVite.js
-├── vite.config.js
-├── web.js
 
-```
 
 # Task
 
 Fix the following issue!
 
-Remove everything from the doc directory, we restart our documentation
-This is a monorepo, everything we ever write as documentation of this project, will go here
-So we need a hierarchy of directories. Create it!
-
-We want to write the docs in markdown, and generate html now and later other formats.
-
-We will use some documentation tools, so we need to select and install them.
-
-It would be great to host it on github pages, so we need to configure it.
+Rename build.js dor buildDoc.js
+Factor the md = new MarkdownIt creation to createMarkdownRenderer.js
+Similarly create convertDirectory.js
 
 
 # Output Format
