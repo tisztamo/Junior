@@ -8,7 +8,7 @@ const ExecutionResultDisplay = () => {
   let term;
 
   onMount(() => {
-    term = new Terminal();
+    term = new Terminal({ convertEol: true });
     term.open(container);
   });
 

@@ -1,8 +1,5 @@
-task: prompt/task/feature/implement.md
+task: prompt/task/bug/fix.md
 attention:
   - src/frontend/components/ExecutionResultDisplay.jsx
-  - src/frontend/components/PromptDescriptor.jsx
-requirements: >
-  Style the terminal using tailwind to have the same width as the prompt descriptor
-  Remove its fixed width setting
-os: OSX
+requirements: |
+  Fix newline handling with new Terminal({convertEol: true});
