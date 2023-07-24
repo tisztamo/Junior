@@ -1,8 +1,9 @@
 #!/bin/sh
 set -e
-goal="Fix newline handling in Terminal"
+goal="Modify ExecutionResultDisplay component"
 echo "Plan:"
-echo "1. Update Terminal initialization with convertEol option"
+echo "1. Remove padding and color setup from the ExecutionResultDisplay component."
+echo "2. Set its height to 7 lines using the xterm.js api."
 
 cat > src/frontend/components/ExecutionResultDisplay.jsx << 'EOF'
 import { onMount, createEffect } from 'solid-js';
@@ -15,7 +16,7 @@ const ExecutionResultDisplay = () => {
   let term;
 
   onMount(() => {
-    term = new Terminal({ convertEol: true });
+    term = new Terminal({ convertEol: true, rows: 7 });
     term.open(container);
   });
 
@@ -26,7 +27,7 @@ const ExecutionResultDisplay = () => {
   });
 
   return (
-    <div ref={container} class="px-4 py-4 bg-gray-300 text-black rounded overflow-auto max-w-full"></div>
+    <div ref={container} class="rounded overflow-auto max-w-full"></div>
   );
 };
 

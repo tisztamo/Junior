@@ -8,7 +8,7 @@ const ExecutionResultDisplay = () => {
   let term;
 
   onMount(() => {
-    term = new Terminal({ convertEol: true });
+    term = new Terminal({ convertEol: true, rows: 7 });
     term.open(container);
   });
 
@@ -19,7 +19,7 @@ const ExecutionResultDisplay = () => {
   });
 
   return (
-    <div ref={container} class="px-4 py-4 bg-gray-300 text-black rounded overflow-auto max-w-full"></div>
+    <div ref={container} class="rounded overflow-auto max-w-full"></div>
   );
 };
 

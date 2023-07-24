@@ -2,4 +2,6 @@ task: prompt/task/bug/fix.md
 attention:
   - src/frontend/components/ExecutionResultDisplay.jsx
 requirements: |
-  Fix newline handling with new Terminal({convertEol: true});
+  Remove padding and color setup from the ExecutionResultDisplay component.
+  Set its height to 7 lines (using the xterm.js api if possible)
+

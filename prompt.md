@@ -12,7 +12,7 @@ const ExecutionResultDisplay = () => {
   let term;
 
   onMount(() => {
-    term = new Terminal();
+    term = new Terminal({ convertEol: true });
     term.open(container);
   });
 
@@ -36,7 +36,8 @@ export default ExecutionResultDisplay;
 
 Fix the following issue!
 
-Fix newline handling with new Terminal({convertEol: true});
+Remove padding and color setup from the ExecutionResultDisplay component.
+Set its height to 7 lines (using the xterm.js api if possible)
 
 
 # Output Format
