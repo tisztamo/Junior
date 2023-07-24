@@ -14,12 +14,12 @@ const ExecutionResultDisplay = () => {
 
   createEffect(() => {
     if (term) {
-      term.write(executionResult());
+ term.write(executionResult());
     }
   });
 
   return (
-    <div ref={container} class="w-64 px-4 py-4 bg-gray-300 text-black rounded"></div>
+    <div ref={container} class="px-4 py-4 bg-gray-300 text-black rounded overflow-auto max-w-full"></div>
   );
 };
 

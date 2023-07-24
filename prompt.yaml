@@ -1,12 +1,8 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/
-  - src/frontend/components/ExecuteButton.jsx
   - src/frontend/components/ExecutionResultDisplay.jsx
-  - src/frontend/stores/executionResult.js
+  - src/frontend/components/PromptDescriptor.jsx
 requirements: >
-  Install and use xterm.js in ExecutionResultDisplay to display the execution
-  result.
-
-  This is a Solidjs project.
+  Style the terminal using tailwind to have the same width as the prompt descriptor
+  Remove its fixed width setting
 os: OSX

@@ -1,24 +1,71 @@
 # Working set
 
-src/frontend/components/ExecuteButton.jsx:
+src/frontend/components/ExecutionResultDisplay.jsx:
 ```
-import { executeChange } from '../service/executeChange';
-import { setExecutionResult } from '../stores/executionResult';
+import { onMount, createEffect } from 'solid-js';
+import { Terminal } from 'xterm';
+import 'xterm/css/xterm.css';
+import { executionResult } from '../stores/executionResult';
 
-const ExecuteButton = () => {
-  const handleExecuteChange = async () => {
-    const change = await navigator.clipboard.readText();
-    const response = await executeChange(change);
-    setExecutionResult(response.message);
-    console.log(response.message);
-  };
+const ExecutionResultDisplay = () => {
+  let container;
+  let term;
+
+  onMount(() => {
+    term = new Terminal();
+    term.open(container);
+  });
+
+  createEffect(() => {
+    if (term) {
+      term.write(executionResult());
+    }
+  });
 
   return (
-    <button class="w-64 px-4 py-4 bg-orange-300 text-white rounded" onClick={handleExecuteChange}>Paste & Execute Change</button>
+    <div ref={container} class="w-64 px-4 py-4 bg-gray-300 text-black rounded"></div>
   );
 };
 
-export default ExecuteButton;
+export default ExecutionResultDisplay;
+
+```
+
+src/frontend/components/PromptDescriptor.jsx:
+```
+import { onMount, onCleanup } from 'solid-js';
+import { fetchDescriptor } from '../service/fetchDescriptor';
+import { useWebsocket } from '../service/useWebsocket';
+import { promptDescriptor, setPromptDescriptor } from '../stores/promptDescriptor';
+
+const PromptDescriptor = () => {
+
+  onMount(async () => {
+    const text = await fetchDescriptor();
+    setPromptDescriptor(text);
+  });
+
+  useWebsocket(async (e) => {
+    if (e.data === 'update') {
+      const text = await fetchDescriptor();
+      setPromptDescriptor(text);
+    }
+  });
+
+  onCleanup(() => {
+    setPromptDescriptor('');
+  });
+
+  return (
+    <div class="overflow-auto max-w-full">
+      <div class="whitespace-pre-wrap overflow-x-scroll overflow-y-auto font-mono">
+        {promptDescriptor()}
+      </div>
+    </div>
+  );
+};
+
+export default PromptDescriptor;
 
 ```
 
@@ -34,7 +81,7 @@ Implement the following feature!
 
 Requirements:
 
-The field to use is called output, not message
+Style the terminal using tailwind to have the same width as the prompt descriptor Remove its fixed width setting
 
 
 
