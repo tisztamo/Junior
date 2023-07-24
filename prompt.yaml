@@ -1,5 +1,7 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/components/PromptDisplay.jsx
+  - src/config.js
 requirements: |
-  When the prompt is empty, do not show the details tag
+  When no OPENAI_API_KEY env var presents, try to open ./secret.sh
+  and parse it to get the key.
+  Move this logic and the "new ChatGPTAPI" call to a function in src/llm/openai/createApi.js (create the dir).

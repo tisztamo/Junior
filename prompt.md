@@ -1,30 +1,43 @@
 # Working set
 
-src/frontend/components/PromptDisplay.jsx:
+src/config.js:
 ```
-import { createSignal, onMount, createEffect } from "solid-js";
-import { prompt } from '../stores/prompt';
+import readline from 'readline';
+import { ChatGPTAPI } from 'chatgpt';
+import { getSystemPrompt } from "./prompt/getSystemPrompt.js";
 
-const PromptDisplay = () => {
-  let div;
-  let summary;
+function isDryRun() {
+  return process.argv.includes("-d") || process.argv.includes("--dry-run");
+}
 
-  createEffect(() => {
-    if (div) {
-      div.innerHTML = prompt();
-      summary.innerHTML = `prompt length: ${prompt().length} chars`;
-    }
-  });
+const api = isDryRun() ? {
+    sendMessage: () => { return {id: 42, text: "DRY RUN, NOT SENT"}}
+  } : new ChatGPTAPI({
+  debug: true,
+  apiKey: process.env.OPENAI_API_KEY,
+  systemMessage: await getSystemPrompt(),
+  completionParams: {
+    model: get_model(),
+    stream: true,
+    temperature: 0.5,
+    max_tokens: 2048,
+  }
+});
 
-  return (
-    <details class="w-full max-w-screen overflow-x-auto whitespace-normal markdown">
-      <summary ref={summary}></summary>
-      <div ref={div}></div>
-    </details>
-  );
-};
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
 
-export default PromptDisplay;
+function get_model() {
+  const modelArg = process.argv.find(arg => arg.startsWith('--model='));
+  if (modelArg) {
+    return modelArg.split('=')[1];
+  }
+  return "gpt-4";
+}
+
+export { api, rl, get_model };
 
 ```
 
@@ -40,7 +53,9 @@ Implement the following feature!
 
 Requirements:
 
-When the prompt is empty, do not show the details tag
+When no OPENAI_API_KEY env var presents, try to open ./secret.sh
+and parse it to get the key.
+Move this logic and the &#34;new ChatGPTAPI&#34; call to a function in src/llm/openai/createApi.js (create the dir).
 
 
 
