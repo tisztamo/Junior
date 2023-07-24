@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 
 import { startInteractiveSession } from './interactiveSession/startInteractiveSession.js';
-import { api, get_model, rl } from './config.js';
+import { getApi, get_model, rl } from './config.js';
 
-console.log("Welcome to Junior. Model: " + get_model() + "\n");
-
-startInteractiveSession(rl, api);
+(async () => {
+  console.log("Welcome to Junior. Model: " + get_model() + "\n");
+  const api = await getApi();
+  startInteractiveSession(rl, api);
+})();
 
 export { startInteractiveSession };

@@ -1,11 +1,16 @@
-task: prompt/task/feature/implement.md
+task: prompt/task/bug/fix.md
 attention:
-  - ./src/
-  - ./src/llm/
-  - ./src/llm/openai/
   - src/config.js
-  - src/llm/openai/createApi.js
+  - src/interactiveSession/saveAndSendPrompt.js
+  - src/main.js
 requirements: >
-  Factor out the dry-run fake api creation from config.js to llm/fake/createFakeApi.js (create dir)
-  In openai/createApi.js, when the api key not found for openai, console.warn and return a fake api instance.
+  file:///Users/ko/projects-new/Junior/src/interactiveSession/saveAndSendPrompt.js:3
+  import { api, rl } from '../config.js';
+         ^^^
+  SyntaxError: The requested module '../config.js' does not provide an export
+  named 'api'
+    at ModuleJob._instantiate
+
+  api was changed to getApi() in config.js
+  Also fix main.js to use getApi()
 os: OSX

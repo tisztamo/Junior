@@ -1,39 +1,10 @@
 # Working set
 
-```
-./src/
-├── .DS_Store
-├── attention/...
-├── backend/...
-├── config.js
-├── doc/...
-├── execute/...
-├── frontend/...
-├── git/...
-├── index.html
-├── interactiveSession/...
-├── llm/...
-├── main.js
-├── prompt/...
-├── startVite.js
-├── vite.config.js
-├── web.js
-
-```
-```
-./src/llm/
-├── openai/...
-
-```
-```
-./src/llm/openai/
-├── createApi.js
-
-```
 src/config.js:
 ```
 import readline from 'readline';
 import createApi from './llm/openai/createApi.js';
+import createFakeApi from './llm/fake/createFakeApi.js';
 
 function isDryRun() {
   return process.argv.includes("-d") || process.argv.includes("--dry-run");
@@ -49,9 +20,7 @@ function get_model() {
 
 async function getApi() {
   if (isDryRun()) {
-    return {
-      sendMessage: () => { return {id: 42, text: "DRY RUN, NOT SENT"}}
-    };
+    return createFakeApi();
   } else {
     return await createApi(get_model());
   }
@@ -66,60 +35,51 @@ export { getApi, rl, get_model };
 
 ```
 
-src/llm/openai/createApi.js:
+src/interactiveSession/saveAndSendPrompt.js:
 ```
-import fs from 'fs';
-import { ChatGPTAPI } from 'chatgpt';
-import { getSystemPrompt } from "../../prompt/getSystemPrompt.js";
+import { printNewText } from './printNewText.js';
+import { handleApiResponse } from './handleApiResponse.js';
+import { api, rl } from '../config.js';
 
-export default async function createApi(model) {
-  let apiKey = process.env.OPENAI_API_KEY;
-
-  if (!apiKey) {
-    if (fs.existsSync('./secret.sh')) {
-      const secretFileContent = fs.readFileSync('./secret.sh', 'utf-8');
-      const match = secretFileContent.match(/export OPENAI_API_KEY=(\S+)/);
-      if (match) {
-        apiKey = match[1];
-      }
-    }
-  }
-
-  if (!apiKey) {
-    throw new Error('OPENAI_API_KEY not found');
-  }
-
-  const systemMessage = await getSystemPrompt();
-
-  return new ChatGPTAPI({
-    debug: true,
-    apiKey,
-    systemMessage,
-    completionParams: {
-      model,
-      stream: true,
-      temperature: 0.5,
-      max_tokens: 2048,
-    }
-  });
+const saveAndSendPrompt = async (prompt, task) => {
+  let lastTextLength = 0;
+  const res = await api.sendMessage(prompt, { onProgress: printNewText(lastTextLength) });
+  console.log("\x1b[0m");
+  const msg = res.text.trim();
+  console.log("");
+  handleApiResponse(msg);
 }
+
+export { saveAndSendPrompt };
+
+```
+
+src/main.js:
+```
+#!/usr/bin/env node
+
+import { startInteractiveSession } from './interactiveSession/startInteractiveSession.js';
+import { api, get_model, rl } from './config.js';
+
+console.log("Welcome to Junior. Model: " + get_model() + "\n");
+
+startInteractiveSession(rl, api);
+
+export { startInteractiveSession };
 
 ```
 
 
 # Task
 
-Implement the following feature!
+Fix the following issue!
 
-- Create a plan!
-- Create new files when needed!
-- Every js file should only export a single function!
-- Use ES6 imports!
+file:///Users/ko/projects-new/Junior/src/interactiveSession/saveAndSendPrompt.js:3 import { api, rl } from &#39;../config.js&#39;;
+       ^^^
+SyntaxError: The requested module &#39;../config.js&#39; does not provide an export named &#39;api&#39;
+  at ModuleJob._instantiate
 
-Requirements:
-
-Factor out the dry-run fake api creation from config.js to llm/fake/createFakeApi.js (create dir) In openai/createApi.js, when the api key not found for openai, console.warn and return a fake api instance.
-
+api was changed to getApi() in config.js Also fix main.js to use getApi()
 
 
 # Output Format
