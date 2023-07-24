@@ -1,6 +1,10 @@
-task: prompt/task/bug/fix.md
+task: prompt/task/feature/implement.md
 attention:
-  - ./
-  - doc/
-requirements: |
-  Remove .nojekyll files
+  - src/frontend/components/TasksList.jsx
+  - src/frontend/fetchTasks.js
+  - src/frontend/stores/promptDescriptor.js
+  - src/frontend/stores/selectedTask.js
+  - src/frontend/service/parseYamlAndGetTask.js
+requirements: >
+  Instead of selecting the first task, listen to the promptDescriptor and if not
+  empty, get the task from it!
