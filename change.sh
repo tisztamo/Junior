@@ -1,56 +1,68 @@
 #!/bin/sh
-# Goal: Factor out promptDescriptor defaults to a separate file
+set -e
+goal="Encapsulate markdown in details tag"
 # Plan:
-# 1. Create a new file promptDescriptorDefaults.js
-# 2. Add the default handling of the format and add defaults for "os" and "installedTools"
-# 3. Modify createPrompt.js to import and use the defaults from promptDescriptorDefaults.js
+# 1. Modify the PromptDisplay component to wrap the markdown in a details tag with a summary tag displaying the character count
+# 2. Change the placement of the PromptDisplay component in App.jsx to right under the StartButton component
 
-# Step 1: Create promptDescriptorDefaults.js
-cat > ./src/prompt/promptDescriptorDefaults.js << 'EOF'
-const promptDescriptorDefaults = {
-  format: "prompt/format/shell.md",
-  os: "Debian",
-  installedTools: "npm, jq"
+echo "Modifying PromptDisplay component"
+cat << 'EOF' > src/frontend/components/PromptDisplay.jsx
+import { createSignal, onMount, createEffect } from "solid-js";
+import { prompt } from '../stores/prompt';
+
+const PromptDisplay = () => {
+  let div;
+  let summary;
+
+  createEffect(() => {
+    if (div) {
+      div.innerHTML = prompt();
+      summary.innerHTML = `prompt length: ${prompt().length} chars`;
+    }
+  });
+
+  return (
+    <details class="w-full max-w-screen overflow-x-auto whitespace-normal markdown">
+      <summary ref={summary}></summary>
+      <div ref={div}></div>
+    </details>
+  );
 };
 
-export default promptDescriptorDefaults;
+export default PromptDisplay;
 EOF
 
-# Step 2: Modify createPrompt.js to import and use the defaults
-cat > ./src/prompt/createPrompt.js << 'EOF'
-import { readAttention } from "../attention/readAttention.js"
-import yaml from 'js-yaml';
-import { getSystemPromptIfNeeded } from './getSystemPromptIfNeeded.js';
-import { resolveTemplateVariables } from './resolveTemplateVariables.js';
-import { extractTemplateVars } from './extractTemplateVars.js';
-import { loadPromptDescriptor } from './loadPromptDescriptor.js';
-import { loadTaskTemplate } from './loadTaskTemplate.js';
-import { loadFormatTemplate } from './loadFormatTemplate.js';
-import promptDescriptorDefaults from './promptDescriptorDefaults.js';
+echo "Repositioning PromptDisplay in App.jsx"
+cat << 'EOF' > src/frontend/App.jsx
+import NotesInput from './components/NotesInput';
+import StartButton from './components/StartButton';
+import ExecuteButton from './components/ExecuteButton';
+import ResetButton from './components/ResetButton';
+import PromptDisplay from './components/PromptDisplay';
+import TasksList from './components/TasksList';
+import PromptDescriptor from './components/PromptDescriptor';
+import NavBar from './components/NavBar';
+import { notes, setNotes } from './stores/notes';
+import { setPrompt } from './stores/prompt';
 
-const createPrompt = async (userInput) => {
-  let promptDescriptor = yaml.load(await loadPromptDescriptor());
+const App = () => {
+  return (
+    <div class="m-2">
+      <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
+        <NavBar />
+        <TasksList />
+        <PromptDescriptor />
+        <NotesInput notes={notes} setNotes={setNotes} />
+        <StartButton notes={notes} setPrompt={setPrompt} />
+        <PromptDisplay />
+        <ExecuteButton />
+        <ResetButton />
+      </div>
+    </div>
+  );
+};
 
-  // Fill in the defaults from promptDescriptorDefaults.js
-  promptDescriptor = { ...promptDescriptorDefaults, ...promptDescriptor };
-
-  let templateVars = extractTemplateVars(promptDescriptor);
-  templateVars = await resolveTemplateVariables(templateVars);
-
-  const attention = await readAttention(promptDescriptor.attention);
-  const task = await loadTaskTemplate(promptDescriptor.task, templateVars);
-
-  const format = await loadFormatTemplate(promptDescriptor.format, templateVars);
-  const system = await getSystemPromptIfNeeded();
-  const saveto = promptDescriptor.saveto;
-  return {
-    prompt: `${system}# Working set\n\n${attention.join("\n")}\n\n# Task\n\n${task}\n\n# Output Format\n\n${format}\n\n${userInput ? userInput : ""}`,
-    saveto
-  };
-}
-
-export { createPrompt };
+export default App;
 EOF
 
-# Task solved
-echo "Task solved."
+echo "Completed: $goal\n"

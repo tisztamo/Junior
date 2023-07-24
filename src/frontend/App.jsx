@@ -18,9 +18,9 @@ const App = () => {
         <PromptDescriptor />
         <NotesInput notes={notes} setNotes={setNotes} />
         <StartButton notes={notes} setPrompt={setPrompt} />
+        <PromptDisplay />
         <ExecuteButton />
         <ResetButton />
-        <PromptDisplay />
       </div>
     </div>
   );
