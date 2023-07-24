@@ -2,14 +2,13 @@
 
 src/frontend/App.jsx:
 ```
-import StartButton from './components/StartButton';
+import GenerateButton from './components/GenerateButton';
 import ExecuteButton from './components/ExecuteButton';
 import ResetButton from './components/ResetButton';
 import PromptDisplay from './components/PromptDisplay';
 import TasksList from './components/TasksList';
 import PromptDescriptor from './components/PromptDescriptor';
 import NavBar from './components/NavBar';
-import { setPrompt } from './stores/prompt';
 
 const App = () => {
   return (
@@ -18,7 +17,7 @@ const App = () => {
         <NavBar />
         <TasksList />
         <PromptDescriptor />
-        <StartButton setPrompt={setPrompt} />
+        <GenerateButton />
         <PromptDisplay />
         <ExecuteButton />
         <ResetButton />
@@ -31,35 +30,53 @@ export default App;
 
 ```
 
-src/frontend/components/StartButton.jsx:
+src/frontend/service/executeChange.js:
 ```
-import { generatePrompt } from '../generatePrompt';
-import { marked } from 'marked';
-import copy from 'clipboard-copy';
+import { getBaseUrl } from '../getBaseUrl';
 
-const StartButton = ({setPrompt}) => {
-  const handleGeneratePrompt = async () => {
-    const response = await generatePrompt();
+const executeChange = async (change) => {
+  const baseUrl = getBaseUrl();
+  const response = await fetch(`${baseUrl}/execute`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ change })
+  });
 
-    copy(response.prompt)
-      .then(() => {
-        console.log('Prompt copied to clipboard!');
-      })
-      .catch(err => {
-        console.error('Failed to copy prompt: ', err);
-      });
+  const data = await response.json();
 
-    const htmlPrompt = marked(response.prompt);
+  return data;
+};
 
-    setPrompt(htmlPrompt);
+export { executeChange };
+
+```
+
+src/frontend/components/ExecuteButton.jsx:
+```
+import { executeChange } from '../service/executeChange';
+
+const ExecuteButton = () => {
+  const handleExecuteChange = async () => {
+    const change = await navigator.clipboard.readText();
+    const response = await executeChange(change);
+
+    console.log(response.message);
   };
 
   return (
-    <button class="w-64 px-4 py-4 bg-blue-500 text-white rounded" onClick={handleGeneratePrompt}>Generate & Copy Prompt</button>
+    <button class="w-64 px-4 py-4 bg-orange-300 text-white rounded" onClick={handleExecuteChange}>Paste & Execute Change</button>
   );
 };
 
-export default StartButton;
+export default ExecuteButton;
+
+```
+
+src/frontend/stores/promptDescriptor.js:
+```
+import { createSignal } from 'solid-js';
+
+export const [promptDescriptor, setPromptDescriptor] = createSignal('');
 
 ```
 
@@ -75,7 +92,9 @@ Implement the following feature!
 
 Requirements:
 
-Rename StartButton to GenerateButton and do not pass setPrompt to it, it can import itself.
+Create a signal in a new file in stores for result of the execution
+Create a new component for displaying the result of the execution
+Put the new component under the execute button
 
 
 
@@ -96,9 +115,8 @@ goal=[Task description, max 7 words]
 # Plan:
 # 1. [...]
 # ...
-# N. echo "Completed: $goal\n"
-
 [Commands solving the task]
+echo "\033[32mCompleted: $goal\033[0m\n"
 ```
 
 EXAMPLE END

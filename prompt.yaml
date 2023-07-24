@@ -1,7 +1,11 @@
 task: prompt/task/feature/implement.md
 attention:
   - src/frontend/App.jsx
-  - src/frontend/components/StartButton.jsx
+  - src/frontend/service/executeChange.js
+  - src/frontend/components/ExecuteButton.jsx
+  - src/frontend/stores/promptDescriptor.js
 requirements: |
-  Rename StartButton to GenerateButton and do not pass setPrompt to it, it can import itself.
+  Create a signal in a new file in stores for result of the execution
+  Create a new component for displaying the result of the execution
+  Put the new component under the execute button
 os: OSX

@@ -1,10 +1,11 @@
 import { executeChange } from '../service/executeChange';
+import { setExecutionResult } from '../stores/executionResult';
 
 const ExecuteButton = () => {
   const handleExecuteChange = async () => {
     const change = await navigator.clipboard.readText();
     const response = await executeChange(change);
-
+    setExecutionResult(response.message);
     console.log(response.message);
   };
 

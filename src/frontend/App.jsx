@@ -5,6 +5,7 @@ import PromptDisplay from './components/PromptDisplay';
 import TasksList from './components/TasksList';
 import PromptDescriptor from './components/PromptDescriptor';
 import NavBar from './components/NavBar';
+import ExecutionResultDisplay from './components/ExecutionResultDisplay';
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
         <GenerateButton />
         <PromptDisplay />
         <ExecuteButton />
+        <ExecutionResultDisplay />
         <ResetButton />
       </div>
     </div>

@@ -13,9 +13,8 @@ goal=[Task description, max 7 words]
 # Plan:
 # 1. [...]
 # ...
-# N. echo "Completed: $goal\n"
-
 [Commands solving the task]
+echo "\033[32mCompleted: $goal\033[0m\n"
 ```
 
 EXAMPLE END
