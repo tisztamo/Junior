@@ -1,5 +1,6 @@
 import readline from 'readline';
 import createApi from './llm/openai/createApi.js';
+import createFakeApi from './llm/fake/createFakeApi.js';
 
 function isDryRun() {
   return process.argv.includes("-d") || process.argv.includes("--dry-run");
@@ -15,9 +16,7 @@ function get_model() {
 
 async function getApi() {
   if (isDryRun()) {
-    return {
-      sendMessage: () => { return {id: 42, text: "DRY RUN, NOT SENT"}}
-    };
+    return createFakeApi();
   } else {
     return await createApi(get_model());
   }

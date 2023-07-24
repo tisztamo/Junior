@@ -1,7 +1,11 @@
 task: prompt/task/feature/implement.md
 attention:
+  - ./src/
+  - ./src/llm/
+  - ./src/llm/openai/
   - src/config.js
-requirements: |
-  When no OPENAI_API_KEY env var presents, try to open ./secret.sh
-  and parse it to get the key.
-  Move this logic and the "new ChatGPTAPI" call to a function in src/llm/openai/createApi.js (create the dir).
+  - src/llm/openai/createApi.js
+requirements: >
+  Factor out the dry-run fake api creation from config.js to llm/fake/createFakeApi.js (create dir)
+  In openai/createApi.js, when the api key not found for openai, console.warn and return a fake api instance.
+os: OSX

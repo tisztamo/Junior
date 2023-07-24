@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { ChatGPTAPI } from 'chatgpt';
 import { getSystemPrompt } from "../../prompt/getSystemPrompt.js";
+import createFakeApi from '../fake/createFakeApi.js';
 
 export default async function createApi(model) {
   let apiKey = process.env.OPENAI_API_KEY;
@@ -16,7 +17,8 @@ export default async function createApi(model) {
   }
 
   if (!apiKey) {
-    throw new Error('OPENAI_API_KEY not found');
+    console.warn('OPENAI_API_KEY not found, using fake API');
+    return createFakeApi();
   }
 
   const systemMessage = await getSystemPrompt();

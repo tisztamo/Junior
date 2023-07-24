@@ -1,33 +1,43 @@
 # Working set
 
+```
+./src/
+├── .DS_Store
+├── attention/...
+├── backend/...
+├── config.js
+├── doc/...
+├── execute/...
+├── frontend/...
+├── git/...
+├── index.html
+├── interactiveSession/...
+├── llm/...
+├── main.js
+├── prompt/...
+├── startVite.js
+├── vite.config.js
+├── web.js
+
+```
+```
+./src/llm/
+├── openai/...
+
+```
+```
+./src/llm/openai/
+├── createApi.js
+
+```
 src/config.js:
 ```
 import readline from 'readline';
-import { ChatGPTAPI } from 'chatgpt';
-import { getSystemPrompt } from "./prompt/getSystemPrompt.js";
+import createApi from './llm/openai/createApi.js';
 
 function isDryRun() {
   return process.argv.includes("-d") || process.argv.includes("--dry-run");
 }
-
-const api = isDryRun() ? {
-    sendMessage: () => { return {id: 42, text: "DRY RUN, NOT SENT"}}
-  } : new ChatGPTAPI({
-  debug: true,
-  apiKey: process.env.OPENAI_API_KEY,
-  systemMessage: await getSystemPrompt(),
-  completionParams: {
-    model: get_model(),
-    stream: true,
-    temperature: 0.5,
-    max_tokens: 2048,
-  }
-});
-
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
 
 function get_model() {
   const modelArg = process.argv.find(arg => arg.startsWith('--model='));
@@ -37,7 +47,62 @@ function get_model() {
   return "gpt-4";
 }
 
-export { api, rl, get_model };
+async function getApi() {
+  if (isDryRun()) {
+    return {
+      sendMessage: () => { return {id: 42, text: "DRY RUN, NOT SENT"}}
+    };
+  } else {
+    return await createApi(get_model());
+  }
+}
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+export { getApi, rl, get_model };
+
+```
+
+src/llm/openai/createApi.js:
+```
+import fs from 'fs';
+import { ChatGPTAPI } from 'chatgpt';
+import { getSystemPrompt } from "../../prompt/getSystemPrompt.js";
+
+export default async function createApi(model) {
+  let apiKey = process.env.OPENAI_API_KEY;
+
+  if (!apiKey) {
+    if (fs.existsSync('./secret.sh')) {
+      const secretFileContent = fs.readFileSync('./secret.sh', 'utf-8');
+      const match = secretFileContent.match(/export OPENAI_API_KEY=(\S+)/);
+      if (match) {
+        apiKey = match[1];
+      }
+    }
+  }
+
+  if (!apiKey) {
+    throw new Error('OPENAI_API_KEY not found');
+  }
+
+  const systemMessage = await getSystemPrompt();
+
+  return new ChatGPTAPI({
+    debug: true,
+    apiKey,
+    systemMessage,
+    completionParams: {
+      model,
+      stream: true,
+      temperature: 0.5,
+      max_tokens: 2048,
+    }
+  });
+}
 
 ```
 
@@ -53,9 +118,7 @@ Implement the following feature!
 
 Requirements:
 
-When no OPENAI_API_KEY env var presents, try to open ./secret.sh
-and parse it to get the key.
-Move this logic and the &#34;new ChatGPTAPI&#34; call to a function in src/llm/openai/createApi.js (create the dir).
+Factor out the dry-run fake api creation from config.js to llm/fake/createFakeApi.js (create dir) In openai/createApi.js, when the api key not found for openai, console.warn and return a fake api instance.
 
 
 
@@ -63,7 +126,7 @@ Move this logic and the &#34;new ChatGPTAPI&#34; call to a function in src/llm/o
 
 Encode and enclose your results as ./change.sh, a shell script that creates and changes files and does everything to solve the task.
 Files are small, prefer heredoc-ing full files using 'EOF' to prevent substitution.
-OS: Debian
+OS: OSX
 Installed tools: npm, jq
 Do NOT write any text outside the script!
 

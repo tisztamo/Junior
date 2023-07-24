@@ -1,19 +1,60 @@
 #!/bin/sh
 set -e
-goal="Refactor code to handle OPENAI_API_KEY"
+goal="Refactor dry-run API creation"
 echo "Plan:"
-echo "1. Create the directory src/llm/openai"
-echo "2. Create the file src/llm/openai/createApi.js"
-echo "3. Move the logic for creating the ChatGPTAPI instance to createApi.js"
-echo "4. Implement the logic to read the OPENAI_API_KEY from the environment variable or from the secret.sh file"
-echo "5. Update src/config.js to import and use the createApi function from createApi.js"
+echo "1. Create a new file 'createFakeApi.js' inside './src/llm/fake/'"
+echo "2. Copy the code related to fake api creation from 'config.js' to 'createFakeApi.js'"
+echo "3. Modify 'config.js' to import and use the 'createFakeApi.js' function"
+echo "4. Modify 'openai/createApi.js' to warn and return a fake api instance when OPENAI_API_KEY not found"
 
-mkdir -p src/llm/openai
+mkdir -p ./src/llm/fake/
 
-cat << 'EOF' > src/llm/openai/createApi.js
+cat << 'EOF' > ./src/llm/fake/createFakeApi.js
+export default function createFakeApi() {
+  return {
+    sendMessage: () => { return {id: 42, text: "DRY RUN, NOT SENT"}}
+  };
+}
+EOF
+
+cat << 'EOF' > ./src/config.js
+import readline from 'readline';
+import createApi from './llm/openai/createApi.js';
+import createFakeApi from './llm/fake/createFakeApi.js';
+
+function isDryRun() {
+  return process.argv.includes("-d") || process.argv.includes("--dry-run");
+}
+
+function get_model() {
+  const modelArg = process.argv.find(arg => arg.startsWith('--model='));
+  if (modelArg) {
+    return modelArg.split('=')[1];
+  }
+  return "gpt-4";
+}
+
+async function getApi() {
+  if (isDryRun()) {
+    return createFakeApi();
+  } else {
+    return await createApi(get_model());
+  }
+}
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+export { getApi, rl, get_model };
+EOF
+
+cat << 'EOF' > ./src/llm/openai/createApi.js
 import fs from 'fs';
 import { ChatGPTAPI } from 'chatgpt';
 import { getSystemPrompt } from "../../prompt/getSystemPrompt.js";
+import createFakeApi from '../fake/createFakeApi.js';
 
 export default async function createApi(model) {
   let apiKey = process.env.OPENAI_API_KEY;
@@ -29,7 +70,8 @@ export default async function createApi(model) {
   }
 
   if (!apiKey) {
-    throw new Error('OPENAI_API_KEY not found');
+    console.warn('OPENAI_API_KEY not found, using fake API');
+    return createFakeApi();
   }
 
   const systemMessage = await getSystemPrompt();
@@ -46,40 +88,6 @@ export default async function createApi(model) {
     }
   });
 }
-EOF
-
-cat << 'EOF' > src/config.js
-import readline from 'readline';
-import createApi from './llm/openai/createApi.js';
-
-function isDryRun() {
-  return process.argv.includes("-d") || process.argv.includes("--dry-run");
-}
-
-function get_model() {
-  const modelArg = process.argv.find(arg => arg.startsWith('--model='));
-  if (modelArg) {
-    return modelArg.split('=')[1];
-  }
-  return "gpt-4";
-}
-
-async function getApi() {
-  if (isDryRun()) {
-    return {
-      sendMessage: () => { return {id: 42, text: "DRY RUN, NOT SENT"}}
-    };
-  } else {
-    return await createApi(get_model());
-  }
-}
-
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
-
-export { getApi, rl, get_model };
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"
