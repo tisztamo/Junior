@@ -11,15 +11,17 @@ import { setPrompt } from './stores/prompt';
 
 const App = () => {
   return (
-    <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
-      <NavBar />
-      <TasksList />
-      <PromptDescriptor />
-      <NotesInput notes={notes} setNotes={setNotes} />
-      <StartButton notes={notes} setPrompt={setPrompt} />
-      <ExecuteButton />
-      <ResetButton />
-      <PromptDisplay />
+    <div class="m-2">
+      <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
+        <NavBar />
+        <TasksList />
+        <PromptDescriptor />
+        <NotesInput notes={notes} setNotes={setNotes} />
+        <StartButton notes={notes} setPrompt={setPrompt} />
+        <ExecuteButton />
+        <ResetButton />
+        <PromptDisplay />
+      </div>
     </div>
   );
 };

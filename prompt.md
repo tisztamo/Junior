@@ -1,77 +1,51 @@
 # Working set
 
-src/frontend/components/TasksList.jsx:
+src/frontend/App.jsx:
 ```
-import { onMount } from 'solid-js';
-import { fetchTasks } from '../fetchTasks';
-import { handleTaskChange } from '../service/handleTaskChange';
-import { selectedTask, setSelectedTask } from '../stores/selectedTask';
+import NotesInput from './components/NotesInput';
+import StartButton from './components/StartButton';
+import ExecuteButton from './components/ExecuteButton';
+import ResetButton from './components/ResetButton';
+import PromptDisplay from './components/PromptDisplay';
+import TasksList from './components/TasksList';
+import PromptDescriptor from './components/PromptDescriptor';
+import NavBar from './components/NavBar';
+import { notes, setNotes } from './stores/notes';
+import { setPrompt } from './stores/prompt';
 
-const TasksList = () => {
-  const tasks = fetchTasks();
-
-  onMount(async () => {
-    const task = tasks[0]; // Set default task to the first in the list
-    setSelectedTask(task);
-  });
-
+const App = () => {
   return (
-    // Align the tasklist to the left within a single column layout and add background color
-    <div class="w-full flex justify-start bg-gray-100 p-2 rounded">
-      <label class="mr-2">Task:</label>
-      <select class="w-full" value={selectedTask()} onChange={e => handleTaskChange(e)}>
-        {tasks().map(task => <option value={task}>{task}</option>)}
-      </select>
+    <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
+      <NavBar />
+      <TasksList />
+      <PromptDescriptor />
+      <NotesInput notes={notes} setNotes={setNotes} />
+      <StartButton notes={notes} setPrompt={setPrompt} />
+      <ExecuteButton />
+      <ResetButton />
+      <PromptDisplay />
     </div>
   );
 };
 
-export default TasksList;
+export default App;
 
 ```
 
-src/frontend/fetchTasks.js:
+src/index.html:
 ```
-import { createSignal } from 'solid-js';
-import { getBaseUrl } from './getBaseUrl';
-
-export const fetchTasks = () => {
-    const [tasks, setTasks] = createSignal([]);
-    const baseUrl = getBaseUrl();
-    const response = fetch(`${baseUrl}/tasks`);
-    response.then(r => r.json()).then(data => setTasks(data.tasks));
-
-    return tasks;
-};
-
-```
-
-src/frontend/stores/promptDescriptor.js:
-```
-import { createSignal } from 'solid-js';
-
-export const [promptDescriptor, setPromptDescriptor] = createSignal('');
-
-```
-
-src/frontend/stores/selectedTask.js:
-```
-import { createSignal } from 'solid-js';
-
-export const [selectedTask, setSelectedTask] = createSignal('');
-
-```
-
-src/frontend/service/parseYamlAndGetTask.js:
-```
-import YAML from 'yaml';
-
-export const parseYamlAndGetTask = (yamlString) => {
-  const doc = YAML.parse(yamlString);
-  // Remove 'prompt/task/' prefix
-  const task = doc.task.replace('prompt/task/', '');
-  return task;
-};
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Junior</title>
+</head>
+<body>
+  <div id="app"></div>
+  <script type="module" src="/frontend/index.jsx"></script>
+</body>
+</html>
 
 ```
 
@@ -87,7 +61,7 @@ Implement the following feature!
 
 Requirements:
 
-Instead of selecting the first task, listen to the promptDescriptor and if not empty, get the task from it!
+Add a small margin around the content using tailwind.
 
 
 

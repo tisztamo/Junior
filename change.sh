@@ -1,44 +1,39 @@
 #!/bin/sh
-# Goal: Listen to promptDescriptor and set task if not empty
+# Goal: Add small margin around content with Tailwind CSS
 # Plan:
-# 1. Modify the TasksList component to listen to the promptDescriptor store.
-# 2. If promptDescriptor is not empty, get the task from it using parseYamlAndGetTask and set it as the selected task.
-# 3. If promptDescriptor is empty, do nothing.
+# 1. Identify the div that encompasses the entire content in the `App.jsx` file.
+# 2. Wrap the existing div into a new parent div.
+# 3. Apply the tailwind CSS class for margin to the new parent div.
+#    Here, we will use `m-2` to add a small margin around the entire content.
 
-# Step 1: Modify the TasksList.jsx component
+cat > src/frontend/App.jsx << EOF
+import NotesInput from './components/NotesInput';
+import StartButton from './components/StartButton';
+import ExecuteButton from './components/ExecuteButton';
+import ResetButton from './components/ResetButton';
+import PromptDisplay from './components/PromptDisplay';
+import TasksList from './components/TasksList';
+import PromptDescriptor from './components/PromptDescriptor';
+import NavBar from './components/NavBar';
+import { notes, setNotes } from './stores/notes';
+import { setPrompt } from './stores/prompt';
 
-cat > src/frontend/components/TasksList.jsx << EOF
-import { onMount, createEffect } from 'solid-js';
-import { fetchTasks } from '../fetchTasks';
-import { handleTaskChange } from '../service/handleTaskChange';
-import { selectedTask, setSelectedTask } from '../stores/selectedTask';
-import { promptDescriptor } from '../stores/promptDescriptor';
-import { parseYamlAndGetTask } from '../service/parseYamlAndGetTask';
-
-const TasksList = () => {
-  const tasks = fetchTasks();
-
-  createEffect(() => {
-    const descriptor = promptDescriptor();
-    if (descriptor !== '') {
-      const task = parseYamlAndGetTask(descriptor);
-      setSelectedTask(task);
-    }
-  });
-
+const App = () => {
   return (
-    <div class="w-full flex justify-start bg-gray-100 p-2 rounded">
-      <label class="mr-2">Task:</label>
-      <select class="w-full" value={selectedTask()} onChange={e => handleTaskChange(e)}>
-        {tasks().map(task => <option value={task}>{task}</option>)}
-      </select>
+    <div class="m-2">
+      <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
+        <NavBar />
+        <TasksList />
+        <PromptDescriptor />
+        <NotesInput notes={notes} setNotes={setNotes} />
+        <StartButton notes={notes} setPrompt={setPrompt} />
+        <ExecuteButton />
+        <ResetButton />
+        <PromptDisplay />
+      </div>
     </div>
   );
 };
 
-export default TasksList;
+export default App;
 EOF
-
-# TasksList.jsx component is updated.
-# Note: You might need to restart your application to see the changes take effect.
-echo "TasksList.jsx component has been updated. You might need to restart your application to see the changes take effect."
