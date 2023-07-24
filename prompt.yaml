@@ -1,7 +1,5 @@
-task: prompt/task/refactor/move_files.md
+task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/components/ResetButton.jsx
-  - src/frontend/App.jsx
-requirements: >
-  Rename the reset git button to RollbackButton with label "Roll Back to Last
-  Commit".
+  - src/frontend/components/PromptDisplay.jsx
+requirements: |
+  When the prompt is empty, do not show the details tag

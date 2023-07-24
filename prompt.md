@@ -1,71 +1,47 @@
 # Working set
 
-src/frontend/components/ResetButton.jsx:
+src/frontend/components/PromptDisplay.jsx:
 ```
-import { resetGit } from '../service/resetGit';
+import { createSignal, onMount, createEffect } from "solid-js";
+import { prompt } from '../stores/prompt';
 
-const ResetButton = () => {
-  const handleReset = async () => {
-    const response = await resetGit();
+const PromptDisplay = () => {
+  let div;
+  let summary;
 
-    console.log(response.message);
-  };
+  createEffect(() => {
+    if (div) {
+      div.innerHTML = prompt();
+      summary.innerHTML = `prompt length: ${prompt().length} chars`;
+    }
+  });
 
   return (
-    <button class="w-64 px-4 py-4 bg-red-700 text-white rounded" onClick={handleReset}>Reset Git</button>
+    <details class="w-full max-w-screen overflow-x-auto whitespace-normal markdown">
+      <summary ref={summary}></summary>
+      <div ref={div}></div>
+    </details>
   );
 };
 
-export default ResetButton;
-
-```
-
-src/frontend/App.jsx:
-```
-import GenerateButton from './components/GenerateButton';
-import ExecuteButton from './components/ExecuteButton';
-import ResetButton from './components/ResetButton';
-import PromptDisplay from './components/PromptDisplay';
-import TasksList from './components/TasksList';
-import PromptDescriptor from './components/PromptDescriptor';
-import NavBar from './components/NavBar';
-import ExecutionResultDisplay from './components/ExecutionResultDisplay';
-
-const App = () => {
-  return (
-    <div class="m-2">
-      <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
-        <NavBar />
-        <TasksList />
-        <PromptDescriptor />
-        <GenerateButton />
-        <PromptDisplay />
-        <ExecuteButton />
-        <ExecutionResultDisplay />
-        <ResetButton />
-      </div>
-    </div>
-  );
-};
-
-export default App;
+export default PromptDisplay;
 
 ```
 
 
 # Task
 
-Move the following files to the specified target dirs!
+Implement the following feature!
 
-Find out the best target dir if it is not specified!
+- Create a plan!
+- Create new files when needed!
+- Every js file should only export a single function!
+- Use ES6 imports!
 
-You need to follow dependencies to maintain coherence.
+Requirements:
 
-Before executing, write a concise plan! The plan should show:
- - How do you avoid breaking other parts of the code.
- - If you had to choose, your way of thinking.
+When the prompt is empty, do not show the details tag
 
-Rename the reset git button to RollbackButton with label &#34;Roll Back to Last Commit&#34;.
 
 
 # Output Format
