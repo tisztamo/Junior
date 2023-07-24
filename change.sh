@@ -1,93 +1,46 @@
 #!/bin/sh
 set -e
-goal="Refactor dry-run API creation"
+goal="Fix terminal parent element error"
 echo "Plan:"
-echo "1. Create a new file 'createFakeApi.js' inside './src/llm/fake/'"
-echo "2. Copy the code related to fake api creation from 'config.js' to 'createFakeApi.js'"
-echo "3. Modify 'config.js' to import and use the 'createFakeApi.js' function"
-echo "4. Modify 'openai/createApi.js' to warn and return a fake api instance when OPENAI_API_KEY not found"
+echo "1. Edit ExecutionResultDisplay.jsx to ensure that the div always exists."
+echo "2. Instead of conditionally rendering the div, render it always but control its visibility using CSS."
 
-mkdir -p ./src/llm/fake/
+cat > src/frontend/components/ExecutionResultDisplay.jsx << 'EOF'
+import { onMount, createEffect, onCleanup } from 'solid-js';
+import { Terminal } from 'xterm';
+import 'xterm/css/xterm.css';
+import { executionResult } from '../stores/executionResult';
 
-cat << 'EOF' > ./src/llm/fake/createFakeApi.js
-export default function createFakeApi() {
-  return {
-    sendMessage: () => { return {id: 42, text: "DRY RUN, NOT SENT"}}
-  };
-}
-EOF
+const ExecutionResultDisplay = () => {
+  let container;
+  let term;
 
-cat << 'EOF' > ./src/config.js
-import readline from 'readline';
-import createApi from './llm/openai/createApi.js';
-import createFakeApi from './llm/fake/createFakeApi.js';
+  onMount(() => {
+    term = new Terminal({ convertEol: true, rows: 7 });
+    term.open(container);
+  });
 
-function isDryRun() {
-  return process.argv.includes("-d") || process.argv.includes("--dry-run");
-}
-
-function get_model() {
-  const modelArg = process.argv.find(arg => arg.startsWith('--model='));
-  if (modelArg) {
-    return modelArg.split('=')[1];
-  }
-  return "gpt-4";
-}
-
-async function getApi() {
-  if (isDryRun()) {
-    return createFakeApi();
-  } else {
-    return await createApi(get_model());
-  }
-}
-
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
-
-export { getApi, rl, get_model };
-EOF
-
-cat << 'EOF' > ./src/llm/openai/createApi.js
-import fs from 'fs';
-import { ChatGPTAPI } from 'chatgpt';
-import { getSystemPrompt } from "../../prompt/getSystemPrompt.js";
-import createFakeApi from '../fake/createFakeApi.js';
-
-export default async function createApi(model) {
-  let apiKey = process.env.OPENAI_API_KEY;
-
-  if (!apiKey) {
-    if (fs.existsSync('./secret.sh')) {
-      const secretFileContent = fs.readFileSync('./secret.sh', 'utf-8');
-      const match = secretFileContent.match(/export OPENAI_API_KEY=(\S+)/);
-      if (match) {
-        apiKey = match[1];
-      }
-    }
-  }
-
-  if (!apiKey) {
-    console.warn('OPENAI_API_KEY not found, using fake API');
-    return createFakeApi();
-  }
-
-  const systemMessage = await getSystemPrompt();
-
-  return new ChatGPTAPI({
-    debug: true,
-    apiKey,
-    systemMessage,
-    completionParams: {
-      model,
-      stream: true,
-      temperature: 0.5,
-      max_tokens: 2048,
+  createEffect(() => {
+    if (term && executionResult() !== '') {
+      term.write(executionResult());
     }
   });
-}
+
+  onCleanup(() => {
+    if (term) {
+      term.dispose();
+    }
+  });
+
+  return (
+    <div 
+      ref={container} 
+      class={`rounded overflow-auto max-w-full ${executionResult() !== '' ? 'block' : 'hidden'}`}
+    />
+  );
+};
+
+export default ExecutionResultDisplay;
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"

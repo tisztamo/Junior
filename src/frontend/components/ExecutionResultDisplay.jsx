@@ -1,4 +1,4 @@
-import { onMount, createEffect } from 'solid-js';
+import { onMount, createEffect, onCleanup } from 'solid-js';
 import { Terminal } from 'xterm';
 import 'xterm/css/xterm.css';
 import { executionResult } from '../stores/executionResult';
@@ -18,8 +18,17 @@ const ExecutionResultDisplay = () => {
     }
   });
 
+  onCleanup(() => {
+    if (term) {
+      term.dispose();
+    }
+  });
+
   return (
-    executionResult() !== '' && <div ref={container} class="rounded overflow-auto max-w-full"></div>
+    <div 
+      ref={container} 
+      class={`rounded overflow-auto max-w-full ${executionResult() !== '' ? 'block' : 'hidden'}`}
+    />
   );
 };
 

@@ -1,16 +1,9 @@
 task: prompt/task/bug/fix.md
 attention:
-  - src/config.js
-  - src/interactiveSession/saveAndSendPrompt.js
-  - src/main.js
-requirements: >
-  file:///Users/ko/projects-new/Junior/src/interactiveSession/saveAndSendPrompt.js:3
-  import { api, rl } from '../config.js';
-         ^^^
-  SyntaxError: The requested module '../config.js' does not provide an export
-  named 'api'
-    at ModuleJob._instantiate
+  - src/frontend/components/ExecutionResultDisplay.jsx
+requirements: |
+  Uncaught Error: Terminal requires a parent element.
+    at I.open (Terminal.ts:408:13)
 
-  api was changed to getApi() in config.js
-  Also fix main.js to use getApi()
+  To fix this, ensure that the div always exists, just hidden when not needed.
 os: OSX

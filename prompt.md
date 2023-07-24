@@ -1,71 +1,33 @@
 # Working set
 
-src/config.js:
+src/frontend/components/ExecutionResultDisplay.jsx:
 ```
-import readline from 'readline';
-import createApi from './llm/openai/createApi.js';
-import createFakeApi from './llm/fake/createFakeApi.js';
+import { onMount, createEffect } from 'solid-js';
+import { Terminal } from 'xterm';
+import 'xterm/css/xterm.css';
+import { executionResult } from '../stores/executionResult';
 
-function isDryRun() {
-  return process.argv.includes("-d") || process.argv.includes("--dry-run");
-}
+const ExecutionResultDisplay = () => {
+  let container;
+  let term;
 
-function get_model() {
-  const modelArg = process.argv.find(arg => arg.startsWith('--model='));
-  if (modelArg) {
-    return modelArg.split('=')[1];
-  }
-  return "gpt-4";
-}
+  onMount(() => {
+    term = new Terminal({ convertEol: true, rows: 7 });
+    term.open(container);
+  });
 
-async function getApi() {
-  if (isDryRun()) {
-    return createFakeApi();
-  } else {
-    return await createApi(get_model());
-  }
-}
+  createEffect(() => {
+    if (term && executionResult() !== '') {
+      term.write(executionResult());
+    }
+  });
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
+  return (
+    executionResult() !== '' && <div ref={container} class="rounded overflow-auto max-w-full"></div>
+  );
+};
 
-export { getApi, rl, get_model };
-
-```
-
-src/interactiveSession/saveAndSendPrompt.js:
-```
-import { printNewText } from './printNewText.js';
-import { handleApiResponse } from './handleApiResponse.js';
-import { api, rl } from '../config.js';
-
-const saveAndSendPrompt = async (prompt, task) => {
-  let lastTextLength = 0;
-  const res = await api.sendMessage(prompt, { onProgress: printNewText(lastTextLength) });
-  console.log("\x1b[0m");
-  const msg = res.text.trim();
-  console.log("");
-  handleApiResponse(msg);
-}
-
-export { saveAndSendPrompt };
-
-```
-
-src/main.js:
-```
-#!/usr/bin/env node
-
-import { startInteractiveSession } from './interactiveSession/startInteractiveSession.js';
-import { api, get_model, rl } from './config.js';
-
-console.log("Welcome to Junior. Model: " + get_model() + "\n");
-
-startInteractiveSession(rl, api);
-
-export { startInteractiveSession };
+export default ExecutionResultDisplay;
 
 ```
 
@@ -74,12 +36,10 @@ export { startInteractiveSession };
 
 Fix the following issue!
 
-file:///Users/ko/projects-new/Junior/src/interactiveSession/saveAndSendPrompt.js:3 import { api, rl } from &#39;../config.js&#39;;
-       ^^^
-SyntaxError: The requested module &#39;../config.js&#39; does not provide an export named &#39;api&#39;
-  at ModuleJob._instantiate
+Uncaught Error: Terminal requires a parent element.
+  at I.open (Terminal.ts:408:13)
 
-api was changed to getApi() in config.js Also fix main.js to use getApi()
+To fix this, ensure that the div always exists, just hidden when not needed.
 
 
 # Output Format
