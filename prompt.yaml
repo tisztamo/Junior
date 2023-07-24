@@ -1,9 +1,6 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/service/executeChange.js
-  - src/backend/handlers/executeHandler.js
-  - src/execute/executeAndForwardOutput.js
-requirements: |
-  The execute api fails to return anything. It should return  { result: 0, output: 'output'}
-  Do not append extra text to last_command_result, and rename it to commandOutput
+  - src/frontend/components/ExecuteButton.jsx
+requirements: >
+  The field to use is called output, not message
 os: OSX

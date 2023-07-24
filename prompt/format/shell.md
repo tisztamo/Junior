@@ -10,11 +10,10 @@ EXAMPLE START
 #!/bin/sh
 set -e
 goal=[Task description, max 7 words]
-# Plan:
-# 1. [...]
-# ...
+echo "Plan:"
+echo "1. [...]"
 [Commands solving the task]
-echo "\033[32mCompleted: $goal\033[0m\n"
+echo "\033[32mDone: $goal\033[0m\n"
 ```
 
 EXAMPLE END

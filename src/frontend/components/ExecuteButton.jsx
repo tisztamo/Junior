@@ -5,8 +5,8 @@ const ExecuteButton = () => {
   const handleExecuteChange = async () => {
     const change = await navigator.clipboard.readText();
     const response = await executeChange(change);
-    setExecutionResult(response.message);
-    console.log(response.message);
+    setExecutionResult(response.output);
+    console.log(response.output);
   };
 
   return (

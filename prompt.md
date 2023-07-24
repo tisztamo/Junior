@@ -1,71 +1,24 @@
 # Working set
 
-src/frontend/service/executeChange.js:
+src/frontend/components/ExecuteButton.jsx:
 ```
-import { getBaseUrl } from '../getBaseUrl';
+import { executeChange } from '../service/executeChange';
+import { setExecutionResult } from '../stores/executionResult';
 
-const executeChange = async (change) => {
-  const baseUrl = getBaseUrl();
-  const response = await fetch(`${baseUrl}/execute`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ change })
-  });
+const ExecuteButton = () => {
+  const handleExecuteChange = async () => {
+    const change = await navigator.clipboard.readText();
+    const response = await executeChange(change);
+    setExecutionResult(response.message);
+    console.log(response.message);
+  };
 
-  const data = await response.json();
-
-  return data;
+  return (
+    <button class="w-64 px-4 py-4 bg-orange-300 text-white rounded" onClick={handleExecuteChange}>Paste & Execute Change</button>
+  );
 };
 
-export { executeChange };
-
-```
-
-src/backend/handlers/executeHandler.js:
-```
-import { executeAndForwardOutput } from '../../execute/executeAndForwardOutput.js';
-
-function executeHandler(req, res) {
-  executeAndForwardOutput(req.body.change, (result) => {
-    res.json({ result });
-  });
-}
-
-export { executeHandler };
-
-```
-
-src/execute/executeAndForwardOutput.js:
-```
-import { spawn } from 'child_process';
-import { rl } from '../config.js';
-
-function executeAndForwardOutput(code, next) {
-  const child = spawn(code, { shell: true });
-  let last_command_result = '';
-
-  child.stdout.on('data', (data) => {
-    console.log(`${data}`);
-    last_command_result += data;
-  });
-
-  child.stderr.on('data', (data) => {
-    console.error(`${data}`);
-    last_command_result += data;
-  });
-
-  child.on('close', (code) => {
-    if (code !== 0) {
-      console.log(`child process exited with code ${code}`);
-      last_command_result = "Command failed. Output:\n" + last_command_result;
-    } else {
-      last_command_result = "Command executed. Output:\n" + last_command_result;
-    }
-    next();
-  });
-}
-
-export { executeAndForwardOutput };
+export default ExecuteButton;
 
 ```
 
@@ -81,8 +34,7 @@ Implement the following feature!
 
 Requirements:
 
-The execute api fails to return anything. It should return  { result: 0, output: &#39;output&#39;}
-Do not append extra text to last_command_result, and rename it to commandOutput
+The field to use is called output, not message
 
 
 
@@ -100,11 +52,10 @@ EXAMPLE START
 #!/bin/sh
 set -e
 goal=[Task description, max 7 words]
-# Plan:
-# 1. [...]
-# ...
+echo "Plan:"
+echo "1. [...]"
 [Commands solving the task]
-echo "\033[32mCompleted: $goal\033[0m\n"
+echo "\033[32mDone: $goal\033[0m\n"
 ```
 
 EXAMPLE END

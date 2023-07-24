@@ -1,48 +1,27 @@
 #!/bin/sh
 set -e
-goal="Fix execute API to return command output"
-# Plan:
-# 1. Update src/execute/executeAndForwardOutput.js to remove extra text and change last_command_result to commandOutput
-# 2. Update src/backend/handlers/executeHandler.js to pass the commandOutput as the result to res.json
+goal="Update 'message' field to 'output'"
+echo "Plan:"
+echo "1. Replace 'message' with 'output' in ExecuteButton.jsx"
 
-# Step 1
-cat << 'EOF' > src/execute/executeAndForwardOutput.js
-import { spawn } from 'child_process';
-import { rl } from '../config.js';
+cat > src/frontend/components/ExecuteButton.jsx << 'EOF'
+import { executeChange } from '../service/executeChange';
+import { setExecutionResult } from '../stores/executionResult';
 
-function executeAndForwardOutput(code, next) {
-  const child = spawn(code, { shell: true });
-  let commandOutput = '';
+const ExecuteButton = () => {
+  const handleExecuteChange = async () => {
+    const change = await navigator.clipboard.readText();
+    const response = await executeChange(change);
+    setExecutionResult(response.output);
+    console.log(response.output);
+  };
 
-  child.stdout.on('data', (data) => {
-    console.log(`${data}`);
-    commandOutput += data;
-  });
+  return (
+    <button class="w-64 px-4 py-4 bg-orange-300 text-white rounded" onClick={handleExecuteChange}>Paste & Execute Change</button>
+  );
+};
 
-  child.stderr.on('data', (data) => {
-    console.error(`${data}`);
-    commandOutput += data;
-  });
-
-  child.on('close', (code) => {
-    next(code, commandOutput);
-  });
-}
-
-export { executeAndForwardOutput };
+export default ExecuteButton;
 EOF
 
-# Step 2
-cat << 'EOF' > src/backend/handlers/executeHandler.js
-import { executeAndForwardOutput } from '../../execute/executeAndForwardOutput.js';
-
-function executeHandler(req, res) {
-  executeAndForwardOutput(req.body.change, (result, output) => {
-    res.json({ result, output });
-  });
-}
-
-export { executeHandler };
-EOF
-
-echo "\033[32mCompleted: $goal\033[0m\n"
+echo "\033[32mDone: $goal\033[0m\n"
