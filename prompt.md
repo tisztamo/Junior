@@ -12,7 +12,7 @@ const ExecutionResultDisplay = () => {
   let term;
 
   onMount(() => {
-    term = new Terminal({ convertEol: true });
+    term = new Terminal({ convertEol: true, rows: 7 });
     term.open(container);
   });
 
@@ -23,7 +23,7 @@ const ExecutionResultDisplay = () => {
   });
 
   return (
-    <div ref={container} class="px-4 py-4 bg-gray-300 text-black rounded overflow-auto max-w-full"></div>
+    <div ref={container} class="rounded overflow-auto max-w-full"></div>
   );
 };
 
@@ -36,8 +36,7 @@ export default ExecutionResultDisplay;
 
 Fix the following issue!
 
-Remove padding and color setup from the ExecutionResultDisplay component.
-Set its height to 7 lines (using the xterm.js api if possible)
+Do not display the terminal when the execution result is empty.
 
 
 # Output Format

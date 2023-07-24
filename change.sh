@@ -1,9 +1,9 @@
 #!/bin/sh
 set -e
-goal="Modify ExecutionResultDisplay component"
+goal="Hide terminal div when execution result is empty"
 echo "Plan:"
-echo "1. Remove padding and color setup from the ExecutionResultDisplay component."
-echo "2. Set its height to 7 lines using the xterm.js api."
+echo "1. Modify ExecutionResultDisplay.jsx to check if executionResult is empty before rendering the div."
+echo "2. If executionResult is empty, do not render the div."
 
 cat > src/frontend/components/ExecutionResultDisplay.jsx << 'EOF'
 import { onMount, createEffect } from 'solid-js';
@@ -21,13 +21,13 @@ const ExecutionResultDisplay = () => {
   });
 
   createEffect(() => {
-    if (term) {
- term.write(executionResult());
+    if (term && executionResult() !== '') {
+      term.write(executionResult());
     }
   });
 
   return (
-    <div ref={container} class="rounded overflow-auto max-w-full"></div>
+    executionResult() !== '' && <div ref={container} class="rounded overflow-auto max-w-full"></div>
   );
 };
 

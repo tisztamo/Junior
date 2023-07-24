@@ -2,6 +2,5 @@ task: prompt/task/bug/fix.md
 attention:
   - src/frontend/components/ExecutionResultDisplay.jsx
 requirements: |
-  Remove padding and color setup from the ExecutionResultDisplay component.
-  Set its height to 7 lines (using the xterm.js api if possible)
+  Do not display the terminal when the execution result is empty.
 

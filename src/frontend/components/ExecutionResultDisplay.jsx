@@ -13,13 +13,13 @@ const ExecutionResultDisplay = () => {
   });
 
   createEffect(() => {
-    if (term) {
- term.write(executionResult());
+    if (term && executionResult() !== '') {
+      term.write(executionResult());
     }
   });
 
   return (
-    <div ref={container} class="rounded overflow-auto max-w-full"></div>
+    executionResult() !== '' && <div ref={container} class="rounded overflow-auto max-w-full"></div>
   );
 };
 
