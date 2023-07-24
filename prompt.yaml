@@ -1,11 +1,9 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/App.jsx
   - src/frontend/service/executeChange.js
-  - src/frontend/components/ExecuteButton.jsx
-  - src/frontend/stores/promptDescriptor.js
+  - src/backend/handlers/executeHandler.js
+  - src/execute/executeAndForwardOutput.js
 requirements: |
-  Create a signal in a new file in stores for result of the execution
-  Create a new component for displaying the result of the execution
-  Put the new component under the execute button
+  The execute api fails to return anything. It should return  { result: 0, output: 'output'}
+  Do not append extra text to last_command_result, and rename it to commandOutput
 os: OSX
