@@ -1,6 +1,6 @@
 import { resetGit } from '../service/resetGit';
 
-const ResetButton = () => {
+const RollbackButton = () => {
   const handleReset = async () => {
     const response = await resetGit();
 
@@ -8,8 +8,8 @@ const ResetButton = () => {
   };
 
   return (
-    <button class="w-64 px-4 py-4 bg-red-700 text-white rounded" onClick={handleReset}>Reset Git</button>
+    <button class="w-64 px-4 py-4 bg-red-700 text-white rounded" onClick={handleReset}>Roll Back to Last Commit</button>
   );
 };
 
-export default ResetButton;
+export default RollbackButton;

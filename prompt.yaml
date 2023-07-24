@@ -1,6 +1,7 @@
-task: prompt/task/bug/fix.md
+task: prompt/task/refactor/move_files.md
 attention:
-  - src/frontend/components/ExecutionResultDisplay.jsx
-requirements: |
-  Do not display the terminal when the execution result is empty.
-
+  - src/frontend/components/ResetButton.jsx
+  - src/frontend/App.jsx
+requirements: >
+  Rename the reset git button to RollbackButton with label "Roll Back to Last
+  Commit".
