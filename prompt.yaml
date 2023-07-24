@@ -1,6 +1,12 @@
 task: prompt/task/feature/implement.md
 attention:
+  - src/frontend/
   - src/frontend/components/ExecuteButton.jsx
+  - src/frontend/components/ExecutionResultDisplay.jsx
+  - src/frontend/stores/executionResult.js
 requirements: >
-  The field to use is called output, not message
+  Install and use xterm.js in ExecutionResultDisplay to display the execution
+  result.
+
+  This is a Solidjs project.
 os: OSX
