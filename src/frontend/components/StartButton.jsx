@@ -2,9 +2,9 @@ import { generatePrompt } from '../generatePrompt';
 import { marked } from 'marked';
 import copy from 'clipboard-copy';
 
-const StartButton = ({notes, setPrompt}) => {
+const StartButton = ({setPrompt}) => {
   const handleGeneratePrompt = async () => {
-    const response = await generatePrompt(notes());
+    const response = await generatePrompt();
 
     copy(response.prompt)
       .then(() => {

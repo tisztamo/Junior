@@ -1,4 +1,3 @@
-import NotesInput from './components/NotesInput';
 import StartButton from './components/StartButton';
 import ExecuteButton from './components/ExecuteButton';
 import ResetButton from './components/ResetButton';
@@ -6,7 +5,6 @@ import PromptDisplay from './components/PromptDisplay';
 import TasksList from './components/TasksList';
 import PromptDescriptor from './components/PromptDescriptor';
 import NavBar from './components/NavBar';
-import { notes, setNotes } from './stores/notes';
 import { setPrompt } from './stores/prompt';
 
 const App = () => {
@@ -16,8 +14,7 @@ const App = () => {
         <NavBar />
         <TasksList />
         <PromptDescriptor />
-        <NotesInput notes={notes} setNotes={setNotes} />
-        <StartButton notes={notes} setPrompt={setPrompt} />
+        <StartButton setPrompt={setPrompt} />
         <PromptDisplay />
         <ExecuteButton />
         <ResetButton />

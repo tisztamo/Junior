@@ -1,9 +1,9 @@
 task: prompt/task/feature/implement.md
 attention:
   - src/frontend/App.jsx
-  - src/frontend/components/PromptDisplay.jsx
-requirements: |
-  Encapsulate the markdown in a html details tag, which remains closed until the user opens it.
-  Display the number of characters in the summary as "prompt length: 12 chars"
-  Move the display right under the start button.
+  - src/frontend/stores/notes.js
+  - src/frontend/components/NotesInput.jsx
+  - src/frontend/components/StartButton.jsx
+requirements: >
+  Fully eliminate the notes input feature!
 os: OSX

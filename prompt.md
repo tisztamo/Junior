@@ -22,9 +22,9 @@ const App = () => {
         <PromptDescriptor />
         <NotesInput notes={notes} setNotes={setNotes} />
         <StartButton notes={notes} setPrompt={setPrompt} />
+        <PromptDisplay />
         <ExecuteButton />
         <ResetButton />
-        <PromptDisplay />
       </div>
     </div>
   );
@@ -34,26 +34,59 @@ export default App;
 
 ```
 
-src/frontend/components/PromptDisplay.jsx:
+src/frontend/stores/notes.js:
 ```
-import { createSignal, onMount, createEffect } from "solid-js";
-import { prompt } from '../stores/prompt';
+import { createSignal } from 'solid-js';
 
-const PromptDisplay = () => {
-  let div;
+export const [notes, setNotes] = createSignal('');
 
-  createEffect(() => {
-    if (div) {
-      div.innerHTML = prompt();
-    }
-  });
+```
 
+src/frontend/components/NotesInput.jsx:
+```
+import { createSignal } from 'solid-js';
+
+const NotesInput = () => {
+  const [notes, setNotes] = createSignal('');
+  
   return (
-    <div className="w-full max-w-screen overflow-x-auto whitespace-normal markdown" ref={div}></div>
+    <input type="text" value={notes()} onInput={e => setNotes(e.target.value)} />
   );
 };
 
-export default PromptDisplay;
+export default NotesInput;
+
+```
+
+src/frontend/components/StartButton.jsx:
+```
+import { generatePrompt } from '../generatePrompt';
+import { marked } from 'marked';
+import copy from 'clipboard-copy';
+
+const StartButton = ({notes, setPrompt}) => {
+  const handleGeneratePrompt = async () => {
+    const response = await generatePrompt(notes());
+
+    copy(response.prompt)
+      .then(() => {
+        console.log('Prompt copied to clipboard!');
+      })
+      .catch(err => {
+        console.error('Failed to copy prompt: ', err);
+      });
+
+    const htmlPrompt = marked(response.prompt);
+
+    setPrompt(htmlPrompt);
+  };
+
+  return (
+    <button class="w-64 px-4 py-4 bg-blue-500 text-white rounded" onClick={handleGeneratePrompt}>Generate & Copy Prompt</button>
+  );
+};
+
+export default StartButton;
 
 ```
 
@@ -69,9 +102,7 @@ Implement the following feature!
 
 Requirements:
 
-Encapsulate the markdown in a html details tag, which remains closed until the user opens it.
-Display the number of characters in the summary as &#34;prompt length: 12 chars&#34;
-Move the display right under the start button.
+Fully eliminate the notes input feature!
 
 
 
