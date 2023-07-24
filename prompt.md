@@ -1,51 +1,57 @@
 # Working set
 
-src/frontend/App.jsx:
+src/prompt/createPrompt.js:
 ```
-import NotesInput from './components/NotesInput';
-import StartButton from './components/StartButton';
-import ExecuteButton from './components/ExecuteButton';
-import ResetButton from './components/ResetButton';
-import PromptDisplay from './components/PromptDisplay';
-import TasksList from './components/TasksList';
-import PromptDescriptor from './components/PromptDescriptor';
-import NavBar from './components/NavBar';
-import { notes, setNotes } from './stores/notes';
-import { setPrompt } from './stores/prompt';
+import { readAttention } from "../attention/readAttention.js"
+import yaml from 'js-yaml';
+import { getSystemPromptIfNeeded } from './getSystemPromptIfNeeded.js';
+import { resolveTemplateVariables } from './resolveTemplateVariables.js';
+import { extractTemplateVars } from './extractTemplateVars.js';
+import { loadPromptDescriptor } from './loadPromptDescriptor.js';
+import { loadTaskTemplate } from './loadTaskTemplate.js';
+import { loadFormatTemplate } from './loadFormatTemplate.js';
 
-const App = () => {
-  return (
-    <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
-      <NavBar />
-      <TasksList />
-      <PromptDescriptor />
-      <NotesInput notes={notes} setNotes={setNotes} />
-      <StartButton notes={notes} setPrompt={setPrompt} />
-      <ExecuteButton />
-      <ResetButton />
-      <PromptDisplay />
-    </div>
-  );
-};
+const createPrompt = async (userInput) => {
+  const promptDescriptor = yaml.load(await loadPromptDescriptor());
+  let templateVars = extractTemplateVars(promptDescriptor);
 
-export default App;
+  templateVars = await resolveTemplateVariables(templateVars);
+
+  const attention = await readAttention(promptDescriptor.attention);
+  const task = await loadTaskTemplate(promptDescriptor.task, templateVars);
+  
+  // Check if promptDescriptor.format is undefined. If it is, assign a default value
+  if(!promptDescriptor.format) {
+    promptDescriptor.format = "prompt/format/shell.md";
+  }
+  
+  const format = await loadFormatTemplate(promptDescriptor.format, templateVars);
+  const system = await getSystemPromptIfNeeded();
+  const saveto = promptDescriptor.saveto;
+  return {
+    prompt: `${system}# Working set\n\n${attention.join("\n")}\n\n# Task\n\n${task}\n\n# Output Format\n\n${format}\n\n${userInput ? userInput : ""}`,
+    saveto
+  };
+}
+
+export { createPrompt };
+
 
 ```
 
-src/index.html:
+src/prompt/extractTemplateVars.js:
 ```
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>Junior</title>
-</head>
-<body>
-  <div id="app"></div>
-  <script type="module" src="/frontend/index.jsx"></script>
-</body>
-</html>
+// Extracts template variables from the prompt descriptor.
+function extractTemplateVars(promptDescriptor) {
+  return Object.keys(promptDescriptor)
+    .filter(key => ['task', 'format', 'attention', 'saveto'].indexOf(key) < 0)
+    .reduce((obj, key) => {
+      obj[key] = promptDescriptor[key];
+      return obj;
+    }, {});
+}
+
+export { extractTemplateVars };
 
 ```
 
@@ -61,7 +67,11 @@ Implement the following feature!
 
 Requirements:
 
-Add a small margin around the content using tailwind.
+Create a new file promptDescriptorDefaults.js, and factor out the
+format default handling to it.
+Also add defaults for
+{ &#34;os&#34;: &#34;Debian&#34;, &#34;installedTools&#34;: &#34;npm, jq&#34;}
+Fill in the defaults right after loading the yaml!
 
 
 
@@ -69,8 +79,8 @@ Add a small margin around the content using tailwind.
 
 Encode and enclose your results as ./change.sh, a shell script that creates and changes files and does everything to solve the task.
 Files are small, prefer heredoc-ing full files without substitution.
-Assume OSX.
-npm and jq are installed.
+OS: OSX
+Installed tools: npm, jq
 Do NOT write any text outside the script (the plan goes into it)!
 
 

@@ -1,6 +1,13 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/App.jsx
-  - src/index.html
+  - src/prompt/createPrompt.js
+  - src/prompt/extractTemplateVars.js
 requirements: |
-  Add a small margin around the content using tailwind.
+  Create a new file promptDescriptorDefaults.js, and factor out the
+  format default handling to it.
+  Also add defaults for
+  { "os": "Debian", "installedTools": "npm, jq"}
+  Fill in the defaults right after loading the yaml!
+os: OSX
+installedTools: npm, jq
+
