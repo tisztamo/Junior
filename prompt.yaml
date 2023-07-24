@@ -1,9 +1,7 @@
 task: prompt/task/feature/implement.md
 attention:
   - src/frontend/App.jsx
-  - src/frontend/stores/notes.js
-  - src/frontend/components/NotesInput.jsx
   - src/frontend/components/StartButton.jsx
-requirements: >
-  Fully eliminate the notes input feature!
+requirements: |
+  Rename StartButton to GenerateButton and do not pass setPrompt to it, it can import itself.
 os: OSX

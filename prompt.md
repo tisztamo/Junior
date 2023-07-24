@@ -2,7 +2,6 @@
 
 src/frontend/App.jsx:
 ```
-import NotesInput from './components/NotesInput';
 import StartButton from './components/StartButton';
 import ExecuteButton from './components/ExecuteButton';
 import ResetButton from './components/ResetButton';
@@ -10,7 +9,6 @@ import PromptDisplay from './components/PromptDisplay';
 import TasksList from './components/TasksList';
 import PromptDescriptor from './components/PromptDescriptor';
 import NavBar from './components/NavBar';
-import { notes, setNotes } from './stores/notes';
 import { setPrompt } from './stores/prompt';
 
 const App = () => {
@@ -20,8 +18,7 @@ const App = () => {
         <NavBar />
         <TasksList />
         <PromptDescriptor />
-        <NotesInput notes={notes} setNotes={setNotes} />
-        <StartButton notes={notes} setPrompt={setPrompt} />
+        <StartButton setPrompt={setPrompt} />
         <PromptDisplay />
         <ExecuteButton />
         <ResetButton />
@@ -34,39 +31,15 @@ export default App;
 
 ```
 
-src/frontend/stores/notes.js:
-```
-import { createSignal } from 'solid-js';
-
-export const [notes, setNotes] = createSignal('');
-
-```
-
-src/frontend/components/NotesInput.jsx:
-```
-import { createSignal } from 'solid-js';
-
-const NotesInput = () => {
-  const [notes, setNotes] = createSignal('');
-  
-  return (
-    <input type="text" value={notes()} onInput={e => setNotes(e.target.value)} />
-  );
-};
-
-export default NotesInput;
-
-```
-
 src/frontend/components/StartButton.jsx:
 ```
 import { generatePrompt } from '../generatePrompt';
 import { marked } from 'marked';
 import copy from 'clipboard-copy';
 
-const StartButton = ({notes, setPrompt}) => {
+const StartButton = ({setPrompt}) => {
   const handleGeneratePrompt = async () => {
-    const response = await generatePrompt(notes());
+    const response = await generatePrompt();
 
     copy(response.prompt)
       .then(() => {
@@ -102,7 +75,7 @@ Implement the following feature!
 
 Requirements:
 
-Fully eliminate the notes input feature!
+Rename StartButton to GenerateButton and do not pass setPrompt to it, it can import itself.
 
 
 

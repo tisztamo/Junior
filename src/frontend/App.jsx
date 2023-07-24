@@ -1,11 +1,10 @@
-import StartButton from './components/StartButton';
+import GenerateButton from './components/GenerateButton';
 import ExecuteButton from './components/ExecuteButton';
 import ResetButton from './components/ResetButton';
 import PromptDisplay from './components/PromptDisplay';
 import TasksList from './components/TasksList';
 import PromptDescriptor from './components/PromptDescriptor';
 import NavBar from './components/NavBar';
-import { setPrompt } from './stores/prompt';
 
 const App = () => {
   return (
@@ -14,7 +13,7 @@ const App = () => {
         <NavBar />
         <TasksList />
         <PromptDescriptor />
-        <StartButton setPrompt={setPrompt} />
+        <GenerateButton />
         <PromptDisplay />
         <ExecuteButton />
         <ResetButton />

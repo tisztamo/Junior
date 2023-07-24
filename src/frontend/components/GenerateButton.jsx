@@ -1,8 +1,9 @@
 import { generatePrompt } from '../generatePrompt';
 import { marked } from 'marked';
 import copy from 'clipboard-copy';
+import { setPrompt } from '../stores/prompt';
 
-const StartButton = ({setPrompt}) => {
+const GenerateButton = () => {
   const handleGeneratePrompt = async () => {
     const response = await generatePrompt();
 
@@ -24,4 +25,4 @@ const StartButton = ({setPrompt}) => {
   );
 };
 
-export default StartButton;
+export default GenerateButton;
