@@ -1,25 +1,24 @@
-task: prompt/task/bug/fix.md
+task: prompt/task/refactor/move_files.md
 attention:
-  - prompt/task/bug/fix.md
-  - postcss.config.js
+  - ./
+  - src/
+  - src/frontend/
+  - postcss.config.cjs
+  - src/vite.config.js
 requirements: >
-  [vite:css] Nested CSS was detected, but CSS nesting has not been configured
-  correctly. Please enable a CSS nesting plugin *before* Tailwind in your
-  configuration.
+  Move the postcss config to src/frontend/ and configure vite to use it.
 
-  We already have one, try the config in the tailwind docs:
+  In vite docs:
 
-  // postcss.config.js module.exports = {
-    plugins: {
-      'postcss-import': {},
-      'tailwindcss/nesting': {},
-      tailwindcss: {},
-      autoprefixer: {},
-    }
-  }
+  css.postcss# Type: string | (postcss.ProcessOptions & { plugins?:
+  postcss.Plugin[] })
 
-  No need to install anything.
+  Inline PostCSS config or a custom directory to search PostCSS config from
+  (default is project root).
 
-  Also rename our config file to .cjs before applying the change so we can avoid
-  import issues.
+  For inline PostCSS config, it expects the same format as postcss.config.js.
+  But for plugins property, only array format can be used.
+
+  The search is done using postcss-load-config and only the supported config
+  file names are loaded.
 os: OSX
