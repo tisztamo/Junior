@@ -1,22 +1,12 @@
 task: prompt/task/refactor/move_files.md
 attention:
-  - ./
   - src/
   - src/frontend/
-  - src/frontend/postcss.config.cjs
   - src/vite.config.js
-  - tailwind.config.js
+  - src/startVite.js
+  - src/web.js
+  - src/index.html
 requirements: >
-  Move the tailwind config to src/frontend/, convert it to .cjs (no es6 imports) and configure the project to use it.
-
-  FYI the tailwind docs says:
-
-  If you’re using Tailwind as a PostCSS plugin, you will need to specify your custom configuration path in your PostCSS configuration:
-
-  postcss.config.js:
-  module.exports = {
-    plugins: {
-      tailwindcss: { config: './tailwindcss-config.js' },
-    },
-  }
+  Move the vite config, startVite.js and index.html from src/ to src/frontend/!
+  Note that vite.config uses paths relative to the project root so no need to update it.
 os: OSX
