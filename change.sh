@@ -1,13 +1,17 @@
 #!/bin/sh
 set -e
-goal="Fix CSS nesting issue in postcss config"
+goal="Move and reconfigure Tailwind config file"
 echo "Plan:"
-echo "1. Rename postcss.config.js to postcss.config.cjs"
-echo "2. Modify the postcss config to include 'postcss-import', 'tailwindcss/nesting' before 'tailwindcss' and 'autoprefixer'"
+echo "1. Move the 'tailwind.config.js' file to 'src/frontend' directory."
+echo "2. Rename the 'tailwind.config.js' to 'tailwind.config.cjs' since Node.js uses commonJS and not ES6 syntax."
+echo "3. Update 'postcss.config.cjs' in 'src/frontend' directory to use the moved tailwind config file with the complete path."
+echo "4. Update 'vite.config.js' in 'src' directory to use the updated 'postcss.config.cjs' file."
 
-mv postcss.config.js postcss.config.cjs
+# Move and rename the tailwind config file
+mv ./tailwind.config.js ./src/frontend/tailwind.config.cjs
 
-cat > postcss.config.cjs <<'EOF'
+# Heredoc the new postcss.config.cjs file
+cat <<'EOF' > ./src/frontend/postcss.config.cjs
 const tailwindcss = require('tailwindcss');
 const autoprefixer = require('autoprefixer');
 const postcssImport = require('postcss-import');
@@ -17,10 +21,26 @@ module.exports = {
   plugins: {
     'postcss-import': {},
     'tailwindcss/nesting': postcssNested,
-    tailwindcss: tailwindcss,
+    tailwindcss: { config: './src/frontend/tailwind.config.cjs' },
     autoprefixer: autoprefixer,
   },
 };
+EOF
+
+# Heredoc the updated vite.config.js file
+cat <<'EOF' > ./src/vite.config.js
+import { defineConfig } from 'vite'
+import solidPlugin from 'vite-plugin-solid'
+
+export default defineConfig({
+  plugins: [solidPlugin()],
+  css: {
+    postcss: './src/frontend/postcss.config.cjs'
+  },
+  build: {
+    target: 'esnext',
+  },
+})
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"

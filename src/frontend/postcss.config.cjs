@@ -7,7 +7,7 @@ module.exports = {
   plugins: {
     'postcss-import': {},
     'tailwindcss/nesting': postcssNested,
-    tailwindcss: tailwindcss,
+    tailwindcss: { config: './src/frontend/tailwind.config.cjs' },
     autoprefixer: autoprefixer,
   },
 };
