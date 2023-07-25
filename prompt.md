@@ -1,33 +1,27 @@
 # Working set
 
-src/frontend/components/ExecutionResultDisplay.jsx:
+prompt/task/bug/fix.md:
 ```
-import { onMount, createEffect } from 'solid-js';
-import { Terminal } from 'xterm';
-import 'xterm/css/xterm.css';
-import { executionResult } from '../stores/executionResult';
+Fix the following issue!
 
-const ExecutionResultDisplay = () => {
-  let container;
-  let term;
+<%= requirements %>
+```
 
-  onMount(() => {
-    term = new Terminal({ convertEol: true, rows: 7 });
-    term.open(container);
-  });
+postcss.config.js:
+```
+import tailwindcss from 'tailwindcss';
+import autoprefixer from 'autoprefixer';
+import postcssNested from 'postcss-nested';
 
-  createEffect(() => {
-    if (term && executionResult() !== '') {
-      term.write(executionResult());
-    }
-  });
-
-  return (
-    executionResult() !== '' && <div ref={container} class="rounded overflow-auto max-w-full"></div>
-  );
-};
-
-export default ExecutionResultDisplay;
+export default function postCssConfig() {
+  return {
+    plugins: [
+      postcssNested(),
+      tailwindcss(),
+      autoprefixer()
+    ]
+  }
+}
 
 ```
 
@@ -36,10 +30,18 @@ export default ExecutionResultDisplay;
 
 Fix the following issue!
 
-Uncaught Error: Terminal requires a parent element.
-  at I.open (Terminal.ts:408:13)
-
-To fix this, ensure that the div always exists, just hidden when not needed.
+[vite:css] Nested CSS was detected, but CSS nesting has not been configured correctly. Please enable a CSS nesting plugin *before* Tailwind in your configuration.
+We already have one, try the config in the tailwind docs:
+// postcss.config.js module.exports = {
+  plugins: {
+    &#39;postcss-import&#39;: {},
+    &#39;tailwindcss/nesting&#39;: {},
+    tailwindcss: {},
+    autoprefixer: {},
+  }
+}
+No need to install anything.
+Also rename our config file to .cjs before applying the change so we can avoid import issues.
 
 
 # Output Format

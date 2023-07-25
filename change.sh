@@ -1,46 +1,26 @@
 #!/bin/sh
 set -e
-goal="Fix terminal parent element error"
+goal="Fix CSS nesting issue in postcss config"
 echo "Plan:"
-echo "1. Edit ExecutionResultDisplay.jsx to ensure that the div always exists."
-echo "2. Instead of conditionally rendering the div, render it always but control its visibility using CSS."
+echo "1. Rename postcss.config.js to postcss.config.cjs"
+echo "2. Modify the postcss config to include 'postcss-import', 'tailwindcss/nesting' before 'tailwindcss' and 'autoprefixer'"
 
-cat > src/frontend/components/ExecutionResultDisplay.jsx << 'EOF'
-import { onMount, createEffect, onCleanup } from 'solid-js';
-import { Terminal } from 'xterm';
-import 'xterm/css/xterm.css';
-import { executionResult } from '../stores/executionResult';
+mv postcss.config.js postcss.config.cjs
 
-const ExecutionResultDisplay = () => {
-  let container;
-  let term;
+cat > postcss.config.cjs <<'EOF'
+const tailwindcss = require('tailwindcss');
+const autoprefixer = require('autoprefixer');
+const postcssImport = require('postcss-import');
+const postcssNested = require('postcss-nested');
 
-  onMount(() => {
-    term = new Terminal({ convertEol: true, rows: 7 });
-    term.open(container);
-  });
-
-  createEffect(() => {
-    if (term && executionResult() !== '') {
-      term.write(executionResult());
-    }
-  });
-
-  onCleanup(() => {
-    if (term) {
-      term.dispose();
-    }
-  });
-
-  return (
-    <div 
-      ref={container} 
-      class={`rounded overflow-auto max-w-full ${executionResult() !== '' ? 'block' : 'hidden'}`}
-    />
-  );
+module.exports = {
+  plugins: {
+    'postcss-import': {},
+    'tailwindcss/nesting': postcssNested,
+    tailwindcss: tailwindcss,
+    autoprefixer: autoprefixer,
+  },
 };
-
-export default ExecutionResultDisplay;
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"
