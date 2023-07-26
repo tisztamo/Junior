@@ -1,13 +1,12 @@
+const path = require('path');
 const tailwindcss = require('tailwindcss');
 const autoprefixer = require('autoprefixer');
-const postcssImport = require('postcss-import');
 const postcssNested = require('postcss-nested');
 
 module.exports = {
   plugins: {
-    'postcss-import': {},
     'tailwindcss/nesting': postcssNested,
-    tailwindcss: { config: './src/frontend/tailwind.config.cjs' },
+    tailwindcss: { config: path.join(__dirname, 'tailwind.config.cjs') },
     autoprefixer: autoprefixer,
   },
 };

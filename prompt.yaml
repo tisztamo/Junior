@@ -1,5 +1,8 @@
 task: prompt/task/bug/fix.md
 attention:
-  - src/git/gitStatus.js
-requirements: Add --porcelain=v1 when calling git status
+  - ./
+  - ./src/
+  - ./src/frontend/
+  - src/frontend/postcss.config.cjs
+requirements: The tailwind config path should be relative to the postcss config file, not the working dir. Also remove unused imports!
 os: OSX

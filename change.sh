@@ -1,24 +1,23 @@
 #!/bin/sh
 set -e
-goal="Add porcelain=v1 to git status command"
+goal="Fix postcss config and remove unused imports"
 echo "Plan:"
-echo "1. Add --porcelain=v1 option to git status command in gitStatus.js"
+echo "1. Remove unused imports from postcss.config.cjs"
+echo "2. Calculate the relative path using dirname and use it for tailwindcss config path"
 
-/bin/cat <<EOF >src/git/gitStatus.js
-import { promisify } from 'util';
-import { exec } from 'child_process';
+cat >./src/frontend/postcss.config.cjs <<'EOF'
+const path = require('path');
+const tailwindcss = require('tailwindcss');
+const autoprefixer = require('autoprefixer');
+const postcssNested = require('postcss-nested');
 
-const execAsync = promisify(exec);
-
-export default async function gitStatus() {
-  try {
-    const { stdout, stderr } = await execAsync('git status --porcelain=v1');
-    return stdout;
-  } catch (error) {
-    console.error(`exec error: ${error}`);
-    throw error;
-  }
-}
+module.exports = {
+  plugins: {
+    'tailwindcss/nesting': postcssNested,
+    tailwindcss: { config: path.join(__dirname, 'tailwind.config.cjs') },
+    autoprefixer: autoprefixer,
+  },
+};
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"
