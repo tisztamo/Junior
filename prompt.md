@@ -1,75 +1,19 @@
 # Working set
 
+src/frontend/vite.config.js:
 ```
-./
-├── .DS_Store
-├── .git/...
-├── .github/...
-├── .gitignore
-├── .vscode/...
-├── README.md
-├── change.sh
-├── doc/...
-├── integrations/...
-├── node_modules/...
-├── package-lock.json
-├── package.json
-├── prompt/...
-├── prompt.md
-├── prompt.yaml
-├── src/...
+import { defineConfig } from 'vite'
+import solidPlugin from 'vite-plugin-solid'
 
-```
-```
-./src/
-├── .DS_Store
-├── attention/...
-├── backend/...
-├── config.js
-├── doc/...
-├── execute/...
-├── frontend/...
-├── git/...
-├── interactiveSession/...
-├── llm/...
-├── main.js
-├── prompt/...
-├── web.js
-
-```
-```
-./src/frontend/
-├── App.jsx
-├── components/...
-├── fetchTasks.js
-├── generatePrompt.js
-├── getBaseUrl.js
-├── index.html
-├── index.jsx
-├── postcss.config.cjs
-├── service/...
-├── startVite.js
-├── stores/...
-├── styles/...
-├── tailwind.config.cjs
-├── vite.config.js
-
-```
-src/frontend/postcss.config.cjs:
-```
-const tailwindcss = require('tailwindcss');
-const autoprefixer = require('autoprefixer');
-const postcssImport = require('postcss-import');
-const postcssNested = require('postcss-nested');
-
-module.exports = {
-  plugins: {
-    'postcss-import': {},
-    'tailwindcss/nesting': postcssNested,
-    tailwindcss: { config: './src/frontend/tailwind.config.cjs' },
-    autoprefixer: autoprefixer,
+export default defineConfig({
+  plugins: [solidPlugin()],
+  css: {
+    postcss: './src/frontend/postcss.config.cjs'
   },
-};
+  build: {
+    target: 'esnext',
+  },
+})
 
 ```
 
@@ -78,7 +22,7 @@ module.exports = {
 
 Fix the following issue!
 
-The tailwind config path should be relative to the postcss config file, not the working dir. Also remove unused imports!
+The postcss config path should be relative to the vite config file, not the working dir. Use dirname, they are in the same dir
 
 # Output Format
 

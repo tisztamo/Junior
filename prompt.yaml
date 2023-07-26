@@ -1,8 +1,7 @@
 task: prompt/task/bug/fix.md
 attention:
-  - ./
-  - ./src/
-  - ./src/frontend/
-  - src/frontend/postcss.config.cjs
-requirements: The tailwind config path should be relative to the postcss config file, not the working dir. Also remove unused imports!
+  - src/frontend/vite.config.js
+requirements: >-
+  The postcss config path should be relative to the vite config file, not
+  the working dir. Use dirname, they are in the same dir
 os: OSX
