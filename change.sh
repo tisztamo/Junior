@@ -1,47 +1,63 @@
 #!/bin/sh
 set -e
-goal="Implementing code validation and refactoring"
+goal="Implement git status endpoint"
 echo "Plan:"
-echo "1. Remove the unused import 'rl' from executeAndForwardOutput.js"
-echo "2. Update the executeAndForwardOutput function to check if the code starts with a shebang"
-echo "3. Save the code to a file './change.sh' and run it instead of feeding the lines directly to the shell"
+echo "1. Create a new handler gitStatusHandler.js to process the endpoint requests."
+echo "2. Implement a new function gitStatus.js to execute git status command."
+echo "3. Update setupRoutes.js to include the new endpoint '/status'."
 
-# Step 1, 2, and 3: Remove the unused import, validate shebang and write code to file
-cat << 'EOF' > ./src/execute/executeAndForwardOutput.js
-import { writeFile } from 'fs/promises';
-import { spawn } from 'child_process';
+# Step 1: Create gitStatusHandler.js
+cat > src/backend/handlers/gitStatusHandler.js << 'EOF'
+import gitStatus from '../../git/gitStatus.js';
 
-async function executeAndForwardOutput(code, next) {
-  // Check if the code starts with a shebang
-  if (!code.startsWith('#!')) {
-    throw new Error('Code does not start with a shebang');
-  }
-
+export default async function gitStatusHandler(req, res) {
   try {
-    // Write code to change.sh
-    await writeFile('./change.sh', code);
-    const child = spawn('./change.sh', [], { shell: true });
-    let commandOutput = '';
-
-    child.stdout.on('data', (data) => {
-      console.log(`${data}`);
-      commandOutput += data;
-    });
-
-    child.stderr.on('data', (data) => {
-      console.error(`${data}`);
-      commandOutput += data;
-    });
-
-    child.on('close', (code) => {
-      next(code, commandOutput);
-    });
-  } catch (err) {
-    console.error(err);
+    const status = await gitStatus();
+    res.status(200).send({ status });
+  } catch (error) {
+    res.status(500).send({ message: 'Error in getting Git status', error });
   }
 }
+EOF
 
-export { executeAndForwardOutput };
+# Step 2: Create gitStatus.js
+cat > src/git/gitStatus.js << 'EOF'
+import { promisify } from 'util';
+import { exec } from 'child_process';
+
+const execAsync = promisify(exec);
+
+export default async function gitStatus() {
+  try {
+    const { stdout, stderr } = await execAsync('git status');
+    return stdout;
+  } catch (error) {
+    console.error(`exec error: ${error}`);
+    throw error;
+  }
+}
+EOF
+
+# Step 3: Update setupRoutes.js to include new endpoint
+cat > src/backend/setupRoutes.js << 'EOF'
+import { generateHandler } from './handlers/generateHandler.js';
+import { servePromptDescriptor } from './handlers/servePromptDescriptor.js';
+import { updateTaskHandler } from './handlers/updateTaskHandler.js';
+import { listTasks } from './handlers/listTasks.js';
+import { executeHandler } from './handlers/executeHandler.js';
+import resetGitHandler from './handlers/resetGitHandler.js';
+import gitStatusHandler from './handlers/gitStatusHandler.js';
+
+export function setupRoutes(app) {
+  app.get('/descriptor', servePromptDescriptor);
+  app.get('/tasks', (req, res) => res.json({ tasks: listTasks() }));
+  app.get('/status', gitStatusHandler);
+
+  app.post('/generate', generateHandler);
+  app.post('/updatetask', updateTaskHandler);
+  app.post('/execute', executeHandler);
+  app.post('/reset', resetGitHandler);
+}
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"

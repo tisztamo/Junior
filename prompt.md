@@ -1,30 +1,82 @@
 # Working set
 
-src/execute/executeAndForwardOutput.js:
+src/backend/setupRoutes.js:
 ```
-import { spawn } from 'child_process';
-import { rl } from '../config.js';
+import { generateHandler } from './handlers/generateHandler.js';
+import { servePromptDescriptor } from './handlers/servePromptDescriptor.js';
+import { updateTaskHandler } from './handlers/updateTaskHandler.js';
+import { listTasks } from './handlers/listTasks.js';
+import { executeHandler } from './handlers/executeHandler.js';
+import resetGitHandler from './handlers/resetGitHandler.js';
 
-function executeAndForwardOutput(code, next) {
-  const child = spawn(code, { shell: true });
-  let commandOutput = '';
+export function setupRoutes(app) {
+  app.get('/descriptor', servePromptDescriptor);
+  app.get('/tasks', (req, res) => res.json({ tasks: listTasks() }));
 
-  child.stdout.on('data', (data) => {
-    console.log(`${data}`);
-    commandOutput += data;
-  });
-
-  child.stderr.on('data', (data) => {
-    console.error(`${data}`);
-    commandOutput += data;
-  });
-
-  child.on('close', (code) => {
-    next(code, commandOutput);
-  });
+  app.post('/generate', generateHandler);
+  app.post('/updatetask', updateTaskHandler);
+  app.post('/execute', executeHandler);
+  app.post('/reset', resetGitHandler);
 }
 
-export { executeAndForwardOutput };
+```
+
+src/backend/handlers/resetGitHandler.js:
+```
+import resetGit from '../../git/resetGit.js';
+
+export default async function resetGitHandler(req, res) {
+  try {
+    await resetGit();
+    res.status(200).send({ message: 'Git successfully reset' });
+  } catch (error) {
+    res.status(500).send({ message: 'Error in resetting Git', error });
+  }
+}
+
+```
+
+src/git/resetGit.js:
+```
+import { exec } from 'child_process';
+
+export default function resetGit() {
+  // Stash all changes including untracked files
+  exec('git stash -u', (err, stdout, stderr) => {
+    if (err) {
+      console.error(`exec error: ${err}`);
+      return;
+    }
+    console.log(`stdout: ${stdout}`);
+
+    // Clean the repository and reset to the latest commit
+    exec('git clean -f -d && git reset --hard', (err, stdout, stderr) => {
+      if (err) {
+        console.error(`exec error: ${err}`);
+        return;
+      }
+      console.log(`stdout: ${stdout}`);
+
+      // Checkout prompt.yaml from stash
+      exec('git checkout stash@{0} -- prompt.yaml', (err, stdout, stderr) => {
+        if (err) {
+          console.error(`exec error: ${err}`);
+          return;
+        }
+        console.log(`stdout: ${stdout}`);
+
+        // Drop the stash
+        exec('git stash drop', (err, stdout, stderr) => {
+          if (err) {
+            console.error(`exec error: ${err}`);
+            return;
+          }
+          console.log(`stdout: ${stdout}`);
+        });
+      });
+    });
+  });
+}
 
 ```
 
@@ -38,9 +90,7 @@ Implement the following feature!
 
 Requirements:
 
-Check if the code starts with a shebang and throw if not
-Save the code to ./change.sh and the run ./change.sh instead of feeding the lines directly to the shell
-remove the unused import &#34;rl&#34;
+Create an endpoint &#34;/status&#34; which runs git status
 
 
 

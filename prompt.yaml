@@ -1,8 +1,8 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/execute/executeAndForwardOutput.js
+  - src/backend/setupRoutes.js
+  - src/backend/handlers/resetGitHandler.js
+  - src/git/resetGit.js
 requirements: |
-  Check if the code starts with a shebang and throw if not
-  Save the code to ./change.sh and the run ./change.sh instead of feeding the lines directly to the shell
-  remove the unused import "rl"
+  Create an endpoint "/status" which runs git status
 os: OSX
