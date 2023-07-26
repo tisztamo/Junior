@@ -1,40 +1,24 @@
 # Working set
 
-src/prompt/createPrompt.js:
+src/frontend/styles/markdown.css:
 ```
-import { readAttention } from "../attention/readAttention.js"
-import yaml from 'js-yaml';
-import { getSystemPromptIfNeeded } from './getSystemPromptIfNeeded.js';
-import { resolveTemplateVariables } from './resolveTemplateVariables.js';
-import { extractTemplateVars } from './extractTemplateVars.js';
-import { loadPromptDescriptor } from './loadPromptDescriptor.js';
-import { loadTaskTemplate } from './loadTaskTemplate.js';
-import { loadFormatTemplate } from './loadFormatTemplate.js';
-import promptDescriptorDefaults from './promptDescriptorDefaults.js';
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
-const createPrompt = async (userInput) => {
-  let promptDescriptorDefaultsData = await promptDescriptorDefaults();
-  let promptDescriptor = yaml.load(await loadPromptDescriptor());
+.markdown {
+  & h1 {
+    @apply text-4xl font-bold mb-4;
+  }
 
-  // Fill in the defaults from promptDescriptorDefaults.js
-  promptDescriptor = { ...promptDescriptorDefaultsData, ...promptDescriptor };
+  & p {
+    @apply text-base font-normal mb-4;
+  }
 
-  let templateVars = extractTemplateVars(promptDescriptor);
-  templateVars = await resolveTemplateVariables(templateVars);
-
-  const attention = await readAttention(promptDescriptor.attention);
-  const task = await loadTaskTemplate(promptDescriptor.task, templateVars);
-
-  const format = await loadFormatTemplate(promptDescriptor.format, templateVars);
-  const system = await getSystemPromptIfNeeded();
-  const saveto = promptDescriptor.saveto;
-  return {
-    prompt: `${system}# Working set\n\n${attention.join("\n")}\n\n# Task\n\n${task}\n\n# Output Format\n\n${format}\n\n${userInput ? userInput : ""}`,
-    saveto
-  };
+  & pre {
+    @apply bg-gray-100 p-4 font-mono;
+  }
 }
-
-export { createPrompt };
 
 ```
 
@@ -48,7 +32,7 @@ Implement the following feature!
 
 Requirements:
 
-Switch order of loading the descriptor yaml and the defaults
+Add styles for h2, h3 and lists!
 
 
 

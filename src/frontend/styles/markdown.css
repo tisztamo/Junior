@@ -7,8 +7,20 @@
     @apply text-4xl font-bold mb-4;
   }
 
+  & h2 {
+    @apply text-3xl font-bold mb-3;
+  }
+
+  & h3 {
+    @apply text-2xl font-semibold mb-2;
+  }
+
   & p {
     @apply text-base font-normal mb-4;
+  }
+
+  & ul, & ol {
+    @apply list-decimal list-inside mb-4;
   }
 
   & pre {

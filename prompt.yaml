@@ -1,6 +1,6 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/prompt/createPrompt.js
-requirements: >
-  Switch order of loading the descriptor yaml and the defaults
+  - src/frontend/styles/markdown.css
+requirements: |
+  Add styles for h2, h3 and lists!
 os: OSX
