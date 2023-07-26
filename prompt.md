@@ -1,24 +1,30 @@
 # Working set
 
-src/frontend/styles/markdown.css:
+src/execute/executeAndForwardOutput.js:
 ```
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+import { spawn } from 'child_process';
+import { rl } from '../config.js';
 
-.markdown {
-  & h1 {
-    @apply text-4xl font-bold mb-4;
-  }
+function executeAndForwardOutput(code, next) {
+  const child = spawn(code, { shell: true });
+  let commandOutput = '';
 
-  & p {
-    @apply text-base font-normal mb-4;
-  }
+  child.stdout.on('data', (data) => {
+    console.log(`${data}`);
+    commandOutput += data;
+  });
 
-  & pre {
-    @apply bg-gray-100 p-4 font-mono;
-  }
+  child.stderr.on('data', (data) => {
+    console.error(`${data}`);
+    commandOutput += data;
+  });
+
+  child.on('close', (code) => {
+    next(code, commandOutput);
+  });
 }
+
+export { executeAndForwardOutput };
 
 ```
 
@@ -32,7 +38,9 @@ Implement the following feature!
 
 Requirements:
 
-Add styles for h2, h3 and lists!
+Check if the code starts with a shebang and throw if not
+Save the code to ./change.sh and the run ./change.sh instead of feeding the lines directly to the shell
+remove the unused import &#34;rl&#34;
 
 
 

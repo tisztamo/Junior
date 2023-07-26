@@ -1,41 +1,47 @@
 #!/bin/sh
 set -e
-goal="Add styles for h2, h3 and lists in markdown.css"
+goal="Implementing code validation and refactoring"
 echo "Plan:"
-echo "1. Add styles for h2 and h3 headings in the markdown.css file."
-echo "2. Add styles for unordered (ul) and ordered (ol) lists in the markdown.css file."
+echo "1. Remove the unused import 'rl' from executeAndForwardOutput.js"
+echo "2. Update the executeAndForwardOutput function to check if the code starts with a shebang"
+echo "3. Save the code to a file './change.sh' and run it instead of feeding the lines directly to the shell"
 
-# Begin commands
-cat << 'EOF' > src/frontend/styles/markdown.css
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+# Step 1, 2, and 3: Remove the unused import, validate shebang and write code to file
+cat << 'EOF' > ./src/execute/executeAndForwardOutput.js
+import { writeFile } from 'fs/promises';
+import { spawn } from 'child_process';
 
-.markdown {
-  & h1 {
-    @apply text-4xl font-bold mb-4;
+async function executeAndForwardOutput(code, next) {
+  // Check if the code starts with a shebang
+  if (!code.startsWith('#!')) {
+    throw new Error('Code does not start with a shebang');
   }
 
-  & h2 {
-    @apply text-3xl font-bold mb-3;
-  }
+  try {
+    // Write code to change.sh
+    await writeFile('./change.sh', code);
+    const child = spawn('./change.sh', [], { shell: true });
+    let commandOutput = '';
 
-  & h3 {
-    @apply text-2xl font-semibold mb-2;
-  }
+    child.stdout.on('data', (data) => {
+      console.log(`${data}`);
+      commandOutput += data;
+    });
 
-  & p {
-    @apply text-base font-normal mb-4;
-  }
+    child.stderr.on('data', (data) => {
+      console.error(`${data}`);
+      commandOutput += data;
+    });
 
-  & ul, & ol {
-    @apply list-decimal list-inside mb-4;
-  }
-
-  & pre {
-    @apply bg-gray-100 p-4 font-mono;
+    child.on('close', (code) => {
+      next(code, commandOutput);
+    });
+  } catch (err) {
+    console.error(err);
   }
 }
+
+export { executeAndForwardOutput };
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"

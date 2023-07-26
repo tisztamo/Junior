@@ -1,23 +1,34 @@
+import { writeFile } from 'fs/promises';
 import { spawn } from 'child_process';
-import { rl } from '../config.js';
 
-function executeAndForwardOutput(code, next) {
-  const child = spawn(code, { shell: true });
-  let commandOutput = '';
+async function executeAndForwardOutput(code, next) {
+  // Check if the code starts with a shebang
+  if (!code.startsWith('#!')) {
+    throw new Error('Code does not start with a shebang');
+  }
 
-  child.stdout.on('data', (data) => {
-    console.log(`${data}`);
-    commandOutput += data;
-  });
+  try {
+    // Write code to change.sh
+    await writeFile('./change.sh', code);
+    const child = spawn('./change.sh', [], { shell: true });
+    let commandOutput = '';
 
-  child.stderr.on('data', (data) => {
-    console.error(`${data}`);
-    commandOutput += data;
-  });
+    child.stdout.on('data', (data) => {
+      console.log(`${data}`);
+      commandOutput += data;
+    });
 
-  child.on('close', (code) => {
-    next(code, commandOutput);
-  });
+    child.stderr.on('data', (data) => {
+      console.error(`${data}`);
+      commandOutput += data;
+    });
+
+    child.on('close', (code) => {
+      next(code, commandOutput);
+    });
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 export { executeAndForwardOutput };

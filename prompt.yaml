@@ -1,6 +1,8 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/styles/markdown.css
+  - src/execute/executeAndForwardOutput.js
 requirements: |
-  Add styles for h2, h3 and lists!
+  Check if the code starts with a shebang and throw if not
+  Save the code to ./change.sh and the run ./change.sh instead of feeding the lines directly to the shell
+  remove the unused import "rl"
 os: OSX
