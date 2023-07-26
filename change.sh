@@ -1,63 +1,103 @@
 #!/bin/sh
 set -e
-goal="Implement git status endpoint"
+goal="Implement Git status information display"
 echo "Plan:"
-echo "1. Create a new handler gitStatusHandler.js to process the endpoint requests."
-echo "2. Implement a new function gitStatus.js to execute git status command."
-echo "3. Update setupRoutes.js to include the new endpoint '/status'."
+echo "1. Create a new service for fetching git status information"
+echo "2. Create a new store for git status"
+echo "3. Create a new component to display the git status"
+echo "4. Update the App.jsx file to include the new component after the ExecutionResultDisplay"
 
-# Step 1: Create gitStatusHandler.js
-cat > src/backend/handlers/gitStatusHandler.js << 'EOF'
-import gitStatus from '../../git/gitStatus.js';
+# Step 1: Create a new service for fetching git status information
+cat << 'EOF' > ./src/frontend/service/fetchGitStatus.js
+import { getBaseUrl } from '../getBaseUrl';
 
-export default async function gitStatusHandler(req, res) {
-  try {
-    const status = await gitStatus();
-    res.status(200).send({ status });
-  } catch (error) {
-    res.status(500).send({ message: 'Error in getting Git status', error });
-  }
-}
+const fetchGitStatus = async () => {
+  const baseUrl = getBaseUrl();
+  const response = await fetch(`${baseUrl}/status`);
+
+  const data = await response.json();
+
+  return data;
+};
+
+export { fetchGitStatus };
 EOF
 
-# Step 2: Create gitStatus.js
-cat > src/git/gitStatus.js << 'EOF'
-import { promisify } from 'util';
-import { exec } from 'child_process';
+# Step 2: Create a new signal for git status
+cat << 'EOF' > ./src/frontend/stores/gitStatus.js
+import { createSignal } from 'solid-js';
 
-const execAsync = promisify(exec);
+const [gitStatus, setGitStatus] = createSignal('');
 
-export default async function gitStatus() {
-  try {
-    const { stdout, stderr } = await execAsync('git status');
-    return stdout;
-  } catch (error) {
-    console.error(`exec error: ${error}`);
-    throw error;
-  }
-}
+export { gitStatus, setGitStatus };
 EOF
 
-# Step 3: Update setupRoutes.js to include new endpoint
-cat > src/backend/setupRoutes.js << 'EOF'
-import { generateHandler } from './handlers/generateHandler.js';
-import { servePromptDescriptor } from './handlers/servePromptDescriptor.js';
-import { updateTaskHandler } from './handlers/updateTaskHandler.js';
-import { listTasks } from './handlers/listTasks.js';
-import { executeHandler } from './handlers/executeHandler.js';
-import resetGitHandler from './handlers/resetGitHandler.js';
-import gitStatusHandler from './handlers/gitStatusHandler.js';
+# Step 3: Create a new component to display the git status
+cat << 'EOF' > ./src/frontend/components/GitStatusDisplay.jsx
+import { onMount, createEffect, onCleanup } from 'solid-js';
+import { gitStatus, setGitStatus } from '../stores/gitStatus';
+import { fetchGitStatus } from '../service/fetchGitStatus';
 
-export function setupRoutes(app) {
-  app.get('/descriptor', servePromptDescriptor);
-  app.get('/tasks', (req, res) => res.json({ tasks: listTasks() }));
-  app.get('/status', gitStatusHandler);
+const GitStatusDisplay = () => {
+  let statusContainer;
 
-  app.post('/generate', generateHandler);
-  app.post('/updatetask', updateTaskHandler);
-  app.post('/execute', executeHandler);
-  app.post('/reset', resetGitHandler);
-}
+  onMount(async () => {
+    const status = await fetchGitStatus();
+    setGitStatus(status);
+  });
+
+  createEffect(() => {
+    if (gitStatus() !== '') {
+      statusContainer.innerText = gitStatus();
+    }
+  });
+
+  onCleanup(() => {
+    setGitStatus('');
+  });
+
+  return (
+    <pre
+      ref={statusContainer}
+      class={`rounded overflow-auto max-w-full ${gitStatus() !== '' ? 'block' : 'hidden'}`}
+    />
+  );
+};
+
+export default GitStatusDisplay;
+EOF
+
+# Step 4: Update the App.jsx file to include the new component after the ExecutionResultDisplay
+cat << 'EOF' > ./src/frontend/App.jsx
+import GenerateButton from './components/GenerateButton';
+import ExecuteButton from './components/ExecuteButton';
+import RollbackButton from './components/RollbackButton';
+import PromptDisplay from './components/PromptDisplay';
+import TasksList from './components/TasksList';
+import PromptDescriptor from './components/PromptDescriptor';
+import NavBar from './components/NavBar';
+import ExecutionResultDisplay from './components/ExecutionResultDisplay';
+import GitStatusDisplay from './components/GitStatusDisplay';
+
+const App = () => {
+  return (
+    <div class="m-2">
+      <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
+        <NavBar />
+        <TasksList />
+        <PromptDescriptor />
+        <GenerateButton />
+        <PromptDisplay />
+        <ExecuteButton />
+        <ExecutionResultDisplay />
+        <GitStatusDisplay />
+        <RollbackButton />
+      </div>
+    </div>
+  );
+};
+
+export default App;
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"

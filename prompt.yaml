@@ -1,8 +1,11 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/backend/setupRoutes.js
-  - src/backend/handlers/resetGitHandler.js
-  - src/git/resetGit.js
-requirements: |
-  Create an endpoint "/status" which runs git status
+  - src/frontend/service/
+  - src/frontend/App.jsx
+  - src/frontend/components/ExecutionResultDisplay.jsx
+  - src/frontend/service/executeChange.js
+requirements: >
+  Create a component for displaying git status information retrieved from
+  "/status". Use a pre tag, not a terminal. Show it after ExecutionResultDisplay.
+  Also add a store and service for fetching.
 os: OSX

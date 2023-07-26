@@ -6,6 +6,7 @@ import TasksList from './components/TasksList';
 import PromptDescriptor from './components/PromptDescriptor';
 import NavBar from './components/NavBar';
 import ExecutionResultDisplay from './components/ExecutionResultDisplay';
+import GitStatusDisplay from './components/GitStatusDisplay';
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
         <PromptDisplay />
         <ExecuteButton />
         <ExecutionResultDisplay />
+        <GitStatusDisplay />
         <RollbackButton />
       </div>
     </div>
