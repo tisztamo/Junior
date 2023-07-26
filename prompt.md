@@ -1,112 +1,73 @@
 # Working set
 
+src/prompt/promptDescriptorDefaults.js:
 ```
-./
-├── .DS_Store
-├── .git/...
-├── .github/...
-├── .gitignore
-├── .vscode/...
-├── README.md
-├── babel.config.js
-├── change.sh
-├── doc/...
-├── integrations/...
-├── node_modules/...
-├── package-lock.json
-├── package.json
-├── postcss.config.cjs
-├── prompt/...
-├── prompt.md
-├── prompt.yaml
-├── src/...
-├── tailwind.config.js
-
-```
-```
-src/
-├── .DS_Store
-├── attention/...
-├── backend/...
-├── config.js
-├── doc/...
-├── execute/...
-├── frontend/...
-├── git/...
-├── index.html
-├── interactiveSession/...
-├── llm/...
-├── main.js
-├── prompt/...
-├── startVite.js
-├── vite.config.js
-├── web.js
-
-```
-```
-src/frontend/
-├── App.jsx
-├── components/...
-├── fetchTasks.js
-├── generatePrompt.js
-├── getBaseUrl.js
-├── index.jsx
-├── service/...
-├── stores/...
-├── styles/...
-
-```
-postcss.config.cjs:
-```
-const tailwindcss = require('tailwindcss');
-const autoprefixer = require('autoprefixer');
-const postcssImport = require('postcss-import');
-const postcssNested = require('postcss-nested');
-
-module.exports = {
-  plugins: {
-    'postcss-import': {},
-    'tailwindcss/nesting': postcssNested,
-    tailwindcss: tailwindcss,
-    autoprefixer: autoprefixer,
-  },
+const promptDescriptorDefaults = {
+  format: "prompt/format/shell.md",
+  os: "Debian",
+  installedTools: "npm, jq"
 };
 
+export default promptDescriptorDefaults;
+
 ```
 
-src/vite.config.js:
+src/prompt/createPrompt.js:
 ```
-import { defineConfig } from 'vite'
-import solidPlugin from 'vite-plugin-solid'
+import { readAttention } from "../attention/readAttention.js"
+import yaml from 'js-yaml';
+import { getSystemPromptIfNeeded } from './getSystemPromptIfNeeded.js';
+import { resolveTemplateVariables } from './resolveTemplateVariables.js';
+import { extractTemplateVars } from './extractTemplateVars.js';
+import { loadPromptDescriptor } from './loadPromptDescriptor.js';
+import { loadTaskTemplate } from './loadTaskTemplate.js';
+import { loadFormatTemplate } from './loadFormatTemplate.js';
+import promptDescriptorDefaults from './promptDescriptorDefaults.js';
 
-export default defineConfig({
-  plugins: [solidPlugin()],
-  build: {
-    target: 'esnext',
-  },
-})
+const createPrompt = async (userInput) => {
+  let promptDescriptor = yaml.load(await loadPromptDescriptor());
+
+  // Fill in the defaults from promptDescriptorDefaults.js
+  promptDescriptor = { ...promptDescriptorDefaults, ...promptDescriptor };
+
+  let templateVars = extractTemplateVars(promptDescriptor);
+  templateVars = await resolveTemplateVariables(templateVars);
+
+  const attention = await readAttention(promptDescriptor.attention);
+  const task = await loadTaskTemplate(promptDescriptor.task, templateVars);
+
+  const format = await loadFormatTemplate(promptDescriptor.format, templateVars);
+  const system = await getSystemPromptIfNeeded();
+  const saveto = promptDescriptor.saveto;
+  return {
+    prompt: `${system}# Working set\n\n${attention.join("\n")}\n\n# Task\n\n${task}\n\n# Output Format\n\n${format}\n\n${userInput ? userInput : ""}`,
+    saveto
+  };
+}
+
+export { createPrompt };
 
 ```
 
 
 # Task
 
-Move the following files to the specified target dirs!
+Implement the following feature!
 
-Find out the best target dir if it is not specified!
+- Create a plan!
+- Create new files when needed!
+- Every js file should only export a single function!
+- Use ES6 imports!
 
-You need to follow dependencies to maintain coherence.
+Requirements:
 
-Before executing, write a concise plan! The plan should show:
- - How do you avoid breaking other parts of the code.
- - If you had to choose, your way of thinking.
+Instead of a defaults object, defaults should be filled
+with properties representing files in the prompt dir.
+E.g. if the prompt/ dir contains 2 files, a.md and b.md, then
+the defaults object should look like {&#34;a&#34;: &#34;the content of a.md&#34;, &#34;b&#34;: &#34;the content of b.md&#34;}
+Use loadPromptFile for loading the files.
+Also create the format.md, os.md etc. in prompt/ in order to have the same defaults.
 
-Move the postcss config to src/frontend/ and configure vite to use it.
-In vite docs:
-css.postcss# Type: string | (postcss.ProcessOptions &amp; { plugins?: postcss.Plugin[] })
-Inline PostCSS config or a custom directory to search PostCSS config from (default is project root).
-For inline PostCSS config, it expects the same format as postcss.config.js. But for plugins property, only array format can be used.
-The search is done using postcss-load-config and only the supported config file names are loaded.
 
 
 # Output Format

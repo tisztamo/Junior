@@ -1,7 +1,12 @@
-const promptDescriptorDefaults = {
-  format: "prompt/format/shell.md",
-  os: "Debian",
-  installedTools: "npm, jq"
-};
+import { loadPromptFile } from './loadPromptFile.js';
 
-export default promptDescriptorDefaults;
+const loadDefaults = async () => {
+  let promptDescriptorDefaults = {};
+  const files = ['format', 'os', 'installedTools'];
+  for (let file of files) {
+    promptDescriptorDefaults[file] = await loadPromptFile(`prompt/${file}.md`);
+  }
+  return promptDescriptorDefaults;
+}
+
+export default loadDefaults;

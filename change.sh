@@ -1,95 +1,77 @@
 #!/bin/sh
 set -e
-goal="Move vite config, startVite.js and index.html to src/frontend/"
+goal="Modify defaults to load from files"
 echo "Plan:"
-echo "1. Move the vite config, startVite.js and index.html files to the src/frontend/ directory."
-echo "2. Update the import statements in web.js to point to the new location of startVite.js"
-echo "3. Update the script source in index.html to keep it working."
-echo "4. Update the projectRoot in startVite.js to reflect the new location."
-echo "5. Update the path in the exec command in startVite.js to reflect the new file locations."
+echo "1. Create the necessary files in the prompt/ directory with appropriate contents"
+echo "2. Modify the promptDescriptorDefaults.js file to import loadPromptFile and load the file contents into the default object"
+echo "3. Modify the createPrompt.js file to accommodate the changes in the promptDescriptorDefaults.js"
 
-# Step 1: Moving vite config, startVite.js and index.html to src/frontend/
+# Step 1: Create the necessary files in the prompt/ directory with appropriate contents
+mkdir -p prompt
 
-cat << 'EOF' > src/frontend/vite.config.js
-import { defineConfig } from 'vite'
-import solidPlugin from 'vite-plugin-solid'
-
-export default defineConfig({
-  plugins: [solidPlugin()],
-  css: {
-    postcss: './src/frontend/postcss.config.cjs'
-  },
-  build: {
-    target: 'esnext',
-  },
-})
+cat << 'EOF' > ./prompt/format.md
+prompt/format/shell.md
 EOF
 
-# Step 4: Updating projectRoot in startVite.js
+cat << 'EOF' > ./prompt/os.md
+Debian
+EOF
 
-cat << 'EOF' > src/frontend/startVite.js
-import { exec } from 'child_process';
-import path from 'path';
-import { fileURLToPath } from 'url';
+cat << 'EOF' > ./prompt/installedTools.md
+npm, jq
+EOF
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const projectRoot = path.resolve(__dirname, '../..');
+# Step 2: Modify the promptDescriptorDefaults.js file to import loadPromptFile and load the file contents into the default object
+cat << 'EOF' > ./src/prompt/promptDescriptorDefaults.js
+import { loadPromptFile } from './loadPromptFile.js';
 
-export function startVite() {
-  const vite = exec(`${projectRoot}/node_modules/.bin/vite ${projectRoot}/src/frontend --open`);
-  vite.stdout.pipe(process.stdout);
-  vite.stderr.pipe(process.stderr);
-
-  process.on('exit', () => vite.kill());
+const loadDefaults = async () => {
+  let promptDescriptorDefaults = {};
+  const files = ['format', 'os', 'installedTools'];
+  for (let file of files) {
+    promptDescriptorDefaults[file] = await loadPromptFile(`prompt/${file}.md`);
+  }
+  return promptDescriptorDefaults;
 }
+
+export default loadDefaults;
 EOF
 
-cat << 'EOF' > src/frontend/index.html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>Junior</title>
-</head>
-<body>
-  <div id="app"></div>
-  <script type="module" src="/frontend/index.jsx"></script>
-</body>
-</html>
+# Step 3: Modify the createPrompt.js file to accommodate the changes in the promptDescriptorDefaults.js
+cat << 'EOF' > ./src/prompt/createPrompt.js
+import { readAttention } from "../attention/readAttention.js"
+import yaml from 'js-yaml';
+import { getSystemPromptIfNeeded } from './getSystemPromptIfNeeded.js';
+import { resolveTemplateVariables } from './resolveTemplateVariables.js';
+import { extractTemplateVars } from './extractTemplateVars.js';
+import { loadPromptDescriptor } from './loadPromptDescriptor.js';
+import { loadTaskTemplate } from './loadTaskTemplate.js';
+import { loadFormatTemplate } from './loadFormatTemplate.js';
+import loadDefaults from './promptDescriptorDefaults.js';
+
+const createPrompt = async (userInput) => {
+  let promptDescriptorDefaults = await loadDefaults();
+  let promptDescriptor = yaml.load(await loadPromptDescriptor());
+
+  // Fill in the defaults from promptDescriptorDefaults.js
+  promptDescriptor = { ...promptDescriptorDefaults, ...promptDescriptor };
+
+  let templateVars = extractTemplateVars(promptDescriptor);
+  templateVars = await resolveTemplateVariables(templateVars);
+
+  const attention = await readAttention(promptDescriptor.attention);
+  const task = await loadTaskTemplate(promptDescriptor.task, templateVars);
+
+  const format = await loadFormatTemplate(promptDescriptor.format, templateVars);
+  const system = await getSystemPromptIfNeeded();
+  const saveto = promptDescriptor.saveto;
+  return {
+    prompt: `${system}# Working set\n\n${attention.join("\n")}\n\n# Task\n\n${task}\n\n# Output Format\n\n${format}\n\n${userInput ? userInput : ""}`,
+    saveto
+  };
+}
+
+export { createPrompt };
 EOF
-
-# Step 2: Updating web.js
-
-cat << 'EOF' > src/web.js
-#!/usr/bin/env node
-import { startServer } from './backend/startServer.js';
-import { startVite } from './frontend/startVite.js';
-
-startServer();
-startVite();
-EOF
-
-# Step 3: Updating index.html
-
-cat << 'EOF' > src/frontend/index.html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>Junior</title>
-</head>
-<body>
-  <div id="app"></div>
-  <script type="module" src="/index.jsx"></script>
-</body>
-</html>
-EOF
-
-# Remove old files
-rm src/vite.config.js
-rm src/startVite.js
-rm src/index.html
 
 echo "\033[32mDone: $goal\033[0m\n"

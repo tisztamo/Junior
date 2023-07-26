@@ -1,12 +1,19 @@
-task: prompt/task/refactor/move_files.md
+task: prompt/task/feature/implement.md
 attention:
-  - src/
-  - src/frontend/
-  - src/vite.config.js
-  - src/startVite.js
-  - src/web.js
-  - src/index.html
+  - src/prompt/promptDescriptorDefaults.js
+  - src/prompt/createPrompt.js
 requirements: >
-  Move the vite config, startVite.js and index.html from src/ to src/frontend/!
-  Note that vite.config uses paths relative to the project root so no need to update it.
+  Instead of a defaults object, defaults should be filled
+
+  with properties representing files in the prompt dir.
+
+  E.g. if the prompt/ dir contains 2 files, a.md and b.md, then
+
+  the defaults object should look like {"a": "the content of a.md", "b": "the
+  content of b.md"}
+
+  Use loadPromptFile for loading the files.
+
+  Also create the format.md, os.md etc. in prompt/ in order to have the same
+  defaults.
 os: OSX
