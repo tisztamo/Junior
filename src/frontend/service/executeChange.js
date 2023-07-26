@@ -1,4 +1,5 @@
 import { getBaseUrl } from '../getBaseUrl';
+import { fetchGitStatus } from './fetchGitStatus';
 
 const executeChange = async (change) => {
   const baseUrl = getBaseUrl();
@@ -9,6 +10,9 @@ const executeChange = async (change) => {
   });
 
   const data = await response.json();
+
+  // Fetch git status after code execution
+  fetchGitStatus();
 
   return data;
 };

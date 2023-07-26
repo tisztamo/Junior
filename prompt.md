@@ -1,51 +1,68 @@
 # Working set
 
-src/frontend/components/GitStatusDisplay.jsx:
+src/frontend/service/executeChange.js:
 ```
-import { onMount, createEffect } from 'solid-js';
-import { gitStatus, setGitStatus } from '../stores/gitStatus';
-import { fetchGitStatus } from '../service/fetchGitStatus';
+import { getBaseUrl } from '../getBaseUrl';
 
-const GitStatusDisplay = () => {
-  let statusContainer;
-
-  onMount(async () => {
-    const status = await fetchGitStatus();
-    setGitStatus(status);
+const executeChange = async (change) => {
+  const baseUrl = getBaseUrl();
+  const response = await fetch(`${baseUrl}/execute`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ change })
   });
 
-  createEffect(() => {
-    const gitStatusValue = gitStatus();
-    if (gitStatusValue && gitStatusValue.status && gitStatusValue.status !== '') {
-      statusContainer.innerText = gitStatusValue.status;
+  const data = await response.json();
+
+  return data;
+};
+
+export { executeChange };
+
+```
+
+src/frontend/components/PromptDescriptor.jsx:
+```
+import { onMount, onCleanup } from 'solid-js';
+import { fetchDescriptor } from '../service/fetchDescriptor';
+import { useWebsocket } from '../service/useWebsocket';
+import { promptDescriptor, setPromptDescriptor } from '../stores/promptDescriptor';
+
+const PromptDescriptor = () => {
+
+  onMount(async () => {
+    const text = await fetchDescriptor();
+    setPromptDescriptor(text);
+  });
+
+  useWebsocket(async (e) => {
+    if (e.data === 'update') {
+      const text = await fetchDescriptor();
+      setPromptDescriptor(text);
     }
   });
 
+  onCleanup(() => {
+    setPromptDescriptor('');
+  });
+
   return (
-    <pre
-      ref={statusContainer}
-      class={`rounded overflow-auto max-w-full ${gitStatus() && gitStatus().status && gitStatus().status !== '' ? 'block' : 'hidden'}`}
-    />
+    <div class="overflow-auto max-w-full">
+      <div class="whitespace-pre-wrap overflow-x-scroll overflow-y-auto font-mono">
+        {promptDescriptor()}
+      </div>
+    </div>
   );
 };
 
-export default GitStatusDisplay;
-
-```
-
-src/frontend/stores/gitStatus.js:
-```
-import { createSignal } from 'solid-js';
-
-const [gitStatus, setGitStatus] = createSignal('');
-
-export { gitStatus, setGitStatus };
+export default PromptDescriptor;
 
 ```
 
 src/frontend/service/fetchGitStatus.js:
 ```
 import { getBaseUrl } from '../getBaseUrl';
+import { setGitStatus } from '../stores/gitStatus';
 
 const fetchGitStatus = async () => {
   const baseUrl = getBaseUrl();
@@ -53,7 +70,7 @@ const fetchGitStatus = async () => {
 
   const data = await response.json();
 
-  return data;
+  setGitStatus(data);
 };
 
 export { fetchGitStatus };
@@ -65,7 +82,7 @@ export { fetchGitStatus };
 
 Fix the following issue!
 
-Fetch should not return the result but write it to the store
+fetch git status after code execution and when an update event is coming on websocket.
 
 
 # Output Format

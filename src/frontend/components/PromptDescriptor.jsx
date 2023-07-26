@@ -1,5 +1,6 @@
 import { onMount, onCleanup } from 'solid-js';
 import { fetchDescriptor } from '../service/fetchDescriptor';
+import { fetchGitStatus } from '../service/fetchGitStatus';
 import { useWebsocket } from '../service/useWebsocket';
 import { promptDescriptor, setPromptDescriptor } from '../stores/promptDescriptor';
 
@@ -14,6 +15,8 @@ const PromptDescriptor = () => {
     if (e.data === 'update') {
       const text = await fetchDescriptor();
       setPromptDescriptor(text);
+      // Fetch git status when an update event is received
+      fetchGitStatus();
     }
   });
 

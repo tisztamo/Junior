@@ -1,53 +1,70 @@
 #!/bin/sh
 set -e
-goal="Modify fetchGitStatus to write data to store"
+goal="Fetch git status after code execution and websocket update"
 echo "Plan:"
-echo "1. Modify fetchGitStatus.js to import setGitStatus from gitStatus.js"
-echo "2. Use setGitStatus to write data to the store inside fetchGitStatus"
-echo "3. Modify GitStatusDisplay.jsx to remove fetchGitStatus call, since fetchGitStatus itself will update the store"
+echo "1. Update 'executeChange.js' to fetch git status after code execution"
+echo "2. Update 'PromptDescriptor.jsx' to fetch git status when a websocket update event is received"
 
-cat << 'EOF' > ./src/frontend/service/fetchGitStatus.js
+cat << 'EOF' > src/frontend/service/executeChange.js
 import { getBaseUrl } from '../getBaseUrl';
-import { setGitStatus } from '../stores/gitStatus';
+import { fetchGitStatus } from './fetchGitStatus';
 
-const fetchGitStatus = async () => {
+const executeChange = async (change) => {
   const baseUrl = getBaseUrl();
-  const response = await fetch(`${baseUrl}/status`);
+  const response = await fetch(`${baseUrl}/execute`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ change })
+  });
 
   const data = await response.json();
 
-  setGitStatus(data);
+  // Fetch git status after code execution
+  fetchGitStatus();
+
+  return data;
 };
 
-export { fetchGitStatus };
+export { executeChange };
 EOF
 
-cat << 'EOF' > ./src/frontend/components/GitStatusDisplay.jsx
-import { onMount, createEffect } from 'solid-js';
-import { gitStatus } from '../stores/gitStatus';
+cat << 'EOF' > src/frontend/components/PromptDescriptor.jsx
+import { onMount, onCleanup } from 'solid-js';
+import { fetchDescriptor } from '../service/fetchDescriptor';
 import { fetchGitStatus } from '../service/fetchGitStatus';
+import { useWebsocket } from '../service/useWebsocket';
+import { promptDescriptor, setPromptDescriptor } from '../stores/promptDescriptor';
 
-const GitStatusDisplay = () => {
-  let statusContainer;
+const PromptDescriptor = () => {
 
-  onMount(fetchGitStatus);
+  onMount(async () => {
+    const text = await fetchDescriptor();
+    setPromptDescriptor(text);
+  });
 
-  createEffect(() => {
-    const gitStatusValue = gitStatus();
-    if (gitStatusValue && gitStatusValue.status && gitStatusValue.status !== '') {
-      statusContainer.innerText = gitStatusValue.status;
+  useWebsocket(async (e) => {
+    if (e.data === 'update') {
+      const text = await fetchDescriptor();
+      setPromptDescriptor(text);
+      // Fetch git status when an update event is received
+      fetchGitStatus();
     }
   });
 
+  onCleanup(() => {
+    setPromptDescriptor('');
+  });
+
   return (
-    <pre
-      ref={statusContainer}
-      class={`rounded overflow-auto max-w-full ${gitStatus() && gitStatus().status && gitStatus().status !== '' ? 'block' : 'hidden'}`}
-    />
+    <div class="overflow-auto max-w-full">
+      <div class="whitespace-pre-wrap overflow-x-scroll overflow-y-auto font-mono">
+        {promptDescriptor()}
+      </div>
+    </div>
   );
 };
 
-export default GitStatusDisplay;
+export default PromptDescriptor;
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"

@@ -1,8 +1,9 @@
 task: prompt/task/bug/fix.md
 attention:
-  - src/frontend/components/GitStatusDisplay.jsx
-  - src/frontend/stores/gitStatus.js
+  - src/frontend/service/executeChange.js
+  - src/frontend/components/PromptDescriptor.jsx
   - src/frontend/service/fetchGitStatus.js
-requirements: |
-  Fetch should not return the result but write it to the store
+requirements: >
+  fetch git status after code execution and when an update event is coming on
+  websocket.
 os: OSX
