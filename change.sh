@@ -1,44 +1,40 @@
 #!/bin/sh
 set -e
-goal="Modify defaults to load from files"
+goal="Refactor loadDefaults function in promptDescriptorDefaults.js"
 echo "Plan:"
-echo "1. Create the necessary files in the prompt/ directory with appropriate contents"
-echo "2. Modify the promptDescriptorDefaults.js file to import loadPromptFile and load the file contents into the default object"
-echo "3. Modify the createPrompt.js file to accommodate the changes in the promptDescriptorDefaults.js"
+echo "1. Rename the loadDefaults function to promptDescriptorDefaults in promptDescriptorDefaults.js"
+echo "2. Implement functionality to dynamically load .md files from prompt/ directories in the promptDescriptorDefaults.js"
+echo "3. Adjust the export in the createPrompt.js file to account for the renamed function"
+echo "4. Implement a new function in a new file getPromptDirectories.js which returns the prompt directories."
 
-# Step 1: Create the necessary files in the prompt/ directory with appropriate contents
-mkdir -p prompt
-
-cat << 'EOF' > ./prompt/format.md
-prompt/format/shell.md
-EOF
-
-cat << 'EOF' > ./prompt/os.md
-Debian
-EOF
-
-cat << 'EOF' > ./prompt/installedTools.md
-npm, jq
-EOF
-
-# Step 2: Modify the promptDescriptorDefaults.js file to import loadPromptFile and load the file contents into the default object
-cat << 'EOF' > ./src/prompt/promptDescriptorDefaults.js
+cat > ./src/prompt/promptDescriptorDefaults.js << 'EOF'
 import { loadPromptFile } from './loadPromptFile.js';
+import { getPromptDirectories } from './getPromptDirectories.js';
+import fs from 'fs';
+import path from 'path';
 
-const loadDefaults = async () => {
+const promptDescriptorDefaults = async () => {
   let promptDescriptorDefaults = {};
-  const files = ['format', 'os', 'installedTools'];
-  for (let file of files) {
-    promptDescriptorDefaults[file] = await loadPromptFile(`prompt/${file}.md`);
+  
+  const promptDirs = getPromptDirectories();
+
+  for(let dir of promptDirs) {
+    const files = fs.readdirSync(dir).filter(file => file.endsWith('.md'));
+
+    for (let file of files) {
+      const fileNameWithoutExtension = path.basename(file, '.md');
+      promptDescriptorDefaults[fileNameWithoutExtension] = await loadPromptFile(`prompt/${file}`);
+    }
   }
   return promptDescriptorDefaults;
 }
 
-export default loadDefaults;
+export default promptDescriptorDefaults;
 EOF
 
-# Step 3: Modify the createPrompt.js file to accommodate the changes in the promptDescriptorDefaults.js
-cat << 'EOF' > ./src/prompt/createPrompt.js
+echo "./src/prompt/promptDescriptorDefaults.js has been updated"
+
+cat > ./src/prompt/createPrompt.js << 'EOF'
 import { readAttention } from "../attention/readAttention.js"
 import yaml from 'js-yaml';
 import { getSystemPromptIfNeeded } from './getSystemPromptIfNeeded.js';
@@ -47,14 +43,14 @@ import { extractTemplateVars } from './extractTemplateVars.js';
 import { loadPromptDescriptor } from './loadPromptDescriptor.js';
 import { loadTaskTemplate } from './loadTaskTemplate.js';
 import { loadFormatTemplate } from './loadFormatTemplate.js';
-import loadDefaults from './promptDescriptorDefaults.js';
+import promptDescriptorDefaults from './promptDescriptorDefaults.js';
 
 const createPrompt = async (userInput) => {
-  let promptDescriptorDefaults = await loadDefaults();
+  let promptDescriptorDefaultsData = await promptDescriptorDefaults();
   let promptDescriptor = yaml.load(await loadPromptDescriptor());
 
   // Fill in the defaults from promptDescriptorDefaults.js
-  promptDescriptor = { ...promptDescriptorDefaults, ...promptDescriptor };
+  promptDescriptor = { ...promptDescriptorDefaultsData, ...promptDescriptor };
 
   let templateVars = extractTemplateVars(promptDescriptor);
   templateVars = await resolveTemplateVariables(templateVars);
@@ -73,5 +69,25 @@ const createPrompt = async (userInput) => {
 
 export { createPrompt };
 EOF
+
+echo "./src/prompt/createPrompt.js has been updated"
+
+cat > ./src/prompt/getPromptDirectories.js << 'EOF'
+import path from 'path';
+
+const getPromptDirectories = () => {
+  const rootDir = path.resolve();
+  const workingDir = process.cwd();
+  
+  return [
+    path.join(rootDir, 'prompt'),
+    path.join(workingDir, 'prompt')
+  ];
+}
+
+export { getPromptDirectories };
+EOF
+
+echo "./src/prompt/getPromptDirectories.js has been created"
 
 echo "\033[32mDone: $goal\033[0m\n"

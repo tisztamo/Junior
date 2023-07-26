@@ -1,12 +1,22 @@
 import { loadPromptFile } from './loadPromptFile.js';
+import { getPromptDirectories } from './getPromptDirectories.js';
+import fs from 'fs';
+import path from 'path';
 
-const loadDefaults = async () => {
+const promptDescriptorDefaults = async () => {
   let promptDescriptorDefaults = {};
-  const files = ['format', 'os', 'installedTools'];
-  for (let file of files) {
-    promptDescriptorDefaults[file] = await loadPromptFile(`prompt/${file}.md`);
+  
+  const promptDirs = getPromptDirectories();
+
+  for(let dir of promptDirs) {
+    const files = fs.readdirSync(dir).filter(file => file.endsWith('.md'));
+
+    for (let file of files) {
+      const fileNameWithoutExtension = path.basename(file, '.md');
+      promptDescriptorDefaults[fileNameWithoutExtension] = await loadPromptFile(`prompt/${file}`);
+    }
   }
   return promptDescriptorDefaults;
 }
 
-export default loadDefaults;
+export default promptDescriptorDefaults;

@@ -1,14 +1,75 @@
 # Working set
 
+```
+./
+├── .DS_Store
+├── .git/...
+├── .github/...
+├── .gitignore
+├── .vscode/...
+├── README.md
+├── change.sh
+├── doc/...
+├── integrations/...
+├── node_modules/...
+├── package-lock.json
+├── package.json
+├── prompt/...
+├── prompt.md
+├── prompt.yaml
+├── src/...
+
+```
+```
+./src/
+├── .DS_Store
+├── attention/...
+├── backend/...
+├── config.js
+├── doc/...
+├── execute/...
+├── frontend/...
+├── git/...
+├── interactiveSession/...
+├── llm/...
+├── main.js
+├── prompt/...
+├── web.js
+
+```
+```
+./src/prompt/
+├── createPrompt.js
+├── extractTemplateVars.js
+├── getPromptDirectories.js
+├── getPromptFlag.js
+├── getSystemPrompt.js
+├── getSystemPromptIfNeeded.js
+├── loadFormatTemplate.js
+├── loadPromptDescriptor.js
+├── loadPromptFile.js
+├── loadTaskTemplate.js
+├── promptDescriptorConfig.js
+├── promptDescriptorDefaults.js
+├── promptProcessing.js
+├── resolveTemplateVariables.js
+├── watchPromptDescriptor.js
+
+```
 src/prompt/promptDescriptorDefaults.js:
 ```
-const promptDescriptorDefaults = {
-  format: "prompt/format/shell.md",
-  os: "Debian",
-  installedTools: "npm, jq"
-};
+import { loadPromptFile } from './loadPromptFile.js';
 
-export default promptDescriptorDefaults;
+const loadDefaults = async () => {
+  let promptDescriptorDefaults = {};
+  const files = ['format', 'os', 'installedTools'];
+  for (let file of files) {
+    promptDescriptorDefaults[file] = await loadPromptFile(`prompt/${file}.md`);
+  }
+  return promptDescriptorDefaults;
+}
+
+export default loadDefaults;
 
 ```
 
@@ -22,9 +83,10 @@ import { extractTemplateVars } from './extractTemplateVars.js';
 import { loadPromptDescriptor } from './loadPromptDescriptor.js';
 import { loadTaskTemplate } from './loadTaskTemplate.js';
 import { loadFormatTemplate } from './loadFormatTemplate.js';
-import promptDescriptorDefaults from './promptDescriptorDefaults.js';
+import loadDefaults from './promptDescriptorDefaults.js';
 
 const createPrompt = async (userInput) => {
+  let promptDescriptorDefaults = await loadDefaults();
   let promptDescriptor = yaml.load(await loadPromptDescriptor());
 
   // Fill in the defaults from promptDescriptorDefaults.js
@@ -61,12 +123,7 @@ Implement the following feature!
 
 Requirements:
 
-Instead of a defaults object, defaults should be filled
-with properties representing files in the prompt dir.
-E.g. if the prompt/ dir contains 2 files, a.md and b.md, then
-the defaults object should look like {&#34;a&#34;: &#34;the content of a.md&#34;, &#34;b&#34;: &#34;the content of b.md&#34;}
-Use loadPromptFile for loading the files.
-Also create the format.md, os.md etc. in prompt/ in order to have the same defaults.
+1. Rename the loadDefaults function to promptDescriptorDefaults 2. Instead of the constant array read the .md files from prompt/ directories to generate the list of defaults. Load both the prompt/ dir relative to the working dir and relative to the project root and merge them. Note that __dirname is not automatically available in es6 modules.
 
 
 
@@ -76,6 +133,7 @@ Encode and enclose your results as ./change.sh, a shell script that creates and 
 Files are small, prefer heredoc-ing full files using 'EOF' to prevent substitution.
 OS: OSX
 Installed tools: npm, jq
+
 Do NOT write any text outside the script!
 
 EXAMPLE START
