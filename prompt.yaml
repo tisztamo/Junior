@@ -1,11 +1,6 @@
-task: prompt/task/feature/implement.md
+task: prompt/task/bug/fix.md
 attention:
-  - src/frontend/service/
-  - src/frontend/App.jsx
-  - src/frontend/components/ExecutionResultDisplay.jsx
-  - src/frontend/service/executeChange.js
-requirements: >
-  Create a component for displaying git status information retrieved from
-  "/status". Use a pre tag, not a terminal. Show it after ExecutionResultDisplay.
-  Also add a store and service for fetching.
+  - src/frontend/components/GitStatusDisplay.jsx
+requirements: |
+  gitStatus returns an object with status field.
 os: OSX

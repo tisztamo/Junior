@@ -1,104 +1,47 @@
 # Working set
 
-src/backend/setupRoutes.js:
+src/frontend/components/GitStatusDisplay.jsx:
 ```
-import { generateHandler } from './handlers/generateHandler.js';
-import { servePromptDescriptor } from './handlers/servePromptDescriptor.js';
-import { updateTaskHandler } from './handlers/updateTaskHandler.js';
-import { listTasks } from './handlers/listTasks.js';
-import { executeHandler } from './handlers/executeHandler.js';
-import resetGitHandler from './handlers/resetGitHandler.js';
+import { onMount, createEffect, onCleanup } from 'solid-js';
+import { gitStatus, setGitStatus } from '../stores/gitStatus';
+import { fetchGitStatus } from '../service/fetchGitStatus';
 
-export function setupRoutes(app) {
-  app.get('/descriptor', servePromptDescriptor);
-  app.get('/tasks', (req, res) => res.json({ tasks: listTasks() }));
+const GitStatusDisplay = () => {
+  let statusContainer;
 
-  app.post('/generate', generateHandler);
-  app.post('/updatetask', updateTaskHandler);
-  app.post('/execute', executeHandler);
-  app.post('/reset', resetGitHandler);
-}
-
-```
-
-src/backend/handlers/resetGitHandler.js:
-```
-import resetGit from '../../git/resetGit.js';
-
-export default async function resetGitHandler(req, res) {
-  try {
-    await resetGit();
-    res.status(200).send({ message: 'Git successfully reset' });
-  } catch (error) {
-    res.status(500).send({ message: 'Error in resetting Git', error });
-  }
-}
-
-```
-
-src/git/resetGit.js:
-```
-import { exec } from 'child_process';
-
-export default function resetGit() {
-  // Stash all changes including untracked files
-  exec('git stash -u', (err, stdout, stderr) => {
-    if (err) {
-      console.error(`exec error: ${err}`);
-      return;
-    }
-    console.log(`stdout: ${stdout}`);
-
-    // Clean the repository and reset to the latest commit
-    exec('git clean -f -d && git reset --hard', (err, stdout, stderr) => {
-      if (err) {
-        console.error(`exec error: ${err}`);
-        return;
-      }
-      console.log(`stdout: ${stdout}`);
-
-      // Checkout prompt.yaml from stash
-      exec('git checkout stash@{0} -- prompt.yaml', (err, stdout, stderr) => {
-        if (err) {
-          console.error(`exec error: ${err}`);
-          return;
-        }
-        console.log(`stdout: ${stdout}`);
-
-        // Drop the stash
-        exec('git stash drop', (err, stdout, stderr) => {
-          if (err) {
-            console.error(`exec error: ${err}`);
-            return;
-          }
-          console.log(`stdout: ${stdout}`);
-        });
-      });
-    });
+  onMount(async () => {
+    const status = await fetchGitStatus();
+    setGitStatus(status);
   });
-}
+
+  createEffect(() => {
+    if (gitStatus() !== '') {
+      statusContainer.innerText = gitStatus();
+    }
+  });
+
+  onCleanup(() => {
+    setGitStatus('');
+  });
+
+  return (
+    <pre
+      ref={statusContainer}
+      class={`rounded overflow-auto max-w-full ${gitStatus() !== '' ? 'block' : 'hidden'}`}
+    />
+  );
+};
+
+export default GitStatusDisplay;
 
 ```
 
 
 # Task
 
-Implement the following feature!
+Fix the following issue!
 
-- Create a plan!
-- Create new files when needed!
-
-Requirements:
-
-Create an endpoint &#34;/status&#34; which runs git status
-
-
-
-## Project Specifics
-
-- Every js file should *only export a single function*!
-- Use *ES6 imports*!
-- The frontend uses *Solidjs*, edit .jsx file accordingly
+gitStatus returns an object with status field.
 
 
 # Output Format
