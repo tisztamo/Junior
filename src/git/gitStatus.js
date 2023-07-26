@@ -5,10 +5,10 @@ const execAsync = promisify(exec);
 
 export default async function gitStatus() {
   try {
-    const { stdout, stderr } = await execAsync('git status');
+    const { stdout, stderr } = await execAsync('git status --porcelain=v1');
     return stdout;
   } catch (error) {
-    console.error(`exec error: ${error}`);
+    console.error();
     throw error;
   }
 }

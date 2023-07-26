@@ -1,9 +1,5 @@
 task: prompt/task/bug/fix.md
 attention:
-  - src/frontend/service/executeChange.js
-  - src/frontend/components/PromptDescriptor.jsx
-  - src/frontend/service/fetchGitStatus.js
-requirements: >
-  fetch git status after code execution and when an update event is coming on
-  websocket.
+  - src/git/gitStatus.js
+requirements: Add --porcelain=v1 when calling git status
 os: OSX

@@ -1,70 +1,24 @@
 #!/bin/sh
 set -e
-goal="Fetch git status after code execution and websocket update"
+goal="Add porcelain=v1 to git status command"
 echo "Plan:"
-echo "1. Update 'executeChange.js' to fetch git status after code execution"
-echo "2. Update 'PromptDescriptor.jsx' to fetch git status when a websocket update event is received"
+echo "1. Add --porcelain=v1 option to git status command in gitStatus.js"
 
-cat << 'EOF' > src/frontend/service/executeChange.js
-import { getBaseUrl } from '../getBaseUrl';
-import { fetchGitStatus } from './fetchGitStatus';
+/bin/cat <<EOF >src/git/gitStatus.js
+import { promisify } from 'util';
+import { exec } from 'child_process';
 
-const executeChange = async (change) => {
-  const baseUrl = getBaseUrl();
-  const response = await fetch(`${baseUrl}/execute`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ change })
-  });
+const execAsync = promisify(exec);
 
-  const data = await response.json();
-
-  // Fetch git status after code execution
-  fetchGitStatus();
-
-  return data;
-};
-
-export { executeChange };
-EOF
-
-cat << 'EOF' > src/frontend/components/PromptDescriptor.jsx
-import { onMount, onCleanup } from 'solid-js';
-import { fetchDescriptor } from '../service/fetchDescriptor';
-import { fetchGitStatus } from '../service/fetchGitStatus';
-import { useWebsocket } from '../service/useWebsocket';
-import { promptDescriptor, setPromptDescriptor } from '../stores/promptDescriptor';
-
-const PromptDescriptor = () => {
-
-  onMount(async () => {
-    const text = await fetchDescriptor();
-    setPromptDescriptor(text);
-  });
-
-  useWebsocket(async (e) => {
-    if (e.data === 'update') {
-      const text = await fetchDescriptor();
-      setPromptDescriptor(text);
-      // Fetch git status when an update event is received
-      fetchGitStatus();
-    }
-  });
-
-  onCleanup(() => {
-    setPromptDescriptor('');
-  });
-
-  return (
-    <div class="overflow-auto max-w-full">
-      <div class="whitespace-pre-wrap overflow-x-scroll overflow-y-auto font-mono">
-        {promptDescriptor()}
-      </div>
-    </div>
-  );
-};
-
-export default PromptDescriptor;
+export default async function gitStatus() {
+  try {
+    const { stdout, stderr } = await execAsync('git status --porcelain=v1');
+    return stdout;
+  } catch (error) {
+    console.error(`exec error: ${error}`);
+    throw error;
+  }
+}
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"
