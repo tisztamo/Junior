@@ -1,75 +1,29 @@
 # Working set
 
-```
-./
-├── .DS_Store
-├── .git/...
-├── .github/...
-├── .gitignore
-├── .vscode/...
-├── README.md
-├── change.sh
-├── doc/...
-├── integrations/...
-├── node_modules/...
-├── package-lock.json
-├── package.json
-├── prompt/...
-├── prompt.md
-├── prompt.yaml
-├── src/...
-
-```
-```
-./src/
-├── .DS_Store
-├── attention/...
-├── backend/...
-├── config.js
-├── doc/...
-├── execute/...
-├── frontend/...
-├── git/...
-├── interactiveSession/...
-├── llm/...
-├── main.js
-├── prompt/...
-├── web.js
-
-```
-```
-./src/prompt/
-├── createPrompt.js
-├── extractTemplateVars.js
-├── getPromptDirectories.js
-├── getPromptFlag.js
-├── getSystemPrompt.js
-├── getSystemPromptIfNeeded.js
-├── loadFormatTemplate.js
-├── loadPromptDescriptor.js
-├── loadPromptFile.js
-├── loadTaskTemplate.js
-├── promptDescriptorConfig.js
-├── promptDescriptorDefaults.js
-├── promptProcessing.js
-├── resolveTemplateVariables.js
-├── watchPromptDescriptor.js
-
-```
 src/prompt/promptDescriptorDefaults.js:
 ```
 import { loadPromptFile } from './loadPromptFile.js';
+import { getPromptDirectories } from './getPromptDirectories.js';
+import fs from 'fs';
+import path from 'path';
 
-const loadDefaults = async () => {
+const promptDescriptorDefaults = async () => {
   let promptDescriptorDefaults = {};
-  const files = ['format', 'os', 'installedTools'];
-  for (let file of files) {
-    promptDescriptorDefaults[file] = await loadPromptFile(`prompt/${file}.md`);
+  
+  const promptDirs = getPromptDirectories();
+
+  for(let dir of promptDirs) {
+    const files = fs.readdirSync(dir).filter(file => file.endsWith('.md'));
+
+    for (let file of files) {
+      const fileNameWithoutExtension = path.basename(file, '.md');
+      promptDescriptorDefaults[fileNameWithoutExtension] = await loadPromptFile(`prompt/${file}`);
+    }
   }
   return promptDescriptorDefaults;
 }
 
-export default loadDefaults;
+export default promptDescriptorDefaults;
 
 ```
 
@@ -83,14 +37,14 @@ import { extractTemplateVars } from './extractTemplateVars.js';
 import { loadPromptDescriptor } from './loadPromptDescriptor.js';
 import { loadTaskTemplate } from './loadTaskTemplate.js';
 import { loadFormatTemplate } from './loadFormatTemplate.js';
-import loadDefaults from './promptDescriptorDefaults.js';
+import promptDescriptorDefaults from './promptDescriptorDefaults.js';
 
 const createPrompt = async (userInput) => {
-  let promptDescriptorDefaults = await loadDefaults();
+  let promptDescriptorDefaultsData = await promptDescriptorDefaults();
   let promptDescriptor = yaml.load(await loadPromptDescriptor());
 
   // Fill in the defaults from promptDescriptorDefaults.js
-  promptDescriptor = { ...promptDescriptorDefaults, ...promptDescriptor };
+  promptDescriptor = { ...promptDescriptorDefaultsData, ...promptDescriptor };
 
   let templateVars = extractTemplateVars(promptDescriptor);
   templateVars = await resolveTemplateVariables(templateVars);
@@ -118,21 +72,29 @@ Implement the following feature!
 
 - Create a plan!
 - Create new files when needed!
-- Every js file should only export a single function!
-- Use ES6 imports!
 
 Requirements:
 
-1. Rename the loadDefaults function to promptDescriptorDefaults 2. Instead of the constant array read the .md files from prompt/ directories to generate the list of defaults. Load both the prompt/ dir relative to the working dir and relative to the project root and merge them. Note that __dirname is not automatically available in es6 modules.
+Optimize the code so that when a file exists in both prompt dir, we should only load it once. I think it would be nice to create the list of unique filenames first.
 
+
+
+## Project Specifics
+
+- Every js file should *only export a single function*!
+- Use *ES6 imports*!
+- The frontend uses *Solidjs*, edit .jsx file accordingly
 
 
 # Output Format
 
 Encode and enclose your results as ./change.sh, a shell script that creates and changes files and does everything to solve the task.
 Files are small, prefer heredoc-ing full files using 'EOF' to prevent substitution.
+
 OS: OSX
+
 Installed tools: npm, jq
+
 
 Do NOT write any text outside the script!
 

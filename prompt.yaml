@@ -1,14 +1,8 @@
 task: prompt/task/feature/implement.md
 attention:
-  - ./
-  - ./src/
-  - ./src/prompt/
   - src/prompt/promptDescriptorDefaults.js
   - src/prompt/createPrompt.js
 requirements: >
-  1. Rename the loadDefaults function to promptDescriptorDefaults
-  2. Instead of the constant array read the .md files from prompt/ directories
-  to generate the list of defaults. Load both the prompt/ dir relative to the working dir
-  and relative to the project root and merge them.
-  Note that __dirname is not automatically available in es6 modules.
+  Optimize the code so that when a file exists in both prompt dir, we should only load it once.
+  I think it would be nice to create the list of unique filenames first.
 os: OSX

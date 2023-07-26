@@ -1,13 +1,12 @@
 #!/bin/sh
 set -e
-goal="Refactor loadDefaults function in promptDescriptorDefaults.js"
+goal="Optimize prompt file loading"
 echo "Plan:"
-echo "1. Rename the loadDefaults function to promptDescriptorDefaults in promptDescriptorDefaults.js"
-echo "2. Implement functionality to dynamically load .md files from prompt/ directories in the promptDescriptorDefaults.js"
-echo "3. Adjust the export in the createPrompt.js file to account for the renamed function"
-echo "4. Implement a new function in a new file getPromptDirectories.js which returns the prompt directories."
+echo "1. Modify the 'promptDescriptorDefaults.js' to create a list of unique filenames before loading them."
+echo "2. Change the 'createPrompt.js' to handle the new way 'promptDescriptorDefaults.js' works."
 
-cat > ./src/prompt/promptDescriptorDefaults.js << 'EOF'
+# Change the promptDescriptorDefaults.js file
+cat > src/prompt/promptDescriptorDefaults.js << 'EOF'
 import { loadPromptFile } from './loadPromptFile.js';
 import { getPromptDirectories } from './getPromptDirectories.js';
 import fs from 'fs';
@@ -17,24 +16,28 @@ const promptDescriptorDefaults = async () => {
   let promptDescriptorDefaults = {};
   
   const promptDirs = getPromptDirectories();
+  let uniqueFiles = new Set();
 
+  // Store all unique file names
   for(let dir of promptDirs) {
     const files = fs.readdirSync(dir).filter(file => file.endsWith('.md'));
-
-    for (let file of files) {
-      const fileNameWithoutExtension = path.basename(file, '.md');
-      promptDescriptorDefaults[fileNameWithoutExtension] = await loadPromptFile(`prompt/${file}`);
-    }
+    files.forEach(file => uniqueFiles.add(file));
   }
+
+  // Load only unique files
+  for (let file of uniqueFiles) {
+    const fileNameWithoutExtension = path.basename(file, '.md');
+    promptDescriptorDefaults[fileNameWithoutExtension] = await loadPromptFile(`prompt/${file}`);
+  }
+  
   return promptDescriptorDefaults;
 }
 
 export default promptDescriptorDefaults;
 EOF
 
-echo "./src/prompt/promptDescriptorDefaults.js has been updated"
-
-cat > ./src/prompt/createPrompt.js << 'EOF'
+# Change the createPrompt.js file
+cat > src/prompt/createPrompt.js << 'EOF'
 import { readAttention } from "../attention/readAttention.js"
 import yaml from 'js-yaml';
 import { getSystemPromptIfNeeded } from './getSystemPromptIfNeeded.js';
@@ -69,25 +72,5 @@ const createPrompt = async (userInput) => {
 
 export { createPrompt };
 EOF
-
-echo "./src/prompt/createPrompt.js has been updated"
-
-cat > ./src/prompt/getPromptDirectories.js << 'EOF'
-import path from 'path';
-
-const getPromptDirectories = () => {
-  const rootDir = path.resolve();
-  const workingDir = process.cwd();
-  
-  return [
-    path.join(rootDir, 'prompt'),
-    path.join(workingDir, 'prompt')
-  ];
-}
-
-export { getPromptDirectories };
-EOF
-
-echo "./src/prompt/getPromptDirectories.js has been created"
 
 echo "\033[32mDone: $goal\033[0m\n"
