@@ -1,8 +1,6 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/prompt/promptDescriptorDefaults.js
   - src/prompt/createPrompt.js
 requirements: >
-  Optimize the code so that when a file exists in both prompt dir, we should only load it once.
-  I think it would be nice to create the list of unique filenames first.
+  Switch order of loading the descriptor yaml and the defaults
 os: OSX

@@ -9,8 +9,8 @@ import { loadFormatTemplate } from './loadFormatTemplate.js';
 import promptDescriptorDefaults from './promptDescriptorDefaults.js';
 
 const createPrompt = async (userInput) => {
-  let promptDescriptorDefaultsData = await promptDescriptorDefaults();
   let promptDescriptor = yaml.load(await loadPromptDescriptor());
+  let promptDescriptorDefaultsData = await promptDescriptorDefaults();
 
   // Fill in the defaults from promptDescriptorDefaults.js
   promptDescriptor = { ...promptDescriptorDefaultsData, ...promptDescriptor };

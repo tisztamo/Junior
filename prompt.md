@@ -1,32 +1,5 @@
 # Working set
 
-src/prompt/promptDescriptorDefaults.js:
-```
-import { loadPromptFile } from './loadPromptFile.js';
-import { getPromptDirectories } from './getPromptDirectories.js';
-import fs from 'fs';
-import path from 'path';
-
-const promptDescriptorDefaults = async () => {
-  let promptDescriptorDefaults = {};
-  
-  const promptDirs = getPromptDirectories();
-
-  for(let dir of promptDirs) {
-    const files = fs.readdirSync(dir).filter(file => file.endsWith('.md'));
-
-    for (let file of files) {
-      const fileNameWithoutExtension = path.basename(file, '.md');
-      promptDescriptorDefaults[fileNameWithoutExtension] = await loadPromptFile(`prompt/${file}`);
-    }
-  }
-  return promptDescriptorDefaults;
-}
-
-export default promptDescriptorDefaults;
-
-```
-
 src/prompt/createPrompt.js:
 ```
 import { readAttention } from "../attention/readAttention.js"
@@ -75,7 +48,7 @@ Implement the following feature!
 
 Requirements:
 
-Optimize the code so that when a file exists in both prompt dir, we should only load it once. I think it would be nice to create the list of unique filenames first.
+Switch order of loading the descriptor yaml and the defaults
 
 
 
