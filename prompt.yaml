@@ -1,7 +1,7 @@
 task: prompt/task/bug/fix.md
 attention:
+  - src/backend/handlers/updateTaskHandler.js
   - src/prompt/loadPromptDescriptor.js
-  - src/backend/handlers/servePromptDescriptor.js
 requirements: >-
-  loadPromptDescriptor should be used instead of reading the file directly in servePromptDescriptor
+  Create savePromptDescriptor.js and use it and loadPromptDescriptor when updating the task. Do not use dirname.
 os: OSX
