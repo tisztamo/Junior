@@ -1,6 +1,8 @@
 task: prompt/task/bug/fix.md
 attention:
   - src/frontend/components/GitStatusDisplay.jsx
+  - src/frontend/stores/gitStatus.js
+  - src/frontend/service/fetchGitStatus.js
 requirements: |
-  gitStatus returns an object with status field.
+  Fetch should not return the result but write it to the store
 os: OSX

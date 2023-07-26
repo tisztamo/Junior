@@ -1,14 +1,11 @@
 import { onMount, createEffect } from 'solid-js';
-import { gitStatus, setGitStatus } from '../stores/gitStatus';
+import { gitStatus } from '../stores/gitStatus';
 import { fetchGitStatus } from '../service/fetchGitStatus';
 
 const GitStatusDisplay = () => {
   let statusContainer;
 
-  onMount(async () => {
-    const status = await fetchGitStatus();
-    setGitStatus(status);
-  });
+  onMount(fetchGitStatus);
 
   createEffect(() => {
     const gitStatusValue = gitStatus();

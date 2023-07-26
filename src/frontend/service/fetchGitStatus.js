@@ -1,4 +1,5 @@
 import { getBaseUrl } from '../getBaseUrl';
+import { setGitStatus } from '../stores/gitStatus';
 
 const fetchGitStatus = async () => {
   const baseUrl = getBaseUrl();
@@ -6,7 +7,7 @@ const fetchGitStatus = async () => {
 
   const data = await response.json();
 
-  return data;
+  setGitStatus(data);
 };
 
 export { fetchGitStatus };

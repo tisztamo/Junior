@@ -1,23 +1,36 @@
 #!/bin/sh
 set -e
-goal="Fix GitStatusDisplay to handle missing status field and remove onCleanup"
+goal="Modify fetchGitStatus to write data to store"
 echo "Plan:"
-echo "1. Update GitStatusDisplay component to correctly handle potential missing status field."
-echo "2. The gitStatus() function might now return an object that could potentially lack a status field. We should account for this case."
-echo "3. We're also asked to remove the onCleanup function call as it's no longer necessary."
+echo "1. Modify fetchGitStatus.js to import setGitStatus from gitStatus.js"
+echo "2. Use setGitStatus to write data to the store inside fetchGitStatus"
+echo "3. Modify GitStatusDisplay.jsx to remove fetchGitStatus call, since fetchGitStatus itself will update the store"
 
-cat <<'EOF' > src/frontend/components/GitStatusDisplay.jsx
+cat << 'EOF' > ./src/frontend/service/fetchGitStatus.js
+import { getBaseUrl } from '../getBaseUrl';
+import { setGitStatus } from '../stores/gitStatus';
+
+const fetchGitStatus = async () => {
+  const baseUrl = getBaseUrl();
+  const response = await fetch(`${baseUrl}/status`);
+
+  const data = await response.json();
+
+  setGitStatus(data);
+};
+
+export { fetchGitStatus };
+EOF
+
+cat << 'EOF' > ./src/frontend/components/GitStatusDisplay.jsx
 import { onMount, createEffect } from 'solid-js';
-import { gitStatus, setGitStatus } from '../stores/gitStatus';
+import { gitStatus } from '../stores/gitStatus';
 import { fetchGitStatus } from '../service/fetchGitStatus';
 
 const GitStatusDisplay = () => {
   let statusContainer;
 
-  onMount(async () => {
-    const status = await fetchGitStatus();
-    setGitStatus(status);
-  });
+  onMount(fetchGitStatus);
 
   createEffect(() => {
     const gitStatusValue = gitStatus();
