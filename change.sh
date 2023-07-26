@@ -1,27 +1,17 @@
 #!/bin/sh
 set -e
-goal="Fix relative path issue in vite config"
+goal="Use loadPromptDescriptor in servePromptDescriptor"
 echo "Plan:"
-echo "1. Import { dirname } from 'path' and 'url' to create a dirname variable in the ES6 module context."
-echo "2. Change the path for PostCSS configuration in vite.config.js to be relative to the vite.config.js file location using the dirname variable."
+echo "1. Import loadPromptDescriptor in servePromptDescriptor.js"
+echo "2. Use loadPromptDescriptor instead of readFile in the servePromptDescriptor function"
 
-cat >./src/frontend/vite.config.js <<'EOF'
-import { defineConfig } from 'vite'
-import solidPlugin from 'vite-plugin-solid'
-import { join, dirname } from 'path'
-import { fileURLToPath } from 'url'
+cat >./src/backend/handlers/servePromptDescriptor.js <<'EOF'
+import { loadPromptDescriptor } from '../../prompt/loadPromptDescriptor.js';
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
-
-export default defineConfig({
-  plugins: [solidPlugin()],
-  css: {
-    postcss: join(__dirname, 'postcss.config.cjs'),
-  },
-  build: {
-    target: 'esnext',
-  },
-})
+export const servePromptDescriptor = async (req, res) => {
+  const file = await loadPromptDescriptor();
+  res.send(file);
+};
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"

@@ -1,19 +1,40 @@
 # Working set
 
-src/frontend/vite.config.js:
+src/prompt/loadPromptDescriptor.js:
 ```
-import { defineConfig } from 'vite'
-import solidPlugin from 'vite-plugin-solid'
+import fs from 'fs';
+import util from 'util';
 
-export default defineConfig({
-  plugins: [solidPlugin()],
-  css: {
-    postcss: './src/frontend/postcss.config.cjs'
-  },
-  build: {
-    target: 'esnext',
-  },
-})
+const readFile = util.promisify(fs.readFile);
+import { descriptorFileName } from "./promptDescriptorConfig.js";
+
+const loadPromptDescriptor = async (rawPrinter) => {
+  const descriptorContent = await readFile(descriptorFileName, 'utf8');
+  if (rawPrinter) {
+    rawPrinter(descriptorFileName + ':\n' + descriptorContent);
+  }
+  return descriptorContent;
+};
+
+export { loadPromptDescriptor };
+
+```
+
+src/backend/handlers/servePromptDescriptor.js:
+```
+import { readFile } from 'fs/promises';
+import path from 'path';
+
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+export const servePromptDescriptor = async (req, res) => {
+  const file = await readFile(path.resolve(__dirname, '../../../prompt.yaml'), 'utf-8');
+  res.send(file);
+};
 
 ```
 
@@ -22,7 +43,7 @@ export default defineConfig({
 
 Fix the following issue!
 
-The postcss config path should be relative to the vite config file, not the working dir. Use dirname, they are in the same dir
+loadPromptDescriptor should be used instead of reading the file directly in servePromptDescriptor
 
 # Output Format
 

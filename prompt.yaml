@@ -1,7 +1,7 @@
 task: prompt/task/bug/fix.md
 attention:
-  - src/frontend/vite.config.js
+  - src/prompt/loadPromptDescriptor.js
+  - src/backend/handlers/servePromptDescriptor.js
 requirements: >-
-  The postcss config path should be relative to the vite config file, not
-  the working dir. Use dirname, they are in the same dir
+  loadPromptDescriptor should be used instead of reading the file directly in servePromptDescriptor
 os: OSX
