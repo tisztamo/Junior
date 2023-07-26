@@ -11,8 +11,11 @@ const promptDescriptorDefaults = async () => {
 
   // Store all unique file names
   for(let dir of promptDirs) {
-    const files = fs.readdirSync(dir).filter(file => file.endsWith('.md'));
-    files.forEach(file => uniqueFiles.add(file));
+    // Check if directory exists before trying to read its content
+    if (fs.existsSync(dir)) {
+      const files = fs.readdirSync(dir).filter(file => file.endsWith('.md'));
+      files.forEach(file => uniqueFiles.add(file));
+    }
   }
 
   // Load only unique files

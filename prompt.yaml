@@ -1,7 +1,5 @@
 task: prompt/task/bug/fix.md
 attention:
-  - src/backend/handlers/updateTaskHandler.js
-  - src/prompt/loadPromptDescriptor.js
-requirements: >-
-  Create savePromptDescriptor.js and use it and loadPromptDescriptor when updating the task. Do not use dirname.
+  - src/prompt/promptDescriptorDefaults.js
+requirements: Handle the case silently when a prompt folder does not exests.
 os: OSX

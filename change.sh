@@ -1,49 +1,41 @@
 #!/bin/sh
 set -e
-goal="Fix task update issue with new save/load prompt descriptors"
+goal="Handle missing prompt folder silently"
 echo "Plan:"
-echo "1. Create savePromptDescriptor.js"
-echo "2. Update updateTaskHandler.js to use savePromptDescriptor and loadPromptDescriptor"
-echo "3. Confirm changes."
+echo "1. Add a check for existence of directory before trying to read its content."
+echo "2. Skip to the next iteration of the loop if directory does not exist."
 
-cat > src/prompt/savePromptDescriptor.js << 'EOF'
+cat > ./src/prompt/promptDescriptorDefaults.js << 'EOF'
+import { loadPromptFile } from './loadPromptFile.js';
+import { getPromptDirectories } from './getPromptDirectories.js';
 import fs from 'fs';
-import util from 'util';
-
-const writeFile = util.promisify(fs.writeFile);
-import { descriptorFileName } from "./promptDescriptorConfig.js";
-
-const savePromptDescriptor = async (data) => {
-  await writeFile(descriptorFileName, data, 'utf8');
-};
-
-export { savePromptDescriptor };
-EOF
-
-cat > src/backend/handlers/updateTaskHandler.js << 'EOF'
 import path from 'path';
-import yaml from 'js-yaml';
-import { loadPromptDescriptor } from "../../prompt/loadPromptDescriptor.js";
-import { savePromptDescriptor } from "../../prompt/savePromptDescriptor.js";
 
-export const updateTaskHandler = async (req, res) => {
-  const task = req.body.task;
+const promptDescriptorDefaults = async () => {
+  let promptDescriptorDefaults = {};
   
-  try {
-    const fileContent = await loadPromptDescriptor();
+  const promptDirs = getPromptDirectories();
+  let uniqueFiles = new Set();
 
-    const document = yaml.load(fileContent);
-    document.task = path.join("prompt", "task", task);
-    
-    const newYamlStr = yaml.dump(document);
-    await savePromptDescriptor(newYamlStr);
-    
-    res.status(200).json({ message: "Task updated successfully" });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Internal server error" });
+  // Store all unique file names
+  for(let dir of promptDirs) {
+    // Check if directory exists before trying to read its content
+    if (fs.existsSync(dir)) {
+      const files = fs.readdirSync(dir).filter(file => file.endsWith('.md'));
+      files.forEach(file => uniqueFiles.add(file));
+    }
   }
-};
+
+  // Load only unique files
+  for (let file of uniqueFiles) {
+    const fileNameWithoutExtension = path.basename(file, '.md');
+    promptDescriptorDefaults[fileNameWithoutExtension] = await loadPromptFile(`prompt/${file}`);
+  }
+  
+  return promptDescriptorDefaults;
+}
+
+export default promptDescriptorDefaults;
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"
