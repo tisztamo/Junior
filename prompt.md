@@ -1,32 +1,41 @@
 # Working set
 
-src/init.js:
+src/execute/executeAndForwardOutput.js:
 ```
-#!/usr/bin/env node
-import { execSync } from 'child_process';
-import { writeFileSync } from 'fs';
-import { join } from 'path';
-import { createGitignore } from './git/createGitignore.js';
+import { writeFile } from 'fs/promises';
+import { spawn } from 'child_process';
 
-function juniorInit() {
-  execSync('git init', { stdio: 'inherit' });
+async function executeAndForwardOutput(code, next) {
+  // Check if the code starts with a shebang
+  if (!code.startsWith('#!')) {
+    throw new Error('Code does not start with a shebang');
+  }
 
-  createGitignore();
+  try {
+    // Write code to change.sh
+    await writeFile('./change.sh', code);
+    const child = spawn('./change.sh', [], { shell: true });
+    let commandOutput = '';
 
-  execSync('git add .gitignore', { stdio: 'inherit' });
-  execSync('git commit -m "Junior init"', { stdio: 'inherit' });
+    child.stdout.on('data', (data) => {
+      console.log(`${data}`);
+      commandOutput += data;
+    });
 
-  const yamlContent = `task: prompt/task/feature/implement.md
-attention:
-  - ./
-requirements: Create a Hello World in Node.js`;
+    child.stderr.on('data', (data) => {
+      console.error(`${data}`);
+      commandOutput += data;
+    });
 
-  writeFileSync('prompt.yaml', yamlContent);
-
-  console.log('\x1b[32mRepo initialized for Junior development\x1b[0m');
+    child.on('close', (code) => {
+      next(code, commandOutput);
+    });
+  } catch (err) {
+    console.error(err);
+  }
 }
 
-juniorInit();
+export { executeAndForwardOutput };
 
 ```
 
@@ -40,7 +49,7 @@ Implement the following feature!
 
 Requirements:
 
-- Factor out prompt.yaml creation to src/prompt/createPromptYaml.js! - Also create and call src/prompt/createProjectSpecifics.js which creates ./prompt/projectSpecifics.md with the content &#34;## Project Specifics\n&#34;!
+Make change.sh executable after writing
 
 
 ## Project Specifics

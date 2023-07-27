@@ -1,48 +1,61 @@
 #!/bin/sh
 set -e
-goal="Create prompt directory and commit it"
+goal="Make change.sh executable after writing"
 echo "Plan:"
-echo "1. Create a new function called 'createPromptDir' in a new file 'src/prompt/createPromptDir.js'"
-echo "2. The function will check if the 'prompt' directory exists, and if not, create it."
-echo "3. Rewrite 'src/init.js' using heredoc, to include the import and use of 'createPromptDir' function, also adjusting the final commit command to include the 'prompt' directory."
-echo "4. The creation of the 'prompt' directory and its commit to git will be included at the end of 'src/init.js'."
+echo "1. Create a new file named 'makeExecutable.js' in src/execute directory."
+echo "2. Write a function in 'makeExecutable.js' that makes a file executable."
+echo "3. Import and call the function in 'executeAndForwardOutput.js' after the file is written."
 
-# Step 1: Create 'createPromptDir.js'
-cat << 'EOF' > src/prompt/createPromptDir.js
-import { existsSync, mkdirSync } from 'fs';
+cat << 'EOF' > ./src/execute/makeExecutable.js
+import { chmod } from 'fs/promises';
 
-export async function createPromptDir() {
-  if (!existsSync('./prompt')) {
-    mkdirSync('./prompt');
+async function makeExecutable(filepath) {
+  try {
+    await chmod(filepath, '755');
+  } catch (err) {
+    console.error(`Failed to make ${filepath} executable: ${err}`);
   }
 }
+
+export { makeExecutable };
 EOF
 
-# Step 3: Rewrite 'init.js' to import and use 'createPromptDir', also commit all changes at the end
-cat << 'EOF' > src/init.js
-#!/usr/bin/env node
-import { execSync } from 'child_process';
-import { join } from 'path';
-import { createPromptYaml } from './prompt/createPromptYaml.js';
-import { createProjectSpecifics } from './prompt/createProjectSpecifics.js';
-import { createGitignore } from './git/createGitignore.js';
-import { createPromptDir } from './prompt/createPromptDir.js';
+# modify the 'executeAndForwardOutput.js' to call the 'makeExecutable' function after writing 'change.sh'
+cat << 'EOF' > ./src/execute/executeAndForwardOutput.js
+import { writeFile } from 'fs/promises';
+import { spawn } from 'child_process';
+import { makeExecutable } from './makeExecutable.js';
 
-async function juniorInit() {
-  execSync('git init', { stdio: 'inherit' });
+async function executeAndForwardOutput(code, next) {
+  if (!code.startsWith('#!')) {
+    throw new Error('Code does not start with a shebang');
+  }
 
-  createGitignore();
-  await createPromptDir();
-  createPromptYaml();
-  createProjectSpecifics();
+  try {
+    await writeFile('./change.sh', code);
+    await makeExecutable('./change.sh');
+    const child = spawn('./change.sh', [], { shell: true });
+    let commandOutput = '';
 
-  execSync('git add .', { stdio: 'inherit' });
-  execSync('git commit -m "Junior init"', { stdio: 'inherit' });
+    child.stdout.on('data', (data) => {
+      console.log(`${data}`);
+      commandOutput += data;
+    });
 
-  console.log('\x1b[32mRepo initialized for Junior development\x1b[0m');
+    child.stderr.on('data', (data) => {
+      console.error(`${data}`);
+      commandOutput += data;
+    });
+
+    child.on('close', (code) => {
+      next(code, commandOutput);
+    });
+  } catch (err) {
+    console.error(err);
+  }
 }
 
-juniorInit();
+export { executeAndForwardOutput };
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"

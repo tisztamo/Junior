@@ -1,6 +1,5 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/init.js
-  - src/prompt/createProjectSpecifics.js
-requirements: Create the prompt dir if it doesn't exist. Also commit it.
+  - src/execute/executeAndForwardOutput.js
+requirements: Make change.sh executable after writing
 os: OSX
