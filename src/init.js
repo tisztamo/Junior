@@ -1,19 +1,13 @@
 #!/usr/bin/env node
 import { execSync } from 'child_process';
-import { appendFileSync, writeFileSync, existsSync } from 'fs';
+import { writeFileSync } from 'fs';
 import { join } from 'path';
+import { createGitignore } from './git/createGitignore.js';
 
 function juniorInit() {
   execSync('git init', { stdio: 'inherit' });
-  
-  const gitignorePath = join(process.cwd(), '.gitignore');
-  const ignoreContent = ['prompt.yaml', 'prompt.md', 'change.sh'].join('\n');
 
-  if (existsSync(gitignorePath)) {
-    appendFileSync(gitignorePath, `\n${ignoreContent}`);
-  } else {
-    writeFileSync(gitignorePath, ignoreContent);
-  }
+  createGitignore();
 
   execSync('git add .gitignore', { stdio: 'inherit' });
   execSync('git commit -m "Junior init"', { stdio: 'inherit' });

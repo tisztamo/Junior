@@ -1,18 +1,7 @@
 task: prompt/task/bug/fix.md
 attention:
-  - package.json
-requirements: |
-  Create a new command junior-init in src/init.js that will
-    - initialize a new git repo
-    - .gitignore prompt.yaml, prompt.md and change.sh
-    - If .gitignore already exists, append to it.
-    - commit the changes as "Junior init"
-    - create prompt.yaml with the following content:
-      ```yaml
-      task: prompt/task/feature/implement.md
-      attention:
-        - ./
-      requirements: Create a Hello World in Node.js
-      ```
-    - Report a green "Repo initialized for Junior development" message when the command is done
+  - src/init.js
+requirements:
+  - Factor out .gitignore creation to a new file in src/git/
+  - Also gitignore node_modules/ if it is not already gitignored.
 os: OSX

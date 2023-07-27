@@ -1,51 +1,38 @@
 # Working set
 
-src/frontend/components/GitStatusDisplay.jsx:
+src/init.js:
 ```
-import { onMount, createEffect } from 'solid-js';
-import { gitStatus } from '../stores/gitStatus';
-import { fetchGitStatus } from '../service/fetchGitStatus';
+#!/usr/bin/env node
+import { execSync } from 'child_process';
+import { appendFileSync, writeFileSync, existsSync } from 'fs';
+import { join } from 'path';
 
-const GitStatusDisplay = () => {
-  let statusContainer;
+function juniorInit() {
+  execSync('git init', { stdio: 'inherit' });
+  
+  const gitignorePath = join(process.cwd(), '.gitignore');
+  const ignoreContent = ['prompt.yaml', 'prompt.md', 'change.sh'].join('\n');
 
-  onMount(fetchGitStatus);
-
-  createEffect(() => {
-    const gitStatusValue = gitStatus();
-    if (gitStatusValue) {
-      if (gitStatusValue.error && gitStatusValue.error.stderr.includes('Not a git repository')) {
-        statusContainer.innerText = 'Not a git repo. Run \'npx junior-init\' to initialize!';
-      } else if (gitStatusValue.message && gitStatusValue.message !== '') {
-        statusContainer.innerText = gitStatusValue.message;
-      }
-    }
-  });
-
-  return (
-    <pre
-      ref={statusContainer}
-      class={`rounded overflow-auto max-w-full ${gitStatus() && gitStatus().message && gitStatus().message !== '' ? 'block' : 'hidden'}`}
-    />
-  );
-};
-
-export default GitStatusDisplay;
-
-```
-
-src/backend/handlers/gitStatusHandler.js:
-```
-import gitStatus from '../../git/gitStatus.js';
-
-export default async function gitStatusHandler(req, res) {
-  try {
-    const status = await gitStatus();
-    res.status(200).send({ status });
-  } catch (error) {
-    res.status(500).send({ message: 'Error in getting Git status', error });
+  if (existsSync(gitignorePath)) {
+    appendFileSync(gitignorePath, `\n${ignoreContent}`);
+  } else {
+    writeFileSync(gitignorePath, ignoreContent);
   }
+
+  execSync('git add .gitignore', { stdio: 'inherit' });
+  execSync('git commit -m "Junior init"', { stdio: 'inherit' });
+
+  const yamlContent = `task: prompt/task/feature/implement.md
+attention:
+  - ./
+requirements: Create a Hello World in Node.js`;
+
+  writeFileSync('prompt.yaml', yamlContent);
+
+  console.log('\x1b[32mRepo initialized for Junior development\x1b[0m');
 }
+
+juniorInit();
 
 ```
 
@@ -54,21 +41,7 @@ export default async function gitStatusHandler(req, res) {
 
 Fix the following issue!
 
-1. Move the git status result from the status field of the response to the message field.
-2. When the endpoint reports an error in the error field similar to this (check stderr for &#34;Not a git repository&#34;):
-{
-  &#34;message&#34;: &#34;Error in getting Git status&#34;,
-  &#34;error&#34;: {
-    &#34;code&#34;: 128,
-    &#34;killed&#34;: false,
-    &#34;signal&#34;: null,
-    &#34;cmd&#34;: &#34;git status --porcelain=v1&#34;,
-    &#34;stdout&#34;: &#34;&#34;,
-    &#34;stderr&#34;: &#34;fatal: Not a git repository (or any of the parent directories): .git\n&#34;
-  }
-}
-then display &#34;Not a git repo. Run &#39;npx junior-init&#39; to initialize!&#34;.
-
+Factor out .gitignore creation to a new file in src/git/,Also gitignore node_modules/ if it is not already gitignored.
 
 # Output Format
 
