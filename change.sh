@@ -1,41 +1,58 @@
 #!/bin/sh
 set -e
-goal="Handle missing prompt folder silently"
+goal="Simplify GitStatusDisplay and gitStatusHandler logic"
 echo "Plan:"
-echo "1. Add a check for existence of directory before trying to read its content."
-echo "2. Skip to the next iteration of the loop if directory does not exist."
+echo "1. Update gitStatusHandler.js to send git status in 'message' field instead of 'status'"
+echo "2. Update gitStatusHandler.js to send specific error message when stderr includes 'Not a git repository'"
+echo "3. Update GitStatusDisplay.jsx to simply display the message, and if an error exists, error.stderr"
 
-cat > ./src/prompt/promptDescriptorDefaults.js << 'EOF'
-import { loadPromptFile } from './loadPromptFile.js';
-import { getPromptDirectories } from './getPromptDirectories.js';
-import fs from 'fs';
-import path from 'path';
+cat > ./src/backend/handlers/gitStatusHandler.js << 'EOF'
+import gitStatus from '../../git/gitStatus.js';
 
-const promptDescriptorDefaults = async () => {
-  let promptDescriptorDefaults = {};
-  
-  const promptDirs = getPromptDirectories();
-  let uniqueFiles = new Set();
-
-  // Store all unique file names
-  for(let dir of promptDirs) {
-    // Check if directory exists before trying to read its content
-    if (fs.existsSync(dir)) {
-      const files = fs.readdirSync(dir).filter(file => file.endsWith('.md'));
-      files.forEach(file => uniqueFiles.add(file));
+export default async function gitStatusHandler(req, res) {
+  try {
+    const status = await gitStatus();
+    res.status(200).send({ message: status });
+  } catch (error) {
+    let errorMessage = 'Error in getting Git status';
+    if (error.stderr && error.stderr.includes('Not a git repository')) {
+      errorMessage = 'Not a git repo. Run \'npx junior-init\' to initialize!';
     }
+    res.status(500).send({ message: errorMessage, error });
   }
-
-  // Load only unique files
-  for (let file of uniqueFiles) {
-    const fileNameWithoutExtension = path.basename(file, '.md');
-    promptDescriptorDefaults[fileNameWithoutExtension] = await loadPromptFile(`prompt/${file}`);
-  }
-  
-  return promptDescriptorDefaults;
 }
+EOF
 
-export default promptDescriptorDefaults;
+cat > ./src/frontend/components/GitStatusDisplay.jsx << 'EOF'
+import { onMount, createEffect } from 'solid-js';
+import { gitStatus } from '../stores/gitStatus';
+import { fetchGitStatus } from '../service/fetchGitStatus';
+
+const GitStatusDisplay = () => {
+  let statusContainer;
+
+  onMount(fetchGitStatus);
+
+  createEffect(() => {
+    const gitStatusValue = gitStatus();
+    if (gitStatusValue) {
+      if (gitStatusValue.error) {
+        statusContainer.innerText = `${gitStatusValue.message}\n${gitStatusValue.error.stderr}`;
+      } else if (gitStatusValue.message && gitStatusValue.message !== '') {
+        statusContainer.innerText = gitStatusValue.message;
+      }
+    }
+  });
+
+  return (
+    <pre
+      ref={statusContainer}
+      class={`rounded overflow-auto max-w-full ${gitStatus() && gitStatus().message && gitStatus().message !== '' ? 'block' : 'hidden'}`}
+    />
+  );
+};
+
+export default GitStatusDisplay;
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"

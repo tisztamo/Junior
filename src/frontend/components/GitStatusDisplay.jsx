@@ -9,15 +9,19 @@ const GitStatusDisplay = () => {
 
   createEffect(() => {
     const gitStatusValue = gitStatus();
-    if (gitStatusValue && gitStatusValue.status && gitStatusValue.status !== '') {
-      statusContainer.innerText = gitStatusValue.status;
+    if (gitStatusValue) {
+      if (gitStatusValue.error) {
+        statusContainer.innerText = `${gitStatusValue.message}\n${gitStatusValue.error.stderr}`;
+      } else if (gitStatusValue.message && gitStatusValue.message !== '') {
+        statusContainer.innerText = gitStatusValue.message;
+      }
     }
   });
 
   return (
     <pre
       ref={statusContainer}
-      class={`rounded overflow-auto max-w-full ${gitStatus() && gitStatus().status && gitStatus().status !== '' ? 'block' : 'hidden'}`}
+      class={`rounded overflow-auto max-w-full ${gitStatus() && gitStatus().message && gitStatus().message !== '' ? 'block' : 'hidden'}`}
     />
   );
 };

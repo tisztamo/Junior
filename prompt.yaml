@@ -1,5 +1,25 @@
 task: prompt/task/bug/fix.md
 attention:
-  - src/prompt/promptDescriptorDefaults.js
-requirements: Handle the case silently when a prompt folder does not exests.
+  - src/frontend/components/GitStatusDisplay.jsx
+  - src/backend/handlers/gitStatusHandler.js
+requirements: >
+  1. Move the git status result from the status field of the response to the
+  message field.
+
+  2. When the endpoint reports an error in the error field similar to this
+  (check stderr for "Not a git repository"):
+
+  {
+    "message": "Error in getting Git status",
+    "error": {
+      "code": 128,
+      "killed": false,
+      "signal": null,
+      "cmd": "git status --porcelain=v1",
+      "stdout": "",
+      "stderr": "fatal: Not a git repository (or any of the parent directories): .git\n"
+    }
+  }
+
+  then display "Not a git repo. Run 'npx junior-init' to initialize!".
 os: OSX
