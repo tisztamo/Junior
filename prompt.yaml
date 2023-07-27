@@ -1,7 +1,8 @@
-task: prompt/task/bug/fix.md
+task: prompt/task/feature/implement.md
 attention:
-  - src/prompt/getPromptDirectories.js
-requirements:
-  use import.meta to get the dir of the source file.
-  One directory is relative to the working dir, the other relative to the project root.
+  - src/init.js
+requirements: >-
+  - Factor out prompt.yaml creation to src/prompt/createPromptYaml.js! - Also
+  create and call src/prompt/createProjectSpecifics.js which creates
+  ./prompt/projectSpecifics.md with the content "## Project Specifics\n"!
 os: OSX

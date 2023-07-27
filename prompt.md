@@ -1,29 +1,55 @@
 # Working set
 
-src/prompt/getPromptDirectories.js:
+src/init.js:
 ```
-import path from 'path';
+#!/usr/bin/env node
+import { execSync } from 'child_process';
+import { writeFileSync } from 'fs';
+import { join } from 'path';
+import { createGitignore } from './git/createGitignore.js';
 
-const getPromptDirectories = () => {
-  const rootDir = path.resolve();
-  const workingDir = process.cwd();
-  
-  return [
-    path.join(rootDir, 'prompt'),
-    path.join(workingDir, 'prompt')
-  ];
+function juniorInit() {
+  execSync('git init', { stdio: 'inherit' });
+
+  createGitignore();
+
+  execSync('git add .gitignore', { stdio: 'inherit' });
+  execSync('git commit -m "Junior init"', { stdio: 'inherit' });
+
+  const yamlContent = `task: prompt/task/feature/implement.md
+attention:
+  - ./
+requirements: Create a Hello World in Node.js`;
+
+  writeFileSync('prompt.yaml', yamlContent);
+
+  console.log('\x1b[32mRepo initialized for Junior development\x1b[0m');
 }
 
-export { getPromptDirectories };
+juniorInit();
 
 ```
 
 
 # Task
 
-Fix the following issue!
+Implement the following feature!
 
-use import.meta to get the dir of the source file. One directory is relative to the working dir, the other relative to the project root.
+- Create a plan!
+- Create new files when needed!
+
+Requirements:
+
+- Factor out prompt.yaml creation to src/prompt/createPromptYaml.js! - Also create and call src/prompt/createProjectSpecifics.js which creates ./prompt/projectSpecifics.md with the content &#34;## Project Specifics\n&#34;!
+
+
+## Project Specifics
+
+- Every js file should *only export a single function*!
+- Use *ES6 imports*!
+- Prefer *async/await* over promises!
+- The frontend uses *Solidjs*, edit .jsx file accordingly
+
 
 # Output Format
 
