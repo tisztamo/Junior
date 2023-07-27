@@ -1,55 +1,43 @@
 #!/bin/sh
 set -e
-goal="Refactor prompt.yaml creation and create projectSpecifics.md"
+goal="Create prompt directory and commit it"
 echo "Plan:"
-echo "1. Create src/prompt/createPromptYaml.js with its necessary function"
-echo "2. Create src/prompt/createProjectSpecifics.js with its necessary function"
-echo "3. Refactor src/init.js to use these new functions"
+echo "1. Create a new function called 'createPromptDir' in a new file 'src/prompt/createPromptDir.js'"
+echo "2. The function will check if the 'prompt' directory exists, and if not, create it."
+echo "3. Rewrite 'src/init.js' using heredoc, to include the import and use of 'createPromptDir' function, also adjusting the final commit command to include the 'prompt' directory."
+echo "4. The creation of the 'prompt' directory and its commit to git will be included at the end of 'src/init.js'."
 
-# Step 1: Create src/prompt/createPromptYaml.js
-cat << 'EOF' > ./src/prompt/createPromptYaml.js
-import { writeFileSync } from 'fs';
+# Step 1: Create 'createPromptDir.js'
+cat << 'EOF' > src/prompt/createPromptDir.js
+import { existsSync, mkdirSync } from 'fs';
 
-export function createPromptYaml() {
-  const yamlContent = `task: prompt/task/feature/implement.md
-attention:
-  - ./
-requirements: Create a Hello World in Node.js`;
-
-  writeFileSync('prompt.yaml', yamlContent);
+export async function createPromptDir() {
+  if (!existsSync('./prompt')) {
+    mkdirSync('./prompt');
+  }
 }
 EOF
 
-# Step 2: Create src/prompt/createProjectSpecifics.js
-cat << 'EOF' > ./src/prompt/createProjectSpecifics.js
-import { writeFileSync } from 'fs';
-
-export function createProjectSpecifics() {
-  const markdownContent = `## Project Specifics\n`;
-
-  writeFileSync('./prompt/projectSpecifics.md', markdownContent);
-}
-EOF
-
-# Step 3: Refactor src/init.js to use these new functions
-cat << 'EOF' > ./src/init.js
+# Step 3: Rewrite 'init.js' to import and use 'createPromptDir', also commit all changes at the end
+cat << 'EOF' > src/init.js
 #!/usr/bin/env node
 import { execSync } from 'child_process';
 import { join } from 'path';
 import { createPromptYaml } from './prompt/createPromptYaml.js';
 import { createProjectSpecifics } from './prompt/createProjectSpecifics.js';
 import { createGitignore } from './git/createGitignore.js';
+import { createPromptDir } from './prompt/createPromptDir.js';
 
 async function juniorInit() {
   execSync('git init', { stdio: 'inherit' });
 
   createGitignore();
-
-  execSync('git add .gitignore', { stdio: 'inherit' });
-  execSync('git commit -m "Junior init"', { stdio: 'inherit' });
-
+  await createPromptDir();
   createPromptYaml();
   createProjectSpecifics();
+
+  execSync('git add .', { stdio: 'inherit' });
+  execSync('git commit -m "Junior init"', { stdio: 'inherit' });
 
   console.log('\x1b[32mRepo initialized for Junior development\x1b[0m');
 }

@@ -1,8 +1,6 @@
 task: prompt/task/feature/implement.md
 attention:
   - src/init.js
-requirements: >-
-  - Factor out prompt.yaml creation to src/prompt/createPromptYaml.js! - Also
-  create and call src/prompt/createProjectSpecifics.js which creates
-  ./prompt/projectSpecifics.md with the content "## Project Specifics\n"!
+  - src/prompt/createProjectSpecifics.js
+requirements: Create the prompt dir if it doesn't exist. Also commit it.
 os: OSX
