@@ -1,16 +1,3 @@
-#!/bin/sh
-set -e
-goal="Initialize a new git repository for Junior"
-echo "Plan:"
-echo "1. Create a new command junior-init in src/init.js"
-echo "2. Initialize a new git repository"
-echo "3. Create/Append .gitignore"
-echo "4. Commit the changes"
-echo "5. Create prompt.yaml"
-echo "6. Display a success message"
-
-# Step 1
-cat <<'EOF' > src/init.js
 #!/usr/bin/env node
 import { execSync } from 'child_process';
 import { appendFileSync, writeFileSync, existsSync } from 'fs';
@@ -42,12 +29,3 @@ requirements: Create a Hello World in Node.js`;
 }
 
 juniorInit();
-EOF
-
-# Make the file executable
-chmod +x src/init.js
-
-# Include junior-init in package.json bin section
-jq '.bin["junior-init"] = "src/init.js"' package.json > temp.json && mv temp.json package.json
-
-echo "\033[32mDone: $goal\033[0m\n"
