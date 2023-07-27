@@ -1,7 +1,7 @@
 task: prompt/task/bug/fix.md
 attention:
-  - src/init.js
+  - src/prompt/getPromptDirectories.js
 requirements:
-  - Factor out .gitignore creation to a new file in src/git/
-  - Also gitignore node_modules/ if it is not already gitignored.
+  use import.meta to get the dir of the source file.
+  One directory is relative to the working dir, the other relative to the project root.
 os: OSX

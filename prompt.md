@@ -1,38 +1,20 @@
 # Working set
 
-src/init.js:
+src/prompt/getPromptDirectories.js:
 ```
-#!/usr/bin/env node
-import { execSync } from 'child_process';
-import { appendFileSync, writeFileSync, existsSync } from 'fs';
-import { join } from 'path';
+import path from 'path';
 
-function juniorInit() {
-  execSync('git init', { stdio: 'inherit' });
+const getPromptDirectories = () => {
+  const rootDir = path.resolve();
+  const workingDir = process.cwd();
   
-  const gitignorePath = join(process.cwd(), '.gitignore');
-  const ignoreContent = ['prompt.yaml', 'prompt.md', 'change.sh'].join('\n');
-
-  if (existsSync(gitignorePath)) {
-    appendFileSync(gitignorePath, `\n${ignoreContent}`);
-  } else {
-    writeFileSync(gitignorePath, ignoreContent);
-  }
-
-  execSync('git add .gitignore', { stdio: 'inherit' });
-  execSync('git commit -m "Junior init"', { stdio: 'inherit' });
-
-  const yamlContent = `task: prompt/task/feature/implement.md
-attention:
-  - ./
-requirements: Create a Hello World in Node.js`;
-
-  writeFileSync('prompt.yaml', yamlContent);
-
-  console.log('\x1b[32mRepo initialized for Junior development\x1b[0m');
+  return [
+    path.join(rootDir, 'prompt'),
+    path.join(workingDir, 'prompt')
+  ];
 }
 
-juniorInit();
+export { getPromptDirectories };
 
 ```
 
@@ -41,7 +23,7 @@ juniorInit();
 
 Fix the following issue!
 
-Factor out .gitignore creation to a new file in src/git/,Also gitignore node_modules/ if it is not already gitignored.
+use import.meta to get the dir of the source file. One directory is relative to the working dir, the other relative to the project root.
 
 # Output Format
 
