@@ -1,16 +1,11 @@
 task: prompt/task/doc/improve.md
 attention:
-  - ./
-  - doc/
-  - doc/index.html
-  - doc/example.md
-  - doc/example.html
-  - ./README.md
+  - doc/web.md
 requirements: |
-  Document the web interface in doc/web.md and npm run build:doc! Link it from index.html!
-  Read README.md carefully, but do not assume the reader knows it, and do not edit it!
+  npm run build:doc at the end!
 
-  
-  </div></div><button class="w-64 px-4 py-4 bg-blue-500 text-white rounded">Generate &amp; Copy Prompt</button><details class="w-full max-w-screen overflow-x-auto whitespace-normal markdown" style="display: none;"><summary>prompt length: 0 chars</summary><div></div></details><button class="w-64 px-4 py-4 bg-orange-300 text-white rounded">Paste &amp; Execute Change</button><div class="rounded overflow-auto max-w-full hidden"><div dir="ltr" class="terminal xterm xterm-dom-renderer-owner-1"><div class="xterm-viewport" style="background-color: rgb(0, 0, 0);"><div class="xterm-scroll-area"></div></div><div class="xterm-screen" style="width: 0px; height: 0px;"><div class="xterm-helpers"><textarea class="xterm-helper-textarea" aria-label="Terminal input" aria-multiline="false" autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0"></textarea><span class="xterm-char-measure-element" aria-hidden="true" style="font-family: courier-new, courier, monospace; font-size: 15px;">W</span><div class="composition-view"></div></div><style>.xterm-dom-renderer-owner-1 .xterm-rows span { display: inline-block; height: 100%; vertical-align: top; width: 0px}</style><style>.xterm-dom-renderer-owner-1 .xterm-rows { color: #ffffff; font-family: courier-new, courier, monospace; font-size: 15px;}.xterm-dom-renderer-owner-1 .xterm-rows .xterm-dim { color: #ffffff80;}.xterm-dom-renderer-owner-1 span:not(.xterm-bold) { font-weight: normal;}.xterm-dom-renderer-owner-1 span.xterm-bold { font-weight: bold;}.xterm-dom-renderer-owner-1 span.xterm-italic { font-style: italic;}@keyframes blink_box_shadow_1 { 50% {  box-shadow: none; }}@keyframes blink_block_1 { 0% {  background-color: #ffffff;  color: #000000; } 50% {  background-color: #000000;  color: #ffffff; }}.xterm-dom-renderer-owner-1 .xterm-rows:not(.xterm-focus) .xterm-cursor.xterm-cursor-block ,.xterm-dom-renderer-owner-1 .xterm-rows:not(.xterm-focus) .xterm-cursor.xterm-cursor-bar ,.xterm-dom-renderer-owner-1 .xterm-rows:not(.xterm-focus) .xterm-cursor.xterm-cursor-underline { outline: 1px solid #ffffff; outline-offset: -1px;}.xterm-dom-renderer-owner-1 .xterm-rows.xte #00000080; }.xterm-dom-renderer-owner-1 .xterm-bg-257 { background-color: #ffffff; }</style><div class="xterm-rows" aria-hidden="true" style="line-height: normal;"><div style="width: 0px; height: 0px; line-height: 0px; overflow: hidden;"><span class="xterm-cursor xterm-cursor-block"> </span></div><div class="xterm-decoration-container"></div></div></div></div><pre class="rounded overflow-auto max-w-full block"> M prompt.md<br> M prompt.yaml<br></pre><button class="w-64 px-4 py-4 bg-red-700 text-white rounded">Roll Back to Last Commit</button></div>
+  Add an image: ./screenshot.png
+  Add a video: https://youtu.be/W_iwry8uT7E
+
+  At the beginning of usage write about the workflow: Edit prompt.yaml with vscode, using the Junior plugin, then going to the web interface to continue.
 os: OSX
-
