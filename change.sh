@@ -1,61 +1,47 @@
 #!/bin/sh
 set -e
-goal="Make change.sh executable after writing"
+goal="Improve the web interface documentation"
 echo "Plan:"
-echo "1. Create a new file named 'makeExecutable.js' in src/execute directory."
-echo "2. Write a function in 'makeExecutable.js' that makes a file executable."
-echo "3. Import and call the function in 'executeAndForwardOutput.js' after the file is written."
+echo "1. Enhance explanation and user workflow in the 'Usage' section."
+echo "2. Add an image and a video guide to the documentation."
+echo "3. Run the npm command to build the new doc."
 
-cat << 'EOF' > ./src/execute/makeExecutable.js
-import { chmod } from 'fs/promises';
+# Enhance the documentation by adding workflow, image, and video guide
+cat << 'EOF' > doc/web.md
+# Web Interface
 
-async function makeExecutable(filepath) {
-  try {
-    await chmod(filepath, '755');
-  } catch (err) {
-    console.error(`Failed to make ${filepath} executable: ${err}`);
-  }
-}
+The Contributor project also provides a web interface to guide the AI model. It's designed for use with ChatGPT Pro and doesn't require an API key.
 
-export { makeExecutable };
+## Starting the Web Interface
+
+Run the application with `npm start` to start a local server on port 3000. Open your web browser and navigate to `http://localhost:3000` to access the web interface.
+
+## Workflow
+
+The typical workflow begins with editing the `prompt.yaml` file in your code editor of choice (we recommend Visual Studio Code with the Junior plugin for an optimal experience). Once you're satisfied with your task setup, you proceed to the web interface for execution and monitoring.
+
+## Usage
+
+The web interface has a few interactive components:
+
+![Web Interface](./screenshot.png)
+
+- **Generate & Copy Prompt button**: Click this to generate a task prompt based on your `prompt.yaml` file and copy it to your clipboard.
+
+- **Paste & Execute Change button**: Paste the generated prompt into the input field and click this button to execute the changes.
+
+- **Roll Back to Last Commit button**: If you made a mistake or aren't happy with the changes, click this button to revert to the last commit.
+
+- **Terminal**: Displays the output of your command execution. It's a simple console that shows the progress of the task.
+
+For a more detailed guide on using the web interface, refer to our video tutorial [here](https://youtu.be/W_iwry8uT7E).
+
+Remember, you can always refer to your `prompt.yaml` file to modify the task details or attention mechanism.
+
+Happy developing with your AI contributor!
 EOF
 
-# modify the 'executeAndForwardOutput.js' to call the 'makeExecutable' function after writing 'change.sh'
-cat << 'EOF' > ./src/execute/executeAndForwardOutput.js
-import { writeFile } from 'fs/promises';
-import { spawn } from 'child_process';
-import { makeExecutable } from './makeExecutable.js';
-
-async function executeAndForwardOutput(code, next) {
-  if (!code.startsWith('#!')) {
-    throw new Error('Code does not start with a shebang');
-  }
-
-  try {
-    await writeFile('./change.sh', code);
-    await makeExecutable('./change.sh');
-    const child = spawn('./change.sh', [], { shell: true });
-    let commandOutput = '';
-
-    child.stdout.on('data', (data) => {
-      console.log(`${data}`);
-      commandOutput += data;
-    });
-
-    child.stderr.on('data', (data) => {
-      console.error(`${data}`);
-      commandOutput += data;
-    });
-
-    child.on('close', (code) => {
-      next(code, commandOutput);
-    });
-  } catch (err) {
-    console.error(err);
-  }
-}
-
-export { executeAndForwardOutput };
-EOF
+# Build the new documentation
+npm run build:doc
 
 echo "\033[32mDone: $goal\033[0m\n"
