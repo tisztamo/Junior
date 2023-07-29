@@ -10,9 +10,15 @@ The Contributor project also provides a web interface to guide the AI model. It'
 
 Run the application with `npm start` to start a local server on port 3000. Open your web browser and navigate to `http://localhost:3000` to access the web interface.
 
+## Workflow
+
+The typical workflow begins with editing the `prompt.yaml` file in your code editor of choice (we recommend Visual Studio Code with the Junior plugin for an optimal experience). Once you're satisfied with your task setup, you proceed to the web interface for execution and monitoring.
+
 ## Usage
 
 The web interface has a few interactive components:
+
+![Web Interface](./screenshot.png)
 
 - **Generate & Copy Prompt button**: Click this to generate a task prompt based on your `prompt.yaml` file and copy it to your clipboard.
 
@@ -21,6 +27,8 @@ The web interface has a few interactive components:
 - **Roll Back to Last Commit button**: If you made a mistake or aren't happy with the changes, click this button to revert to the last commit.
 
 - **Terminal**: Displays the output of your command execution. It's a simple console that shows the progress of the task.
+
+For a more detailed guide on using the web interface, refer to our video tutorial [here](https://youtu.be/W_iwry8uT7E).
 
 Remember, you can always refer to your `prompt.yaml` file to modify the task details or attention mechanism.
 
@@ -34,11 +42,13 @@ Happy developing with your AI contributor!
 Improve the documentation!
 
 npm run build:doc at the end!
+Remove &#34;also&#34; from the first sentence!
+Name the color of the buttons in their doc!
 
-Add an image: ./screenshot.png
-Add a video: https://youtu.be/W_iwry8uT7E
-
-At the beginning of usage write about the workflow: Edit prompt.yaml with vscode, using the Junior plugin, then going to the web interface to continue.
+Rewrite to incorporate the following:
+- The copied prompt should be pasted to chatGPT 4 or similar.
+- What the model responds (a shell script) should be pasted to the orange Paste &amp; Execute Change button
+- Rollback preserves prompt.yaml, but drops every change, including new files created in the meantime, even if not created by Junior.
 
 
 # Output Format

@@ -3,9 +3,12 @@ attention:
   - doc/web.md
 requirements: |
   npm run build:doc at the end!
+  Remove "also" from the first sentence!
+  Name the color of the buttons in their doc!
 
-  Add an image: ./screenshot.png
-  Add a video: https://youtu.be/W_iwry8uT7E
-
-  At the beginning of usage write about the workflow: Edit prompt.yaml with vscode, using the Junior plugin, then going to the web interface to continue.
+  Rewrite to incorporate the following:
+  - The copied prompt should be pasted to chatGPT 4 or similar.
+  - What the model responds (a shell script) should be pasted to the orange Paste & Execute Change button
+  - Rollback preserves prompt.yaml, but drops every change, including new files created in the meantime, even if not created by Junior.
+  
 os: OSX
