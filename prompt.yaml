@@ -1,11 +1,12 @@
 task: prompt/task/doc/improve.md
 attention:
+  - doc/
   - doc/web.md
 requirements: |
-  npm run build:doc at the end!
+  Incorporate the followings:
 
-  Add an image: ./screenshot.png
-  Add a video: https://youtu.be/W_iwry8uT7E
+  - The web interface has a frontend and a backend, two different servers.
+  - Backend runs on port 10101 frontend on 5173, browser is started automatically on http://localhost:5173/
 
-  At the beginning of usage write about the workflow: Edit prompt.yaml with vscode, using the Junior plugin, then going to the web interface to continue.
+  You need to run "npm run build:doc" at the end of the script to regenerate web.html!
 os: OSX

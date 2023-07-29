@@ -1,7 +1,9 @@
 <h1>Web Interface</h1>
-<p>The Contributor project also provides a web interface to guide the AI model. It’s designed for use with ChatGPT Pro and doesn’t require an API key.</p>
+<p>The Contributor project provides a web interface to automate making changes with the help of the Language Learning Model (LLM). It’s designed for use with ChatGPT Pro and doesn’t require an API key.</p>
+<h2>Architecture</h2>
+<p>The web interface is composed of two different servers: a frontend and a backend. The frontend server runs on port 5173, and the backend server runs on port 10101.</p>
 <h2>Starting the Web Interface</h2>
-<p>Run the application with <code>npm start</code> to start a local server on port 3000. Open your web browser and navigate to <code>http://localhost:3000</code> to access the web interface.</p>
+<p>Run the application with <code>npm start</code> to start both servers. A web browser window will automatically open at <code>http://localhost:5173</code>, which is where you can access the web interface.</p>
 <h2>Workflow</h2>
 <p>The typical workflow begins with editing the <code>prompt.yaml</code> file in your code editor of choice (we recommend Visual Studio Code with the Junior plugin for an optimal experience). Once you’re satisfied with your task setup, you proceed to the web interface for execution and monitoring.</p>
 <h2>Usage</h2>
@@ -9,13 +11,13 @@
 <p><img src="./screenshot.png" alt="Web Interface"></p>
 <ul>
 <li>
-<p><strong>Generate &amp; Copy Prompt button</strong>: Click this to generate a task prompt based on your <code>prompt.yaml</code> file and copy it to your clipboard.</p>
+<p><strong>Generate &amp; Copy Prompt button (Blue)</strong>: Click this to generate a task prompt based on your <code>prompt.yaml</code> file and copy it to your clipboard. The copied prompt should be pasted to ChatGPT 4 or similar for execution.</p>
 </li>
 <li>
-<p><strong>Paste &amp; Execute Change button</strong>: Paste the generated prompt into the input field and click this button to execute the changes.</p>
+<p><strong>Paste &amp; Execute Change button (Orange)</strong>: Paste the response from the AI model (a shell script) into the input field and click this button to execute the changes.</p>
 </li>
 <li>
-<p><strong>Roll Back to Last Commit button</strong>: If you made a mistake or aren’t happy with the changes, click this button to revert to the last commit.</p>
+<p><strong>Roll Back to Last Commit button (Red)</strong>: If you made a mistake or aren’t happy with the changes, click this button to revert to the last commit. Please note, the rollback operation preserves the <code>prompt.yaml</code> file, but drops every change since the last commit, including new files created in the meantime, even if they were not created by Junior.</p>
 </li>
 <li>
 <p><strong>Terminal</strong>: Displays the output of your command execution. It’s a simple console that shows the progress of the task.</p>
@@ -23,4 +25,5 @@
 </ul>
 <p>For a more detailed guide on using the web interface, refer to our video tutorial <a href="https://youtu.be/W_iwry8uT7E">here</a>.</p>
 <p>Remember, you can always refer to your <code>prompt.yaml</code> file to modify the task details or attention mechanism.</p>
+<p>At the end of your development, make sure to run <code>npm run build:doc</code> to regenerate the web.html document reflecting the latest changes.</p>
 <p>Happy developing with your AI contributor!</p>
