@@ -1,10 +1,22 @@
 # Working set
 
+```
+doc/
+├── example.html
+├── example.md
+├── index.html
+├── introduction.html
+├── introduction.md
+├── screenshot.png
+├── web.html
+├── web.md
+
+```
 doc/web.md:
 ```
 # Web Interface
 
-The Contributor project provides a web interface to guide the AI model. It's designed for use with ChatGPT Pro and doesn't require an API key.
+The Contributor project provides a web interface to automate making changes with the help of the Language Learning Model (LLM). It's designed for use with ChatGPT Pro and doesn't require an API key.
 
 ## Starting the Web Interface
 
@@ -20,7 +32,7 @@ The web interface has a few interactive components:
 
 ![Web Interface](./screenshot.png)
 
-- **Generate & Copy Prompt button (Green)**: Click this to generate a task prompt based on your `prompt.yaml` file and copy it to your clipboard. The copied prompt should be pasted to ChatGPT 4 or similar for execution.
+- **Generate & Copy Prompt button (Blue)**: Click this to generate a task prompt based on your `prompt.yaml` file and copy it to your clipboard. The copied prompt should be pasted to ChatGPT 4 or similar for execution.
 
 - **Paste & Execute Change button (Orange)**: Paste the response from the AI model (a shell script) into the input field and click this button to execute the changes.
 
@@ -41,9 +53,12 @@ Happy developing with your AI contributor!
 
 Improve the documentation!
 
-npm run build:doc at the end!
-The copy button is blue.
-&#34;to guide the AI model&#34; is more like &#34;to automate making changes with the help of the LLM&#34; (reword if needed)  
+Incorporate the followings:
+
+- The web interface has a frontend and a backend, two different servers.
+- Backend runs on port 10101 frontend on 5173, browser is started automatically on http://localhost:5173/
+
+You need to run &#34;npm run build:doc&#34; at the end of the script to regenerate web.html!
 
 
 # Output Format

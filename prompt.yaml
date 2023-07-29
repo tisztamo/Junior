@@ -1,8 +1,12 @@
 task: prompt/task/doc/improve.md
 attention:
+  - doc/
   - doc/web.md
 requirements: |
-  npm run build:doc at the end!
-  The copy button is blue.
-  "to guide the AI model" is more like "to automate making changes with the help of the LLM" (reword if needed)  
+  Incorporate the followings:
+
+  - The web interface has a frontend and a backend, two different servers.
+  - Backend runs on port 10101 frontend on 5173, browser is started automatically on http://localhost:5173/
+
+  You need to run "npm run build:doc" at the end of the script to regenerate web.html!
 os: OSX
