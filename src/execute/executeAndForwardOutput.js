@@ -1,15 +1,20 @@
 import { writeFile } from 'fs/promises';
 import { spawn } from 'child_process';
 import { makeExecutable } from './makeExecutable.js';
+import {promisify} from 'util';
+
+const writeFileAsync = promisify(writeFile);
+const makeExecutableAsync = promisify(makeExecutable)
 
 async function executeAndForwardOutput(code, next) {
-  if (!code.startsWith('#!')) {
-    throw new Error('Code does not start with a shebang');
-  }
-
   try {
-    await writeFile('./change.sh', code);
-    await makeExecutable('./change.sh');
+    if (!code.startsWith('#!')) {
+      throw new Error('Code does not start with a shebang');
+    }
+    
+    await writeFileAsync('./change.sh', code);
+    await makeExecutableAsync('./change.sh');
+    
     const child = spawn('./change.sh', [], { shell: true });
     let commandOutput = '';
 
@@ -23,11 +28,15 @@ async function executeAndForwardOutput(code, next) {
       commandOutput += data;
     });
 
+    // child.on('close', (code) => {
+    //   next(code, commandOutput);
+    // });
     child.on('close', (code) => {
-      next(code, commandOutput);
+      res.status(200).json({ code, output: commandOutput });
     });
   } catch (err) {
-    console.error(err);
+    // console.log(err);
+    res.status(500).json({ error: err.message });
   }
 }
 
