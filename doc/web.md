@@ -1,6 +1,6 @@
 # Web Interface
 
-The Contributor project provides a web interface to guide the AI model. It's designed for use with ChatGPT Pro and doesn't require an API key.
+The Contributor project provides a web interface to automate making changes with the help of the Language Learning Model (LLM). It's designed for use with ChatGPT Pro and doesn't require an API key.
 
 ## Starting the Web Interface
 
@@ -16,7 +16,7 @@ The web interface has a few interactive components:
 
 ![Web Interface](./screenshot.png)
 
-- **Generate & Copy Prompt button (Green)**: Click this to generate a task prompt based on your `prompt.yaml` file and copy it to your clipboard. The copied prompt should be pasted to ChatGPT 4 or similar for execution.
+- **Generate & Copy Prompt button (Blue)**: Click this to generate a task prompt based on your `prompt.yaml` file and copy it to your clipboard. The copied prompt should be pasted to ChatGPT 4 or similar for execution.
 
 - **Paste & Execute Change button (Orange)**: Paste the response from the AI model (a shell script) into the input field and click this button to execute the changes.
 
