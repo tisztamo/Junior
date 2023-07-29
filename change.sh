@@ -1,51 +1,81 @@
 #!/bin/sh
 set -e
-goal="Improve web interface documentation"
+goal="Rename project from 'The Junior' to 'Junior'"
 echo "Plan:"
-echo "1. Update web.md to reflect the changes."
-echo "2. Rebuild the web.html document with the updated content."
+echo "1. Rename all occurrences of 'The Junior' or 'Contributor' to 'Junior' in README.md file."
+echo "2. Verify that the changes are applied correctly."
 
-cat << 'EOF' > doc/web.md
-# Web Interface
+# Step 1
+cat > README.md << 'EOF'
+Warn: This README is AI generated, just like all the source files of this project.
 
-The Contributor project provides a web interface to automate making changes with the help of the Language Learning Model (LLM). It's designed for use with ChatGPT Pro and doesn't require an API key.
+# Junior - Your AI contributor which writes itself.
 
-## Architecture
+## Description
 
-The web interface is composed of two different servers: a frontend and a backend. The frontend server runs on port 5173, and the backend server runs on port 10101.
+Junior is an exploratory project aimed at revolutionizing the way programmers interact with the development process. Just like how Linus Torvalds oversees the Linux Kernel development without coding himself, this project allows developers to communicate with the AI and supervise the development process.
 
-## Starting the Web Interface
+By providing specific task details in a prompt descriptor and highlighting the relevant parts of your project, you can delegate code implementation, documentation, testing, and more to your AI Junior.
 
-Run the application with `npm start` to start both servers. A web browser window will automatically open at `http://localhost:5173`, which is where you can access the web interface.
+## Getting Started
 
-## Workflow
+### Installation
 
-The typical workflow begins with editing the `prompt.yaml` file in your code editor of choice (we recommend Visual Studio Code with the Junior plugin for an optimal experience). Once you're satisfied with your task setup, you proceed to the web interface for execution and monitoring.
+To install, clone the repository and run `npm install` in the root directory.
 
-## Usage
+### Usage
 
-The web interface has a few interactive components:
+There are two ways to use this project: a command-line interface (CLI) and a web interface.
 
-![Web Interface](./screenshot.png)
+#### Command-line interface (CLI)
 
-- **Generate & Copy Prompt button (Blue)**: Click this to generate a task prompt based on your `prompt.yaml` file and copy it to your clipboard. The copied prompt should be pasted to ChatGPT 4 or similar for execution.
+To start the CLI, use `npm run cli`. This mode uses the ChatGPT API, and you'll need an API key stored in the `OPENAI_API_KEY` environment variable.
 
-- **Paste & Execute Change button (Orange)**: Paste the response from the AI model (a shell script) into the input field and click this button to execute the changes.
+#### Web Interface
 
-- **Roll Back to Last Commit button (Red)**: If you made a mistake or aren't happy with the changes, click this button to revert to the last commit. Please note, the rollback operation preserves the `prompt.yaml` file, but drops every change since the last commit, including new files created in the meantime, even if they were not created by Junior.
+Run the application with `npm start` to start a local server on port 3000, where you can generate a prompt and automatically copy it to paste into ChatGPT. The web interface is designed for use with ChatGPT Pro and doesn't require an API key.
 
-- **Terminal**: Displays the output of your command execution. It's a simple console that shows the progress of the task.
+### The Prompt Descriptor
 
-For a more detailed guide on using the web interface, refer to our video tutorial [here](https://youtu.be/W_iwry8uT7E).
+A prompt descriptor is a YAML file (`prompt.yaml`) outlining the details necessary for generating a task prompt for the AI model.
 
-Remember, you can always refer to your `prompt.yaml` file to modify the task details or attention mechanism.
+Here's an example of a prompt descriptor:
 
-At the end of your development, make sure to run `npm run build:doc` to regenerate the web.html document reflecting the latest changes.
+```yaml
+task: prompt/task/feature/implement.md
+attention:
+  - src/interactiveSession/startInteractiveSession.js
+  - src/prompt/createPrompt.js
+  - src/attention/readAttention.js
+  - prompt.yaml
+requirements: >
+  Write a README.md for this _exploratory_ project!
+format: prompt/format/new_file_version.md
+```
 
-Happy developing with your AI contributor!
+Each element in the descriptor serves a specific purpose:
+- `task`: Describes the task type and scope. For example, `feature/implement`, `bug/fix`, or `refactor/`. You can check out the [prompt/task/feature/implement.md](prompt/task/feature/implement.md) file as an example.
+- `attention`: Lists the files and directories most relevant to the task.
+- `requirements`: Describes the actual task in a human-readable format.
+- `format`: Determines how the output will be formatted.
 
+### Attention Mechanism
+
+The attention mechanism guides the AI model by providing it with a working set. It helps overcome the limited working memory of large language models.
+
+The working set is a subset of the entire project that's currently in focus. It includes both files and directories. For files, the content is directly provided to the AI. For directories, a brief list of files and subdirectories within them is presented.
+
+## Contributing and Support
+
+Contributions are welcome! Remember, we eat our own dog food in this project. Junior is designed to write itself. Your main role will be to oversee the work, provide detailed prompts, and review the outcomes.
+
+For support, please create an issue in the GitHub repository.
+
+**Note:** For meaningful results, it's recommended to use the GPT-4 model or a more recent version.
 EOF
 
-npm run build:doc
+# Step 2
+echo "Verifying the changes:"
+grep -q "Junior" README.md && echo "\033[32mChange successfully applied to README.md\033[0m" || echo "\033[31mChange not applied correctly to README.md\033[0m"
 
 echo "\033[32mDone: $goal\033[0m\n"

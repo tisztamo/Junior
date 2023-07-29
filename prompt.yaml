@@ -1,12 +1,6 @@
 task: prompt/task/doc/improve.md
 attention:
-  - doc/
-  - doc/web.md
-requirements: |
-  Incorporate the followings:
-
-  - The web interface has a frontend and a backend, two different servers.
-  - Backend runs on port 10101 frontend on 5173, browser is started automatically on http://localhost:5173/
-
-  You need to run "npm run build:doc" at the end of the script to regenerate web.html!
+  - README.md
+requirements: >
+  The project is called simply "Junior", without "the". It was renamed from "Contributor" Fix the name in every occurrence!
 os: OSX

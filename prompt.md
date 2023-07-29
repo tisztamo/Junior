@@ -1,51 +1,72 @@
 # Working set
 
+README.md:
 ```
-doc/
-├── example.html
-├── example.md
-├── index.html
-├── introduction.html
-├── introduction.md
-├── screenshot.png
-├── web.html
-├── web.md
+Warn: This README is AI generated, just like all the source files of this project.
 
+# The Junior - Your AI contributor which writes itself.
+
+## Description
+
+The Contributor is an exploratory project aimed at revolutionizing the way programmers interact with the development process. Just like how Linus Torvalds oversees the Linux Kernel development without coding himself, this project allows developers to communicate with the AI and supervise the development process.
+
+By providing specific task details in a prompt descriptor and highlighting the relevant parts of your project, you can delegate code implementation, documentation, testing, and more to your AI Contributor.
+
+## Getting Started
+
+### Installation
+
+To install, clone the repository and run `npm install` in the root directory.
+
+### Usage
+
+There are two ways to use this project: a command-line interface (CLI) and a web interface.
+
+#### Command-line interface (CLI)
+
+To start the CLI, use `npm run cli`. This mode uses the ChatGPT API, and you'll need an API key stored in the `OPENAI_API_KEY` environment variable.
+
+#### Web Interface
+
+Run the application with `npm start` to start a local server on port 3000, where you can generate a prompt and automatically copy it to paste into ChatGPT. The web interface is designed for use with ChatGPT Pro and doesn't require an API key.
+
+### The Prompt Descriptor
+
+A prompt descriptor is a YAML file (`prompt.yaml`) outlining the details necessary for generating a task prompt for the AI model.
+
+Here's an example of a prompt descriptor:
+
+```yaml
+task: prompt/task/feature/implement.md
+attention:
+  - src/interactiveSession/startInteractiveSession.js
+  - src/prompt/createPrompt.js
+  - src/attention/readAttention.js
+  - prompt.yaml
+requirements: >
+  Write a README.md for this _exploratory_ project!
+format: prompt/format/new_file_version.md
 ```
-doc/web.md:
-```
-# Web Interface
 
-The Contributor project provides a web interface to automate making changes with the help of the Language Learning Model (LLM). It's designed for use with ChatGPT Pro and doesn't require an API key.
+Each element in the descriptor serves a specific purpose:
+- `task`: Describes the task type and scope. For example, `feature/implement`, `bug/fix`, or `refactor/`. You can check out the [prompt/task/feature/implement.md](prompt/task/feature/implement.md) file as an example.
+- `attention`: Lists the files and directories most relevant to the task.
+- `requirements`: Describes the actual task in a human-readable format.
+- `format`: Determines how the output will be formatted.
 
-## Starting the Web Interface
+### Attention Mechanism
 
-Run the application with `npm start` to start a local server on port 3000. Open your web browser and navigate to `http://localhost:3000` to access the web interface.
+The attention mechanism guides the AI model by providing it with a working set. It helps overcome the limited working memory of large language models.
 
-## Workflow
+The working set is a subset of the entire project that's currently in focus. It includes both files and directories. For files, the content is directly provided to the AI. For directories, a brief list of files and subdirectories within them is presented.
 
-The typical workflow begins with editing the `prompt.yaml` file in your code editor of choice (we recommend Visual Studio Code with the Junior plugin for an optimal experience). Once you're satisfied with your task setup, you proceed to the web interface for execution and monitoring.
+## Contributing and Support
 
-## Usage
+Contributions are welcome! Remember, we eat our own dog food in this project. This project is designed to write itself. Your main role will be to oversee the work, provide detailed prompts, and review the outcomes.
 
-The web interface has a few interactive components:
+For support, please create an issue in the GitHub repository.
 
-![Web Interface](./screenshot.png)
-
-- **Generate & Copy Prompt button (Blue)**: Click this to generate a task prompt based on your `prompt.yaml` file and copy it to your clipboard. The copied prompt should be pasted to ChatGPT 4 or similar for execution.
-
-- **Paste & Execute Change button (Orange)**: Paste the response from the AI model (a shell script) into the input field and click this button to execute the changes.
-
-- **Roll Back to Last Commit button (Red)**: If you made a mistake or aren't happy with the changes, click this button to revert to the last commit. Please note, the rollback operation preserves the `prompt.yaml` file, but drops every change since the last commit, including new files created in the meantime, even if they were not created by Junior.
-
-- **Terminal**: Displays the output of your command execution. It's a simple console that shows the progress of the task.
-
-For a more detailed guide on using the web interface, refer to our video tutorial [here](https://youtu.be/W_iwry8uT7E).
-
-Remember, you can always refer to your `prompt.yaml` file to modify the task details or attention mechanism.
-
-Happy developing with your AI contributor!
-
+**Note:** For meaningful results, it's recommended to use the GPT-4 model or a more recent version.
 ```
 
 
@@ -53,12 +74,7 @@ Happy developing with your AI contributor!
 
 Improve the documentation!
 
-Incorporate the followings:
-
-- The web interface has a frontend and a backend, two different servers.
-- Backend runs on port 10101 frontend on 5173, browser is started automatically on http://localhost:5173/
-
-You need to run &#34;npm run build:doc&#34; at the end of the script to regenerate web.html!
+The project is called simply &#34;Junior&#34;, without &#34;the&#34;. It was renamed from &#34;Contributor&#34; Fix the name in every occurrence!
 
 
 # Output Format
