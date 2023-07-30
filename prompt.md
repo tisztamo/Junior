@@ -1,16 +1,48 @@
 # Working set
 
+```
+./
+├── .DS_Store
+├── .git/...
+├── .github/...
+├── .gitignore
+├── .vscode/...
+├── README.md
+├── change.sh
+├── doc/...
+├── integrations/...
+├── node_modules/...
+├── package-lock.json
+├── package.json
+├── prompt/...
+├── prompt.md
+├── prompt.yaml
+├── src/...
+
+```
+```
+doc/
+├── example.html
+├── example.md
+├── index.html
+├── introduction.html
+├── introduction.md
+├── screenshot.png
+├── web.html
+├── web.md
+
+```
 README.md:
 ```
 Warn: This README is AI generated, just like all the source files of this project.
 
-# The Junior - Your AI contributor which writes itself.
+# Junior - Your AI contributor which writes itself.
 
 ## Description
 
-The Contributor is an exploratory project aimed at revolutionizing the way programmers interact with the development process. Just like how Linus Torvalds oversees the Linux Kernel development without coding himself, this project allows developers to communicate with the AI and supervise the development process.
+Junior is an exploratory project aimed at revolutionizing the way programmers interact with the development process. Just like how Linus Torvalds oversees the Linux Kernel development without coding himself, this project allows developers to communicate with the AI and supervise the development process.
 
-By providing specific task details in a prompt descriptor and highlighting the relevant parts of your project, you can delegate code implementation, documentation, testing, and more to your AI Contributor.
+By providing specific task details in a prompt descriptor and highlighting the relevant parts of your project, you can delegate code implementation, documentation, testing, and more to your AI Junior.
 
 ## Getting Started
 
@@ -62,11 +94,12 @@ The working set is a subset of the entire project that's currently in focus. It 
 
 ## Contributing and Support
 
-Contributions are welcome! Remember, we eat our own dog food in this project. This project is designed to write itself. Your main role will be to oversee the work, provide detailed prompts, and review the outcomes.
+Contributions are welcome! Remember, we eat our own dog food in this project. Junior is designed to write itself. Your main role will be to oversee the work, provide detailed prompts, and review the outcomes.
 
 For support, please create an issue in the GitHub repository.
 
 **Note:** For meaningful results, it's recommended to use the GPT-4 model or a more recent version.
+
 ```
 
 
@@ -74,7 +107,7 @@ For support, please create an issue in the GitHub repository.
 
 Improve the documentation!
 
-The project is called simply &#34;Junior&#34;, without &#34;the&#34;. It was renamed from &#34;Contributor&#34; Fix the name in every occurrence!
+&#34;Embed&#34; this video https://www.youtube.com/watch?v=W_iwry8uT7E for displaying on github just after the main heading. Download the cover image with curl and store it in doc/assets/ folder. (Create it) When the user clicks the image, open the video (in a new tab if possible). Also add a caption to the image: &#34;Video: Junior codes itself&#34;
 
 
 # Output Format
