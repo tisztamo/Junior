@@ -11,7 +11,6 @@ async function executeAndForwardOutput(code, next) {
     if (!code.startsWith('#!')) {
       throw new Error('Code does not start with a shebang');
     }
-    
     await writeFileAsync('./change.sh', code);
     await makeExecutableAsync('./change.sh');
     
@@ -28,15 +27,11 @@ async function executeAndForwardOutput(code, next) {
       commandOutput += data;
     });
 
-    // child.on('close', (code) => {
-    //   next(code, commandOutput);
-    // });
     child.on('close', (code) => {
-      res.status(200).json({ code, output: commandOutput });
+      next(code, commandOutput);
     });
   } catch (err) {
-    // console.log(err);
-    res.status(500).json({ error: err.message });
+    console.log(err);
   }
 }
 

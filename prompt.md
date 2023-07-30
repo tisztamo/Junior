@@ -4,13 +4,13 @@ README.md:
 ```
 Warn: This README is AI generated, just like all the source files of this project.
 
-# The Junior - Your AI contributor which writes itself.
+# Junior - Your AI contributor which writes itself.
 
 ## Description
 
-The Contributor is an exploratory project aimed at revolutionizing the way programmers interact with the development process. Just like how Linus Torvalds oversees the Linux Kernel development without coding himself, this project allows developers to communicate with the AI and supervise the development process.
+Junior is an exploratory project aimed at revolutionizing the way programmers interact with the development process. Just like how Linus Torvalds oversees the Linux Kernel development without coding himself, this project allows developers to communicate with the AI and supervise the development process.
 
-By providing specific task details in a prompt descriptor and highlighting the relevant parts of your project, you can delegate code implementation, documentation, testing, and more to your AI Contributor.
+By providing specific task details in a prompt descriptor and highlighting the relevant parts of your project, you can delegate code implementation, documentation, testing, and more to your AI Junior.
 
 ## Getting Started
 
@@ -62,11 +62,12 @@ The working set is a subset of the entire project that's currently in focus. It 
 
 ## Contributing and Support
 
-Contributions are welcome! Remember, we eat our own dog food in this project. This project is designed to write itself. Your main role will be to oversee the work, provide detailed prompts, and review the outcomes.
+Contributions are welcome! Remember, we eat our own dog food in this project. Junior is designed to write itself. Your main role will be to oversee the work, provide detailed prompts, and review the outcomes.
 
 For support, please create an issue in the GitHub repository.
 
 **Note:** For meaningful results, it's recommended to use the GPT-4 model or a more recent version.
+
 ```
 
 
