@@ -1,6 +1,9 @@
 task: prompt/task/doc/improve.md
 attention:
-  - README.md
+  - ./
+  - src/
 requirements: >
-  The project is called simply "Junior", without "the". It was renamed from "Contributor" Fix the name in every occurrence!
+  We are on a github pr branch.
+  Some files in the src/frontend/ directory were unintentionally modified and the committed to this branch somewhere in the past.
+  I need a shell script that reverts the changes of src/frontend/ to where it was at the branch creation.
 os: OSX
