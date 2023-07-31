@@ -2,6 +2,8 @@ Warn: This README is AI generated, just like all the source files of this projec
 
 # Junior - Your AI contributor which writes itself.
 
+[![Video: Junior codes itself](doc/assets/video_cover.jpg)](https://www.youtube.com/watch?v=W_iwry8uT7E)
+*"Video: Junior codes itself"*
 ## Description
 
 Junior is an exploratory project aimed at revolutionizing the way programmers interact with the development process. Just like how Linus Torvalds oversees the Linux Kernel development without coding himself, this project allows developers to communicate with the AI and supervise the development process.

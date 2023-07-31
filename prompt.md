@@ -41,8 +41,6 @@ async function executeAndForwardOutput(code, next) {
 
 export { executeAndForwardOutput };
 
-```
-
 src/backend/handlers/executeHandler.js:
 ```
 import { executeAndForwardOutput } from '../../execute/executeAndForwardOutput.js';
@@ -54,7 +52,6 @@ function executeHandler(req, res) {
 }
 
 export { executeHandler };
-
 ```
 
 src/execute/makeExecutable.js:
@@ -70,7 +67,6 @@ async function makeExecutable(filepath) {
 }
 
 export { makeExecutable };
-
 ```
 
 
@@ -79,7 +75,6 @@ export { makeExecutable };
 Fix the following issue!
 
 Do not promisify makeExecutable, just await it.
-
 
 # Output Format
 
