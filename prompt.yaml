@@ -1,9 +1,8 @@
-task: prompt/task/doc/improve.md
+task: prompt/task/bug/fix.md
 attention:
-  - ./
-  - src/
-requirements: >
-  We are on a github pr branch.
-  Some files in the src/frontend/ directory were unintentionally modified and the committed to this branch somewhere in the past.
-  I need a shell script that reverts the changes of src/frontend/ to where it was at the branch creation.
+  - src/execute/executeAndForwardOutput.js
+  - src/backend/handlers/executeHandler.js
+  - src/execute/makeExecutable.js
+requirements: |
+  Do not promisify makeExecutable, just await it.
 os: OSX

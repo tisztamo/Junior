@@ -1,21 +1,46 @@
 #!/bin/sh
 set -e
-goal="Revert src/frontend/ to original state"
+goal="Remove promisify from makeExecutable function"
 echo "Plan:"
-echo "1. Identify the common ancestor commit with the main branch (or another specific branch)"
-echo "2. Checkout the src/frontend/ directory at that commit"
-echo "3. Commit the changes to revert the src/frontend/ directory to its original state"
+echo "1. Remove the promisify call for makeExecutable in executeAndForwardOutput.js"
+echo "2. Update the call to makeExecutable to simply await it"
 
-# Step 1: Identify the common ancestor commit with the main branch (replace 'main' with the specific branch if needed)
-branch_creation_commit=$(git merge-base HEAD main)
+# Remove promisify from makeExecutable in executeAndForwardOutput.js
+cat > src/execute/executeAndForwardOutput.js << 'EOF'
+import { writeFile } from 'fs/promises';
+import { spawn } from 'child_process';
+import { makeExecutable } from './makeExecutable.js';
 
-echo "Branch creation commit: $branch_creation_commit"
+async function executeAndForwardOutput(code, next) {
+  try {
+    if (!code.startsWith('#!')) {
+      throw new Error('Code does not start with a shebang');
+    }
+    await writeFile('./change.sh', code);
+    await makeExecutable('./change.sh');
+    
+    const child = spawn('./change.sh', [], { shell: true });
+    let commandOutput = '';
 
-# Step 2: Checkout the src/frontend/ directory at that commit
-git checkout $branch_creation_commit -- src/frontend/
+    child.stdout.on('data', (data) => {
+      console.log(`${data}`);
+      commandOutput += data;
+    });
 
-# Step 3: Commit the changes
-git add src/frontend/
-git commit -m "Revert src/frontend/ to its state at branch creation"
+    child.stderr.on('data', (data) => {
+      console.error(`${data}`);
+      commandOutput += data;
+    });
+
+    child.on('close', (code) => {
+      next(code, commandOutput);
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+export { executeAndForwardOutput };
+EOF
 
 echo "\033[32mDone: $goal\033[0m\n"
