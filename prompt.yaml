@@ -1,7 +1,15 @@
 task: prompt/task/doc/improve.md
 attention:
-  - .github/ISSUE_TEMPLATE/freely-interpreted-issue.md
-requirements: |
-  Add a note to the issue template that we eat our own dog food:
-  use Junior to work on Junior and commit prompt.yaml, prompt.md and change.sh
+  - README.md
+requirements: >
+  - Fix: The video caption is displayed on the same line as the video. Add an extra newline!
+
+  - Extend the description in readme with the following (put it between the two
+  paragraphs, reword if needed): Isn't that already possible with ChatGPT? No,
+  LLMs have very limited "working memory", so it is not possible to directly
+  work with them on large codebases.
+
+  - Remove port info from README and link doc/web.md for more info
+
+  heredoc whole README.md!
 os: OSX

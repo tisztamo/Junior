@@ -3,10 +3,13 @@ Warn: This README is AI generated, just like all the source files of this projec
 # Junior - Your AI contributor which writes itself.
 
 [![Video: Junior codes itself](doc/assets/video_cover.jpg)](https://www.youtube.com/watch?v=W_iwry8uT7E)
+
 *"Video: Junior codes itself"*
 ## Description
 
 Junior is an exploratory project aimed at revolutionizing the way programmers interact with the development process. Just like how Linus Torvalds oversees the Linux Kernel development without coding himself, this project allows developers to communicate with the AI and supervise the development process.
+
+Isn't that already possible with ChatGPT? No, LLMs have very limited "working memory", so it is not possible to directly work with them on large codebases.
 
 By providing specific task details in a prompt descriptor and highlighting the relevant parts of your project, you can delegate code implementation, documentation, testing, and more to your AI Junior.
 
@@ -26,7 +29,7 @@ To start the CLI, use `npm run cli`. This mode uses the ChatGPT API, and you'll 
 
 #### Web Interface
 
-Run the application with `npm start` to start a local server on port 3000, where you can generate a prompt and automatically copy it to paste into ChatGPT. The web interface is designed for use with ChatGPT Pro and doesn't require an API key.
+Run the application with `npm start` to start a local server, where you can generate a prompt and automatically copy it to paste into ChatGPT. The web interface is designed for use with ChatGPT Pro and doesn't require an API key. For more information about the web interface, please refer to [doc/web.md](doc/web.md).
 
 ### The Prompt Descriptor
 
