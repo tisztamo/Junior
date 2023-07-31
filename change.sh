@@ -1,25 +1,46 @@
 #!/bin/sh
 set -e
-goal="Improve documentation and embed video"
+goal="Remove promisify from makeExecutable function"
 echo "Plan:"
-echo "1. Create a doc/assets directory."
-echo "2. Download video cover image with curl."
-echo "3. Compress the image to be less than 30K."
-echo "4. Add a markdown link to the README.md that points to the Youtube video."
-echo "5. Add a caption to the image."
+echo "1. Remove the promisify call for makeExecutable in executeAndForwardOutput.js"
+echo "2. Update the call to makeExecutable to simply await it"
 
-mkdir -p doc/assets
+# Remove promisify from makeExecutable in executeAndForwardOutput.js
+cat > src/execute/executeAndForwardOutput.js << 'EOF'
+import { writeFile } from 'fs/promises';
+import { spawn } from 'child_process';
+import { makeExecutable } from './makeExecutable.js';
 
-curl -o doc/assets/video_cover.jpg "https://img.youtube.com/vi/W_iwry8uT7E/maxresdefault.jpg"
+async function executeAndForwardOutput(code, next) {
+  try {
+    if (!code.startsWith('#!')) {
+      throw new Error('Code does not start with a shebang');
+    }
+    await writeFile('./change.sh', code);
+    await makeExecutable('./change.sh');
+    
+    const child = spawn('./change.sh', [], { shell: true });
+    let commandOutput = '';
 
-# Compress the image using ffmpeg
-ffmpeg -i doc/assets/video_cover.jpg -vf "scale=iw*0.5:ih*0.5" -compression_level 9 doc/assets/compressed_video_cover.jpg
+    child.stdout.on('data', (data) => {
+      console.log(`${data}`);
+      commandOutput += data;
+    });
 
-mv doc/assets/compressed_video_cover.jpg doc/assets/video_cover.jpg
+    child.stderr.on('data', (data) => {
+      console.error(`${data}`);
+      commandOutput += data;
+    });
 
-sed -i '' '/# Junior - Your AI contributor which writes itself./a\
-\
-[![Video: Junior codes itself](doc/assets/video_cover.jpg)](https://www.youtube.com/watch?v=W_iwry8uT7E)\
-*"Video: Junior codes itself"*' README.md
+    child.on('close', (code) => {
+      next(code, commandOutput);
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+export { executeAndForwardOutput };
+EOF
 
 echo "\033[32mDone: $goal\033[0m\n"

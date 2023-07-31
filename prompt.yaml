@@ -1,11 +1,8 @@
-task: prompt/task/doc/improve.md
+task: prompt/task/bug/fix.md
 attention:
-  - ./
-  - doc/
-  - README.md
-requirements: >
-  "Embed" this video https://www.youtube.com/watch?v=W_iwry8uT7E for displaying on github just after the main heading.
-  Download the cover image with curl and store it in doc/assets/ folder. (Create it)
-  When the user clicks the image, open the video (in a new tab if possible).
-  Also add a caption to the image: "Video: Junior codes itself"
+  - src/execute/executeAndForwardOutput.js
+  - src/backend/handlers/executeHandler.js
+  - src/execute/makeExecutable.js
+requirements: |
+  Do not promisify makeExecutable, just await it.
 os: OSX
