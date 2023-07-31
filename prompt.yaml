@@ -1,14 +1,27 @@
 task: prompt/task/doc/improve.md
 attention:
-  - ./
-  - doc/assets/
-  - src/frontend/
-  - src/frontend/index.html
+  - src/frontend/startVite.js
 requirements: >
-  Generate a logo to doc/assets/logo.png
-  The logo is 1:1 consists of 4 rounded rectangles stacked on each other with small gaps inbetween.
-  Colors from up to down: rgb(59, 130, 246), rgb(253, 186, 116), rgb(185, 28, 28) and rgb(28, 185, 28)
-  generate a favicon to src/frontend/assets/ (Create directory)
-  Use the favicon in index.html
-  convert is installed
+  Rewrite startVite to use the js api!
+  Here is a sample from the vite docs for your help:
+
+  import { fileURLToPath } from 'url'
+  import { createServer } from 'vite'
+
+  const __dirname = fileURLToPath(new URL('.', import.meta.url))
+
+  ;(async () => {
+    const server = await createServer({
+      root: __dirname,
+      server: {
+        port: 1337,
+      },
+    })
+    await server.listen()
+
+    server.printUrls()
+  })()
+
+
+  default port is ok, but be sure to open the browser and start from the dir found in the current version of startVite.js
 os: OSX

@@ -1,62 +1,21 @@
 # Working set
 
+src/frontend/startVite.js:
 ```
-./
-├── .DS_Store
-├── .git/...
-├── .github/...
-├── .gitignore
-├── .vscode/...
-├── README.md
-├── change.sh
-├── doc/...
-├── integrations/...
-├── node_modules/...
-├── package-lock.json
-├── package.json
-├── prompt/...
-├── prompt.md
-├── prompt.yaml
-├── src/...
+import { exec } from 'child_process';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-```
-```
-doc/assets/
-├── video_cover.jpg
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const projectRoot = path.resolve(__dirname, '../..');
 
-```
-```
-src/frontend/
-├── App.jsx
-├── components/...
-├── fetchTasks.js
-├── generatePrompt.js
-├── getBaseUrl.js
-├── index.html
-├── index.jsx
-├── postcss.config.cjs
-├── service/...
-├── startVite.js
-├── stores/...
-├── styles/...
-├── tailwind.config.cjs
-├── vite.config.js
+export function startVite() {
+  const vite = exec(`${projectRoot}/node_modules/.bin/vite ${projectRoot}/src/frontend --open`);
+  vite.stdout.pipe(process.stdout);
+  vite.stderr.pipe(process.stderr);
 
-```
-src/frontend/index.html:
-```
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>Junior</title>
-</head>
-<body>
-  <div id="app"></div>
-  <script type="module" src="/index.jsx"></script>
-</body>
-</html>
+  process.on('exit', () => vite.kill());
+}
 
 ```
 
@@ -65,7 +24,22 @@ src/frontend/index.html:
 
 Improve the documentation!
 
-Generate a logo to doc/assets/logo.png The logo is 1:1 consists of 4 rounded rectangles stacked on each other with small gaps inbetween. Colors from up to down: rgb(59, 130, 246), rgb(253, 186, 116), rgb(185, 28, 28) and rgb(28, 185, 28) generate a favicon to src/frontend/assets/ (Create directory) Use the favicon in index.html convert is installed
+Rewrite startVite to use the js api! Here is a sample from the vite docs for your help:
+import { fileURLToPath } from &#39;url&#39; import { createServer } from &#39;vite&#39;
+const __dirname = fileURLToPath(new URL(&#39;.&#39;, import.meta.url))
+;(async () =&gt; {
+  const server = await createServer({
+    root: __dirname,
+    server: {
+      port: 1337,
+    },
+  })
+  await server.listen()
+
+  server.printUrls()
+})()
+
+default port is ok, but be sure to open the browser and start from the dir found in the current version of startVite.js
 
 
 # Output Format
