@@ -1,80 +1,36 @@
 # Working set
 
-src/execute/executeAndForwardOutput.js:
+.github/ISSUE_TEMPLATE/freely-interpreted-issue.md:
 ```
-import { writeFile } from 'fs/promises';
-import { spawn } from 'child_process';
-import { makeExecutable } from './makeExecutable.js';
-import {promisify} from 'util';
+---
+name: Freely interpreted issue
+about: What it says
+title: ''
+labels: ''
+assignees: ''
 
-const writeFileAsync = promisify(writeFile);
-const makeExecutableAsync = promisify(makeExecutable)
+---
 
-async function executeAndForwardOutput(code, next) {
-  try {
-    if (!code.startsWith('#!')) {
-      throw new Error('Code does not start with a shebang');
-    }
-    await writeFileAsync('./change.sh', code);
-    await makeExecutableAsync('./change.sh');
-    
-    const child = spawn('./change.sh', [], { shell: true });
-    let commandOutput = '';
+## Project Description
 
-    child.stdout.on('data', (data) => {
-      console.log(`${data}`);
-      commandOutput += data;
-    });
+Hey, Contributor!
 
-    child.stderr.on('data', (data) => {
-      console.error(`${data}`);
-      commandOutput += data;
-    });
+Interpret issues freely. Need help or have ideas? Comment right here. Remember, this is the only forum where Krisztián answers questions - your golden ticket to help!
 
-    child.on('close', (code) => {
-      next(code, commandOutput);
-    });
-  } catch (err) {
-    console.log(err);
-  }
-}
+Keep it friendly, that's our vibe.
 
-export { executeAndForwardOutput };
+Happy contributing!
 
-src/backend/handlers/executeHandler.js:
-```
-import { executeAndForwardOutput } from '../../execute/executeAndForwardOutput.js';
-
-function executeHandler(req, res) {
-  executeAndForwardOutput(req.body.change, (result, output) => {
-    res.json({ result, output });
-  });
-}
-
-export { executeHandler };
-```
-
-src/execute/makeExecutable.js:
-```
-import { chmod } from 'fs/promises';
-
-async function makeExecutable(filepath) {
-  try {
-    await chmod(filepath, '755');
-  } catch (err) {
-    console.error(`Failed to make ${filepath} executable: ${err}`);
-  }
-}
-
-export { makeExecutable };
 ```
 
 
 # Task
 
-Fix the following issue!
+Improve the documentation!
 
-Do not promisify makeExecutable, just await it.
+Add a note to the issue template that we eat our own dog food:
+use Junior to work on Junior and commit prompt.yaml, prompt.md and change.sh
+
 
 # Output Format
 

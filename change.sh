@@ -1,46 +1,30 @@
 #!/bin/sh
 set -e
-goal="Remove promisify from makeExecutable function"
+goal="Add note about dogfooding in issue template"
 echo "Plan:"
-echo "1. Remove the promisify call for makeExecutable in executeAndForwardOutput.js"
-echo "2. Update the call to makeExecutable to simply await it"
+echo "1. Add a note about eating our own dog food to the issue template"
 
-# Remove promisify from makeExecutable in executeAndForwardOutput.js
-cat > src/execute/executeAndForwardOutput.js << 'EOF'
-import { writeFile } from 'fs/promises';
-import { spawn } from 'child_process';
-import { makeExecutable } from './makeExecutable.js';
+cat > .github/ISSUE_TEMPLATE/freely-interpreted-issue.md << 'EOF'
+---
+name: Freely interpreted issue
+about: What it says
+title: ''
+labels: ''
+assignees: ''
 
-async function executeAndForwardOutput(code, next) {
-  try {
-    if (!code.startsWith('#!')) {
-      throw new Error('Code does not start with a shebang');
-    }
-    await writeFile('./change.sh', code);
-    await makeExecutable('./change.sh');
-    
-    const child = spawn('./change.sh', [], { shell: true });
-    let commandOutput = '';
+---
 
-    child.stdout.on('data', (data) => {
-      console.log(`${data}`);
-      commandOutput += data;
-    });
+## Project Description
 
-    child.stderr.on('data', (data) => {
-      console.error(`${data}`);
-      commandOutput += data;
-    });
+Hey, Contributor!
 
-    child.on('close', (code) => {
-      next(code, commandOutput);
-    });
-  } catch (err) {
-    console.log(err);
-  }
-}
+Interpret issues freely. Need help or have ideas? Comment right here. Remember, this is the only forum where Krisztián answers questions - your golden ticket to help!
 
-export { executeAndForwardOutput };
+**Note**: We eat our own dog food. We use Junior to work on Junior. So please, commit prompt.yaml, prompt.md, and change.sh as part of your contribution.
+
+Keep it friendly, that's our vibe.
+
+Happy contributing!
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"

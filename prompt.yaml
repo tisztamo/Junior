@@ -1,8 +1,7 @@
-task: prompt/task/bug/fix.md
+task: prompt/task/doc/improve.md
 attention:
-  - src/execute/executeAndForwardOutput.js
-  - src/backend/handlers/executeHandler.js
-  - src/execute/makeExecutable.js
+  - .github/ISSUE_TEMPLATE/freely-interpreted-issue.md
 requirements: |
-  Do not promisify makeExecutable, just await it.
+  Add a note to the issue template that we eat our own dog food:
+  use Junior to work on Junior and commit prompt.yaml, prompt.md and change.sh
 os: OSX
