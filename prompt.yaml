@@ -1,15 +1,14 @@
 task: prompt/task/doc/improve.md
 attention:
-  - README.md
+  - ./
+  - doc/assets/
+  - src/frontend/
+  - src/frontend/index.html
 requirements: >
-  - Fix: The video caption is displayed on the same line as the video. Add an extra newline!
-
-  - Extend the description in readme with the following (put it between the two
-  paragraphs, reword if needed): Isn't that already possible with ChatGPT? No,
-  LLMs have very limited "working memory", so it is not possible to directly
-  work with them on large codebases.
-
-  - Remove port info from README and link doc/web.md for more info
-
-  heredoc whole README.md!
+  Generate a logo to doc/assets/logo.png
+  The logo is 1:1 consists of 4 rounded rectangles stacked on each other with small gaps inbetween.
+  Colors from up to down: rgb(59, 130, 246), rgb(253, 186, 116), rgb(185, 28, 28) and rgb(28, 185, 28)
+  generate a favicon to src/frontend/assets/ (Create directory)
+  Use the favicon in index.html
+  convert is installed
 os: OSX
