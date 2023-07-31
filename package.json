@@ -1,7 +1,7 @@
 {
   "name": "@aijunior/dev",
-  "version": "0.0.1",
-  "description": "Your AI Contributor",
+  "version": "0.0.3",
+  "description": "Your AI Contributor which codes itself",
   "type": "module",
   "main": "src/main.js",
   "bin": {
@@ -35,7 +35,13 @@
     "vite": "^4.3.9",
     "vite-plugin-solid": "^2.7.0",
     "ws": "^8.13.0",
-    "xterm": "^5.2.1"
+    "xterm": "^5.2.1",
+    "@types/js-yaml": "^4.0.5",
+    "autoprefixer": "^10.4.14",
+    "highlight.js": "^11.8.0",
+    "markdown-it": "^13.0.1",
+    "postcss": "^8.4.26",
+    "tailwindcss": "^3.3.3"
   },
   "directories": {
     "doc": "doc"
@@ -47,14 +53,5 @@
   "bugs": {
     "url": "https://github.com/tisztamo/Junior/issues"
   },
-  "homepage": "https://github.com/tisztamo/Junior#readme",
-  "devDependencies": {
-    "@types/js-yaml": "^4.0.5",
-    "autoprefixer": "^10.4.14",
-    "babel-preset-solid": "^1.7.7",
-    "highlight.js": "^11.8.0",
-    "markdown-it": "^13.0.1",
-    "postcss": "^8.4.26",
-    "tailwindcss": "^3.3.3"
-  }
+  "homepage": "https://github.com/tisztamo/Junior#readme"
 }

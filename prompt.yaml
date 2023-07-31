@@ -1,27 +1,8 @@
-task: prompt/task/doc/improve.md
+task: prompt/task/refactor/custom.md
 attention:
-  - src/frontend/startVite.js
-requirements: >
-  Rewrite startVite to use the js api!
-  Here is a sample from the vite docs for your help:
-
-  import { fileURLToPath } from 'url'
-  import { createServer } from 'vite'
-
-  const __dirname = fileURLToPath(new URL('.', import.meta.url))
-
-  ;(async () => {
-    const server = await createServer({
-      root: __dirname,
-      server: {
-        port: 1337,
-      },
-    })
-    await server.listen()
-
-    server.printUrls()
-  })()
-
-
-  default port is ok, but be sure to open the browser and start from the dir found in the current version of startVite.js
+  - package.json
+requirements: |
+  Uninstall babel-preset-solid!
+  Move every other items from devDependencies to dependencies
+  Set description to "Your AI Contributor which codes itself"
 os: OSX

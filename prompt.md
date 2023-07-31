@@ -1,20 +1,66 @@
 # Working set
 
-src/frontend/startVite.js:
+package.json:
 ```
-import { exec } from 'child_process';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const projectRoot = path.resolve(__dirname, '../..');
-
-export function startVite() {
-  const vite = exec(`${projectRoot}/node_modules/.bin/vite ${projectRoot}/src/frontend --open`);
-  vite.stdout.pipe(process.stdout);
-  vite.stderr.pipe(process.stderr);
-
-  process.on('exit', () => vite.kill());
+{
+  "name": "@aijunior/dev",
+  "version": "0.0.1",
+  "description": "Your AI Contributor",
+  "type": "module",
+  "main": "src/main.js",
+  "bin": {
+    "junior": "src/main.js",
+    "junior-web": "src/web.js",
+    "junior-init": "src/init.js"
+  },
+  "scripts": {
+    "cli": "node src/main.js",
+    "start": "node src/web.js",
+    "build:css": "postcss ./src/frontend/styles.css -o ./dist/styles.css",
+    "build:doc": "node ./src/doc/buildDoc.js"
+  },
+  "keywords": [
+    "cli",
+    "uppercase"
+  ],
+  "author": "",
+  "license": "GPL",
+  "dependencies": {
+    "chatgpt": "^5.2.4",
+    "clipboard-copy": "^4.0.1",
+    "cors": "^2.8.5",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "js-yaml": "^4.1.0",
+    "marked": "^5.1.0",
+    "postcss-nested": "^6.0.1",
+    "simple-git": "^3.19.1",
+    "solid-js": "^1.7.7",
+    "vite": "^4.3.9",
+    "vite-plugin-solid": "^2.7.0",
+    "ws": "^8.13.0",
+    "xterm": "^5.2.1"
+  },
+  "directories": {
+    "doc": "doc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tisztamo/Junior.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tisztamo/Junior/issues"
+  },
+  "homepage": "https://github.com/tisztamo/Junior#readme",
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.5",
+    "autoprefixer": "^10.4.14",
+    "babel-preset-solid": "^1.7.7",
+    "highlight.js": "^11.8.0",
+    "markdown-it": "^13.0.1",
+    "postcss": "^8.4.26",
+    "tailwindcss": "^3.3.3"
+  }
 }
 
 ```
@@ -22,24 +68,11 @@ export function startVite() {
 
 # Task
 
-Improve the documentation!
+Refactor!
 
-Rewrite startVite to use the js api! Here is a sample from the vite docs for your help:
-import { fileURLToPath } from &#39;url&#39; import { createServer } from &#39;vite&#39;
-const __dirname = fileURLToPath(new URL(&#39;.&#39;, import.meta.url))
-;(async () =&gt; {
-  const server = await createServer({
-    root: __dirname,
-    server: {
-      port: 1337,
-    },
-  })
-  await server.listen()
-
-  server.printUrls()
-})()
-
-default port is ok, but be sure to open the browser and start from the dir found in the current version of startVite.js
+Uninstall babel-preset-solid!
+Move every other items from devDependencies to dependencies
+Set description to &#34;Your AI Contributor which codes itself&#34;
 
 
 # Output Format
