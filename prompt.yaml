@@ -1,7 +1,8 @@
 task: prompt/task/refactor/custom.md
 attention:
-  - ./
-  - src/frontend/components/GenerateButton.jsx
+  - src/frontend/components/ExecutionResultDisplay.jsx
 requirements: |
-  Uninstall clipboard-copy and use the html5 api directly!
+  No interaction is needed, so xterm.js is too heavyweight.
+  Uninstall it and rewrite ExecutionResultDisplay to use a div
+  but still handle ansi color codes!
 os: OSX

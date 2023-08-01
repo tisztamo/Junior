@@ -1,55 +1,42 @@
 # Working set
 
+src/frontend/components/ExecutionResultDisplay.jsx:
 ```
-./
-├── .DS_Store
-├── .git/...
-├── .github/...
-├── .gitignore
-├── .vscode/...
-├── README.md
-├── change.sh
-├── doc/...
-├── integrations/...
-├── node_modules/...
-├── package-lock.json
-├── package.json
-├── prompt/...
-├── prompt.md
-├── prompt.yaml
-├── src/...
+import { onMount, createEffect, onCleanup } from 'solid-js';
+import { Terminal } from 'xterm';
+import 'xterm/css/xterm.css';
+import { executionResult } from '../stores/executionResult';
 
-```
-src/frontend/components/GenerateButton.jsx:
-```
-import { generatePrompt } from '../generatePrompt';
-import { marked } from 'marked';
-import copy from 'clipboard-copy';
-import { setPrompt } from '../stores/prompt';
+const ExecutionResultDisplay = () => {
+  let container;
+  let term;
 
-const GenerateButton = () => {
-  const handleGeneratePrompt = async () => {
-    const response = await generatePrompt();
+  onMount(() => {
+    term = new Terminal({ convertEol: true, rows: 7 });
+    term.open(container);
+  });
 
-    copy(response.prompt)
-      .then(() => {
-        console.log('Prompt copied to clipboard!');
-      })
-      .catch(err => {
-        console.error('Failed to copy prompt: ', err);
-      });
+  createEffect(() => {
+    if (term && executionResult() !== '') {
+      term.write(executionResult());
+    }
+  });
 
-    const htmlPrompt = marked(response.prompt);
-
-    setPrompt(htmlPrompt);
-  };
+  onCleanup(() => {
+    if (term) {
+      term.dispose();
+    }
+  });
 
   return (
-    <button class="w-64 px-4 py-4 bg-blue-500 text-white rounded" onClick={handleGeneratePrompt}>Generate & Copy Prompt</button>
+    <div 
+      ref={container} 
+      class={`rounded overflow-auto max-w-full ${executionResult() !== '' ? 'block' : 'hidden'}`}
+    />
   );
 };
 
-export default GenerateButton;
+export default ExecutionResultDisplay;
 
 ```
 
@@ -58,7 +45,18 @@ export default GenerateButton;
 
 Refactor!
 
-Uninstall clipboard-copy and use the html5 api directly!
+No interaction is needed, so xterm.js is too heavyweight.
+Uninstall it and rewrite ExecutionResultDisplay to use a div
+but still handle ansi color codes!
+
+
+
+## Project Specifics
+
+- Every js file should *only export a single function*!
+- Use *ES6 imports*!
+- Prefer *async/await* over promises!
+- The frontend uses *Solidjs*, edit .jsx file accordingly
 
 
 # Output Format

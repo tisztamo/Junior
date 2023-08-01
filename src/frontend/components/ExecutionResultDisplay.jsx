@@ -1,26 +1,15 @@
-import { onMount, createEffect, onCleanup } from 'solid-js';
-import { Terminal } from 'xterm';
-import 'xterm/css/xterm.css';
+import { createEffect } from 'solid-js';
 import { executionResult } from '../stores/executionResult';
+import ansi_up from 'ansi_up';
 
 const ExecutionResultDisplay = () => {
   let container;
-  let term;
-
-  onMount(() => {
-    term = new Terminal({ convertEol: true, rows: 7 });
-    term.open(container);
-  });
 
   createEffect(() => {
-    if (term && executionResult() !== '') {
-      term.write(executionResult());
-    }
-  });
-
-  onCleanup(() => {
-    if (term) {
-      term.dispose();
+    if (container && executionResult() !== '') {
+      const ansi_up_instance = new ansi_up();
+      const convertedHtml = ansi_up_instance.ansi_to_html(executionResult()).replace(/\n/g, '<br />');
+      container.innerHTML = convertedHtml;
     }
   });
 

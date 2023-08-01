@@ -1,3 +1,5 @@
 Refactor!
 
 <%= requirements %>
+
+<%= projectSpecifics %>
