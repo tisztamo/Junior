@@ -1,18 +1,11 @@
 #!/bin/sh
 set -e
-goal="Refactor ExecutionResultDisplay, handle colors and newlines"
+goal="Style ExecutionResultDisplay as a terminal"
 echo "Plan:"
-echo "1. Uninstall xterm.js using npm"
-echo "2. Install ansi_up using npm"
-echo "3. Modify ExecutionResultDisplay.jsx to use a div and handle ansi color codes, including newlines"
+echo "1. Update ExecutionResultDisplay.jsx to style the container like a terminal using Tailwind classes."
+echo "2. Add a wrapper div to provide padding and other terminal-like characteristics."
 
-# 1. Uninstall xterm.js using npm
-npm uninstall xterm
-
-# 2. Install ansi_up using npm
-npm install ansi_up
-
-# 3. Modify ExecutionResultDisplay.jsx to use a div and handle ansi color codes, including newlines
+# Updating ExecutionResultDisplay.jsx with terminal-like styling
 cat > src/frontend/components/ExecutionResultDisplay.jsx << 'EOF'
 import { createEffect } from 'solid-js';
 import { executionResult } from '../stores/executionResult';
@@ -30,10 +23,14 @@ const ExecutionResultDisplay = () => {
   });
 
   return (
-    <div 
-      ref={container} 
-      class={`rounded overflow-auto max-w-full ${executionResult() !== '' ? 'block' : 'hidden'}`}
-    />
+    <div class="bg-gray-900 text-white p-4 rounded">
+      <div class="font-mono text-sm">
+        <div 
+          ref={container} 
+          class={`rounded overflow-auto max-w-full p-2 ${executionResult() !== '' ? 'block' : 'hidden'}`}
+        />
+      </div>
+    </div>
   );
 };
 

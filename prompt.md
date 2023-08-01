@@ -2,29 +2,18 @@
 
 src/frontend/components/ExecutionResultDisplay.jsx:
 ```
-import { onMount, createEffect, onCleanup } from 'solid-js';
-import { Terminal } from 'xterm';
-import 'xterm/css/xterm.css';
+import { createEffect } from 'solid-js';
 import { executionResult } from '../stores/executionResult';
+import ansi_up from 'ansi_up';
 
 const ExecutionResultDisplay = () => {
   let container;
-  let term;
-
-  onMount(() => {
-    term = new Terminal({ convertEol: true, rows: 7 });
-    term.open(container);
-  });
 
   createEffect(() => {
-    if (term && executionResult() !== '') {
-      term.write(executionResult());
-    }
-  });
-
-  onCleanup(() => {
-    if (term) {
-      term.dispose();
+    if (container && executionResult() !== '') {
+      const ansi_up_instance = new ansi_up();
+      const convertedHtml = ansi_up_instance.ansi_to_html(executionResult()).replace(/\n/g, '<br />');
+      container.innerHTML = convertedHtml;
     }
   });
 
@@ -43,11 +32,15 @@ export default ExecutionResultDisplay;
 
 # Task
 
-Refactor!
+Implement the following feature!
 
-No interaction is needed, so xterm.js is too heavyweight.
-Uninstall it and rewrite ExecutionResultDisplay to use a div
-but still handle ansi color codes!
+- Create a plan!
+- Create new files when needed!
+
+Requirements:
+
+Style executiondisplay to look like a terminal!
+Tailwind is available.
 
 
 

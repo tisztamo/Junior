@@ -1,8 +1,7 @@
-task: prompt/task/refactor/custom.md
+task: prompt/task/feature/implement.md
 attention:
   - src/frontend/components/ExecutionResultDisplay.jsx
 requirements: |
-  No interaction is needed, so xterm.js is too heavyweight.
-  Uninstall it and rewrite ExecutionResultDisplay to use a div
-  but still handle ansi color codes!
+  Style executiondisplay to look like a terminal!
+  Tailwind is available.
 os: OSX

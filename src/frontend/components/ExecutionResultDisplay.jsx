@@ -14,10 +14,14 @@ const ExecutionResultDisplay = () => {
   });
 
   return (
-    <div 
-      ref={container} 
-      class={`rounded overflow-auto max-w-full ${executionResult() !== '' ? 'block' : 'hidden'}`}
-    />
+    <div class="bg-gray-900 text-white p-4 rounded">
+      <div class="font-mono text-sm">
+        <div 
+          ref={container} 
+          class={`rounded overflow-auto max-w-full p-2 ${executionResult() !== '' ? 'block' : 'hidden'}`}
+        />
+      </div>
+    </div>
   );
 };
 
