@@ -1,8 +1,7 @@
 task: prompt/task/refactor/custom.md
 attention:
-  - package.json
+  - ./
+  - src/frontend/components/GenerateButton.jsx
 requirements: |
-  Uninstall babel-preset-solid!
-  Move every other items from devDependencies to dependencies
-  Set description to "Your AI Contributor which codes itself"
+  Uninstall clipboard-copy and use the html5 api directly!
 os: OSX

@@ -1,67 +1,55 @@
 # Working set
 
-package.json:
 ```
-{
-  "name": "@aijunior/dev",
-  "version": "0.0.1",
-  "description": "Your AI Contributor",
-  "type": "module",
-  "main": "src/main.js",
-  "bin": {
-    "junior": "src/main.js",
-    "junior-web": "src/web.js",
-    "junior-init": "src/init.js"
-  },
-  "scripts": {
-    "cli": "node src/main.js",
-    "start": "node src/web.js",
-    "build:css": "postcss ./src/frontend/styles.css -o ./dist/styles.css",
-    "build:doc": "node ./src/doc/buildDoc.js"
-  },
-  "keywords": [
-    "cli",
-    "uppercase"
-  ],
-  "author": "",
-  "license": "GPL",
-  "dependencies": {
-    "chatgpt": "^5.2.4",
-    "clipboard-copy": "^4.0.1",
-    "cors": "^2.8.5",
-    "ejs": "^3.1.9",
-    "express": "^4.18.2",
-    "js-yaml": "^4.1.0",
-    "marked": "^5.1.0",
-    "postcss-nested": "^6.0.1",
-    "simple-git": "^3.19.1",
-    "solid-js": "^1.7.7",
-    "vite": "^4.3.9",
-    "vite-plugin-solid": "^2.7.0",
-    "ws": "^8.13.0",
-    "xterm": "^5.2.1"
-  },
-  "directories": {
-    "doc": "doc"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/tisztamo/Junior.git"
-  },
-  "bugs": {
-    "url": "https://github.com/tisztamo/Junior/issues"
-  },
-  "homepage": "https://github.com/tisztamo/Junior#readme",
-  "devDependencies": {
-    "@types/js-yaml": "^4.0.5",
-    "autoprefixer": "^10.4.14",
-    "babel-preset-solid": "^1.7.7",
-    "highlight.js": "^11.8.0",
-    "markdown-it": "^13.0.1",
-    "postcss": "^8.4.26",
-    "tailwindcss": "^3.3.3"
-  }
-}
+./
+├── .DS_Store
+├── .git/...
+├── .github/...
+├── .gitignore
+├── .vscode/...
+├── README.md
+├── change.sh
+├── doc/...
+├── integrations/...
+├── node_modules/...
+├── package-lock.json
+├── package.json
+├── prompt/...
+├── prompt.md
+├── prompt.yaml
+├── src/...
+
+```
+src/frontend/components/GenerateButton.jsx:
+```
+import { generatePrompt } from '../generatePrompt';
+import { marked } from 'marked';
+import copy from 'clipboard-copy';
+import { setPrompt } from '../stores/prompt';
+
+const GenerateButton = () => {
+  const handleGeneratePrompt = async () => {
+    const response = await generatePrompt();
+
+    copy(response.prompt)
+      .then(() => {
+        console.log('Prompt copied to clipboard!');
+      })
+      .catch(err => {
+        console.error('Failed to copy prompt: ', err);
+      });
+
+    const htmlPrompt = marked(response.prompt);
+
+    setPrompt(htmlPrompt);
+  };
+
+  return (
+    <button class="w-64 px-4 py-4 bg-blue-500 text-white rounded" onClick={handleGeneratePrompt}>Generate & Copy Prompt</button>
+  );
+};
+
+export default GenerateButton;
 
 ```
 
@@ -70,9 +58,7 @@ package.json:
 
 Refactor!
 
-Uninstall babel-preset-solid!
-Move every other items from devDependencies to dependencies
-Set description to &#34;Your AI Contributor which codes itself&#34;
+Uninstall clipboard-copy and use the html5 api directly!
 
 
 # Output Format
