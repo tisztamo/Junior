@@ -1,84 +1,114 @@
 # Working set
 
-src/backend/setupRoutes.js:
 ```
-import { generateHandler } from './handlers/generateHandler.js';
-import { servePromptDescriptor } from './handlers/servePromptDescriptor.js';
-import { updateTaskHandler } from './handlers/updateTaskHandler.js';
-import { listTasks } from './handlers/listTasks.js';
-import { executeHandler } from './handlers/executeHandler.js';
-import resetGitHandler from './handlers/resetGitHandler.js';
-import gitStatusHandler from './handlers/gitStatusHandler.js';
-
-export function setupRoutes(app) {
-  app.get('/descriptor', servePromptDescriptor);
-  app.get('/tasks', (req, res) => res.json({ tasks: listTasks() }));
-  app.get('/status', gitStatusHandler);
-
-  app.post('/generate', generateHandler);
-  app.post('/updatetask', updateTaskHandler);
-  app.post('/execute', executeHandler);
-  app.post('/reset', resetGitHandler);
-}
+src/frontend/
+├── App.jsx
+├── assets/...
+├── components/...
+├── fetchTasks.js
+├── generatePrompt.js
+├── getBaseUrl.js
+├── index.html
+├── index.jsx
+├── postcss.config.cjs
+├── service/...
+├── startVite.js
+├── stores/...
+├── styles/...
+├── tailwind.config.cjs
+├── vite.config.js
 
 ```
-
-src/backend/handlers/resetGitHandler.js:
 ```
-import resetGit from '../../git/resetGit.js';
-
-export default async function resetGitHandler(req, res) {
-  try {
-    await resetGit();
-    res.status(200).send({ message: 'Git successfully reset' });
-  } catch (error) {
-    res.status(500).send({ message: 'Error in resetting Git', error });
-  }
-}
+src/frontend/stores/
+├── executionResult.js
+├── gitStatus.js
+├── prompt.js
+├── promptDescriptor.js
+├── selectedTask.js
 
 ```
-
-src/git/resetGit.js:
+src/frontend/components/RollbackButton.jsx:
 ```
-import { exec } from 'child_process';
+import { resetGit } from '../service/resetGit';
 
-export default function resetGit() {
-  // Stash all changes including untracked files
-  exec('git stash -u', (err, stdout, stderr) => {
-    if (err) {
-      console.error(`exec error: ${err}`);
-      return;
-    }
-    console.log(`stdout: ${stdout}`);
+const RollbackButton = () => {
+  const handleReset = async () => {
+    const response = await resetGit();
 
-    // Clean the repository and reset to the latest commit
-    exec('git clean -f -d && git reset --hard', (err, stdout, stderr) => {
-      if (err) {
-        console.error(`exec error: ${err}`);
-        return;
-      }
-      console.log(`stdout: ${stdout}`);
+    console.log(response.message);
+  };
 
-      // Checkout prompt.yaml from stash
-      exec('git checkout stash@{0} -- prompt.yaml', (err, stdout, stderr) => {
-        if (err) {
-          console.error(`exec error: ${err}`);
-          return;
-        }
-        console.log(`stdout: ${stdout}`);
+  return (
+    <button class="w-64 px-4 py-4 bg-red-700 text-white rounded" onClick={handleReset}>Roll Back to Last Commit</button>
+  );
+};
 
-        // Drop the stash
-        exec('git stash drop', (err, stdout, stderr) => {
-          if (err) {
-            console.error(`exec error: ${err}`);
-            return;
-          }
-          console.log(`stdout: ${stdout}`);
-        });
-      });
-    });
+export default RollbackButton;
+
+```
+
+src/frontend/App.jsx:
+```
+import GenerateButton from './components/GenerateButton';
+import ExecuteButton from './components/ExecuteButton';
+import RollbackButton from './components/RollbackButton';
+import PromptDisplay from './components/PromptDisplay';
+import TasksList from './components/TasksList';
+import PromptDescriptor from './components/PromptDescriptor';
+import NavBar from './components/NavBar';
+import ExecutionResultDisplay from './components/ExecutionResultDisplay';
+import GitStatusDisplay from './components/GitStatusDisplay';
+
+const App = () => {
+  return (
+    <div class="m-2">
+      <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
+        <NavBar />
+        <TasksList />
+        <PromptDescriptor />
+        <GenerateButton />
+        <PromptDisplay />
+        <ExecuteButton />
+        <ExecutionResultDisplay />
+        <GitStatusDisplay />
+        <RollbackButton />
+      </div>
+    </div>
+  );
+};
+
+export default App;
+
+```
+
+src/frontend/service/resetGit.js:
+```
+import { getBaseUrl } from '../getBaseUrl';
+
+const resetGit = async () => {
+  const baseUrl = getBaseUrl();
+  const response = await fetch(`${baseUrl}/reset`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
   });
-}
+
+  const data = await response.json();
+
+  return data;
+};
+
+export { resetGit };
+
+```
+
+src/frontend/stores/gitStatus.js:
+```
+import { createSignal } from 'solid-js';
+
+const [gitStatus, setGitStatus] = createSignal('');
+
+export { gitStatus, setGitStatus };
 
 ```
 
@@ -92,8 +122,8 @@ Implement the following feature!
 
 Requirements:
 
-Create the commit/ endpoint which commits all new files and changes!
-Commit message comes in the message field.
+Create a green Commit button over the rollback that posts to the commit/ endpoint.
+Commit message goes to the message field and is stored in a new signal in stores/
 
 
 

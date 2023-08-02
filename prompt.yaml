@@ -1,9 +1,15 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/backend/setupRoutes.js
-  - src/backend/handlers/resetGitHandler.js
-  - src/git/resetGit.js
-requirements: |
-  Create the commit/ endpoint which commits all new files and changes!
-  Commit message comes in the message field.
+  - src/frontend/
+  - src/frontend/stores/
+  - src/frontend/components/RollbackButton.jsx
+  - src/frontend/App.jsx
+  - src/frontend/service/resetGit.js
+  - src/frontend/stores/gitStatus.js
+requirements: >
+  Create a green Commit button over the rollback that posts to the commit/
+  endpoint.
+
+  Commit message goes to the message field and is stored in a new signal in
+  stores/
 os: OSX

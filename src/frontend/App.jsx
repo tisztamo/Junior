@@ -1,6 +1,7 @@
 import GenerateButton from './components/GenerateButton';
 import ExecuteButton from './components/ExecuteButton';
 import RollbackButton from './components/RollbackButton';
+import CommitButton from './components/CommitButton';
 import PromptDisplay from './components/PromptDisplay';
 import TasksList from './components/TasksList';
 import PromptDescriptor from './components/PromptDescriptor';
@@ -20,6 +21,7 @@ const App = () => {
         <ExecuteButton />
         <ExecutionResultDisplay />
         <GitStatusDisplay />
+        <CommitButton />
         <RollbackButton />
       </div>
     </div>

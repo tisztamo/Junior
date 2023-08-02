@@ -1,71 +1,100 @@
 #!/bin/sh
 set -e
-goal="Implement the commit endpoint to commit changes"
+goal="Implement Commit button feature"
 echo "Plan:"
-echo "1. Create commitGit.js under src/git to handle the git commit command."
-echo "2. Create commitGitHandler.js under src/backend/handlers to process the request."
-echo "3. Update setupRoutes.js to add the new endpoint for committing changes."
+echo "1. Create a new signal in the stores for the commit message."
+echo "2. Create a new service function to make a POST request to the commit/ endpoint."
+echo "3. Create a new CommitButton component that includes an input field for the commit message and a button to trigger the commit."
+echo "4. Modify App.jsx to include the new CommitButton component above the RollbackButton component."
 
-# Step 1: Create commitGit.js to handle the git commit command
-cat > src/git/commitGit.js << 'EOF'
-import { exec } from 'child_process';
+# Step 1: Create a new signal in the stores for the commit message
+cat <<EOF >src/frontend/stores/commitMessage.js
+import { createSignal } from 'solid-js';
 
-export default function commitGit(message) {
-  return new Promise((resolve, reject) => {
-    exec(`git add . && git commit -m "${message}"`, (err, stdout, stderr) => {
-      if (err) {
-        console.error(`exec error: ${err}`);
-        reject(err);
-        return;
-      }
-      console.log(`stdout: ${stdout}`);
-      resolve(`Committed with message: ${message}`);
-    });
+const [commitMessage, setCommitMessage] = createSignal('');
+
+export { commitMessage, setCommitMessage };
+EOF
+
+# Step 2: Create a new service function to make a POST request to the commit/ endpoint
+cat <<EOF >src/frontend/service/postCommit.js
+import { getBaseUrl } from '../getBaseUrl';
+
+const postCommit = async (message) => {
+  const baseUrl = getBaseUrl();
+  const response = await fetch(\`\${baseUrl}/commit\`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message }),
   });
-}
+
+  const data = await response.json();
+
+  return data;
+};
+
+export { postCommit };
 EOF
 
-# Step 2: Create commitGitHandler.js to process the request
-cat > src/backend/handlers/commitGitHandler.js << 'EOF'
-import commitGit from '../../git/commitGit.js';
+# Step 3: Create a new CommitButton component
+cat <<EOF >src/frontend/components/CommitButton.jsx
+import { postCommit } from '../service/postCommit';
+import { commitMessage, setCommitMessage } from '../stores/commitMessage';
 
-export default async function commitGitHandler(req, res) {
-  try {
-    const message = req.body.message;
-    if (!message) {
-      res.status(400).send({ message: 'Commit message is required' });
-      return;
-    }
-    await commitGit(message);
-    res.status(200).send({ message: `Successfully committed with message: ${message}` });
-  } catch (error) {
-    res.status(500).send({ message: 'Error in committing changes', error });
-  }
-}
+const CommitButton = () => {
+  const handleCommit = async () => {
+    const response = await postCommit(commitMessage());
+    console.log(response.message);
+  };
+
+  const handleChange = (e) => {
+    setCommitMessage(e.target.value);
+  };
+
+  return (
+    <div>
+      <input type="text" class="w-64 px-4 py-2 border rounded" placeholder="Commit message..." onInput={handleChange} />
+      <button class="w-64 px-4 py-4 bg-green-700 text-white rounded mt-2" onClick={handleCommit}>Commit</button>
+    </div>
+  );
+};
+
+export default CommitButton;
 EOF
 
-# Step 3: Update setupRoutes.js to add the new endpoint for committing changes
-cat > src/backend/setupRoutes.js << 'EOF'
-import { generateHandler } from './handlers/generateHandler.js';
-import { servePromptDescriptor } from './handlers/servePromptDescriptor.js';
-import { updateTaskHandler } from './handlers/updateTaskHandler.js';
-import { listTasks } from './handlers/listTasks.js';
-import { executeHandler } from './handlers/executeHandler.js';
-import resetGitHandler from './handlers/resetGitHandler.js';
-import gitStatusHandler from './handlers/gitStatusHandler.js';
-import commitGitHandler from './handlers/commitGitHandler.js';
+# Step 4: Modify App.jsx to include the new CommitButton component
+cat <<EOF >src/frontend/App.jsx
+import GenerateButton from './components/GenerateButton';
+import ExecuteButton from './components/ExecuteButton';
+import RollbackButton from './components/RollbackButton';
+import CommitButton from './components/CommitButton';
+import PromptDisplay from './components/PromptDisplay';
+import TasksList from './components/TasksList';
+import PromptDescriptor from './components/PromptDescriptor';
+import NavBar from './components/NavBar';
+import ExecutionResultDisplay from './components/ExecutionResultDisplay';
+import GitStatusDisplay from './components/GitStatusDisplay';
 
-export function setupRoutes(app) {
-  app.get('/descriptor', servePromptDescriptor);
-  app.get('/tasks', (req, res) => res.json({ tasks: listTasks() }));
-  app.get('/status', gitStatusHandler);
+const App = () => {
+  return (
+    <div class="m-2">
+      <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
+        <NavBar />
+        <TasksList />
+        <PromptDescriptor />
+        <GenerateButton />
+        <PromptDisplay />
+        <ExecuteButton />
+        <ExecutionResultDisplay />
+        <GitStatusDisplay />
+        <CommitButton />
+        <RollbackButton />
+      </div>
+    </div>
+  );
+};
 
-  app.post('/generate', generateHandler);
-  app.post('/updatetask', updateTaskHandler);
-  app.post('/execute', executeHandler);
-  app.post('/reset', resetGitHandler);
-  app.post('/commit', commitGitHandler);
-}
+export default App;
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"
