@@ -1,8 +1,8 @@
-task: prompt/task/refactor/custom.md
+task: prompt/task/feature/implement.md
 attention:
   - src/frontend/components/CommitButton.jsx
-  - src/frontend/components/CommitMessageInput.jsx
-  - src/frontend/components/ExecutionResultDisplay.jsx
+  - src/frontend/stores/commitMessage.js
+  - src/frontend/stores/prompt.js
 requirements: |
-  After commit, clear execution result.
+  After commit, clear the prompt  and the commit message to ''
 os: OSX

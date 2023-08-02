@@ -5,6 +5,7 @@ src/frontend/components/CommitButton.jsx:
 import { postCommit } from '../service/postCommit';
 import { commitMessage } from '../stores/commitMessage';
 import { fetchGitStatus } from '../service/fetchGitStatus';
+import { setExecutionResult } from '../stores/executionResult'; // Importing the necessary function to clear execution result
 
 const CommitButton = () => {
   const handleCommit = async () => {
@@ -12,6 +13,7 @@ const CommitButton = () => {
     console.log(response.message);
     const status = await fetchGitStatus();
     console.log(status);
+    setExecutionResult(''); // Clearing the execution result after commit
   };
 
   return (
@@ -23,73 +25,35 @@ export default CommitButton;
 
 ```
 
-src/frontend/components/CommitMessageInput.jsx:
+src/frontend/stores/commitMessage.js:
 ```
-import { commitMessage, setCommitMessage } from '../stores/commitMessage';
+import { createSignal } from 'solid-js';
 
-const CommitMessageInput = (props) => {
-  const handleChange = (e) => {
-    setCommitMessage(e.target.value);
-  };
+const [commitMessage, setCommitMessage] = createSignal('');
 
-  return (
-    <input type="text" className="w-64 px-4 py-2 border rounded" placeholder="Commit message..." onInput={handleChange} />
-  );
-};
-
-export default CommitMessageInput;
+export { commitMessage, setCommitMessage };
 
 ```
 
-src/frontend/components/ExecutionResultDisplay.jsx:
+src/frontend/stores/prompt.js:
 ```
-import { createEffect, createSignal } from 'solid-js';
-import { executionResult } from '../stores/executionResult';
-import ansiToHtml from '../../execute/ansiToHtml';
+import { createSignal } from 'solid-js';
 
-const ExecutionResultDisplay = () => {
-  let container;
-  const [copyText, setCopyText] = createSignal('copy');
-
-  const copyToClipboard = async (e) => {
-    e.preventDefault(); // Prevent page load on click
-    try {
-      await navigator.clipboard.writeText(executionResult());
-      setCopyText('copied');
-      setTimeout(() => setCopyText('copy'), 2000);
-    } catch (err) {
-      alert("Failed to copy text!");
-      console.warn("Copy operation failed:", err);
-    }
-  };
-
-  createEffect(() => {
-    if (container && executionResult() !== '') {
-      const convertedHtml = ansiToHtml(executionResult());
-      container.innerHTML = convertedHtml;
-    }
-  });
-
-  return (
-    <div class={`relative bg-gray-900 text-white p-4 rounded ${executionResult() !== '' ? 'block' : 'hidden'}`}>
-      <a href="#" class="underline absolute top-0 right-0 m-4" onClick={copyToClipboard}>{copyText()}</a>
-      <div class="font-mono text-sm">
-        <div ref={container} class="rounded overflow-auto max-w-full p-2" />
-      </div>
-    </div>
-  );
-};
-
-export default ExecutionResultDisplay;
+export const [prompt, setPrompt] = createSignal('');
 
 ```
 
 
 # Task
 
-Refactor!
+Implement the following feature!
 
-After commit, clear execution result.
+- Create a plan!
+- Create new files when needed!
+
+Requirements:
+
+After commit, clear the prompt  and the commit message to &#39;&#39;
 
 
 
