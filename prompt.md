@@ -1,27 +1,20 @@
 # Working set
 
-src/frontend/components/CommitButton.jsx:
+src/frontend/components/CommitMessageInput.jsx:
 ```
-import { postCommit } from '../service/postCommit';
-import { commitMessage } from '../stores/commitMessage';
-import { fetchGitStatus } from '../service/fetchGitStatus';
-import { setExecutionResult } from '../stores/executionResult'; // Importing the necessary function to clear execution result
+import { commitMessage, setCommitMessage } from '../stores/commitMessage';
 
-const CommitButton = () => {
-  const handleCommit = async () => {
-    const response = await postCommit(commitMessage());
-    console.log(response.message);
-    const status = await fetchGitStatus();
-    console.log(status);
-    setExecutionResult(''); // Clearing the execution result after commit
+const CommitMessageInput = (props) => {
+  const handleChange = (e) => {
+    setCommitMessage(e.target.value);
   };
 
   return (
-    <button className="w-64 px-4 py-4 bg-green-700 text-white rounded mt-2" onClick={handleCommit}>Commit</button>
+    <input type="text" className="w-64 px-4 py-2 border rounded" placeholder="Commit message..." onInput={handleChange} />
   );
 };
 
-export default CommitButton;
+export default CommitMessageInput;
 
 ```
 
@@ -35,14 +28,6 @@ export { commitMessage, setCommitMessage };
 
 ```
 
-src/frontend/stores/prompt.js:
-```
-import { createSignal } from 'solid-js';
-
-export const [prompt, setPrompt] = createSignal('');
-
-```
-
 
 # Task
 
@@ -53,7 +38,7 @@ Implement the following feature!
 
 Requirements:
 
-After commit, clear the prompt  and the commit message to &#39;&#39;
+When I set the commit message, the input should be updated.
 
 
 

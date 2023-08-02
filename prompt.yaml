@@ -1,8 +1,7 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/components/CommitButton.jsx
+  - src/frontend/components/CommitMessageInput.jsx
   - src/frontend/stores/commitMessage.js
-  - src/frontend/stores/prompt.js
 requirements: |
-  After commit, clear the prompt  and the commit message to ''
+  When I set the commit message, the input should be updated.
 os: OSX
