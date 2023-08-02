@@ -39,7 +39,8 @@ export default App;
 src/frontend/components/CommitButton.jsx:
 ```
 import { postCommit } from '../service/postCommit';
-import { commitMessage, setCommitMessage } from '../stores/commitMessage';
+import CommitMessageInput from './CommitMessageInput';
+import { commitMessage } from '../stores/commitMessage';
 
 const CommitButton = () => {
   const handleCommit = async () => {
@@ -47,13 +48,9 @@ const CommitButton = () => {
     console.log(response.message);
   };
 
-  const handleChange = (e) => {
-    setCommitMessage(e.target.value);
-  };
-
   return (
     <div>
-      <input type="text" class="w-64 px-4 py-2 border rounded" placeholder="Commit message..." onInput={handleChange} />
+      <CommitMessageInput />
       <button class="w-64 px-4 py-4 bg-green-700 text-white rounded mt-2" onClick={handleCommit}>Commit</button>
     </div>
   );
@@ -63,17 +60,30 @@ export default CommitButton;
 
 ```
 
+src/frontend/components/CommitMessageInput.jsx:
+```
+import { commitMessage, setCommitMessage } from '../stores/commitMessage';
+
+const CommitMessageInput = (props) => {
+  const handleChange = (e) => {
+    setCommitMessage(e.target.value);
+  };
+
+  return (
+    <input type="text" class="w-64 px-4 py-2 border rounded" placeholder="Commit message..." onInput={handleChange} />
+  );
+};
+
+export default CommitMessageInput;
+
+```
+
 
 # Task
 
-Implement the following feature!
+Refactor!
 
-- Create a plan!
-- Create new files when needed!
-
-Requirements:
-
-Factor out the commit message to a separate component!
+Move the commit message from CommitButton.jsx to App.jsx. No need for the wrapper div in CommitButton
 
 
 

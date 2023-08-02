@@ -8,6 +8,7 @@ import PromptDescriptor from './components/PromptDescriptor';
 import NavBar from './components/NavBar';
 import ExecutionResultDisplay from './components/ExecutionResultDisplay';
 import GitStatusDisplay from './components/GitStatusDisplay';
+import CommitMessageInput from './components/CommitMessageInput';
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
         <ExecuteButton />
         <ExecutionResultDisplay />
         <GitStatusDisplay />
+        <CommitMessageInput />
         <CommitButton />
         <RollbackButton />
       </div>

@@ -1,7 +1,9 @@
-task: prompt/task/feature/implement.md
+task: prompt/task/refactor/custom.md
 attention:
   - src/frontend/App.jsx
   - src/frontend/components/CommitButton.jsx
+  - src/frontend/components/CommitMessageInput.jsx
 requirements: >
-  Factor out the commit message to a separate component!
+  Move the commit message from CommitButton.jsx to App.jsx. No need for the
+  wrapper div in CommitButton
 os: OSX

@@ -1,5 +1,4 @@
 import { postCommit } from '../service/postCommit';
-import CommitMessageInput from './CommitMessageInput';
 import { commitMessage } from '../stores/commitMessage';
 
 const CommitButton = () => {
@@ -9,10 +8,7 @@ const CommitButton = () => {
   };
 
   return (
-    <div>
-      <CommitMessageInput />
-      <button class="w-64 px-4 py-4 bg-green-700 text-white rounded mt-2" onClick={handleCommit}>Commit</button>
-    </div>
+    <button class="w-64 px-4 py-4 bg-green-700 text-white rounded mt-2" onClick={handleCommit}>Commit</button>
   );
 };
 
