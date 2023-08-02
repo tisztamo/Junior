@@ -1,9 +1,13 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/components/ExecutionResultDisplay.jsx
-  - src/execute/ansiToHtml.js
+  - ./
+  - doc/
+  - doc/index.html
 requirements: |
-  - Use lightgreen instead of green
-  - Add a "copy" link floating over the top right of the execution display
-  which when clicked, copies the original execution result (not the html)
+  - Create roadmap.md with sections "Usability & fixes", "Programming on mobile", "Auto-attention", "Prompt-herd refactors"
+  - Link roadmap.html from index.html
+  - Fix index.html by moving the ill-placed link to the web guide into the body.
+  - Mention the project name "Junior" in index.html text and title
+  - Delete introduction.* and unlink from index.html
+  - npm run build:doc for generating html from md
 os: OSX

@@ -1,57 +1,55 @@
 # Working set
 
-src/frontend/components/ExecutionResultDisplay.jsx:
 ```
-import { createEffect } from 'solid-js';
-import { executionResult } from '../stores/executionResult';
-import ansiToHtml from '../../execute/ansiToHtml';
-
-const ExecutionResultDisplay = () => {
-  let container;
-
-  createEffect(() => {
-    if (container && executionResult() !== '') {
-      const convertedHtml = ansiToHtml(executionResult());
-      container.innerHTML = convertedHtml;
-    }
-  });
-
-  return (
-    <div class={`bg-gray-900 text-white p-4 rounded ${executionResult() !== '' ? 'block' : 'hidden'}`}>
-      <div class="font-mono text-sm">
-        <div ref={container} class="rounded overflow-auto max-w-full p-2" />
-      </div>
-    </div>
-  );
-};
-
-export default ExecutionResultDisplay;
+./
+├── .DS_Store
+├── .git/...
+├── .github/...
+├── .gitignore
+├── .vscode/...
+├── README.md
+├── change.sh
+├── doc/...
+├── integrations/...
+├── node_modules/...
+├── package-lock.json
+├── package.json
+├── prompt/...
+├── prompt.md
+├── prompt.yaml
+├── src/...
 
 ```
-
-src/execute/ansiToHtml.js:
 ```
-const ANSI_COLORS = {
-  '30': 'black',
-  '31': 'red',
-  '32': 'green',
-  '33': 'yellow',
-  '34': 'blue',
-  '35': 'magenta',
-  '36': 'cyan',
-  '37': 'white',
-};
+doc/
+├── .DS_Store
+├── assets/...
+├── example.html
+├── example.md
+├── index.html
+├── introduction.html
+├── introduction.md
+├── screenshot.png
+├── web.html
+├── web.md
 
-const ansiToHtml = (terminalOutputStr) => {
-  let result = '<span>' + terminalOutputStr.replace(/\033\[([0-9]+)m/g, (match, p1) => {
-    const color = ANSI_COLORS[p1];
-    return color ? `</span><span style="color:${color}">` : '</span><span>';
-  });
-  result += '</span>';
-  return result.replace(/\n/g, '<br />');
-};
+```
+doc/index.html:
+```
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Documentation</title>
+  </head>
+  <body>
+    <h1>Welcome to our documentation!</h1>
+    <p>Start with the <a href="introduction.html">introduction</a>.</p>
+  </body>
+</html>
 
-export default ansiToHtml;
+    <p>Check out the <a href="web.html">Web Interface Guide</a>.</p>
+
 
 ```
 
@@ -65,9 +63,12 @@ Implement the following feature!
 
 Requirements:
 
-- Use lightgreen instead of green
-- Add a &#34;copy&#34; link floating over the top right of the execution display
-which when clicked, copies the original execution result (not the html)
+- Create roadmap.md with sections &#34;Usability &amp; fixes&#34;, &#34;Programming on mobile&#34;, &#34;Auto-attention&#34;, &#34;Prompt-herd refactors&#34;
+- Link roadmap.html from index.html
+- Fix index.html by moving the ill-placed link to the web guide into the body.
+- Mention the project name &#34;Junior&#34; in index.html text and title
+- Delete introduction.* and unlink from index.html
+- npm run build:doc for generating html from md
 
 
 

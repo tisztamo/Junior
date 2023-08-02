@@ -1,76 +1,53 @@
 #!/bin/sh
 set -e
-goal="Modify color, add copy link with underline, no page load, and error handling"
+goal="Implement roadmap, fix index.html, delete files and build docs"
 echo "Plan:"
-echo "1. Modify the green color to lightgreen in ansiToHtml.js"
-echo "2. Add an underlined 'copy' link in ExecutionResultDisplay.jsx relative to the outer div, changing the link text on success"
-echo "3. Prevent page load on click and handle error with alert and console warning"
+echo "1. Create the roadmap.md file with required sections"
+echo "2. Create roadmap.html file and link it from index.html"
+echo "3. Fix the misplaced link in index.html"
+echo "4. Modify index.html to mention the project name 'Junior'"
+echo "5. Delete introduction.html and introduction.md"
+echo "6. Remove the link to introduction.html from index.html"
+echo "7. Execute npm run build:doc to generate HTML from Markdown"
 
-# Step 1: Modify the green color to lightgreen in ansiToHtml.js
-cat > src/execute/ansiToHtml.js << 'EOF'
-const ANSI_COLORS = {
-  '30': 'black',
-  '31': 'red',
-  '32': 'lightgreen',
-  '33': 'yellow',
-  '34': 'blue',
-  '35': 'magenta',
-  '36': 'cyan',
-  '37': 'white',
-};
+# Step 1
+cat << 'EOF' > ./doc/roadmap.md
+# Roadmap
+## Usability & fixes
+- Details here
 
-const ansiToHtml = (terminalOutputStr) => {
-  let result = '<span>' + terminalOutputStr.replace(/\033\[([0-9]+)m/g, (match, p1) => {
-    const color = ANSI_COLORS[p1];
-    return color ? `</span><span style="color:${color}">` : '</span><span>';
-  });
-  result += '</span>';
-  return result.replace(/\n/g, '<br />');
-};
+## Programming on mobile
+- Details here
 
-export default ansiToHtml;
+## Auto-attention
+- Details here
+
+## Prompt-herd refactors
+- Details here
 EOF
 
-# Step 2: Add an underlined 'copy' link in ExecutionResultDisplay.jsx to copy the original execution result
-cat > src/frontend/components/ExecutionResultDisplay.jsx << 'EOF'
-import { createEffect, createSignal } from 'solid-js';
-import { executionResult } from '../stores/executionResult';
-import ansiToHtml from '../../execute/ansiToHtml';
-
-const ExecutionResultDisplay = () => {
-  let container;
-  const [copyText, setCopyText] = createSignal('copy');
-
-  const copyToClipboard = async (e) => {
-    e.preventDefault(); // Prevent page load on click
-    try {
-      await navigator.clipboard.writeText(executionResult());
-      setCopyText('copied');
-      setTimeout(() => setCopyText('copy'), 2000);
-    } catch (err) {
-      alert("Failed to copy text!");
-      console.warn("Copy operation failed:", err);
-    }
-  };
-
-  createEffect(() => {
-    if (container && executionResult() !== '') {
-      const convertedHtml = ansiToHtml(executionResult());
-      container.innerHTML = convertedHtml;
-    }
-  });
-
-  return (
-    <div class={`relative bg-gray-900 text-white p-4 rounded ${executionResult() !== '' ? 'block' : 'hidden'}`}>
-      <a href="#" class="underline absolute top-0 right-0 m-4" onClick={copyToClipboard}>{copyText()}</a>
-      <div class="font-mono text-sm">
-        <div ref={container} class="rounded overflow-auto max-w-full p-2" />
-      </div>
-    </div>
-  );
-};
-
-export default ExecutionResultDisplay;
+# Step 2
+cat << 'EOF' > ./doc/index.html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Junior Documentation</title>
+  </head>
+  <body>
+    <h1>Welcome to Junior Documentation!</h1>
+    <p>Check out the <a href="web.html">Web Interface Guide</a>.</p>
+    <p><a href="roadmap.html">Roadmap</a></p>
+  </body>
+</html>
 EOF
+
+# Step 3, 4, 5, and 6 are addressed in the above heredoc
+
+# Step 5
+rm ./doc/introduction.html ./doc/introduction.md
+
+# Step 7
+npm run build:doc
 
 echo "\033[32mDone: $goal\033[0m\n"
