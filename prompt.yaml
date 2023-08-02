@@ -1,15 +1,7 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/
-  - src/frontend/stores/
-  - src/frontend/components/RollbackButton.jsx
   - src/frontend/App.jsx
-  - src/frontend/service/resetGit.js
-  - src/frontend/stores/gitStatus.js
+  - src/frontend/components/CommitButton.jsx
 requirements: >
-  Create a green Commit button over the rollback that posts to the commit/
-  endpoint.
-
-  Commit message goes to the message field and is stored in a new signal in
-  stores/
+  Factor out the commit message to a separate component!
 os: OSX

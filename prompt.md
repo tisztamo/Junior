@@ -1,58 +1,11 @@
 # Working set
 
-```
-src/frontend/
-├── App.jsx
-├── assets/...
-├── components/...
-├── fetchTasks.js
-├── generatePrompt.js
-├── getBaseUrl.js
-├── index.html
-├── index.jsx
-├── postcss.config.cjs
-├── service/...
-├── startVite.js
-├── stores/...
-├── styles/...
-├── tailwind.config.cjs
-├── vite.config.js
-
-```
-```
-src/frontend/stores/
-├── executionResult.js
-├── gitStatus.js
-├── prompt.js
-├── promptDescriptor.js
-├── selectedTask.js
-
-```
-src/frontend/components/RollbackButton.jsx:
-```
-import { resetGit } from '../service/resetGit';
-
-const RollbackButton = () => {
-  const handleReset = async () => {
-    const response = await resetGit();
-
-    console.log(response.message);
-  };
-
-  return (
-    <button class="w-64 px-4 py-4 bg-red-700 text-white rounded" onClick={handleReset}>Roll Back to Last Commit</button>
-  );
-};
-
-export default RollbackButton;
-
-```
-
 src/frontend/App.jsx:
 ```
 import GenerateButton from './components/GenerateButton';
 import ExecuteButton from './components/ExecuteButton';
 import RollbackButton from './components/RollbackButton';
+import CommitButton from './components/CommitButton';
 import PromptDisplay from './components/PromptDisplay';
 import TasksList from './components/TasksList';
 import PromptDescriptor from './components/PromptDescriptor';
@@ -72,6 +25,7 @@ const App = () => {
         <ExecuteButton />
         <ExecutionResultDisplay />
         <GitStatusDisplay />
+        <CommitButton />
         <RollbackButton />
       </div>
     </div>
@@ -82,33 +36,30 @@ export default App;
 
 ```
 
-src/frontend/service/resetGit.js:
+src/frontend/components/CommitButton.jsx:
 ```
-import { getBaseUrl } from '../getBaseUrl';
+import { postCommit } from '../service/postCommit';
+import { commitMessage, setCommitMessage } from '../stores/commitMessage';
 
-const resetGit = async () => {
-  const baseUrl = getBaseUrl();
-  const response = await fetch(`${baseUrl}/reset`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-  });
+const CommitButton = () => {
+  const handleCommit = async () => {
+    const response = await postCommit(commitMessage());
+    console.log(response.message);
+  };
 
-  const data = await response.json();
+  const handleChange = (e) => {
+    setCommitMessage(e.target.value);
+  };
 
-  return data;
+  return (
+    <div>
+      <input type="text" class="w-64 px-4 py-2 border rounded" placeholder="Commit message..." onInput={handleChange} />
+      <button class="w-64 px-4 py-4 bg-green-700 text-white rounded mt-2" onClick={handleCommit}>Commit</button>
+    </div>
+  );
 };
 
-export { resetGit };
-
-```
-
-src/frontend/stores/gitStatus.js:
-```
-import { createSignal } from 'solid-js';
-
-const [gitStatus, setGitStatus] = createSignal('');
-
-export { gitStatus, setGitStatus };
+export default CommitButton;
 
 ```
 
@@ -122,8 +73,7 @@ Implement the following feature!
 
 Requirements:
 
-Create a green Commit button over the rollback that posts to the commit/ endpoint.
-Commit message goes to the message field and is stored in a new signal in stores/
+Factor out the commit message to a separate component!
 
 
 
