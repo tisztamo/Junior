@@ -1,10 +1,7 @@
-task: prompt/task/doc/improve.md
+task: prompt/task/feature/implement.md
 attention:
   - integrations/vscode/
-  - integrations/vscode/README.md
   - integrations/vscode/package.json
 requirements: |
-  - Rename the write attention command to "Junior: Write Attention"
-  - Fill in the repository field with git+https://github.com/tisztamo/Junior.git
-  - License is GPLv3, download its text with curl to integrations/vscode/LICENSE.txt
+  Set JuniorOpenSourceProject as the publisher
 os: OSX
