@@ -1,25 +1,10 @@
 task: prompt/task/doc/improve.md
 attention:
-  - doc/roadmap.md
-  - README.md
-requirements: >
-  Improve the roadmap!
-
-  Usability & fixes details: We will implement the four buttons and fix every
-  major bug and write docs to allow using Junior for developing external
-  projects.
-
-  Programming on mobile: We need a file browser to allow the user to select
-  attention files from mobile. Then we will create an app by wrapping the
-  frontend and test it by developing at the local Playground and while
-  commuting.
-
-  Auto-attention: Based on the requirements and task the user selected, we will
-  propose an attention. We need to embed every file in the project and store the
-  embeddings in an (embedded) vector database
-
-  Prompt-herds (rename it!): Prompt herds will scan and transform (refactor) the
-  codebase gradually
-
-  Do not change the readme, just read it!
+  - integrations/vscode/
+  - integrations/vscode/README.md
+  - integrations/vscode/package.json
+requirements: |
+  - Rename the write attention command to "Junior: Write Attention"
+  - Fill in the repository field with git+https://github.com/tisztamo/Junior.git
+  - License is GPLv3, download its text with curl to integrations/vscode/LICENSE.txt
 os: OSX

@@ -15,7 +15,7 @@
     "commands": [
       {
         "command": "junior.writeAttention",
-        "title": "Write Attention"
+        "title": "Junior: Write Attention"
       }
     ],
     "configuration": {
@@ -53,5 +53,9 @@
     "js-yaml": "^4.1.0",
     "glob": "^8.1.0",
     "@types/glob": "^8.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tisztamo/Junior.git"
   }
 }
