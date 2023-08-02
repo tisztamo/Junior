@@ -1,5 +1,23 @@
 # Working set
 
+```
+src/
+├── .DS_Store
+├── attention/...
+├── backend/...
+├── config.js
+├── doc/...
+├── execute/...
+├── frontend/...
+├── git/...
+├── init.js
+├── interactiveSession/...
+├── llm/...
+├── main.js
+├── prompt/...
+├── web.js
+
+```
 src/frontend/components/ExecutionResultDisplay.jsx:
 ```
 import { createEffect } from 'solid-js';
@@ -18,10 +36,14 @@ const ExecutionResultDisplay = () => {
   });
 
   return (
-    <div 
-      ref={container} 
-      class={`rounded overflow-auto max-w-full ${executionResult() !== '' ? 'block' : 'hidden'}`}
-    />
+    <div class="bg-gray-900 text-white p-4 rounded">
+      <div class="font-mono text-sm">
+        <div 
+          ref={container} 
+          class={`rounded overflow-auto max-w-full p-2 ${executionResult() !== '' ? 'block' : 'hidden'}`}
+        />
+      </div>
+    </div>
   );
 };
 
@@ -39,8 +61,10 @@ Implement the following feature!
 
 Requirements:
 
-Style executiondisplay to look like a terminal!
-Tailwind is available.
+Uninstall and eliminate ansi_up by creating src/execute/ansiToHtml.js!
+List the most used color codes in a const array and replace them in
+ansiToHtml(terminalOutputStr) with appropriate span tags.
+Don&#39;t forget to open and close every tag!
 
 
 

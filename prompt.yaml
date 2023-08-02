@@ -1,7 +1,10 @@
 task: prompt/task/feature/implement.md
 attention:
+  - src/
   - src/frontend/components/ExecutionResultDisplay.jsx
 requirements: |
-  Style executiondisplay to look like a terminal!
-  Tailwind is available.
+  Uninstall and eliminate ansi_up by creating src/execute/ansiToHtml.js!
+  List the most used color codes in a const array and replace them in
+  ansiToHtml(terminalOutputStr) with appropriate span tags.
+  Don't forget to open and close every tag!
 os: OSX
