@@ -1,11 +1,13 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/App.jsx
-  - src/frontend/components/ExecuteButton.jsx
-  - src/frontend/stores/executionResult.js
-  - src/frontend/components/CommitButton.jsx
+  - src/frontend/
+  - src/frontend/service/
+  - src/frontend/stores/change.js
+  - src/frontend/stores/commitMessage.js
 requirements: |
-  - Create a signal in src/frontend/stores/change.js
-  - Save the pasted change after it was executed.
-  - Clear the change after commit.
+  Create a function in the servitce directory, which, when called, starts to
+  monitor the change signal, parses its content, which should be a shells script,
+  for a line:
+  goal="Some goal description"
+  and if found, sets the commit message to the value of this goal variable
 os: OSX
