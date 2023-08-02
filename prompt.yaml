@@ -1,7 +1,11 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/components/CommitMessageInput.jsx
-  - src/frontend/stores/commitMessage.js
+  - src/frontend/App.jsx
+  - src/frontend/components/ExecuteButton.jsx
+  - src/frontend/stores/executionResult.js
+  - src/frontend/components/CommitButton.jsx
 requirements: |
-  When I set the commit message, the input should be updated.
+  - Create a signal in src/frontend/stores/change.js
+  - Save the pasted change after it was executed.
+  - Clear the change after commit.
 os: OSX

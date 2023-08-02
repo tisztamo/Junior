@@ -1,10 +1,12 @@
 import { executeChange } from '../service/executeChange';
 import { setExecutionResult } from '../stores/executionResult';
+import { setChange } from '../stores/change'; // Importing the necessary function to set the change
 
 const ExecuteButton = () => {
   const handleExecuteChange = async () => {
     const change = await navigator.clipboard.readText();
     const response = await executeChange(change);
+    setChange(change); // Saving the pasted change after execution
     setExecutionResult(response.output);
     console.log(response.output);
   };
