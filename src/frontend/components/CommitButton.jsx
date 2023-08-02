@@ -1,6 +1,7 @@
 import { postCommit } from '../service/postCommit';
 import { commitMessage } from '../stores/commitMessage';
 import { fetchGitStatus } from '../service/fetchGitStatus';
+import { setExecutionResult } from '../stores/executionResult'; // Importing the necessary function to clear execution result
 
 const CommitButton = () => {
   const handleCommit = async () => {
@@ -8,6 +9,7 @@ const CommitButton = () => {
     console.log(response.message);
     const status = await fetchGitStatus();
     console.log(status);
+    setExecutionResult(''); // Clearing the execution result after commit
   };
 
   return (

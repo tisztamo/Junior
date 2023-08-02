@@ -2,6 +2,7 @@ task: prompt/task/refactor/custom.md
 attention:
   - src/frontend/components/CommitButton.jsx
   - src/frontend/components/CommitMessageInput.jsx
-requirements: >
-  After commit, fetch git status 
+  - src/frontend/components/ExecutionResultDisplay.jsx
+requirements: |
+  After commit, clear execution result.
 os: OSX

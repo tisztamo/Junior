@@ -4,15 +4,18 @@ src/frontend/components/CommitButton.jsx:
 ```
 import { postCommit } from '../service/postCommit';
 import { commitMessage } from '../stores/commitMessage';
+import { fetchGitStatus } from '../service/fetchGitStatus';
 
 const CommitButton = () => {
   const handleCommit = async () => {
     const response = await postCommit(commitMessage());
     console.log(response.message);
+    const status = await fetchGitStatus();
+    console.log(status);
   };
 
   return (
-    <button class="w-64 px-4 py-4 bg-green-700 text-white rounded mt-2" onClick={handleCommit}>Commit</button>
+    <button className="w-64 px-4 py-4 bg-green-700 text-white rounded mt-2" onClick={handleCommit}>Commit</button>
   );
 };
 
@@ -30,11 +33,54 @@ const CommitMessageInput = (props) => {
   };
 
   return (
-    <input type="text" class="w-64 px-4 py-2 border rounded" placeholder="Commit message..." onInput={handleChange} />
+    <input type="text" className="w-64 px-4 py-2 border rounded" placeholder="Commit message..." onInput={handleChange} />
   );
 };
 
 export default CommitMessageInput;
+
+```
+
+src/frontend/components/ExecutionResultDisplay.jsx:
+```
+import { createEffect, createSignal } from 'solid-js';
+import { executionResult } from '../stores/executionResult';
+import ansiToHtml from '../../execute/ansiToHtml';
+
+const ExecutionResultDisplay = () => {
+  let container;
+  const [copyText, setCopyText] = createSignal('copy');
+
+  const copyToClipboard = async (e) => {
+    e.preventDefault(); // Prevent page load on click
+    try {
+      await navigator.clipboard.writeText(executionResult());
+      setCopyText('copied');
+      setTimeout(() => setCopyText('copy'), 2000);
+    } catch (err) {
+      alert("Failed to copy text!");
+      console.warn("Copy operation failed:", err);
+    }
+  };
+
+  createEffect(() => {
+    if (container && executionResult() !== '') {
+      const convertedHtml = ansiToHtml(executionResult());
+      container.innerHTML = convertedHtml;
+    }
+  });
+
+  return (
+    <div class={`relative bg-gray-900 text-white p-4 rounded ${executionResult() !== '' ? 'block' : 'hidden'}`}>
+      <a href="#" class="underline absolute top-0 right-0 m-4" onClick={copyToClipboard}>{copyText()}</a>
+      <div class="font-mono text-sm">
+        <div ref={container} class="rounded overflow-auto max-w-full p-2" />
+      </div>
+    </div>
+  );
+};
+
+export default ExecutionResultDisplay;
 
 ```
 
@@ -43,7 +89,7 @@ export default CommitMessageInput;
 
 Refactor!
 
-After commit, fetch git status 
+After commit, clear execution result.
 
 
 
