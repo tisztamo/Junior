@@ -1,9 +1,7 @@
 task: prompt/task/refactor/custom.md
 attention:
-  - src/frontend/App.jsx
   - src/frontend/components/CommitButton.jsx
   - src/frontend/components/CommitMessageInput.jsx
 requirements: >
-  Move the commit message from CommitButton.jsx to App.jsx. No need for the
-  wrapper div in CommitButton
+  After commit, fetch git status 
 os: OSX

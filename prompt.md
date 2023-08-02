@@ -1,45 +1,8 @@
 # Working set
 
-src/frontend/App.jsx:
-```
-import GenerateButton from './components/GenerateButton';
-import ExecuteButton from './components/ExecuteButton';
-import RollbackButton from './components/RollbackButton';
-import CommitButton from './components/CommitButton';
-import PromptDisplay from './components/PromptDisplay';
-import TasksList from './components/TasksList';
-import PromptDescriptor from './components/PromptDescriptor';
-import NavBar from './components/NavBar';
-import ExecutionResultDisplay from './components/ExecutionResultDisplay';
-import GitStatusDisplay from './components/GitStatusDisplay';
-
-const App = () => {
-  return (
-    <div class="m-2">
-      <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
-        <NavBar />
-        <TasksList />
-        <PromptDescriptor />
-        <GenerateButton />
-        <PromptDisplay />
-        <ExecuteButton />
-        <ExecutionResultDisplay />
-        <GitStatusDisplay />
-        <CommitButton />
-        <RollbackButton />
-      </div>
-    </div>
-  );
-};
-
-export default App;
-
-```
-
 src/frontend/components/CommitButton.jsx:
 ```
 import { postCommit } from '../service/postCommit';
-import CommitMessageInput from './CommitMessageInput';
 import { commitMessage } from '../stores/commitMessage';
 
 const CommitButton = () => {
@@ -49,10 +12,7 @@ const CommitButton = () => {
   };
 
   return (
-    <div>
-      <CommitMessageInput />
-      <button class="w-64 px-4 py-4 bg-green-700 text-white rounded mt-2" onClick={handleCommit}>Commit</button>
-    </div>
+    <button class="w-64 px-4 py-4 bg-green-700 text-white rounded mt-2" onClick={handleCommit}>Commit</button>
   );
 };
 
@@ -83,7 +43,7 @@ export default CommitMessageInput;
 
 Refactor!
 
-Move the commit message from CommitButton.jsx to App.jsx. No need for the wrapper div in CommitButton
+After commit, fetch git status 
 
 
 
