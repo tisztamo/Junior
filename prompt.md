@@ -1,53 +1,57 @@
 # Working set
 
-```
-src/
-├── .DS_Store
-├── attention/...
-├── backend/...
-├── config.js
-├── doc/...
-├── execute/...
-├── frontend/...
-├── git/...
-├── init.js
-├── interactiveSession/...
-├── llm/...
-├── main.js
-├── prompt/...
-├── web.js
-
-```
 src/frontend/components/ExecutionResultDisplay.jsx:
 ```
 import { createEffect } from 'solid-js';
 import { executionResult } from '../stores/executionResult';
-import ansi_up from 'ansi_up';
+import ansiToHtml from '../../execute/ansiToHtml';
 
 const ExecutionResultDisplay = () => {
   let container;
 
   createEffect(() => {
     if (container && executionResult() !== '') {
-      const ansi_up_instance = new ansi_up();
-      const convertedHtml = ansi_up_instance.ansi_to_html(executionResult()).replace(/\n/g, '<br />');
+      const convertedHtml = ansiToHtml(executionResult());
       container.innerHTML = convertedHtml;
     }
   });
 
   return (
-    <div class="bg-gray-900 text-white p-4 rounded">
+    <div class={`bg-gray-900 text-white p-4 rounded ${executionResult() !== '' ? 'block' : 'hidden'}`}>
       <div class="font-mono text-sm">
-        <div 
-          ref={container} 
-          class={`rounded overflow-auto max-w-full p-2 ${executionResult() !== '' ? 'block' : 'hidden'}`}
-        />
+        <div ref={container} class="rounded overflow-auto max-w-full p-2" />
       </div>
     </div>
   );
 };
 
 export default ExecutionResultDisplay;
+
+```
+
+src/execute/ansiToHtml.js:
+```
+const ANSI_COLORS = {
+  '30': 'black',
+  '31': 'red',
+  '32': 'green',
+  '33': 'yellow',
+  '34': 'blue',
+  '35': 'magenta',
+  '36': 'cyan',
+  '37': 'white',
+};
+
+const ansiToHtml = (terminalOutputStr) => {
+  let result = '<span>' + terminalOutputStr.replace(/\033\[([0-9]+)m/g, (match, p1) => {
+    const color = ANSI_COLORS[p1];
+    return color ? `</span><span style="color:${color}">` : '</span><span>';
+  });
+  result += '</span>';
+  return result.replace(/\n/g, '<br />');
+};
+
+export default ansiToHtml;
 
 ```
 
@@ -61,10 +65,9 @@ Implement the following feature!
 
 Requirements:
 
-Uninstall and eliminate ansi_up by creating src/execute/ansiToHtml.js!
-List the most used color codes in a const array and replace them in
-ansiToHtml(terminalOutputStr) with appropriate span tags.
-Don&#39;t forget to open and close every tag!
+- Use lightgreen instead of green
+- Add a &#34;copy&#34; link floating over the top right of the execution display
+which when clicked, copies the original execution result (not the html)
 
 
 

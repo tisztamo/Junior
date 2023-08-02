@@ -1,10 +1,9 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/
   - src/frontend/components/ExecutionResultDisplay.jsx
+  - src/execute/ansiToHtml.js
 requirements: |
-  Uninstall and eliminate ansi_up by creating src/execute/ansiToHtml.js!
-  List the most used color codes in a const array and replace them in
-  ansiToHtml(terminalOutputStr) with appropriate span tags.
-  Don't forget to open and close every tag!
+  - Use lightgreen instead of green
+  - Add a "copy" link floating over the top right of the execution display
+  which when clicked, copies the original execution result (not the html)
 os: OSX

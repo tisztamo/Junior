@@ -1,7 +1,7 @@
 const ANSI_COLORS = {
   '30': 'black',
   '31': 'red',
-  '32': 'green',
+  '32': 'lightgreen',
   '33': 'yellow',
   '34': 'blue',
   '35': 'magenta',
