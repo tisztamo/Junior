@@ -1,7 +1,9 @@
 task: prompt/task/feature/implement.md
 attention:
-  - integrations/vscode/
-  - integrations/vscode/package.json
+  - src/backend/setupRoutes.js
+  - src/backend/handlers/resetGitHandler.js
+  - src/git/resetGit.js
 requirements: |
-  Set JuniorOpenSourceProject as the publisher
+  Create the commit/ endpoint which commits all new files and changes!
+  Commit message comes in the message field.
 os: OSX

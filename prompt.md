@@ -1,86 +1,83 @@
 # Working set
 
+src/backend/setupRoutes.js:
 ```
-integrations/vscode/
-├── .eslintrc.json
-├── .gitignore
-├── .vscode/...
-├── .vscodeignore
-├── CHANGELOG.md
-├── LICENSE.txt
-├── README.md
-├── junior-0.0.1.vsix
-├── node_modules/...
-├── out/...
-├── package-lock.json
-├── package.json
-├── src/...
-├── tsconfig.json
-├── vsc-extension-quickstart.md
+import { generateHandler } from './handlers/generateHandler.js';
+import { servePromptDescriptor } from './handlers/servePromptDescriptor.js';
+import { updateTaskHandler } from './handlers/updateTaskHandler.js';
+import { listTasks } from './handlers/listTasks.js';
+import { executeHandler } from './handlers/executeHandler.js';
+import resetGitHandler from './handlers/resetGitHandler.js';
+import gitStatusHandler from './handlers/gitStatusHandler.js';
+
+export function setupRoutes(app) {
+  app.get('/descriptor', servePromptDescriptor);
+  app.get('/tasks', (req, res) => res.json({ tasks: listTasks() }));
+  app.get('/status', gitStatusHandler);
+
+  app.post('/generate', generateHandler);
+  app.post('/updatetask', updateTaskHandler);
+  app.post('/execute', executeHandler);
+  app.post('/reset', resetGitHandler);
+}
 
 ```
-integrations/vscode/package.json:
+
+src/backend/handlers/resetGitHandler.js:
 ```
-{
-  "name": "junior",
-  "displayName": "Junior",
-  "description": "Your AI contributor",
-  "version": "0.0.1",
-  "engines": {
-    "vscode": "^1.80.0"
-  },
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [],
-  "main": "./out/extension.js",
-  "contributes": {
-    "commands": [
-      {
-        "command": "junior.writeAttention",
-        "title": "Junior: Write Attention"
-      }
-    ],
-    "configuration": {
-      "type": "object",
-      "title": "Junior",
-      "properties": {
-        "junior.attentionExcludeList": {
-          "type": "array",
-          "default": [],
-          "description": "List of file patterns to exclude from attention"
-        }
-      }
-    }
-  },
-  "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "pretest": "npm run compile && npm run lint",
-    "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js"
-  },
-  "devDependencies": {
-    "@types/mocha": "^10.0.1",
-    "@types/node": "20.2.5",
-    "@types/vscode": "^1.80.0",
-    "@typescript-eslint/eslint-plugin": "^5.59.8",
-    "@typescript-eslint/parser": "^5.59.8",
-    "@vscode/test-electron": "^2.3.2",
-    "eslint": "^8.41.0",
-    "mocha": "^10.2.0",
-    "typescript": "^5.1.3"
-  },
-  "dependencies": {
-    "js-yaml": "^4.1.0",
-    "glob": "^8.1.0",
-    "@types/glob": "^8.1.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/tisztamo/Junior.git"
+import resetGit from '../../git/resetGit.js';
+
+export default async function resetGitHandler(req, res) {
+  try {
+    await resetGit();
+    res.status(200).send({ message: 'Git successfully reset' });
+  } catch (error) {
+    res.status(500).send({ message: 'Error in resetting Git', error });
   }
+}
+
+```
+
+src/git/resetGit.js:
+```
+import { exec } from 'child_process';
+
+export default function resetGit() {
+  // Stash all changes including untracked files
+  exec('git stash -u', (err, stdout, stderr) => {
+    if (err) {
+      console.error(`exec error: ${err}`);
+      return;
+    }
+    console.log(`stdout: ${stdout}`);
+
+    // Clean the repository and reset to the latest commit
+    exec('git clean -f -d && git reset --hard', (err, stdout, stderr) => {
+      if (err) {
+        console.error(`exec error: ${err}`);
+        return;
+      }
+      console.log(`stdout: ${stdout}`);
+
+      // Checkout prompt.yaml from stash
+      exec('git checkout stash@{0} -- prompt.yaml', (err, stdout, stderr) => {
+        if (err) {
+          console.error(`exec error: ${err}`);
+          return;
+        }
+        console.log(`stdout: ${stdout}`);
+
+        // Drop the stash
+        exec('git stash drop', (err, stdout, stderr) => {
+          if (err) {
+            console.error(`exec error: ${err}`);
+            return;
+          }
+          console.log(`stdout: ${stdout}`);
+        });
+      });
+    });
+  });
 }
 
 ```
@@ -95,7 +92,8 @@ Implement the following feature!
 
 Requirements:
 
-Set JuniorOpenSourceProject as the publisher
+Create the commit/ endpoint which commits all new files and changes!
+Commit message comes in the message field.
 
 
 

@@ -5,6 +5,7 @@ import { listTasks } from './handlers/listTasks.js';
 import { executeHandler } from './handlers/executeHandler.js';
 import resetGitHandler from './handlers/resetGitHandler.js';
 import gitStatusHandler from './handlers/gitStatusHandler.js';
+import commitGitHandler from './handlers/commitGitHandler.js';
 
 export function setupRoutes(app) {
   app.get('/descriptor', servePromptDescriptor);
@@ -15,4 +16,5 @@ export function setupRoutes(app) {
   app.post('/updatetask', updateTaskHandler);
   app.post('/execute', executeHandler);
   app.post('/reset', resetGitHandler);
+  app.post('/commit', commitGitHandler);
 }
