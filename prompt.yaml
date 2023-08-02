@@ -1,13 +1,25 @@
-task: prompt/task/feature/implement.md
+task: prompt/task/doc/improve.md
 attention:
-  - ./
-  - doc/
-  - doc/index.html
-requirements: |
-  - Create roadmap.md with sections "Usability & fixes", "Programming on mobile", "Auto-attention", "Prompt-herd refactors"
-  - Link roadmap.html from index.html
-  - Fix index.html by moving the ill-placed link to the web guide into the body.
-  - Mention the project name "Junior" in index.html text and title
-  - Delete introduction.* and unlink from index.html
-  - npm run build:doc for generating html from md
+  - doc/roadmap.md
+  - README.md
+requirements: >
+  Improve the roadmap!
+
+  Usability & fixes details: We will implement the four buttons and fix every
+  major bug and write docs to allow using Junior for developing external
+  projects.
+
+  Programming on mobile: We need a file browser to allow the user to select
+  attention files from mobile. Then we will create an app by wrapping the
+  frontend and test it by developing at the local Playground and while
+  commuting.
+
+  Auto-attention: Based on the requirements and task the user selected, we will
+  propose an attention. We need to embed every file in the project and store the
+  embeddings in an (embedded) vector database
+
+  Prompt-herds (rename it!): Prompt herds will scan and transform (refactor) the
+  codebase gradually
+
+  Do not change the readme, just read it!
 os: OSX

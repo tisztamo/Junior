@@ -1,53 +1,32 @@
 #!/bin/sh
 set -e
-goal="Implement roadmap, fix index.html, delete files and build docs"
+goal="Improve documentation and roadmap"
 echo "Plan:"
-echo "1. Create the roadmap.md file with required sections"
-echo "2. Create roadmap.html file and link it from index.html"
-echo "3. Fix the misplaced link in index.html"
-echo "4. Modify index.html to mention the project name 'Junior'"
-echo "5. Delete introduction.html and introduction.md"
-echo "6. Remove the link to introduction.html from index.html"
-echo "7. Execute npm run build:doc to generate HTML from Markdown"
+echo "1. Update the roadmap with the provided details."
+echo "2. Save changes to doc/roadmap.md."
+echo "3. Build the documentation using npm."
 
-# Step 1
-cat << 'EOF' > ./doc/roadmap.md
+cat > doc/roadmap.md << 'EOF'
 # Roadmap
 ## Usability & fixes
-- Details here
+- Implement the four buttons
+- Fix every major bug
+- Write docs to allow using Junior for developing external projects
 
 ## Programming on mobile
-- Details here
+- Develop a file browser to allow the user to select attention files from mobile
+- Create an app by wrapping the frontend
+- Test it by developing at the local Playground and while commuting
 
 ## Auto-attention
-- Details here
+- Propose an attention based on the requirements and task the user selected
+- Embed every file in the project
+- Store the embeddings in an (embedded) vector database
 
-## Prompt-herd refactors
-- Details here
+## Prompt herds
+- Scan and transform (refactor) the codebase gradually
 EOF
 
-# Step 2
-cat << 'EOF' > ./doc/index.html
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Junior Documentation</title>
-  </head>
-  <body>
-    <h1>Welcome to Junior Documentation!</h1>
-    <p>Check out the <a href="web.html">Web Interface Guide</a>.</p>
-    <p><a href="roadmap.html">Roadmap</a></p>
-  </body>
-</html>
-EOF
-
-# Step 3, 4, 5, and 6 are addressed in the above heredoc
-
-# Step 5
-rm ./doc/introduction.html ./doc/introduction.md
-
-# Step 7
 npm run build:doc
 
 echo "\033[32mDone: $goal\033[0m\n"
