@@ -1,13 +1,8 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/
-  - src/frontend/service/
-  - src/frontend/stores/change.js
-  - src/frontend/stores/commitMessage.js
-requirements: |
-  Create a function in the servitce directory, which, when called, starts to
-  monitor the change signal, parses its content, which should be a shells script,
-  for a line:
-  goal="Some goal description"
-  and if found, sets the commit message to the value of this goal variable
+  - src/frontend/service/monitorChangeSignal.js
+  - src/frontend/components/CommitMessageInput.jsx
+requirements: >
+  Start monitoring when mounting CommitMessageInput
+  monitorChangeSignal should do nothing when the monitoring already runs
 os: OSX

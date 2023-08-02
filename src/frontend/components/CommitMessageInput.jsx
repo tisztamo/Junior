@@ -1,6 +1,11 @@
+import { onCleanup } from 'solid-js';
 import { commitMessage, setCommitMessage } from '../stores/commitMessage';
+import monitorChangeSignal from '../service/monitorChangeSignal';
 
 const CommitMessageInput = (props) => {
+  // Start monitoring when mounting
+  monitorChangeSignal();
+
   const handleChange = (e) => {
     setCommitMessage(e.target.value);
   };

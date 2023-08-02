@@ -1,52 +1,45 @@
 # Working set
 
+src/frontend/service/monitorChangeSignal.js:
 ```
-src/frontend/
-├── App.jsx
-├── assets/...
-├── components/...
-├── fetchTasks.js
-├── generatePrompt.js
-├── getBaseUrl.js
-├── index.html
-├── index.jsx
-├── postcss.config.cjs
-├── service/...
-├── startVite.js
-├── stores/...
-├── styles/...
-├── tailwind.config.cjs
-├── vite.config.js
+import { createEffect } from 'solid-js';
+import { change } from '../stores/change';
+import { setCommitMessage } from '../stores/commitMessage';
 
-```
-```
-src/frontend/service/
-├── createWebSocket.js
-├── executeChange.js
-├── fetchDescriptor.js
-├── fetchGitStatus.js
-├── handleTaskChange.js
-├── parseYamlAndGetTask.js
-├── postCommit.js
-├── resetGit.js
-├── useWebsocket.js
+const monitorChangeSignal = () => {
+  createEffect(() => {
+    const newChangeContent = change();
+    // Check if the new content has the goal variable
+    const goalLineMatch = newChangeContent.match(/goal="(.+?)"/);
+    
+    if (goalLineMatch) {
+      const goalValue = goalLineMatch[1];
+      
+      // Set the commit message to the value of the goal variable
+      setCommitMessage(goalValue);
+    }
+  });
+};
 
-```
-src/frontend/stores/change.js:
-```
-import { createSignal } from 'solid-js';
-
-export const [change, setChange] = createSignal('');
+export default monitorChangeSignal;
 
 ```
 
-src/frontend/stores/commitMessage.js:
+src/frontend/components/CommitMessageInput.jsx:
 ```
-import { createSignal } from 'solid-js';
+import { commitMessage, setCommitMessage } from '../stores/commitMessage';
 
-const [commitMessage, setCommitMessage] = createSignal('');
+const CommitMessageInput = (props) => {
+  const handleChange = (e) => {
+    setCommitMessage(e.target.value);
+  };
 
-export { commitMessage, setCommitMessage };
+  return (
+    <input type="text" className="w-64 px-4 py-2 border rounded" placeholder="Commit message..." value={commitMessage()} onInput={handleChange} />
+  );
+};
+
+export default CommitMessageInput;
 
 ```
 
@@ -60,11 +53,7 @@ Implement the following feature!
 
 Requirements:
 
-Create a function in the servitce directory, which, when called, starts to
-monitor the change signal, parses its content, which should be a shells script,
-for a line:
-goal=&#34;Some goal description&#34;
-and if found, sets the commit message to the value of this goal variable
+Start monitoring when mounting CommitMessageInput monitorChangeSignal should do nothing when the monitoring already runs
 
 
 
