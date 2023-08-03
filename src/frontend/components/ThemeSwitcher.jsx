@@ -5,7 +5,7 @@ const ThemeSwitcher = () => {
 
   createEffect(() => {
     const currentTheme = theme();
-    document.body.className = currentTheme;
+    document.body.className = currentTheme === 'dark' ? 'dark' : ''; // Change this line
     localStorage.setItem('theme', currentTheme);
   });
 

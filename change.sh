@@ -1,12 +1,54 @@
 #!/bin/sh
 set -e
-goal="Implement theme switcher in navbar"
+goal="Fix theme switcher to reflect changes on screen"
 echo "Plan:"
-echo "1. Create ThemeSwitcher.jsx, implementing the theme switching functionality."
-echo "2. Modify NavBar.jsx to include the theme switcher on the top right."
+echo "1. Add dark theme styling in Tailwind configuration."
+echo "2. Modify the ThemeSwitcher component to use the correct class."
 
-# Step 1: Create ThemeSwitcher.jsx
-cat > src/frontend/components/ThemeSwitcher.jsx << 'EOF'
+# Step 1: Adding dark theme styling in Tailwind configuration
+cat << 'EOF' > src/frontend/tailwind.config.cjs
+module.exports = {
+  darkMode: 'class', // Add this line
+  content: [__dirname + '/**/*.html', __dirname + '/**/*.jsx'],
+  theme: {
+    screens: {
+      'xs': '320px',
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px',
+      'xl': '1280px',
+      '2xl': '1536px',
+    },
+    extend: {
+      // Extend the spacing for larger gaps
+      spacing: {
+        '72': '18rem',
+        '84': '21rem',
+        '96': '24rem',
+        '128': '32rem',
+      },
+      // Extend the button styles for larger buttons
+      fontSize: {
+        'btn': '1.5rem',
+      },
+      padding: {
+        'btn': '1.5rem',
+      },
+      // Extend the maxWidth for desktop container
+      maxWidth: {
+        'desktop': '640px',
+      },
+    },
+  },
+  variants: {
+    extend: {},
+  },
+  plugins: [],
+}
+EOF
+
+# Step 2: Modify the ThemeSwitcher component to use the correct class
+cat << 'EOF' > src/frontend/components/ThemeSwitcher.jsx
 import { createEffect, createSignal } from 'solid-js';
 
 const ThemeSwitcher = () => {
@@ -14,7 +56,7 @@ const ThemeSwitcher = () => {
 
   createEffect(() => {
     const currentTheme = theme();
-    document.body.className = currentTheme;
+    document.body.className = currentTheme === 'dark' ? 'dark' : ''; // Change this line
     localStorage.setItem('theme', currentTheme);
   });
 
@@ -30,28 +72,6 @@ const ThemeSwitcher = () => {
 };
 
 export default ThemeSwitcher;
-EOF
-
-# Step 2: Modify NavBar.jsx
-cat > src/frontend/components/NavBar.jsx << 'EOF'
-import { createSignal } from 'solid-js';
-import ThemeSwitcher from './ThemeSwitcher';
-
-const NavBar = () => {
-  const title = 'Junior';
-
-  return (
-    <div class="relative">
-      <div class="absolute top-0 right-0 m-4">
-        <ThemeSwitcher />
-      </div>
-      <h1 class="text-center text-3xl mt-6">{title}</h1>
-      <a href="https://github.com/tisztamo/Junior" class="text-center text-xl underline cursor-pointer">Your AI contributor</a>
-    </div>
-  );
-};
-
-export default NavBar;
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"

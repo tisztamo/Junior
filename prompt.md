@@ -42,45 +42,40 @@ module.exports = {
 
 ```
 
-src/frontend/components/NavBar.jsx:
+src/frontend/components/ThemeSwitcher.jsx:
 ```
-import { createSignal } from 'solid-js';
+import { createEffect, createSignal } from 'solid-js';
 
-const NavBar = () => {
-  const title = 'Junior';
+const ThemeSwitcher = () => {
+  const [theme, setTheme] = createSignal(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+
+  createEffect(() => {
+    const currentTheme = theme();
+    document.body.className = currentTheme;
+    localStorage.setItem('theme', currentTheme);
+  });
+
+  const toggleTheme = () => {
+    setTheme(theme() === 'dark' ? 'light' : 'dark');
+  };
 
   return (
-    <div>
-      <h1 class="text-center text-3xl mt-6">{title}</h1>
-      <a href="https://github.com/tisztamo/Junior" class="text-center text-xl underline cursor-pointer">Your AI contributor</a>
-    </div>
+    <button onClick={toggleTheme} class="text-xl underline cursor-pointer">
+      {theme() === 'dark' ? 'Light Mode' : 'Dark Mode'}
+    </button>
   );
 };
 
-export default NavBar;
+export default ThemeSwitcher;
 
 ```
 
 
 # Task
 
-Implement the following feature!
+Fix the following issue!
 
-- Create a plan!
-- Create new files when needed!
-
-Requirements:
-
-Create a theme switcher component (default from the OS, or dark if not available) Put it to the top right of the navbar.
-
-
-
-## Project Specifics
-
-- Every js file should *only export a single function*!
-- Use *ES6 imports*!
-- Prefer *async/await* over promises!
-- The frontend uses *Solidjs*, edit .jsx file accordingly
+The theme switcher switches classes on the body, but nothing happens on the screen.
 
 
 # Output Format

@@ -1,8 +1,8 @@
-task: prompt/task/feature/implement.md
+task: prompt/task/bug/fix.md
 attention:
   - src/frontend/tailwind.config.cjs
-  - src/frontend/components/NavBar.jsx
+  - src/frontend/components/ThemeSwitcher.jsx
 requirements: >
-  Create a theme switcher component (default from the OS, or dark if not
-  available) Put it to the top right of the navbar.
+  The theme switcher switches classes on the body, but nothing happens on the
+  screen.
 os: OSX

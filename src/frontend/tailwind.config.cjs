@@ -1,4 +1,5 @@
 module.exports = {
+  darkMode: 'class', // Add this line
   content: [__dirname + '/**/*.html', __dirname + '/**/*.jsx'],
   theme: {
     screens: {
