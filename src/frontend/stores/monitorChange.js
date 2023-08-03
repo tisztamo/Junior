@@ -2,9 +2,11 @@ import { createEffect } from 'solid-js';
 import { change } from '../stores/change';
 import { setCommitMessage } from '../stores/commitMessage';
 
+// The monitorChange function starts monitoring the change store,
+// and if a goal is found, it sets the commit message accordingly.
 let monitoring = false;
 
-const monitorChangeSignal = () => {
+const monitorChange = () => {
   if (monitoring) return;
 
   monitoring = true;
@@ -21,4 +23,4 @@ const monitorChangeSignal = () => {
   });
 };
 
-export default monitorChangeSignal;
+export default monitorChange;

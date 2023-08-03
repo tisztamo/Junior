@@ -4,7 +4,7 @@ src/frontend/components/CommitMessageInput.jsx:
 ```
 import { onCleanup } from 'solid-js';
 import { commitMessage, setCommitMessage } from '../stores/commitMessage';
-import monitorChangeSignal from '../service/monitorChangeSignal';
+import monitorChangeSignal from '../stores/monitorChange';
 
 const CommitMessageInput = (props) => {
   // Start monitoring when mounting
@@ -23,7 +23,7 @@ export default CommitMessageInput;
 
 ```
 
-src/frontend/service/monitorChangeSignal.js:
+src/frontend/stores/monitorChange.js:
 ```
 import { createEffect } from 'solid-js';
 import { change } from '../stores/change';
@@ -55,17 +55,18 @@ export default monitorChangeSignal;
 
 # Task
 
-Move the following files to the specified target dirs!
+Refactor!
 
-Find out the best target dir if it is not specified!
+Rename monitorChangeSignal to monitorChange and add a short descriptive comment about the function to the very beginning of the file Remove onCleanup import from CommitMessageInput
 
-You need to follow dependencies to maintain coherence.
 
-Before executing, write a concise plan! The plan should show:
- - How do you avoid breaking other parts of the code.
- - If you had to choose, your way of thinking.
 
-Move monitorChangeSignal.js to src/frontend/stores/ and rename it to monitorChange.js
+## Project Specifics
+
+- Every js file should *only export a single function*!
+- Use *ES6 imports*!
+- Prefer *async/await* over promises!
+- The frontend uses *Solidjs*, edit .jsx file accordingly
 
 
 # Output Format
