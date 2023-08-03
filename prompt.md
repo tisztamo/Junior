@@ -1,50 +1,47 @@
 # Working set
 
+src/frontend/components/CommitMessageInput.jsx:
 ```
-src/frontend/
-├── App.jsx
-├── assets/...
-├── components/...
-├── fetchTasks.js
-├── generatePrompt.js
-├── getBaseUrl.js
-├── index.html
-├── index.jsx
-├── postcss.config.cjs
-├── service/...
-├── startVite.js
-├── stores/...
-├── styles/...
-├── tailwind.config.cjs
-├── vite.config.js
+import { commitMessage, setCommitMessage } from '../model/commitMessage';
+import monitorChange from '../model/monitorChange';
+
+const CommitMessageInput = (props) => {
+  // Start monitoring when mounting
+  monitorChange();
+
+  const handleChange = (e) => {
+    setCommitMessage(e.target.value);
+  };
+
+  return (
+    <input type="text" className="w-64 px-4 py-2 border rounded" placeholder="Commit message..." value={commitMessage()} onInput={handleChange} />
+  );
+};
+
+export default CommitMessageInput;
 
 ```
-```
-src/frontend/stores/
-├── change.js
-├── commitMessage.js
-├── executionResult.js
-├── gitStatus.js
-├── monitorChange.js
-├── prompt.js
-├── promptDescriptor.js
-├── selectedTask.js
 
-```
 
 # Task
 
-Move the following files to the specified target dirs!
+Implement the following feature!
 
-Find out the best target dir if it is not specified!
+- Create a plan!
+- Create new files when needed!
 
-You need to follow dependencies to maintain coherence.
+Requirements:
 
-Before executing, write a concise plan! The plan should show:
- - How do you avoid breaking other parts of the code.
- - If you had to choose, your way of thinking.
+Make CommitMessageInput full width using w-full
 
-Rename src/frontend/stores to src/frontend/model
+
+
+## Project Specifics
+
+- Every js file should *only export a single function*!
+- Use *ES6 imports*!
+- Prefer *async/await* over promises!
+- The frontend uses *Solidjs*, edit .jsx file accordingly
 
 
 # Output Format

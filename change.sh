@@ -1,15 +1,27 @@
 #!/bin/sh
 set -e
-goal="Rename stores to model, maintaining coherence"
+goal="Make CommitMessageInput full width"
 echo "Plan:"
-echo "1. Rename src/frontend/stores to src/frontend/model"
-echo "2. Update any references to the old path in code to prevent breakage"
+echo "1. Modify the class to 'w-full' in CommitMessageInput.jsx to make the input field take full width."
 
-# Rename src/frontend/stores to src/frontend/model
-mv src/frontend/stores src/frontend/model
+cat > src/frontend/components/CommitMessageInput.jsx << 'EOF'
+import { commitMessage, setCommitMessage } from '../model/commitMessage';
+import monitorChange from '../model/monitorChange';
 
-# Find and replace all occurrences of "stores" with "model" in the src/frontend directory
-# The command now searches all text files, not just .js and .jsx
-find src/frontend -type f -exec grep -Iq . {} \; -exec sed -i '' 's/stores/model/g' {} +
+const CommitMessageInput = (props) => {
+  // Start monitoring when mounting
+  monitorChange();
+
+  const handleChange = (e) => {
+    setCommitMessage(e.target.value);
+  };
+
+  return (
+    <input type="text" className="w-full px-4 py-2 border rounded" placeholder="Commit message..." value={commitMessage()} onInput={handleChange} />
+  );
+};
+
+export default CommitMessageInput;
+EOF
 
 echo "\033[32mDone: $goal\033[0m\n"

@@ -1,7 +1,6 @@
-task: prompt/task/refactor/move_files.md
+task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/
-  - src/frontend/stores/
+  - src/frontend/components/CommitMessageInput.jsx
 requirements: |
-  Rename src/frontend/stores to src/frontend/model
+  Make CommitMessageInput full width using w-full
 os: OSX
