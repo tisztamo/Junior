@@ -1,6 +1,13 @@
-task: prompt/task/feature/implement.md
+task: prompt/task/doc/improve.md
 attention:
-  - src/frontend/components/CommitMessageInput.jsx
-requirements: |
-  Make CommitMessageInput full width using w-full
+  - README.md
+requirements: >
+  Change the slogan sto "which codes itself" instead of "which writes itself"
+
+  Move the web interface section to be the first in usage
+
+  In installation write about the "Junior" vscode extension which can be
+  installed from the vscode extension marketplace
+
+  Avoid sed! Heredoc README.md instead!
 os: OSX

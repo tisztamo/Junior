@@ -1,5 +1,5 @@
 Encode and enclose your results as ./change.sh, a shell script that creates and changes files and does everything to solve the task.
-Files are small, prefer heredoc-ing full files using 'EOF' to prevent substitution.
+Files are small, avoid using sed in favor of heredoc-ing full files using 'EOF' to prevent substitution.
 
 OS: <%= os %>
 

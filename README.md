@@ -1,6 +1,6 @@
 Warn: This README is AI generated, just like all the source files of this project.
 
-# Junior - Your AI contributor which writes itself.
+# Junior - Your AI contributor which codes itself.
 
 [![Video: Junior codes itself](doc/assets/video_cover.jpg)](https://www.youtube.com/watch?v=W_iwry8uT7E)
 
@@ -17,19 +17,17 @@ By providing specific task details in a prompt descriptor and highlighting the r
 
 ### Installation
 
-To install, clone the repository and run `npm install` in the root directory.
+To install, clone the repository and run `npm install` in the root directory. Additionally, you can install the "Junior" vscode extension from the vscode extension marketplace.
 
 ### Usage
-
-There are two ways to use this project: a command-line interface (CLI) and a web interface.
-
-#### Command-line interface (CLI)
-
-To start the CLI, use `npm run cli`. This mode uses the ChatGPT API, and you'll need an API key stored in the `OPENAI_API_KEY` environment variable.
 
 #### Web Interface
 
 Run the application with `npm start` to start a local server, where you can generate a prompt and automatically copy it to paste into ChatGPT. The web interface is designed for use with ChatGPT Pro and doesn't require an API key. For more information about the web interface, please refer to [doc/web.md](doc/web.md).
+
+#### Command-line interface (CLI)
+
+To start the CLI, use `npm run cli`. This mode uses the ChatGPT API, and you'll need an API key stored in the `OPENAI_API_KEY` environment variable.
 
 ### The Prompt Descriptor
 
@@ -68,3 +66,4 @@ Contributions are welcome! Remember, we eat our own dog food in this project. Ju
 For support, please create an issue in the GitHub repository.
 
 **Note:** For meaningful results, it's recommended to use the GPT-4 model or a more recent version.
+
