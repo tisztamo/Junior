@@ -1,13 +1,8 @@
-task: prompt/task/doc/improve.md
+task: prompt/task/feature/implement.md
 attention:
-  - README.md
+  - src/frontend/tailwind.config.cjs
+  - src/frontend/components/NavBar.jsx
 requirements: >
-  Change the slogan sto "which codes itself" instead of "which writes itself"
-
-  Move the web interface section to be the first in usage
-
-  In installation write about the "Junior" vscode extension which can be
-  installed from the vscode extension marketplace
-
-  Avoid sed! Heredoc README.md instead!
+  Create a theme switcher component (default from the OS, or dark if not
+  available) Put it to the top right of the navbar.
 os: OSX
