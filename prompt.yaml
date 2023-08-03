@@ -1,8 +1,8 @@
-task: prompt/task/feature/implement.md
+task: prompt/task/refactor/move_files.md
 attention:
-  - src/frontend/service/monitorChangeSignal.js
   - src/frontend/components/CommitMessageInput.jsx
+  - src/frontend/service/monitorChangeSignal.js
 requirements: >
-  Start monitoring when mounting CommitMessageInput
-  monitorChangeSignal should do nothing when the monitoring already runs
+  Move monitorChangeSignal.js to src/frontend/stores/ and rename it to
+  monitorChange.js
 os: OSX

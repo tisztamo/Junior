@@ -1,35 +1,15 @@
 # Working set
 
-src/frontend/service/monitorChangeSignal.js:
-```
-import { createEffect } from 'solid-js';
-import { change } from '../stores/change';
-import { setCommitMessage } from '../stores/commitMessage';
-
-const monitorChangeSignal = () => {
-  createEffect(() => {
-    const newChangeContent = change();
-    // Check if the new content has the goal variable
-    const goalLineMatch = newChangeContent.match(/goal="(.+?)"/);
-    
-    if (goalLineMatch) {
-      const goalValue = goalLineMatch[1];
-      
-      // Set the commit message to the value of the goal variable
-      setCommitMessage(goalValue);
-    }
-  });
-};
-
-export default monitorChangeSignal;
-
-```
-
 src/frontend/components/CommitMessageInput.jsx:
 ```
+import { onCleanup } from 'solid-js';
 import { commitMessage, setCommitMessage } from '../stores/commitMessage';
+import monitorChangeSignal from '../service/monitorChangeSignal';
 
 const CommitMessageInput = (props) => {
+  // Start monitoring when mounting
+  monitorChangeSignal();
+
   const handleChange = (e) => {
     setCommitMessage(e.target.value);
   };
@@ -43,26 +23,49 @@ export default CommitMessageInput;
 
 ```
 
+src/frontend/service/monitorChangeSignal.js:
+```
+import { createEffect } from 'solid-js';
+import { change } from '../stores/change';
+import { setCommitMessage } from '../stores/commitMessage';
+
+let monitoring = false;
+
+const monitorChangeSignal = () => {
+  if (monitoring) return;
+
+  monitoring = true;
+
+  createEffect(() => {
+    const newChangeContent = change();
+    const goalLineMatch = newChangeContent.match(/goal="(.+?)"/);
+    
+    if (goalLineMatch) {
+      const goalValue = goalLineMatch[1];
+      
+      setCommitMessage(goalValue);
+    }
+  });
+};
+
+export default monitorChangeSignal;
+
+```
+
 
 # Task
 
-Implement the following feature!
+Move the following files to the specified target dirs!
 
-- Create a plan!
-- Create new files when needed!
+Find out the best target dir if it is not specified!
 
-Requirements:
+You need to follow dependencies to maintain coherence.
 
-Start monitoring when mounting CommitMessageInput monitorChangeSignal should do nothing when the monitoring already runs
+Before executing, write a concise plan! The plan should show:
+ - How do you avoid breaking other parts of the code.
+ - If you had to choose, your way of thinking.
 
-
-
-## Project Specifics
-
-- Every js file should *only export a single function*!
-- Use *ES6 imports*!
-- Prefer *async/await* over promises!
-- The frontend uses *Solidjs*, edit .jsx file accordingly
+Move monitorChangeSignal.js to src/frontend/stores/ and rename it to monitorChange.js
 
 
 # Output Format
