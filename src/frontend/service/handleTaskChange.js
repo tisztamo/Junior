@@ -1,6 +1,6 @@
 import { getBaseUrl } from '../getBaseUrl';
 import { fetchDescriptor } from './fetchDescriptor';
-import { setPromptDescriptor } from '../stores/promptDescriptor';
+import { setPromptDescriptor } from '../model/promptDescriptor';
 
 export const handleTaskChange = async (e) => {
   const baseUrl = getBaseUrl();

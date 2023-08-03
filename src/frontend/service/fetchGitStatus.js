@@ -1,5 +1,5 @@
 import { getBaseUrl } from '../getBaseUrl';
-import { setGitStatus } from '../stores/gitStatus';
+import { setGitStatus } from '../model/gitStatus';
 
 const fetchGitStatus = async () => {
   const baseUrl = getBaseUrl();

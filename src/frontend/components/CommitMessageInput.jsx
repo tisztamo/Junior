@@ -1,5 +1,5 @@
-import { commitMessage, setCommitMessage } from '../stores/commitMessage';
-import monitorChange from '../stores/monitorChange';
+import { commitMessage, setCommitMessage } from '../model/commitMessage';
+import monitorChange from '../model/monitorChange';
 
 const CommitMessageInput = (props) => {
   // Start monitoring when mounting

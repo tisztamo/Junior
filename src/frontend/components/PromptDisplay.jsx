@@ -1,5 +1,5 @@
 import { createSignal, onMount, createEffect } from "solid-js";
-import { prompt } from '../stores/prompt';
+import { prompt } from '../model/prompt';
 
 const PromptDisplay = () => {
   let div;

@@ -2,7 +2,7 @@ import { onMount, onCleanup } from 'solid-js';
 import { fetchDescriptor } from '../service/fetchDescriptor';
 import { fetchGitStatus } from '../service/fetchGitStatus';
 import { useWebsocket } from '../service/useWebsocket';
-import { promptDescriptor, setPromptDescriptor } from '../stores/promptDescriptor';
+import { promptDescriptor, setPromptDescriptor } from '../model/promptDescriptor';
 
 const PromptDescriptor = () => {
 

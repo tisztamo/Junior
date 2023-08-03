@@ -1,9 +1,7 @@
-task: prompt/task/refactor/custom.md
+task: prompt/task/refactor/move_files.md
 attention:
-  - src/frontend/components/CommitMessageInput.jsx
-  - src/frontend/stores/monitorChange.js
-requirements: >
-  Rename monitorChangeSignal to monitorChange and add a short descriptive
-  comment about the function to the very beginning of the file Remove onCleanup
-  import from CommitMessageInput
+  - src/frontend/
+  - src/frontend/stores/
+requirements: |
+  Rename src/frontend/stores to src/frontend/model
 os: OSX

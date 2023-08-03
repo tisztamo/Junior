@@ -1,9 +1,9 @@
 import { postCommit } from '../service/postCommit';
-import { commitMessage, setCommitMessage } from '../stores/commitMessage';
+import { commitMessage, setCommitMessage } from '../model/commitMessage';
 import { fetchGitStatus } from '../service/fetchGitStatus';
-import { setExecutionResult } from '../stores/executionResult';
-import { setPrompt } from '../stores/prompt';
-import { setChange } from '../stores/change'; // Importing setChange to clear the change
+import { setExecutionResult } from '../model/executionResult';
+import { setPrompt } from '../model/prompt';
+import { setChange } from '../model/change'; // Importing setChange to clear the change
 
 const CommitButton = () => {
   const handleCommit = async () => {

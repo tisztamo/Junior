@@ -1,8 +1,8 @@
 import { onMount, createEffect } from 'solid-js';
 import { fetchTasks } from '../fetchTasks';
 import { handleTaskChange } from '../service/handleTaskChange';
-import { selectedTask, setSelectedTask } from '../stores/selectedTask';
-import { promptDescriptor } from '../stores/promptDescriptor';
+import { selectedTask, setSelectedTask } from '../model/selectedTask';
+import { promptDescriptor } from '../model/promptDescriptor';
 import { parseYamlAndGetTask } from '../service/parseYamlAndGetTask';
 
 const TasksList = () => {

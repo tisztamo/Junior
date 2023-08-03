@@ -1,5 +1,5 @@
 import { createEffect, createSignal } from 'solid-js';
-import { executionResult } from '../stores/executionResult';
+import { executionResult } from '../model/executionResult';
 import ansiToHtml from '../../execute/ansiToHtml';
 
 const ExecutionResultDisplay = () => {

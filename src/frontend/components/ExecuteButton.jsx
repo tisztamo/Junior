@@ -1,6 +1,6 @@
 import { executeChange } from '../service/executeChange';
-import { setExecutionResult } from '../stores/executionResult';
-import { setChange } from '../stores/change'; // Importing the necessary function to set the change
+import { setExecutionResult } from '../model/executionResult';
+import { setChange } from '../model/change'; // Importing the necessary function to set the change
 
 const ExecuteButton = () => {
   const handleExecuteChange = async () => {

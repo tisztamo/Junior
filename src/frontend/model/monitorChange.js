@@ -1,6 +1,6 @@
 import { createEffect } from 'solid-js';
-import { change } from '../stores/change';
-import { setCommitMessage } from '../stores/commitMessage';
+import { change } from '../model/change';
+import { setCommitMessage } from '../model/commitMessage';
 
 // The monitorChange function starts monitoring the change store,
 // and if a goal is found, it sets the commit message accordingly.

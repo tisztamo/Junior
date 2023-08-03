@@ -1,6 +1,6 @@
 import { generatePrompt } from '../generatePrompt';
 import { marked } from 'marked';
-import { setPrompt } from '../stores/prompt';
+import { setPrompt } from '../model/prompt';
 
 const GenerateButton = () => {
   const handleGeneratePrompt = async () => {

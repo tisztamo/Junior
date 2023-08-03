@@ -1,72 +1,50 @@
 # Working set
 
-src/frontend/components/CommitMessageInput.jsx:
 ```
-import { onCleanup } from 'solid-js';
-import { commitMessage, setCommitMessage } from '../stores/commitMessage';
-import monitorChangeSignal from '../stores/monitorChange';
-
-const CommitMessageInput = (props) => {
-  // Start monitoring when mounting
-  monitorChangeSignal();
-
-  const handleChange = (e) => {
-    setCommitMessage(e.target.value);
-  };
-
-  return (
-    <input type="text" className="w-64 px-4 py-2 border rounded" placeholder="Commit message..." value={commitMessage()} onInput={handleChange} />
-  );
-};
-
-export default CommitMessageInput;
+src/frontend/
+├── App.jsx
+├── assets/...
+├── components/...
+├── fetchTasks.js
+├── generatePrompt.js
+├── getBaseUrl.js
+├── index.html
+├── index.jsx
+├── postcss.config.cjs
+├── service/...
+├── startVite.js
+├── stores/...
+├── styles/...
+├── tailwind.config.cjs
+├── vite.config.js
 
 ```
-
-src/frontend/stores/monitorChange.js:
 ```
-import { createEffect } from 'solid-js';
-import { change } from '../stores/change';
-import { setCommitMessage } from '../stores/commitMessage';
-
-let monitoring = false;
-
-const monitorChangeSignal = () => {
-  if (monitoring) return;
-
-  monitoring = true;
-
-  createEffect(() => {
-    const newChangeContent = change();
-    const goalLineMatch = newChangeContent.match(/goal="(.+?)"/);
-    
-    if (goalLineMatch) {
-      const goalValue = goalLineMatch[1];
-      
-      setCommitMessage(goalValue);
-    }
-  });
-};
-
-export default monitorChangeSignal;
+src/frontend/stores/
+├── change.js
+├── commitMessage.js
+├── executionResult.js
+├── gitStatus.js
+├── monitorChange.js
+├── prompt.js
+├── promptDescriptor.js
+├── selectedTask.js
 
 ```
-
 
 # Task
 
-Refactor!
+Move the following files to the specified target dirs!
 
-Rename monitorChangeSignal to monitorChange and add a short descriptive comment about the function to the very beginning of the file Remove onCleanup import from CommitMessageInput
+Find out the best target dir if it is not specified!
 
+You need to follow dependencies to maintain coherence.
 
+Before executing, write a concise plan! The plan should show:
+ - How do you avoid breaking other parts of the code.
+ - If you had to choose, your way of thinking.
 
-## Project Specifics
-
-- Every js file should *only export a single function*!
-- Use *ES6 imports*!
-- Prefer *async/await* over promises!
-- The frontend uses *Solidjs*, edit .jsx file accordingly
+Rename src/frontend/stores to src/frontend/model
 
 
 # Output Format

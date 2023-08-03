@@ -1,5 +1,5 @@
 import { onMount, createEffect } from 'solid-js';
-import { gitStatus } from '../stores/gitStatus';
+import { gitStatus } from '../model/gitStatus';
 import { fetchGitStatus } from '../service/fetchGitStatus';
 
 const GitStatusDisplay = () => {
