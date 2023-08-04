@@ -1,63 +1,40 @@
 # Working set
 
-src/frontend/styles/styles.css:
+src/frontend/App.jsx:
 ```
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
-@import './markdown.css';
+import GenerateButton from './components/GenerateButton';
+import ExecuteButton from './components/ExecuteButton';
+import RollbackButton from './components/RollbackButton';
+import CommitButton from './components/CommitButton';
+import PromptDisplay from './components/PromptDisplay';
+import TasksList from './components/TasksList';
+import PromptDescriptor from './components/PromptDescriptor';
+import NavBar from './components/NavBar';
+import ExecutionResultDisplay from './components/ExecutionResultDisplay';
+import GitStatusDisplay from './components/GitStatusDisplay';
+import CommitMessageInput from './components/CommitMessageInput';
 
-```
+const App = () => {
+  return (
+    <div id="app" class="m-2 bg-maindark:bg-dark-background bg-light-background dark:text-dark-text text-light-text">
+      <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
+        <NavBar />
+        <TasksList />
+        <PromptDescriptor />
+        <GenerateButton />
+        <PromptDisplay />
+        <ExecuteButton />
+        <ExecutionResultDisplay />
+        <GitStatusDisplay />
+        <CommitMessageInput />
+        <CommitButton />
+        <RollbackButton />
+      </div>
+    </div>
+  );
+};
 
-src/frontend/tailwind.config.cjs:
-```
-module.exports = {
-  darkMode: 'class',
-  content: [__dirname + '/**/*.html', __dirname + '/**/*.jsx'],
-  theme: {
-    screens: {
-      'xs': '320px',
-      'sm': '640px',
-      'md': '768px',
-      'lg': '1024px',
-      'xl': '1280px',
-      '2xl': '1536px',
-    },
-    extend: {
-      spacing: {
-        '72': '18rem',
-        '84': '21rem',
-        '96': '24rem',
-        '128': '32rem',
-      },
-      fontSize: {
-        'btn': '1.5rem',
-      },
-      padding: {
-        'btn': '1.5rem',
-      },
-      maxWidth: {
-        'desktop': '640px',
-      },
-      colors: {
-        light: {
-          text: '#1a202c',
-          background: '#f7fafc',
-          emphasize: '#e2e8f0', // New color for emphasizing a component
-        },
-        dark: {
-          text: '#f7fafc',
-          background: '#1a202c',
-          emphasize: '#2d3748', // New color for emphasizing a component in dark mode
-        },
-      },
-    },
-  },
-  variants: {
-    extend: {},
-  },
-  plugins: [],
-}
+export default App;
 
 ```
 
@@ -71,24 +48,8 @@ Implement the following feature!
 
 Requirements:
 
-Create styles/colors.css and import it from styles.css
-Define CSS variables for the colors text, background and emphasize, with separate values for :root and for .dark
-In tailwind config, use those variables instead of the constants, eliminate &#34;light&#34; and &#34;dark&#34; colors there and introduce the use of backgroundColor!
-An example from the tailwind config of another project just to see what I mean:
-
-colors: {
-  primary: &#34;var(--primary-color)&#34;,
-  line: &#34;var(--line-color)&#34;,
-  main: &#34;var(--text-color)&#34;,
-  ln2: &#34;var(--main-bg-2)&#34;,
-  emphasize: &#34;var(--emphasize-color)&#34;
-},
-backgroundColor: {
-  main: &#34;var(--main-bg)&#34;,
-  main2: &#34;var(--main-bg-2)&#34;,
-  chart: &#34;var(--chart-bg)&#34;,
-  line: &#34;var(--line-color)&#34;,
-},
+Remove every bg and text coloring classes from the app div and add bg-main!
+Also replace m-2 with p-2 there!
 
 
 

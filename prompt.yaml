@@ -1,24 +1,7 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/styles/styles.css
-  - src/frontend/tailwind.config.cjs
+  - src/frontend/App.jsx
 requirements: |
-  Create styles/colors.css and import it from styles.css
-  Define CSS variables for the colors text, background and emphasize, with separate values for :root and for .dark
-  In tailwind config, use those variables instead of the constants, eliminate "light" and "dark" colors there and introduce the use of backgroundColor!
-  An example from the tailwind config of another project just to see what I mean:
-
-  colors: {
-    primary: "var(--primary-color)",
-    line: "var(--line-color)",
-    main: "var(--text-color)",
-    ln2: "var(--main-bg-2)",
-    emphasize: "var(--emphasize-color)"
-  },
-  backgroundColor: {
-    main: "var(--main-bg)",
-    main2: "var(--main-bg-2)",
-    chart: "var(--chart-bg)",
-    line: "var(--line-color)",
-  },
+  Remove every bg and text coloring classes from the app div and add bg-main!
+  Also replace m-2 with p-2 there!
 os: OSX
