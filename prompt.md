@@ -1,64 +1,19 @@
 # Working set
 
-src/frontend/tailwind.config.cjs:
-```
-module.exports = {
-  darkMode: 'class',
-  content: [__dirname + '/**/*.html', __dirname + '/**/*.jsx'],
-  theme: {
-    screens: {
-      'xs': '320px',
-      'sm': '640px',
-      'md': '768px',
-      'lg': '1024px',
-      'xl': '1280px',
-      '2xl': '1536px',
-    },
-    extend: {
-      spacing: {
-        '72': '18rem',
-        '84': '21rem',
-        '96': '24rem',
-        '128': '32rem',
-      },
-      fontSize: {
-        'btn': '1.5rem',
-      },
-      padding: {
-        'btn': '1.5rem',
-      },
-      maxWidth: {
-        'desktop': '640px',
-      },
-      colors: {
-        text: "var(--text-color)",
-        emphasize: "var(--emphasize-color)",
-      },
-      backgroundColor: {
-        main: "var(--background-color)",
-      },
-    },
-  },
-  variants: {
-    extend: {},
-  },
-  plugins: [],
-}
-
-```
-
 src/frontend/styles/colors.css:
 ```
 :root {
   --text-color: #1a202c;
   --background-color: #f7fafc;
   --emphasize-color: #e2e8f0;
+  --background-emphasize-color: #e5e7eb;
 }
 
 .dark {
   --text-color: #f7fafc;
   --background-color: #1a202c;
   --emphasize-color: #2d3748;
+  --background-emphasize-color: #2c2f33;
 }
 
 ```
@@ -73,7 +28,7 @@ Implement the following feature!
 
 Requirements:
 
-Add --background-emphasize-color variable to colors.css and ue it as &#34;emphasize&#34; backgroundColor in tailwind
+Change --emphasize-color to be close but visibly different from --text-color! Change --background-emphasize-color to be close but visibly different from  to be close but visibly different from background-color!
 
 
 

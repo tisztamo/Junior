@@ -1,7 +1,7 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/tailwind.config.cjs
   - src/frontend/styles/colors.css
 requirements: >
-  Add --background-emphasize-color variable to colors.css and ue it as "emphasize" backgroundColor in tailwind
+  Change --emphasize-color to be close but visibly different from --text-color!
+  Change --background-emphasize-color to be close but visibly different from  to be close but visibly different from background-color!
 os: OSX
