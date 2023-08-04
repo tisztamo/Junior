@@ -1,7 +1,9 @@
 task: prompt/task/feature/implement.md
 attention:
   - src/frontend/App.jsx
+  - src/frontend/components/CommitMessageInput.jsx
+  - src/frontend/components/TasksList.jsx
 requirements: |
-  Remove every bg and text coloring classes from the app div and add bg-main!
-  Also replace m-2 with p-2 there!
+  Add "text-text" class to the app div
+  Remove every coloring classes from CommitMessageInput and TasksList, and replace them with "bg-emphasize text-emphasize"
 os: OSX

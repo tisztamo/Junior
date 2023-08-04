@@ -12,7 +12,7 @@ import CommitMessageInput from './components/CommitMessageInput';
 
 const App = () => {
   return (
-    <div id="app" class="p-2 bg-main">
+    <div id="app" class="p-2 bg-main text-text">
       <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
         <NavBar />
         <TasksList />

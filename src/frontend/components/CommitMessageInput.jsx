@@ -10,7 +10,7 @@ const CommitMessageInput = (props) => {
   };
 
   return (
-    <input type="text" className="w-full px-4 py-2 border rounded dark:bg-dark-emphasize bg-light-emphasize" placeholder="Commit message..." value={commitMessage()} onInput={handleChange} />
+    <input type="text" className="w-full px-4 py-2 border rounded bg-emphasize text-emphasize" placeholder="Commit message..." value={commitMessage()} onInput={handleChange} />
   );
 };
 

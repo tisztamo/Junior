@@ -16,7 +16,7 @@ import CommitMessageInput from './components/CommitMessageInput';
 
 const App = () => {
   return (
-    <div id="app" class="m-2 bg-maindark:bg-dark-background bg-light-background dark:text-dark-text text-light-text">
+    <div id="app" class="p-2 bg-main">
       <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
         <NavBar />
         <TasksList />
@@ -38,6 +38,62 @@ export default App;
 
 ```
 
+src/frontend/components/CommitMessageInput.jsx:
+```
+import { commitMessage, setCommitMessage } from '../model/commitMessage';
+import monitorChange from '../model/monitorChange';
+
+const CommitMessageInput = (props) => {
+  // Start monitoring when mounting
+  monitorChange();
+
+  const handleChange = (e) => {
+    setCommitMessage(e.target.value);
+  };
+
+  return (
+    <input type="text" className="w-full px-4 py-2 border rounded dark:bg-dark-emphasize bg-light-emphasize" placeholder="Commit message..." value={commitMessage()} onInput={handleChange} />
+  );
+};
+
+export default CommitMessageInput;
+
+```
+
+src/frontend/components/TasksList.jsx:
+```
+import { onMount, createEffect } from 'solid-js';
+import { fetchTasks } from '../fetchTasks';
+import { handleTaskChange } from '../service/handleTaskChange';
+import { selectedTask, setSelectedTask } from '../model/selectedTask';
+import { promptDescriptor } from '../model/promptDescriptor';
+import { parseYamlAndGetTask } from '../service/parseYamlAndGetTask';
+
+const TasksList = () => {
+  const tasks = fetchTasks();
+
+  createEffect(() => {
+    const descriptor = promptDescriptor();
+    if (descriptor !== '') {
+      const task = parseYamlAndGetTask(descriptor);
+      setSelectedTask(task);
+    }
+  });
+
+  return (
+    <div class="w-full flex justify-start dark:bg-dark-emphasize bg-light-emphasize p-2 rounded">
+      <label class="mr-2">Task:</label>
+      <select class="w-full dark:bg-dark-emphasize bg-light-emphasize" value={selectedTask()} onChange={e => handleTaskChange(e)}>
+        {tasks().map(task => <option value={task}>{task}</option>)}
+      </select>
+    </div>
+  );
+};
+
+export default TasksList;
+
+```
+
 
 # Task
 
@@ -48,8 +104,8 @@ Implement the following feature!
 
 Requirements:
 
-Remove every bg and text coloring classes from the app div and add bg-main!
-Also replace m-2 with p-2 there!
+Add &#34;text-text&#34; class to the app div
+Remove every coloring classes from CommitMessageInput and TasksList, and replace them with &#34;bg-emphasize text-emphasize&#34;
 
 
 
