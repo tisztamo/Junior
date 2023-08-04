@@ -1,96 +1,65 @@
 # Working set
 
-src/frontend/App.jsx:
+src/frontend/tailwind.config.cjs:
 ```
-import GenerateButton from './components/GenerateButton';
-import ExecuteButton from './components/ExecuteButton';
-import RollbackButton from './components/RollbackButton';
-import CommitButton from './components/CommitButton';
-import PromptDisplay from './components/PromptDisplay';
-import TasksList from './components/TasksList';
-import PromptDescriptor from './components/PromptDescriptor';
-import NavBar from './components/NavBar';
-import ExecutionResultDisplay from './components/ExecutionResultDisplay';
-import GitStatusDisplay from './components/GitStatusDisplay';
-import CommitMessageInput from './components/CommitMessageInput';
-
-const App = () => {
-  return (
-    <div id="app" class="p-2 bg-main">
-      <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
-        <NavBar />
-        <TasksList />
-        <PromptDescriptor />
-        <GenerateButton />
-        <PromptDisplay />
-        <ExecuteButton />
-        <ExecutionResultDisplay />
-        <GitStatusDisplay />
-        <CommitMessageInput />
-        <CommitButton />
-        <RollbackButton />
-      </div>
-    </div>
-  );
-};
-
-export default App;
-
-```
-
-src/frontend/components/CommitMessageInput.jsx:
-```
-import { commitMessage, setCommitMessage } from '../model/commitMessage';
-import monitorChange from '../model/monitorChange';
-
-const CommitMessageInput = (props) => {
-  // Start monitoring when mounting
-  monitorChange();
-
-  const handleChange = (e) => {
-    setCommitMessage(e.target.value);
-  };
-
-  return (
-    <input type="text" className="w-full px-4 py-2 border rounded dark:bg-dark-emphasize bg-light-emphasize" placeholder="Commit message..." value={commitMessage()} onInput={handleChange} />
-  );
-};
-
-export default CommitMessageInput;
+module.exports = {
+  darkMode: 'class',
+  content: [__dirname + '/**/*.html', __dirname + '/**/*.jsx'],
+  theme: {
+    screens: {
+      'xs': '320px',
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px',
+      'xl': '1280px',
+      '2xl': '1536px',
+    },
+    extend: {
+      spacing: {
+        '72': '18rem',
+        '84': '21rem',
+        '96': '24rem',
+        '128': '32rem',
+      },
+      fontSize: {
+        'btn': '1.5rem',
+      },
+      padding: {
+        'btn': '1.5rem',
+      },
+      maxWidth: {
+        'desktop': '640px',
+      },
+      colors: {
+        text: "var(--text-color)",
+        emphasize: "var(--emphasize-color)",
+      },
+      backgroundColor: {
+        main: "var(--background-color)",
+      },
+    },
+  },
+  variants: {
+    extend: {},
+  },
+  plugins: [],
+}
 
 ```
 
-src/frontend/components/TasksList.jsx:
+src/frontend/styles/colors.css:
 ```
-import { onMount, createEffect } from 'solid-js';
-import { fetchTasks } from '../fetchTasks';
-import { handleTaskChange } from '../service/handleTaskChange';
-import { selectedTask, setSelectedTask } from '../model/selectedTask';
-import { promptDescriptor } from '../model/promptDescriptor';
-import { parseYamlAndGetTask } from '../service/parseYamlAndGetTask';
+:root {
+  --text-color: #1a202c;
+  --background-color: #f7fafc;
+  --emphasize-color: #e2e8f0;
+}
 
-const TasksList = () => {
-  const tasks = fetchTasks();
-
-  createEffect(() => {
-    const descriptor = promptDescriptor();
-    if (descriptor !== '') {
-      const task = parseYamlAndGetTask(descriptor);
-      setSelectedTask(task);
-    }
-  });
-
-  return (
-    <div class="w-full flex justify-start dark:bg-dark-emphasize bg-light-emphasize p-2 rounded">
-      <label class="mr-2">Task:</label>
-      <select class="w-full dark:bg-dark-emphasize bg-light-emphasize" value={selectedTask()} onChange={e => handleTaskChange(e)}>
-        {tasks().map(task => <option value={task}>{task}</option>)}
-      </select>
-    </div>
-  );
-};
-
-export default TasksList;
+.dark {
+  --text-color: #f7fafc;
+  --background-color: #1a202c;
+  --emphasize-color: #2d3748;
+}
 
 ```
 
@@ -104,8 +73,7 @@ Implement the following feature!
 
 Requirements:
 
-Add &#34;text-text&#34; class to the app div
-Remove every coloring classes from CommitMessageInput and TasksList, and replace them with &#34;bg-emphasize text-emphasize&#34;
+Add --background-emphasize-color variable to colors.css and ue it as &#34;emphasize&#34; backgroundColor in tailwind
 
 
 

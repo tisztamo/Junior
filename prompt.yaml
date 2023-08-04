@@ -1,9 +1,7 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/App.jsx
-  - src/frontend/components/CommitMessageInput.jsx
-  - src/frontend/components/TasksList.jsx
-requirements: |
-  Add "text-text" class to the app div
-  Remove every coloring classes from CommitMessageInput and TasksList, and replace them with "bg-emphasize text-emphasize"
+  - src/frontend/tailwind.config.cjs
+  - src/frontend/styles/colors.css
+requirements: >
+  Add --background-emphasize-color variable to colors.css and ue it as "emphasize" backgroundColor in tailwind
 os: OSX

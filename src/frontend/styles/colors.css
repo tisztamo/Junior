@@ -2,10 +2,12 @@
   --text-color: #1a202c;
   --background-color: #f7fafc;
   --emphasize-color: #e2e8f0;
+  --background-emphasize-color: #e5e7eb;
 }
 
 .dark {
   --text-color: #f7fafc;
   --background-color: #1a202c;
   --emphasize-color: #2d3748;
+  --background-emphasize-color: #2c2f33;
 }
