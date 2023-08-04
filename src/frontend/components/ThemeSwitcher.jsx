@@ -5,7 +5,8 @@ const ThemeSwitcher = () => {
 
   createEffect(() => {
     const currentTheme = theme();
-    document.body.className = currentTheme === 'dark' ? 'dark' : 'light'; // Fixed line for light mode
+    const themeClass = currentTheme === 'dark' ? 'dark' : 'light';
+    document.body.className = [themeClass, 'bg-main', 'text-text'].join(' '); // Adding classes 'bg-main' and 'text-text' to the body
     localStorage.setItem('theme', currentTheme);
   });
 

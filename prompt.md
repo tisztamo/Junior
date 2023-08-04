@@ -1,54 +1,86 @@
 # Working set
 
-src/frontend/styles/colors.css:
+src/frontend/index.html:
 ```
-:root {
-  --text-color: #1a202c;
-  --background-color: #f7fafc;
-  --emphasize-color: #16181f;
-  --background-emphasize-color: #f2f4f6;
-}
-
-.dark {
-  --text-color: #f7fafc;
-  --background-color: #1a202c;
-  --emphasize-color: #f2f4f6;
-  --background-emphasize-color: #141618;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
+  <title>Junior</title>
+</head>
+<body>
+  <div id="app"></div>
+  <script type="module" src="/index.jsx"></script>
+</body>
+</html>
 
 ```
 
-src/frontend/styles/markdown.css:
+src/frontend/App.jsx:
 ```
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+import GenerateButton from './components/GenerateButton';
+import ExecuteButton from './components/ExecuteButton';
+import RollbackButton from './components/RollbackButton';
+import CommitButton from './components/CommitButton';
+import PromptDisplay from './components/PromptDisplay';
+import TasksList from './components/TasksList';
+import PromptDescriptor from './components/PromptDescriptor';
+import NavBar from './components/NavBar';
+import ExecutionResultDisplay from './components/ExecutionResultDisplay';
+import GitStatusDisplay from './components/GitStatusDisplay';
+import CommitMessageInput from './components/CommitMessageInput';
 
-.markdown {
-  & h1 {
-    @apply text-4xl font-bold mb-4;
-  }
+const App = () => {
+  return (
+    <div id="app" class="p-2 bg-main text-text">
+      <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
+        <NavBar />
+        <TasksList />
+        <PromptDescriptor />
+        <GenerateButton />
+        <PromptDisplay />
+        <ExecuteButton />
+        <ExecutionResultDisplay />
+        <GitStatusDisplay />
+        <CommitMessageInput />
+        <CommitButton />
+        <RollbackButton />
+      </div>
+    </div>
+  );
+};
 
-  & h2 {
-    @apply text-3xl font-bold mb-3;
-  }
+export default App;
 
-  & h3 {
-    @apply text-2xl font-semibold mb-2;
-  }
+```
 
-  & p {
-    @apply text-base font-normal mb-4;
-  }
+src/frontend/components/ThemeSwitcher.jsx:
+```
+import { createEffect, createSignal } from 'solid-js';
 
-  & ul, & ol {
-    @apply list-decimal list-inside mb-4;
-  }
+const ThemeSwitcher = () => {
+  const [theme, setTheme] = createSignal(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
 
-  & pre {
-    @apply bg-gray-100 p-4 font-mono;
-  }
-}
+  createEffect(() => {
+    const currentTheme = theme();
+    document.body.className = currentTheme === 'dark' ? 'dark' : 'light'; // Fixed line for light mode
+    localStorage.setItem('theme', currentTheme);
+  });
+
+  const toggleTheme = () => {
+    setTheme(theme() === 'dark' ? 'light' : 'dark');
+  };
+
+  return (
+    <button onClick={toggleTheme} class="text-xl cursor-pointer">
+      {theme() === 'dark' ? '🌙' : '☀️'} {/* Unicode symbols for dark and light modes */}
+    </button>
+  );
+};
+
+export default ThemeSwitcher;
 
 ```
 
@@ -62,7 +94,7 @@ Implement the following feature!
 
 Requirements:
 
-Use the --emphasize-color and --background-emphasize-color variables for code blocks.
+Move bg-main text-text to the body! Preserve existing classes on the body when switching theme!
 
 
 

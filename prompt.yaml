@@ -1,7 +1,9 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/styles/colors.css
-  - src/frontend/styles/markdown.css
+  - src/frontend/index.html
+  - src/frontend/App.jsx
+  - src/frontend/components/ThemeSwitcher.jsx
 requirements: >
-  Use the --emphasize-color and --background-emphasize-color variables for code blocks.
+  Move bg-main text-text to the body! Preserve existing classes on the body when
+  switching theme!
 os: OSX
