@@ -1,8 +1,10 @@
 #!/bin/sh
 set -e
-goal="Replace text input with textarea in ExecuteButton"
+goal="Save content and execute change on paste"
 echo "Plan:"
-echo "1. Modify the ExecuteButton.jsx file to replace the input field with a single-row textarea."
+echo "1. Modify ExecuteButton.jsx to handle the onPaste event in the textarea."
+echo "2. Shorten the placeholder text to fit within the button's width."
+echo "3. Trigger the execution immediately upon paste."
 
 cat > src/frontend/components/ExecuteButton.jsx << 'EOF'
 import { createEffect, createSignal } from 'solid-js';
@@ -14,15 +16,17 @@ const ExecuteButton = () => {
   const [inputAvailable, setInputAvailable] = createSignal(true);
   const [changeInput, setChangeInput] = createSignal('');
 
-  const handleExecuteChange = async () => {
-    let change = changeInput();
-    if (inputAvailable() && navigator.clipboard) {
-      change = await navigator.clipboard.readText();
-    }
+  const handleExecuteChange = async (change) => {
     const response = await executeChange(change);
     setChange(change);
     setExecutionResult(response.output);
     console.log(response.output);
+  };
+
+  const handlePaste = async (e) => {
+    const paste = (e.clipboardData || window.clipboardData).getData('text');
+    setChangeInput(paste);
+    handleExecuteChange(paste);
   };
 
   // Check if clipboard reading is available
@@ -40,9 +44,9 @@ const ExecuteButton = () => {
         <textarea
           rows="1"
           class="w-full px-2 py-2 bg-white text-black resize-none"
-          placeholder="Paste the change here to execute"
+          placeholder="Paste here to execute"
           value={changeInput()}
-          onInput={(e) => setChangeInput(e.currentTarget.value)}
+          onPaste={handlePaste}
         />
       )}
     </button>

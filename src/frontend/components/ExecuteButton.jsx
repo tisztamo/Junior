@@ -7,15 +7,17 @@ const ExecuteButton = () => {
   const [inputAvailable, setInputAvailable] = createSignal(true);
   const [changeInput, setChangeInput] = createSignal('');
 
-  const handleExecuteChange = async () => {
-    let change = changeInput();
-    if (inputAvailable() && navigator.clipboard) {
-      change = await navigator.clipboard.readText();
-    }
+  const handleExecuteChange = async (change) => {
     const response = await executeChange(change);
     setChange(change);
     setExecutionResult(response.output);
     console.log(response.output);
+  };
+
+  const handlePaste = async (e) => {
+    const paste = (e.clipboardData || window.clipboardData).getData('text');
+    setChangeInput(paste);
+    handleExecuteChange(paste);
   };
 
   // Check if clipboard reading is available
@@ -33,9 +35,9 @@ const ExecuteButton = () => {
         <textarea
           rows="1"
           class="w-full px-2 py-2 bg-white text-black resize-none"
-          placeholder="Paste the change here to execute"
+          placeholder="Paste here to execute"
           value={changeInput()}
-          onInput={(e) => setChangeInput(e.currentTarget.value)}
+          onPaste={handlePaste}
         />
       )}
     </button>

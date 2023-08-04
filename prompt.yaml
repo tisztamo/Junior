@@ -2,6 +2,5 @@ task: prompt/task/feature/implement.md
 attention:
   - src/frontend/components/ExecuteButton.jsx
 requirements: >
-  Use a textarea instead of the text input to prevent losing newline characters.
-  Make it looking single-row.
+  When the user pastes something to the textarea, also save its content and execute the change.
 os: OSX
