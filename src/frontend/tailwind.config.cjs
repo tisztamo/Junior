@@ -27,16 +27,11 @@ module.exports = {
         'desktop': '640px',
       },
       colors: {
-        light: {
-          text: '#1a202c',
-          background: '#f7fafc',
-          emphasize: '#e2e8f0', // New color for emphasizing a component
-        },
-        dark: {
-          text: '#f7fafc',
-          background: '#1a202c',
-          emphasize: '#2d3748', // New color for emphasizing a component in dark mode
-        },
+        text: "var(--text-color)",
+        emphasize: "var(--emphasize-color)",
+      },
+      backgroundColor: {
+        main: "var(--background-color)",
       },
     },
   },

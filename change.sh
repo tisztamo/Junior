@@ -1,62 +1,82 @@
 #!/bin/sh
 set -e
-goal="Coloring select tag and inputs to be dark theme-aware"
+goal="Implement new styles and color configuration"
 echo "Plan:"
-echo "1. Modify CommitMessageInput.jsx to add the emphasize tailwind color class for dark and light modes."
-echo "2. Modify TasksList.jsx to add the emphasize tailwind color class for dark and light modes to the select tag."
+echo "1. Create a new file styles/colors.css to define the CSS variables for text, background, and emphasize colors."
+echo "2. Modify src/frontend/styles/styles.css to import the new styles/colors.css."
+echo "3. Update src/frontend/tailwind.config.cjs to use the defined CSS variables for colors, remove unnecessary configurations, and introduce backgroundColor usage."
 
-# Modifying CommitMessageInput.jsx to add dark theme-aware classes
-cat << 'EOF' > src/frontend/components/CommitMessageInput.jsx
-import { commitMessage, setCommitMessage } from '../model/commitMessage';
-import monitorChange from '../model/monitorChange';
+# Step 1: Create a new file styles/colors.css
+cat << 'EOF' > src/frontend/styles/colors.css
+:root {
+  --text-color: #1a202c;
+  --background-color: #f7fafc;
+  --emphasize-color: #e2e8f0;
+}
 
-const CommitMessageInput = (props) => {
-  // Start monitoring when mounting
-  monitorChange();
-
-  const handleChange = (e) => {
-    setCommitMessage(e.target.value);
-  };
-
-  return (
-    <input type="text" className="w-full px-4 py-2 border rounded dark:bg-dark-emphasize bg-light-emphasize" placeholder="Commit message..." value={commitMessage()} onInput={handleChange} />
-  );
-};
-
-export default CommitMessageInput;
+.dark {
+  --text-color: #f7fafc;
+  --background-color: #1a202c;
+  --emphasize-color: #2d3748;
+}
 EOF
+echo "Created styles/colors.css."
 
-# Modifying TasksList.jsx to add dark theme-aware classes to the select tag
-cat << 'EOF' > src/frontend/components/TasksList.jsx
-import { onMount, createEffect } from 'solid-js';
-import { fetchTasks } from '../fetchTasks';
-import { handleTaskChange } from '../service/handleTaskChange';
-import { selectedTask, setSelectedTask } from '../model/selectedTask';
-import { promptDescriptor } from '../model/promptDescriptor';
-import { parseYamlAndGetTask } from '../service/parseYamlAndGetTask';
-
-const TasksList = () => {
-  const tasks = fetchTasks();
-
-  createEffect(() => {
-    const descriptor = promptDescriptor();
-    if (descriptor !== '') {
-      const task = parseYamlAndGetTask(descriptor);
-      setSelectedTask(task);
-    }
-  });
-
-  return (
-    <div class="w-full flex justify-start dark:bg-dark-emphasize bg-light-emphasize p-2 rounded">
-      <label class="mr-2">Task:</label>
-      <select class="w-full dark:bg-dark-emphasize bg-light-emphasize" value={selectedTask()} onChange={e => handleTaskChange(e)}>
-        {tasks().map(task => <option value={task}>{task}</option>)}
-      </select>
-    </div>
-  );
-};
-
-export default TasksList;
+# Step 2: Modify src/frontend/styles/styles.css to import the new styles/colors.css
+cat << 'EOF' > src/frontend/styles/styles.css
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+@import './colors.css';
+@import './markdown.css';
 EOF
+echo "Modified src/frontend/styles/styles.css."
+
+# Step 3: Update src/frontend/tailwind.config.cjs
+cat << 'EOF' > src/frontend/tailwind.config.cjs
+module.exports = {
+  darkMode: 'class',
+  content: [__dirname + '/**/*.html', __dirname + '/**/*.jsx'],
+  theme: {
+    screens: {
+      'xs': '320px',
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px',
+      'xl': '1280px',
+      '2xl': '1536px',
+    },
+    extend: {
+      spacing: {
+        '72': '18rem',
+        '84': '21rem',
+        '96': '24rem',
+        '128': '32rem',
+      },
+      fontSize: {
+        'btn': '1.5rem',
+      },
+      padding: {
+        'btn': '1.5rem',
+      },
+      maxWidth: {
+        'desktop': '640px',
+      },
+      colors: {
+        text: "var(--text-color)",
+        emphasize: "var(--emphasize-color)",
+      },
+      backgroundColor: {
+        main: "var(--background-color)",
+      },
+    },
+  },
+  variants: {
+    extend: {},
+  },
+  plugins: [],
+}
+EOF
+echo "Updated src/frontend/tailwind.config.cjs."
 
 echo "\033[32mDone: $goal\033[0m\n"

@@ -1,58 +1,11 @@
 # Working set
 
-src/frontend/components/CommitMessageInput.jsx:
+src/frontend/styles/styles.css:
 ```
-import { commitMessage, setCommitMessage } from '../model/commitMessage';
-import monitorChange from '../model/monitorChange';
-
-const CommitMessageInput = (props) => {
-  // Start monitoring when mounting
-  monitorChange();
-
-  const handleChange = (e) => {
-    setCommitMessage(e.target.value);
-  };
-
-  return (
-    <input type="text" className="w-full px-4 py-2 border rounded" placeholder="Commit message..." value={commitMessage()} onInput={handleChange} />
-  );
-};
-
-export default CommitMessageInput;
-
-```
-
-src/frontend/components/TasksList.jsx:
-```
-import { onMount, createEffect } from 'solid-js';
-import { fetchTasks } from '../fetchTasks';
-import { handleTaskChange } from '../service/handleTaskChange';
-import { selectedTask, setSelectedTask } from '../model/selectedTask';
-import { promptDescriptor } from '../model/promptDescriptor';
-import { parseYamlAndGetTask } from '../service/parseYamlAndGetTask';
-
-const TasksList = () => {
-  const tasks = fetchTasks();
-
-  createEffect(() => {
-    const descriptor = promptDescriptor();
-    if (descriptor !== '') {
-      const task = parseYamlAndGetTask(descriptor);
-      setSelectedTask(task);
-    }
-  });
-
-  return (
-    <div class="w-full flex justify-start dark:bg-dark-emphasize bg-light-emphasize p-2 rounded">
-      <label class="mr-2">Task:</label>
-      <select class="w-full" value={selectedTask()} onChange={e => handleTaskChange(e)}>
-        {tasks().map(task => <option value={task}>{task}</option>)}
-      </select>
-    </div>
-  );
-};
-
-export default TasksList;
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+@import './markdown.css';
 
 ```
 
@@ -118,9 +71,24 @@ Implement the following feature!
 
 Requirements:
 
-Color the select tag in tasklist to be dark theme-aware!
-Also make CommitMessageInput and its input dark theme-aware&#34;!
-Only use the emphasize tailwind color name, do not create new ones!
+Create styles/colors.css and import it from styles.css
+Define CSS variables for the colors text, background and emphasize, with separate values for :root and for .dark
+In tailwind config, use those variables instead of the constants, eliminate &#34;light&#34; and &#34;dark&#34; colors there and introduce the use of backgroundColor!
+An example from the tailwind config of another project just to see what I mean:
+
+colors: {
+  primary: &#34;var(--primary-color)&#34;,
+  line: &#34;var(--line-color)&#34;,
+  main: &#34;var(--text-color)&#34;,
+  ln2: &#34;var(--main-bg-2)&#34;,
+  emphasize: &#34;var(--emphasize-color)&#34;
+},
+backgroundColor: {
+  main: &#34;var(--main-bg)&#34;,
+  main2: &#34;var(--main-bg-2)&#34;,
+  chart: &#34;var(--chart-bg)&#34;,
+  line: &#34;var(--line-color)&#34;,
+},
 
 
 
