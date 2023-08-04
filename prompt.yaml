@@ -1,9 +1,13 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/index.html
-  - src/frontend/App.jsx
-  - src/frontend/components/ThemeSwitcher.jsx
+  - src/frontend/components/ExecuteButton.jsx
 requirements: >
-  Move bg-main text-text to the body! Preserve existing classes on the body when
-  switching theme!
+  When navigator.clipboard.readText is unavailable,
+
+  then display an input box inside the button instead of the normal text.
+
+  The placeholder of the input is: "Paste the change here to execute".
+
+  When the user pastes a text into the input, execute it just like the pasted
+  text at button click.
 os: OSX

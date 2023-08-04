@@ -1,73 +1,57 @@
 #!/bin/sh
 set -e
-goal="Move bg-main text-text to the body, preserve classes on theme switch"
+goal="Implement clipboard reading fallback with input box"
 echo "Plan:"
-echo "1. Update the App.jsx file to remove classes 'bg-main' and 'text-text' from the main div."
-echo "2. Modify ThemeSwitcher.jsx to add/remove 'bg-main' and 'text-text' classes to the body along with the theme class."
+echo "1. Modify ExecuteButton.jsx to include a check for navigator.clipboard.readText availability."
+echo "2. If unavailable, render an input box inside the button with placeholder."
+echo "3. Execute the change when text is pasted into the input box."
 
-# Step 1: Update App.jsx
-cat << 'EOF' > src/frontend/App.jsx
-import GenerateButton from './components/GenerateButton';
-import ExecuteButton from './components/ExecuteButton';
-import RollbackButton from './components/RollbackButton';
-import CommitButton from './components/CommitButton';
-import PromptDisplay from './components/PromptDisplay';
-import TasksList from './components/TasksList';
-import PromptDescriptor from './components/PromptDescriptor';
-import NavBar from './components/NavBar';
-import ExecutionResultDisplay from './components/ExecutionResultDisplay';
-import GitStatusDisplay from './components/GitStatusDisplay';
-import CommitMessageInput from './components/CommitMessageInput';
-
-const App = () => {
-  return (
-    <div id="app" class="p-2">
-      <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
-        <NavBar />
-        <TasksList />
-        <PromptDescriptor />
-        <GenerateButton />
-        <PromptDisplay />
-        <ExecuteButton />
-        <ExecutionResultDisplay />
-        <GitStatusDisplay />
-        <CommitMessageInput />
-        <CommitButton />
-        <RollbackButton />
-      </div>
-    </div>
-  );
-};
-
-export default App;
-EOF
-
-# Step 2: Modify ThemeSwitcher.jsx
-cat << 'EOF' > src/frontend/components/ThemeSwitcher.jsx
+cat > src/frontend/components/ExecuteButton.jsx << 'EOF'
 import { createEffect, createSignal } from 'solid-js';
+import { executeChange } from '../service/executeChange';
+import { setExecutionResult } from '../model/executionResult';
+import { setChange } from '../model/change';
 
-const ThemeSwitcher = () => {
-  const [theme, setTheme] = createSignal(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+const ExecuteButton = () => {
+  const [inputAvailable, setInputAvailable] = createSignal(true);
+  const [changeInput, setChangeInput] = createSignal('');
 
-  createEffect(() => {
-    const currentTheme = theme();
-    const themeClass = currentTheme === 'dark' ? 'dark' : 'light';
-    document.body.className = [themeClass, 'bg-main', 'text-text'].join(' '); // Adding classes 'bg-main' and 'text-text' to the body
-    localStorage.setItem('theme', currentTheme);
-  });
-
-  const toggleTheme = () => {
-    setTheme(theme() === 'dark' ? 'light' : 'dark');
+  const handleExecuteChange = async () => {
+    let change = changeInput();
+    if (inputAvailable() && navigator.clipboard) {
+      change = await navigator.clipboard.readText();
+    }
+    const response = await executeChange(change);
+    setChange(change);
+    setExecutionResult(response.output);
+    console.log(response.output);
   };
 
+  // Check if clipboard reading is available
+  createEffect(() => {
+    if (!navigator.clipboard || !navigator.clipboard.readText) {
+      setInputAvailable(false);
+    }
+  });
+
   return (
-    <button onClick={toggleTheme} class="text-xl cursor-pointer">
-      {theme() === 'dark' ? '🌙' : '☀️'} {/* Unicode symbols for dark and light modes */}
+    <button class="w-64 px-4 py-4 bg-orange-300 text-white rounded" onClick={handleExecuteChange}>
+      {inputAvailable() ? (
+        'Paste & Execute Change'
+      ) : (
+        <input
+          type="text"
+          class="w-full px-2 py-2 bg-white text-black"
+          placeholder="Paste the change here to execute"
+          value={changeInput()}
+          onInput={(e) => setChangeInput(e.currentTarget.value)}
+        />
+      )}
     </button>
   );
 };
 
-export default ThemeSwitcher;
+export default ExecuteButton;
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"

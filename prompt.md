@@ -1,86 +1,52 @@
 # Working set
 
-src/frontend/index.html:
-```
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
-  <title>Junior</title>
-</head>
-<body>
-  <div id="app"></div>
-  <script type="module" src="/index.jsx"></script>
-</body>
-</html>
-
-```
-
-src/frontend/App.jsx:
-```
-import GenerateButton from './components/GenerateButton';
-import ExecuteButton from './components/ExecuteButton';
-import RollbackButton from './components/RollbackButton';
-import CommitButton from './components/CommitButton';
-import PromptDisplay from './components/PromptDisplay';
-import TasksList from './components/TasksList';
-import PromptDescriptor from './components/PromptDescriptor';
-import NavBar from './components/NavBar';
-import ExecutionResultDisplay from './components/ExecutionResultDisplay';
-import GitStatusDisplay from './components/GitStatusDisplay';
-import CommitMessageInput from './components/CommitMessageInput';
-
-const App = () => {
-  return (
-    <div id="app" class="p-2 bg-main text-text">
-      <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
-        <NavBar />
-        <TasksList />
-        <PromptDescriptor />
-        <GenerateButton />
-        <PromptDisplay />
-        <ExecuteButton />
-        <ExecutionResultDisplay />
-        <GitStatusDisplay />
-        <CommitMessageInput />
-        <CommitButton />
-        <RollbackButton />
-      </div>
-    </div>
-  );
-};
-
-export default App;
-
-```
-
-src/frontend/components/ThemeSwitcher.jsx:
+src/frontend/components/ExecuteButton.jsx:
 ```
 import { createEffect, createSignal } from 'solid-js';
+import { executeChange } from '../service/executeChange';
+import { setExecutionResult } from '../model/executionResult';
+import { setChange } from '../model/change';
 
-const ThemeSwitcher = () => {
-  const [theme, setTheme] = createSignal(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+const ExecuteButton = () => {
+  const [inputAvailable, setInputAvailable] = createSignal(true);
+  const [changeInput, setChangeInput] = createSignal('');
 
-  createEffect(() => {
-    const currentTheme = theme();
-    document.body.className = currentTheme === 'dark' ? 'dark' : 'light'; // Fixed line for light mode
-    localStorage.setItem('theme', currentTheme);
-  });
-
-  const toggleTheme = () => {
-    setTheme(theme() === 'dark' ? 'light' : 'dark');
+  const handleExecuteChange = async () => {
+    let change = changeInput();
+    if (inputAvailable() && navigator.clipboard) {
+      change = await navigator.clipboard.readText();
+    }
+    const response = await executeChange(change);
+    setChange(change);
+    setExecutionResult(response.output);
+    console.log(response.output);
   };
 
+  // Check if clipboard reading is available
+  createEffect(() => {
+    if (!navigator.clipboard || !navigator.clipboard.readText) {
+      setInputAvailable(false);
+    }
+  });
+
   return (
-    <button onClick={toggleTheme} class="text-xl cursor-pointer">
-      {theme() === 'dark' ? '🌙' : '☀️'} {/* Unicode symbols for dark and light modes */}
+    <button class="w-64 px-4 py-4 bg-orange-300 text-white rounded" onClick={handleExecuteChange}>
+      {inputAvailable() ? (
+        'Paste & Execute Change'
+      ) : (
+        <input
+          type="text"
+          class="w-full px-2 py-2 bg-white text-black"
+          placeholder="Paste the change here to execute"
+          value={changeInput()}
+          onInput={(e) => setChangeInput(e.currentTarget.value)}
+        />
+      )}
     </button>
   );
 };
 
-export default ThemeSwitcher;
+export default ExecuteButton;
 
 ```
 
@@ -94,7 +60,10 @@ Implement the following feature!
 
 Requirements:
 
-Move bg-main text-text to the body! Preserve existing classes on the body when switching theme!
+When navigator.clipboard.readText is unavailable,
+then display an input box inside the button instead of the normal text.
+The placeholder of the input is: &#34;Paste the change here to execute&#34;.
+When the user pastes a text into the input, execute it just like the pasted text at button click.
 
 
 
