@@ -1,8 +1,8 @@
-task: prompt/task/bug/fix.md
+task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/tailwind.config.cjs
-  - src/frontend/components/ThemeSwitcher.jsx
-requirements: >
-  The theme switcher switches classes on the body, but nothing happens on the
-  screen.
+  - src/frontend/components/NavBar.jsx
+requirements: |
+  Make the navbar full width using w-full, and redesign its layout:
+  - The theme switch goes to the top right
+  - H1 and the link are in the center horizontally, under each other
 os: OSX

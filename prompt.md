@@ -1,81 +1,50 @@
 # Working set
 
-src/frontend/tailwind.config.cjs:
+src/frontend/components/NavBar.jsx:
 ```
-module.exports = {
-  content: [__dirname + '/**/*.html', __dirname + '/**/*.jsx'],
-  theme: {
-    screens: {
-      'xs': '320px',
-      'sm': '640px',
-      'md': '768px',
-      'lg': '1024px',
-      'xl': '1280px',
-      '2xl': '1536px',
-    },
-    extend: {
-      // Extend the spacing for larger gaps
-      spacing: {
-        '72': '18rem',
-        '84': '21rem',
-        '96': '24rem',
-        '128': '32rem',
-      },
-      // Extend the button styles for larger buttons
-      fontSize: {
-        'btn': '1.5rem',
-      },
-      padding: {
-        'btn': '1.5rem',
-      },
-      // Extend the maxWidth for desktop container
-      maxWidth: {
-        'desktop': '640px',
-      },
-    },
-  },
-  variants: {
-    extend: {},
-  },
-  plugins: [],
-}
+import { createSignal } from 'solid-js';
+import ThemeSwitcher from './ThemeSwitcher';
 
-```
-
-src/frontend/components/ThemeSwitcher.jsx:
-```
-import { createEffect, createSignal } from 'solid-js';
-
-const ThemeSwitcher = () => {
-  const [theme, setTheme] = createSignal(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-
-  createEffect(() => {
-    const currentTheme = theme();
-    document.body.className = currentTheme;
-    localStorage.setItem('theme', currentTheme);
-  });
-
-  const toggleTheme = () => {
-    setTheme(theme() === 'dark' ? 'light' : 'dark');
-  };
+const NavBar = () => {
+  const title = 'Junior';
 
   return (
-    <button onClick={toggleTheme} class="text-xl underline cursor-pointer">
-      {theme() === 'dark' ? 'Light Mode' : 'Dark Mode'}
-    </button>
+    <div class="relative">
+      <div class="absolute top-0 right-0 m-4">
+        <ThemeSwitcher />
+      </div>
+      <h1 class="text-center text-3xl mt-6">{title}</h1>
+      <a href="https://github.com/tisztamo/Junior" class="text-center text-xl underline cursor-pointer">Your AI contributor</a>
+    </div>
   );
 };
 
-export default ThemeSwitcher;
+export default NavBar;
 
 ```
 
 
 # Task
 
-Fix the following issue!
+Implement the following feature!
 
-The theme switcher switches classes on the body, but nothing happens on the screen.
+- Create a plan!
+- Create new files when needed!
+
+Requirements:
+
+Make the navbar full width using w-full, and redesign its layout:
+- The theme switch goes to the top right
+- H1 and the link are in the center horizontally, under each other
+
+
+
+## Project Specifics
+
+- Every js file should *only export a single function*!
+- Use *ES6 imports*!
+- Prefer *async/await* over promises!
+- The frontend uses *Solidjs*, edit .jsx file accordingly
 
 
 # Output Format
