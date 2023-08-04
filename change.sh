@@ -1,23 +1,40 @@
 #!/bin/sh
 set -e
-goal="Change emphasize colors to be visibly different"
+goal="Implement emphasize colors for code blocks"
 echo "Plan:"
-echo "1. Modify the --emphasize-color to be close but visibly different from --text-color."
-echo "2. Modify the --background-emphasize-color to be close but visibly different from --background-color."
+echo "1. Update the markdown.css file to include the --emphasize-color and --background-emphasize-color for code blocks."
 
-cat << 'EOF' > src/frontend/styles/colors.css
-:root {
-  --text-color: #1a202c;
-  --background-color: #f7fafc;
-  --emphasize-color: #16181f;
-  --background-emphasize-color: #f2f4f6;
-}
+cat > src/frontend/styles/markdown.css << 'EOF'
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
-.dark {
-  --text-color: #f7fafc;
-  --background-color: #1a202c;
-  --emphasize-color: #f2f4f6;
-  --background-emphasize-color: #141618;
+.markdown {
+  & h1 {
+    @apply text-4xl font-bold mb-4;
+  }
+
+  & h2 {
+    @apply text-3xl font-bold mb-3;
+  }
+
+  & h3 {
+    @apply text-2xl font-semibold mb-2;
+  }
+
+  & p {
+    @apply text-base font-normal mb-4;
+  }
+
+  & ul, & ol {
+    @apply list-decimal list-inside mb-4;
+  }
+
+  & pre {
+    @apply bg-gray-100 p-4 font-mono;
+    background-color: var(--background-emphasize-color);
+    color: var(--emphasize-color);
+  }
 }
 EOF
 

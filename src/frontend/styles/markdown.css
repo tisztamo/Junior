@@ -25,5 +25,7 @@
 
   & pre {
     @apply bg-gray-100 p-4 font-mono;
+    background-color: var(--background-emphasize-color);
+    color: var(--emphasize-color);
   }
 }

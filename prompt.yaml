@@ -1,7 +1,7 @@
 task: prompt/task/feature/implement.md
 attention:
   - src/frontend/styles/colors.css
+  - src/frontend/styles/markdown.css
 requirements: >
-  Change --emphasize-color to be close but visibly different from --text-color!
-  Change --background-emphasize-color to be close but visibly different from  to be close but visibly different from background-color!
+  Use the --emphasize-color and --background-emphasize-color variables for code blocks.
 os: OSX
