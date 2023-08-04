@@ -1,10 +1,10 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/App.jsx
+  - src/frontend/components/CommitMessageInput.jsx
   - src/frontend/components/TasksList.jsx
   - src/frontend/tailwind.config.cjs
 requirements: |
-  Make TaskList dark theme-aware!
-  Generate new colors in tailwind config that can be generally used
-  for emphasizing a compoment with a background color and replace the hardcoded bg-gray-100
+  Color the select tag in tasklist to be dark theme-aware!
+  Also make CommitMessageInput and its input dark theme-aware"!
+  Only use the emphasize tailwind color name, do not create new ones!
 os: OSX

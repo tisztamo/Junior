@@ -1,40 +1,24 @@
 # Working set
 
-src/frontend/App.jsx:
+src/frontend/components/CommitMessageInput.jsx:
 ```
-import GenerateButton from './components/GenerateButton';
-import ExecuteButton from './components/ExecuteButton';
-import RollbackButton from './components/RollbackButton';
-import CommitButton from './components/CommitButton';
-import PromptDisplay from './components/PromptDisplay';
-import TasksList from './components/TasksList';
-import PromptDescriptor from './components/PromptDescriptor';
-import NavBar from './components/NavBar';
-import ExecutionResultDisplay from './components/ExecutionResultDisplay';
-import GitStatusDisplay from './components/GitStatusDisplay';
-import CommitMessageInput from './components/CommitMessageInput';
+import { commitMessage, setCommitMessage } from '../model/commitMessage';
+import monitorChange from '../model/monitorChange';
 
-const App = () => {
+const CommitMessageInput = (props) => {
+  // Start monitoring when mounting
+  monitorChange();
+
+  const handleChange = (e) => {
+    setCommitMessage(e.target.value);
+  };
+
   return (
-    <div id="app" class="m-2 dark:bg-dark-background bg-light-background dark:text-dark-text text-light-text">
-      <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
-        <NavBar />
-        <TasksList />
-        <PromptDescriptor />
-        <GenerateButton />
-        <PromptDisplay />
-        <ExecuteButton />
-        <ExecutionResultDisplay />
-        <GitStatusDisplay />
-        <CommitMessageInput />
-        <CommitButton />
-        <RollbackButton />
-      </div>
-    </div>
+    <input type="text" className="w-full px-4 py-2 border rounded" placeholder="Commit message..." value={commitMessage()} onInput={handleChange} />
   );
 };
 
-export default App;
+export default CommitMessageInput;
 
 ```
 
@@ -59,7 +43,7 @@ const TasksList = () => {
   });
 
   return (
-    <div class="w-full flex justify-start bg-gray-100 p-2 rounded">
+    <div class="w-full flex justify-start dark:bg-dark-emphasize bg-light-emphasize p-2 rounded">
       <label class="mr-2">Task:</label>
       <select class="w-full" value={selectedTask()} onChange={e => handleTaskChange(e)}>
         {tasks().map(task => <option value={task}>{task}</option>)}
@@ -87,33 +71,31 @@ module.exports = {
       '2xl': '1536px',
     },
     extend: {
-      // Extend the spacing for larger gaps
       spacing: {
         '72': '18rem',
         '84': '21rem',
         '96': '24rem',
         '128': '32rem',
       },
-      // Extend the button styles for larger buttons
       fontSize: {
         'btn': '1.5rem',
       },
       padding: {
         'btn': '1.5rem',
       },
-      // Extend the maxWidth for desktop container
       maxWidth: {
         'desktop': '640px',
       },
-      // Extend the colors for dark and light mode
       colors: {
         light: {
           text: '#1a202c',
           background: '#f7fafc',
+          emphasize: '#e2e8f0', // New color for emphasizing a component
         },
         dark: {
           text: '#f7fafc',
           background: '#1a202c',
+          emphasize: '#2d3748', // New color for emphasizing a component in dark mode
         },
       },
     },
@@ -136,9 +118,9 @@ Implement the following feature!
 
 Requirements:
 
-Make TaskList dark theme-aware!
-Generate new colors in tailwind config that can be generally used
-for emphasizing a compoment with a background color and replace the hardcoded bg-gray-100
+Color the select tag in tasklist to be dark theme-aware!
+Also make CommitMessageInput and its input dark theme-aware&#34;!
+Only use the emphasize tailwind color name, do not create new ones!
 
 
 
