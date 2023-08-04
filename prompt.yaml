@@ -1,12 +1,7 @@
-task: prompt/task/refactor/split.md
+task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/App.jsx
+  - src/frontend/components/ExecuteButton.jsx
 requirements: >
-  Create components for
-    - Prompt Creation (TaskList...PromptDisplay)
-    - Change Execution
-    - Change Inspection (GitStatusDisplay)
-    - Change Finalization
-  And move the corresponding items from App to them.
+  The change text should be read from navigator.clipboard.readText if available,
+  or from the current value of the input otherwise.
 os: OSX
- 

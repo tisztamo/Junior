@@ -7,7 +7,8 @@ const ExecuteButton = () => {
   const [inputAvailable, setInputAvailable] = createSignal(true);
   const [changeInput, setChangeInput] = createSignal('');
 
-  const handleExecuteChange = async (change) => {
+  const handleExecuteChange = async () => {
+    const change = inputAvailable() ? await navigator.clipboard.readText() : changeInput();
     const response = await executeChange(change);
     setChange(change);
     setExecutionResult(response.output);
@@ -17,7 +18,7 @@ const ExecuteButton = () => {
   const handlePaste = async (e) => {
     const paste = (e.clipboardData || window.clipboardData).getData('text');
     setChangeInput(paste);
-    handleExecuteChange(paste);
+    handleExecuteChange();
   };
 
   // Check if clipboard reading is available

@@ -1,106 +1,60 @@
 #!/bin/sh
 set -e
-goal="Refactor App.jsx by splitting into components"
+goal="Implement clipboard reading feature"
 echo "Plan:"
-echo "1. Create PromptCreation.jsx for TaskList to PromptDisplay"
-echo "2. Create ChangeExecution.jsx for ExecuteButton and ExecutionResultDisplay"
-echo "3. Create ChangeInspection.jsx for GitStatusDisplay"
-echo "4. Create ChangeFinalization.jsx for CommitMessageInput, CommitButton, and RollbackButton"
-echo "5. Modify App.jsx to include the new components"
+echo "1. Modify ExecuteButton.jsx to read change text from navigator.clipboard.readText if available, or from the input value otherwise."
+echo "2. Define an async function to handle reading from the clipboard."
+echo "3. Adjust onClick event to accommodate the changes."
 
-# 1. Create PromptCreation.jsx for TaskList to PromptDisplay
-cat <<EOF > src/frontend/components/PromptCreation.jsx
-import TasksList from './TasksList';
-import PromptDescriptor from './PromptDescriptor';
-import GenerateButton from './GenerateButton';
-import PromptDisplay from './PromptDisplay';
+cat > src/frontend/components/ExecuteButton.jsx << 'EOF'
+import { createEffect, createSignal } from 'solid-js';
+import { executeChange } from '../service/executeChange';
+import { setExecutionResult } from '../model/executionResult';
+import { setChange } from '../model/change';
 
-const PromptCreation = () => {
+const ExecuteButton = () => {
+  const [inputAvailable, setInputAvailable] = createSignal(true);
+  const [changeInput, setChangeInput] = createSignal('');
+
+  const handleExecuteChange = async () => {
+    const change = inputAvailable() ? await navigator.clipboard.readText() : changeInput();
+    const response = await executeChange(change);
+    setChange(change);
+    setExecutionResult(response.output);
+    console.log(response.output);
+  };
+
+  const handlePaste = async (e) => {
+    const paste = (e.clipboardData || window.clipboardData).getData('text');
+    setChangeInput(paste);
+    handleExecuteChange();
+  };
+
+  // Check if clipboard reading is available
+  createEffect(() => {
+    if (!navigator.clipboard || !navigator.clipboard.readText) {
+      setInputAvailable(false);
+    }
+  });
+
   return (
-    <>
-      <TasksList />
-      <PromptDescriptor />
-      <GenerateButton />
-      <PromptDisplay />
-    </>
+    <button class="w-64 px-4 py-4 bg-orange-300 text-white rounded" onClick={handleExecuteChange}>
+      {inputAvailable() ? (
+        'Paste & Execute Change'
+      ) : (
+        <textarea
+          rows="1"
+          class="w-full px-2 py-2 bg-white text-black resize-none"
+          placeholder="Paste here to execute"
+          value={changeInput()}
+          onPaste={handlePaste}
+        />
+      )}
+    </button>
   );
 };
 
-export default PromptCreation;
-EOF
-
-# 2. Create ChangeExecution.jsx for ExecuteButton and ExecutionResultDisplay
-cat <<EOF > src/frontend/components/ChangeExecution.jsx
-import ExecuteButton from './ExecuteButton';
-import ExecutionResultDisplay from './ExecutionResultDisplay';
-
-const ChangeExecution = () => {
-  return (
-    <>
-      <ExecuteButton />
-      <ExecutionResultDisplay />
-    </>
-  );
-};
-
-export default ChangeExecution;
-EOF
-
-# 3. Create ChangeInspection.jsx for GitStatusDisplay
-cat <<EOF > src/frontend/components/ChangeInspection.jsx
-import GitStatusDisplay from './GitStatusDisplay';
-
-const ChangeInspection = () => {
-  return (
-    <GitStatusDisplay />
-  );
-};
-
-export default ChangeInspection;
-EOF
-
-# 4. Create ChangeFinalization.jsx for CommitMessageInput, CommitButton, and RollbackButton
-cat <<EOF > src/frontend/components/ChangeFinalization.jsx
-import CommitMessageInput from './CommitMessageInput';
-import CommitButton from './CommitButton';
-import RollbackButton from './RollbackButton';
-
-const ChangeFinalization = () => {
-  return (
-    <>
-      <CommitMessageInput />
-      <CommitButton />
-      <RollbackButton />
-    </>
-  );
-};
-
-export default ChangeFinalization;
-EOF
-
-# 5. Modify App.jsx to include the new components
-cat <<EOF > src/frontend/App.jsx
-import NavBar from './components/NavBar';
-import PromptCreation from './components/PromptCreation';
-import ChangeExecution from './components/ChangeExecution';
-import ChangeInspection from './components/ChangeInspection';
-import ChangeFinalization from './components/ChangeFinalization';
-
-const App = () => {
-  return (
-    <div id="app" class="p-2">
-      <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
-        <NavBar />
-        <PromptCreation />
-        <ChangeExecution />
-        <ChangeInspection />
-        <ChangeFinalization />
-      </div>
-    </div>
-  );
-};
-
-export default App;
+export default ExecuteButton;
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"
