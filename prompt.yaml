@@ -1,6 +1,12 @@
-task: prompt/task/feature/implement.md
+task: prompt/task/refactor/split.md
 attention:
-  - src/frontend/components/ExecuteButton.jsx
+  - src/frontend/App.jsx
 requirements: >
-  When the user pastes something to the textarea, also save its content and execute the change.
+  Create components for
+    - Prompt Creation (TaskList...PromptDisplay)
+    - Change Execution
+    - Change Inspection (GitStatusDisplay)
+    - Change Finalization
+  And move the corresponding items from App to them.
 os: OSX
+ 

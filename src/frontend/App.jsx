@@ -1,30 +1,18 @@
-import GenerateButton from './components/GenerateButton';
-import ExecuteButton from './components/ExecuteButton';
-import RollbackButton from './components/RollbackButton';
-import CommitButton from './components/CommitButton';
-import PromptDisplay from './components/PromptDisplay';
-import TasksList from './components/TasksList';
-import PromptDescriptor from './components/PromptDescriptor';
 import NavBar from './components/NavBar';
-import ExecutionResultDisplay from './components/ExecutionResultDisplay';
-import GitStatusDisplay from './components/GitStatusDisplay';
-import CommitMessageInput from './components/CommitMessageInput';
+import PromptCreation from './components/PromptCreation';
+import ChangeExecution from './components/ChangeExecution';
+import ChangeInspection from './components/ChangeInspection';
+import ChangeFinalization from './components/ChangeFinalization';
 
 const App = () => {
   return (
     <div id="app" class="p-2">
       <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
         <NavBar />
-        <TasksList />
-        <PromptDescriptor />
-        <GenerateButton />
-        <PromptDisplay />
-        <ExecuteButton />
-        <ExecutionResultDisplay />
-        <GitStatusDisplay />
-        <CommitMessageInput />
-        <CommitButton />
-        <RollbackButton />
+        <PromptCreation />
+        <ChangeExecution />
+        <ChangeInspection />
+        <ChangeFinalization />
       </div>
     </div>
   );

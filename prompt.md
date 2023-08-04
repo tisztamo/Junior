@@ -1,75 +1,58 @@
 # Working set
 
-src/frontend/components/ExecuteButton.jsx:
+src/frontend/App.jsx:
 ```
-import { createEffect, createSignal } from 'solid-js';
-import { executeChange } from '../service/executeChange';
-import { setExecutionResult } from '../model/executionResult';
-import { setChange } from '../model/change';
+import GenerateButton from './components/GenerateButton';
+import ExecuteButton from './components/ExecuteButton';
+import RollbackButton from './components/RollbackButton';
+import CommitButton from './components/CommitButton';
+import PromptDisplay from './components/PromptDisplay';
+import TasksList from './components/TasksList';
+import PromptDescriptor from './components/PromptDescriptor';
+import NavBar from './components/NavBar';
+import ExecutionResultDisplay from './components/ExecutionResultDisplay';
+import GitStatusDisplay from './components/GitStatusDisplay';
+import CommitMessageInput from './components/CommitMessageInput';
 
-const ExecuteButton = () => {
-  const [inputAvailable, setInputAvailable] = createSignal(true);
-  const [changeInput, setChangeInput] = createSignal('');
-
-  const handleExecuteChange = async () => {
-    let change = changeInput();
-    if (inputAvailable() && navigator.clipboard) {
-      change = await navigator.clipboard.readText();
-    }
-    const response = await executeChange(change);
-    setChange(change);
-    setExecutionResult(response.output);
-    console.log(response.output);
-  };
-
-  // Check if clipboard reading is available
-  createEffect(() => {
-    if (!navigator.clipboard || !navigator.clipboard.readText) {
-      setInputAvailable(false);
-    }
-  });
-
+const App = () => {
   return (
-    <button class="w-64 px-4 py-4 bg-orange-300 text-white rounded" onClick={handleExecuteChange}>
-      {inputAvailable() ? (
-        'Paste & Execute Change'
-      ) : (
-        <textarea
-          rows="1"
-          class="w-full px-2 py-2 bg-white text-black resize-none"
-          placeholder="Paste the change here to execute"
-          value={changeInput()}
-          onInput={(e) => setChangeInput(e.currentTarget.value)}
-        />
-      )}
-    </button>
+    <div id="app" class="p-2">
+      <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
+        <NavBar />
+        <TasksList />
+        <PromptDescriptor />
+        <GenerateButton />
+        <PromptDisplay />
+        <ExecuteButton />
+        <ExecutionResultDisplay />
+        <GitStatusDisplay />
+        <CommitMessageInput />
+        <CommitButton />
+        <RollbackButton />
+      </div>
+    </div>
   );
 };
 
-export default ExecuteButton;
+export default App;
 
 ```
 
 
 # Task
 
-Implement the following feature!
+## Refactor by split
 
-- Create a plan!
-- Create new files when needed!
+A file is too big. We need to split it into parts.
+Identify the possible parts and refactor the code in separate files!
 
-Requirements:
+Create components for
+  - Prompt Creation (TaskList...PromptDisplay)
+  - Change Execution
+  - Change Inspection (GitStatusDisplay)
+  - Change Finalization
+And move the corresponding items from App to them.
 
-When the user pastes something to the textarea, also save its content and execute the change.
-
-
-
-## Project Specifics
-
-- Every js file should *only export a single function*!
-- Use *ES6 imports*!
-- Prefer *async/await* over promises!
-- The frontend uses *Solidjs*, edit .jsx file accordingly
 
 
 # Output Format
