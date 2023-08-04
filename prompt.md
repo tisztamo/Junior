@@ -1,25 +1,30 @@
 # Working set
 
-src/frontend/components/NavBar.jsx:
+src/frontend/components/ThemeSwitcher.jsx:
 ```
-import { createSignal } from 'solid-js';
-import ThemeSwitcher from './ThemeSwitcher';
+import { createEffect, createSignal } from 'solid-js';
 
-const NavBar = () => {
-  const title = 'Junior';
+const ThemeSwitcher = () => {
+  const [theme, setTheme] = createSignal(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+
+  createEffect(() => {
+    const currentTheme = theme();
+    document.body.className = currentTheme === 'dark' ? 'dark' : ''; // Change this line
+    localStorage.setItem('theme', currentTheme);
+  });
+
+  const toggleTheme = () => {
+    setTheme(theme() === 'dark' ? 'light' : 'dark');
+  };
 
   return (
-    <div class="relative">
-      <div class="absolute top-0 right-0 m-4">
-        <ThemeSwitcher />
-      </div>
-      <h1 class="text-center text-3xl mt-6">{title}</h1>
-      <a href="https://github.com/tisztamo/Junior" class="text-center text-xl underline cursor-pointer">Your AI contributor</a>
-    </div>
+    <button onClick={toggleTheme} class="text-xl underline cursor-pointer">
+      {theme() === 'dark' ? 'Light Mode' : 'Dark Mode'}
+    </button>
   );
 };
 
-export default NavBar;
+export default ThemeSwitcher;
 
 ```
 
@@ -33,9 +38,8 @@ Implement the following feature!
 
 Requirements:
 
-Make the navbar full width using w-full, and redesign its layout:
-- The theme switch goes to the top right
-- H1 and the link are in the center horizontally, under each other
+Use icons in the theme switcher! Unicode is OK if you prefer.
+Remove every text a the underline decoration, only the icon.
 
 
 

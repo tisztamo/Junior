@@ -1,8 +1,7 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/components/NavBar.jsx
+  - src/frontend/components/ThemeSwitcher.jsx
 requirements: |
-  Make the navbar full width using w-full, and redesign its layout:
-  - The theme switch goes to the top right
-  - H1 and the link are in the center horizontally, under each other
+  Use icons in the theme switcher! Unicode is OK if you prefer.
+  Remove every text a the underline decoration, only the icon.
 os: OSX

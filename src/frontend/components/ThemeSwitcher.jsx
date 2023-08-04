@@ -5,7 +5,7 @@ const ThemeSwitcher = () => {
 
   createEffect(() => {
     const currentTheme = theme();
-    document.body.className = currentTheme === 'dark' ? 'dark' : ''; // Change this line
+    document.body.className = currentTheme === 'dark' ? 'dark' : 'light'; // Fixed line for light mode
     localStorage.setItem('theme', currentTheme);
   });
 
@@ -14,8 +14,8 @@ const ThemeSwitcher = () => {
   };
 
   return (
-    <button onClick={toggleTheme} class="text-xl underline cursor-pointer">
-      {theme() === 'dark' ? 'Light Mode' : 'Dark Mode'}
+    <button onClick={toggleTheme} class="text-xl cursor-pointer">
+      {theme() === 'dark' ? '🌙' : '☀️'} {/* Unicode symbols for dark and light modes */}
     </button>
   );
 };

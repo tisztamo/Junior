@@ -1,31 +1,34 @@
 #!/bin/sh
 set -e
-goal="Redesign the navbar layout with specified design"
+goal="Implement theme switcher with icons"
 echo "Plan:"
-echo "1. Modify the NavBar.jsx to make it full width using w-full class."
-echo "2. Rearrange the components within the NavBar.jsx to match the required design."
+echo "1. Modify the ThemeSwitcher.jsx to replace the text and underline with icons."
+echo "2. Use Unicode symbols for dark and light modes."
 
-cat > src/frontend/components/NavBar.jsx << 'EOF'
-import { createSignal } from 'solid-js';
-import ThemeSwitcher from './ThemeSwitcher';
+cat > src/frontend/components/ThemeSwitcher.jsx << 'EOF'
+import { createEffect, createSignal } from 'solid-js';
 
-const NavBar = () => {
-  const title = 'Junior';
+const ThemeSwitcher = () => {
+  const [theme, setTheme] = createSignal(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+
+  createEffect(() => {
+    const currentTheme = theme();
+    document.body.className = currentTheme === 'dark' ? 'dark' : 'light'; // Fixed line for light mode
+    localStorage.setItem('theme', currentTheme);
+  });
+
+  const toggleTheme = () => {
+    setTheme(theme() === 'dark' ? 'light' : 'dark');
+  };
 
   return (
-    <div class="relative w-full">
-      <div class="absolute top-0 right-0 m-4">
-        <ThemeSwitcher />
-      </div>
-      <div class="flex flex-col items-center justify-center">
-        <h1 class="text-center text-3xl mt-6">{title}</h1>
-        <a href="https://github.com/tisztamo/Junior" class="text-center text-xl underline cursor-pointer">Your AI contributor</a>
-      </div>
-    </div>
+    <button onClick={toggleTheme} class="text-xl cursor-pointer">
+      {theme() === 'dark' ? '🌙' : '☀️'} {/* Unicode symbols for dark and light modes */}
+    </button>
   );
 };
 
-export default NavBar;
+export default ThemeSwitcher;
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"
