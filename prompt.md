@@ -1,30 +1,101 @@
 # Working set
 
-src/frontend/components/ThemeSwitcher.jsx:
+src/frontend/index.html:
 ```
-import { createEffect, createSignal } from 'solid-js';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
+  <title>Junior</title>
+</head>
+<body>
+  <div id="app"></div>
+  <script type="module" src="/index.jsx"></script>
+</body>
+</html>
 
-const ThemeSwitcher = () => {
-  const [theme, setTheme] = createSignal(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+```
 
-  createEffect(() => {
-    const currentTheme = theme();
-    document.body.className = currentTheme === 'dark' ? 'dark' : ''; // Change this line
-    localStorage.setItem('theme', currentTheme);
-  });
+src/frontend/App.jsx:
+```
+import GenerateButton from './components/GenerateButton';
+import ExecuteButton from './components/ExecuteButton';
+import RollbackButton from './components/RollbackButton';
+import CommitButton from './components/CommitButton';
+import PromptDisplay from './components/PromptDisplay';
+import TasksList from './components/TasksList';
+import PromptDescriptor from './components/PromptDescriptor';
+import NavBar from './components/NavBar';
+import ExecutionResultDisplay from './components/ExecutionResultDisplay';
+import GitStatusDisplay from './components/GitStatusDisplay';
+import CommitMessageInput from './components/CommitMessageInput';
 
-  const toggleTheme = () => {
-    setTheme(theme() === 'dark' ? 'light' : 'dark');
-  };
-
+const App = () => {
   return (
-    <button onClick={toggleTheme} class="text-xl underline cursor-pointer">
-      {theme() === 'dark' ? 'Light Mode' : 'Dark Mode'}
-    </button>
+    <div class="m-2">
+      <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
+        <NavBar />
+        <TasksList />
+        <PromptDescriptor />
+        <GenerateButton />
+        <PromptDisplay />
+        <ExecuteButton />
+        <ExecutionResultDisplay />
+        <GitStatusDisplay />
+        <CommitMessageInput />
+        <CommitButton />
+        <RollbackButton />
+      </div>
+    </div>
   );
 };
 
-export default ThemeSwitcher;
+export default App;
+
+```
+
+src/frontend/tailwind.config.cjs:
+```
+module.exports = {
+  darkMode: 'class', // Add this line
+  content: [__dirname + '/**/*.html', __dirname + '/**/*.jsx'],
+  theme: {
+    screens: {
+      'xs': '320px',
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px',
+      'xl': '1280px',
+      '2xl': '1536px',
+    },
+    extend: {
+      // Extend the spacing for larger gaps
+      spacing: {
+        '72': '18rem',
+        '84': '21rem',
+        '96': '24rem',
+        '128': '32rem',
+      },
+      // Extend the button styles for larger buttons
+      fontSize: {
+        'btn': '1.5rem',
+      },
+      padding: {
+        'btn': '1.5rem',
+      },
+      // Extend the maxWidth for desktop container
+      maxWidth: {
+        'desktop': '640px',
+      },
+    },
+  },
+  variants: {
+    extend: {},
+  },
+  plugins: [],
+}
 
 ```
 
@@ -38,8 +109,8 @@ Implement the following feature!
 
 Requirements:
 
-Use icons in the theme switcher! Unicode is OK if you prefer.
-Remove every text a the underline decoration, only the icon.
+Set up text and bg colors for the app, separately for dark and light theme.
+Add tailwind classes to the id=&#34;app&#34; div or in App.jsx if needed for it to change colors based on the theme.
 
 
 

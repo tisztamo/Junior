@@ -1,7 +1,11 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/components/ThemeSwitcher.jsx
-requirements: |
-  Use icons in the theme switcher! Unicode is OK if you prefer.
-  Remove every text a the underline decoration, only the icon.
+  - src/frontend/index.html
+  - src/frontend/App.jsx
+  - src/frontend/tailwind.config.cjs
+requirements: >
+  Set up text and bg colors for the app, separately for dark and light theme.
+
+  Add tailwind classes to the id="app" div or in App.jsx if needed for it to
+  change colors based on the theme.
 os: OSX

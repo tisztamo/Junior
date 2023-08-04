@@ -1,5 +1,5 @@
 module.exports = {
-  darkMode: 'class', // Add this line
+  darkMode: 'class',
   content: [__dirname + '/**/*.html', __dirname + '/**/*.jsx'],
   theme: {
     screens: {
@@ -28,6 +28,17 @@ module.exports = {
       // Extend the maxWidth for desktop container
       maxWidth: {
         'desktop': '640px',
+      },
+      // Extend the colors for dark and light mode
+      colors: {
+        light: {
+          text: '#1a202c',
+          background: '#f7fafc',
+        },
+        dark: {
+          text: '#f7fafc',
+          background: '#1a202c',
+        },
       },
     },
   },
