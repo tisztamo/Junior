@@ -1,10 +1,8 @@
 #!/bin/sh
 set -e
-goal="Implement clipboard reading fallback with input box"
+goal="Replace text input with textarea in ExecuteButton"
 echo "Plan:"
-echo "1. Modify ExecuteButton.jsx to include a check for navigator.clipboard.readText availability."
-echo "2. If unavailable, render an input box inside the button with placeholder."
-echo "3. Execute the change when text is pasted into the input box."
+echo "1. Modify the ExecuteButton.jsx file to replace the input field with a single-row textarea."
 
 cat > src/frontend/components/ExecuteButton.jsx << 'EOF'
 import { createEffect, createSignal } from 'solid-js';
@@ -39,9 +37,9 @@ const ExecuteButton = () => {
       {inputAvailable() ? (
         'Paste & Execute Change'
       ) : (
-        <input
-          type="text"
-          class="w-full px-2 py-2 bg-white text-black"
+        <textarea
+          rows="1"
+          class="w-full px-2 py-2 bg-white text-black resize-none"
           placeholder="Paste the change here to execute"
           value={changeInput()}
           onInput={(e) => setChangeInput(e.currentTarget.value)}

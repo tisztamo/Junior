@@ -60,10 +60,7 @@ Implement the following feature!
 
 Requirements:
 
-When navigator.clipboard.readText is unavailable,
-then display an input box inside the button instead of the normal text.
-The placeholder of the input is: &#34;Paste the change here to execute&#34;.
-When the user pastes a text into the input, execute it just like the pasted text at button click.
+Use a textarea instead of the text input to prevent losing newline characters. Make it looking single-row.
 
 
 

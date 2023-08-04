@@ -30,9 +30,9 @@ const ExecuteButton = () => {
       {inputAvailable() ? (
         'Paste & Execute Change'
       ) : (
-        <input
-          type="text"
-          class="w-full px-2 py-2 bg-white text-black"
+        <textarea
+          rows="1"
+          class="w-full px-2 py-2 bg-white text-black resize-none"
           placeholder="Paste the change here to execute"
           value={changeInput()}
           onInput={(e) => setChangeInput(e.currentTarget.value)}
