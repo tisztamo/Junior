@@ -1,11 +1,10 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/index.html
   - src/frontend/App.jsx
+  - src/frontend/components/TasksList.jsx
   - src/frontend/tailwind.config.cjs
-requirements: >
-  Set up text and bg colors for the app, separately for dark and light theme.
-
-  Add tailwind classes to the id="app" div or in App.jsx if needed for it to
-  change colors based on the theme.
+requirements: |
+  Make TaskList dark theme-aware!
+  Generate new colors in tailwind config that can be generally used
+  for emphasizing a compoment with a background color and replace the hardcoded bg-gray-100
 os: OSX

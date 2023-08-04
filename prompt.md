@@ -1,23 +1,5 @@
 # Working set
 
-src/frontend/index.html:
-```
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
-  <title>Junior</title>
-</head>
-<body>
-  <div id="app"></div>
-  <script type="module" src="/index.jsx"></script>
-</body>
-</html>
-
-```
-
 src/frontend/App.jsx:
 ```
 import GenerateButton from './components/GenerateButton';
@@ -34,7 +16,7 @@ import CommitMessageInput from './components/CommitMessageInput';
 
 const App = () => {
   return (
-    <div class="m-2">
+    <div id="app" class="m-2 dark:bg-dark-background bg-light-background dark:text-dark-text text-light-text">
       <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
         <NavBar />
         <TasksList />
@@ -56,10 +38,44 @@ export default App;
 
 ```
 
+src/frontend/components/TasksList.jsx:
+```
+import { onMount, createEffect } from 'solid-js';
+import { fetchTasks } from '../fetchTasks';
+import { handleTaskChange } from '../service/handleTaskChange';
+import { selectedTask, setSelectedTask } from '../model/selectedTask';
+import { promptDescriptor } from '../model/promptDescriptor';
+import { parseYamlAndGetTask } from '../service/parseYamlAndGetTask';
+
+const TasksList = () => {
+  const tasks = fetchTasks();
+
+  createEffect(() => {
+    const descriptor = promptDescriptor();
+    if (descriptor !== '') {
+      const task = parseYamlAndGetTask(descriptor);
+      setSelectedTask(task);
+    }
+  });
+
+  return (
+    <div class="w-full flex justify-start bg-gray-100 p-2 rounded">
+      <label class="mr-2">Task:</label>
+      <select class="w-full" value={selectedTask()} onChange={e => handleTaskChange(e)}>
+        {tasks().map(task => <option value={task}>{task}</option>)}
+      </select>
+    </div>
+  );
+};
+
+export default TasksList;
+
+```
+
 src/frontend/tailwind.config.cjs:
 ```
 module.exports = {
-  darkMode: 'class', // Add this line
+  darkMode: 'class',
   content: [__dirname + '/**/*.html', __dirname + '/**/*.jsx'],
   theme: {
     screens: {
@@ -89,6 +105,17 @@ module.exports = {
       maxWidth: {
         'desktop': '640px',
       },
+      // Extend the colors for dark and light mode
+      colors: {
+        light: {
+          text: '#1a202c',
+          background: '#f7fafc',
+        },
+        dark: {
+          text: '#f7fafc',
+          background: '#1a202c',
+        },
+      },
     },
   },
   variants: {
@@ -109,8 +136,9 @@ Implement the following feature!
 
 Requirements:
 
-Set up text and bg colors for the app, separately for dark and light theme.
-Add tailwind classes to the id=&#34;app&#34; div or in App.jsx if needed for it to change colors based on the theme.
+Make TaskList dark theme-aware!
+Generate new colors in tailwind config that can be generally used
+for emphasizing a compoment with a background color and replace the hardcoded bg-gray-100
 
 
 

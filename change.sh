@@ -1,12 +1,11 @@
 #!/bin/sh
 set -e
-goal="Setup text and bg colors for dark/light theme"
+goal="Make TaskList dark theme-aware and update colors"
 echo "Plan:"
-echo "1. Modify the tailwind.config.cjs to extend the theme for dark and light mode colors."
-echo "2. Update App.jsx file to apply the dark and light mode classes."
-echo "3. Make sure the styles are applied correctly for both themes."
+echo "1. Define new colors in tailwind config for emphasizing components."
+echo "2. Update TaskList component to use new colors and make it dark theme-aware."
 
-# Step 1: Modify the tailwind.config.cjs
+# Step 1: Define new colors in tailwind config for emphasizing components.
 cat > src/frontend/tailwind.config.cjs << 'EOF'
 module.exports = {
   darkMode: 'class',
@@ -21,33 +20,31 @@ module.exports = {
       '2xl': '1536px',
     },
     extend: {
-      // Extend the spacing for larger gaps
       spacing: {
         '72': '18rem',
         '84': '21rem',
         '96': '24rem',
         '128': '32rem',
       },
-      // Extend the button styles for larger buttons
       fontSize: {
         'btn': '1.5rem',
       },
       padding: {
         'btn': '1.5rem',
       },
-      // Extend the maxWidth for desktop container
       maxWidth: {
         'desktop': '640px',
       },
-      // Extend the colors for dark and light mode
       colors: {
         light: {
           text: '#1a202c',
           background: '#f7fafc',
+          emphasize: '#e2e8f0', // New color for emphasizing a component
         },
         dark: {
           text: '#f7fafc',
           background: '#1a202c',
+          emphasize: '#2d3748', // New color for emphasizing a component in dark mode
         },
       },
     },
@@ -59,41 +56,37 @@ module.exports = {
 }
 EOF
 
-# Step 2: Update App.jsx file
-cat > src/frontend/App.jsx << 'EOF'
-import GenerateButton from './components/GenerateButton';
-import ExecuteButton from './components/ExecuteButton';
-import RollbackButton from './components/RollbackButton';
-import CommitButton from './components/CommitButton';
-import PromptDisplay from './components/PromptDisplay';
-import TasksList from './components/TasksList';
-import PromptDescriptor from './components/PromptDescriptor';
-import NavBar from './components/NavBar';
-import ExecutionResultDisplay from './components/ExecutionResultDisplay';
-import GitStatusDisplay from './components/GitStatusDisplay';
-import CommitMessageInput from './components/CommitMessageInput';
+# Step 2: Update TaskList component to use new colors and make it dark theme-aware.
+cat > src/frontend/components/TasksList.jsx << 'EOF'
+import { onMount, createEffect } from 'solid-js';
+import { fetchTasks } from '../fetchTasks';
+import { handleTaskChange } from '../service/handleTaskChange';
+import { selectedTask, setSelectedTask } from '../model/selectedTask';
+import { promptDescriptor } from '../model/promptDescriptor';
+import { parseYamlAndGetTask } from '../service/parseYamlAndGetTask';
 
-const App = () => {
+const TasksList = () => {
+  const tasks = fetchTasks();
+
+  createEffect(() => {
+    const descriptor = promptDescriptor();
+    if (descriptor !== '') {
+      const task = parseYamlAndGetTask(descriptor);
+      setSelectedTask(task);
+    }
+  });
+
   return (
-    <div id="app" class="m-2 dark:bg-dark-background bg-light-background dark:text-dark-text text-light-text">
-      <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
-        <NavBar />
-        <TasksList />
-        <PromptDescriptor />
-        <GenerateButton />
-        <PromptDisplay />
-        <ExecuteButton />
-        <ExecutionResultDisplay />
-        <GitStatusDisplay />
-        <CommitMessageInput />
-        <CommitButton />
-        <RollbackButton />
-      </div>
+    <div class="w-full flex justify-start dark:bg-dark-emphasize bg-light-emphasize p-2 rounded">
+      <label class="mr-2">Task:</label>
+      <select class="w-full" value={selectedTask()} onChange={e => handleTaskChange(e)}>
+        {tasks().map(task => <option value={task}>{task}</option>)}
+      </select>
     </div>
   );
 };
 
-export default App;
+export default TasksList;
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"

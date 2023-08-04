@@ -11,33 +11,31 @@ module.exports = {
       '2xl': '1536px',
     },
     extend: {
-      // Extend the spacing for larger gaps
       spacing: {
         '72': '18rem',
         '84': '21rem',
         '96': '24rem',
         '128': '32rem',
       },
-      // Extend the button styles for larger buttons
       fontSize: {
         'btn': '1.5rem',
       },
       padding: {
         'btn': '1.5rem',
       },
-      // Extend the maxWidth for desktop container
       maxWidth: {
         'desktop': '640px',
       },
-      // Extend the colors for dark and light mode
       colors: {
         light: {
           text: '#1a202c',
           background: '#f7fafc',
+          emphasize: '#e2e8f0', // New color for emphasizing a component
         },
         dark: {
           text: '#f7fafc',
           background: '#1a202c',
+          emphasize: '#2d3748', // New color for emphasizing a component in dark mode
         },
       },
     },
