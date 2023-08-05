@@ -1,7 +1,9 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/components/ExecuteButton.jsx
+  - src/frontend/components/ChangeFinalization.jsx
+  - src/frontend/components/RollbackButton.jsx
+  - src/frontend/components/CommitButton.jsx
 requirements: >
-  The change text should be read from navigator.clipboard.readText if available,
-  or from the current value of the input otherwise.
+  Change the layout so that commitbutton and rollbackbutton are next to each
+  other horizontally
 os: OSX

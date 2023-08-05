@@ -1,54 +1,72 @@
 # Working set
 
-src/frontend/components/ExecuteButton.jsx:
+src/frontend/components/ChangeFinalization.jsx:
 ```
-import { createEffect, createSignal } from 'solid-js';
-import { executeChange } from '../service/executeChange';
-import { setExecutionResult } from '../model/executionResult';
-import { setChange } from '../model/change';
+import CommitMessageInput from './CommitMessageInput';
+import CommitButton from './CommitButton';
+import RollbackButton from './RollbackButton';
 
-const ExecuteButton = () => {
-  const [inputAvailable, setInputAvailable] = createSignal(true);
-  const [changeInput, setChangeInput] = createSignal('');
-
-  const handleExecuteChange = async (change) => {
-    const response = await executeChange(change);
-    setChange(change);
-    setExecutionResult(response.output);
-    console.log(response.output);
-  };
-
-  const handlePaste = async (e) => {
-    const paste = (e.clipboardData || window.clipboardData).getData('text');
-    setChangeInput(paste);
-    handleExecuteChange(paste);
-  };
-
-  // Check if clipboard reading is available
-  createEffect(() => {
-    if (!navigator.clipboard || !navigator.clipboard.readText) {
-      setInputAvailable(false);
-    }
-  });
-
+const ChangeFinalization = () => {
   return (
-    <button class="w-64 px-4 py-4 bg-orange-300 text-white rounded" onClick={handleExecuteChange}>
-      {inputAvailable() ? (
-        'Paste & Execute Change'
-      ) : (
-        <textarea
-          rows="1"
-          class="w-full px-2 py-2 bg-white text-black resize-none"
-          placeholder="Paste here to execute"
-          value={changeInput()}
-          onPaste={handlePaste}
-        />
-      )}
-    </button>
+    <>
+      <CommitMessageInput />
+      <CommitButton />
+      <RollbackButton />
+    </>
   );
 };
 
-export default ExecuteButton;
+export default ChangeFinalization;
+
+```
+
+src/frontend/components/RollbackButton.jsx:
+```
+import { resetGit } from '../service/resetGit';
+
+const RollbackButton = () => {
+  const handleReset = async () => {
+    const response = await resetGit();
+
+    console.log(response.message);
+  };
+
+  return (
+    <button class="w-64 px-4 py-4 bg-red-700 text-white rounded" onClick={handleReset}>Roll Back to Last Commit</button>
+  );
+};
+
+export default RollbackButton;
+
+```
+
+src/frontend/components/CommitButton.jsx:
+```
+import { postCommit } from '../service/postCommit';
+import { commitMessage, setCommitMessage } from '../model/commitMessage';
+import { fetchGitStatus } from '../service/fetchGitStatus';
+import { setExecutionResult } from '../model/executionResult';
+import { setPrompt } from '../model/prompt';
+import { setChange } from '../model/change'; // Importing setChange to clear the change
+
+const CommitButton = () => {
+  const handleCommit = async () => {
+    const response = await postCommit(commitMessage());
+    console.log(response.message);
+    const status = await fetchGitStatus();
+    console.log(status);
+    setChange(''); // Clearing the change after commit
+    setExecutionResult('');
+    setCommitMessage('');
+    setPrompt('');
+  };
+
+  return (
+    <button className="w-64 px-4 py-4 bg-green-700 text-white rounded mt-2" onClick={handleCommit}>Commit</button>
+  );
+};
+
+export default CommitButton;
 
 ```
 
@@ -62,7 +80,7 @@ Implement the following feature!
 
 Requirements:
 
-The change text should be read from navigator.clipboard.readText if available, or from the current value of the input otherwise.
+Change the layout so that commitbutton and rollbackbutton are next to each other horizontally
 
 
 

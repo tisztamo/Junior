@@ -6,8 +6,10 @@ const ChangeFinalization = () => {
   return (
     <>
       <CommitMessageInput />
-      <CommitButton />
-      <RollbackButton />
+      <div className="flex justify-between mt-2">
+        <CommitButton />
+        <RollbackButton />
+      </div>
     </>
   );
 };
