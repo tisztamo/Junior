@@ -10,8 +10,10 @@ const ChangeFinalization = () => {
   return (
     <>
       <CommitMessageInput />
-      <CommitButton />
-      <RollbackButton />
+      <div className="flex justify-between mt-2">
+        <CommitButton />
+        <RollbackButton />
+      </div>
     </>
   );
 };
@@ -80,7 +82,7 @@ Implement the following feature!
 
 Requirements:
 
-Change the layout so that commitbutton and rollbackbutton are next to each other horizontally
+Make the commit and rollback buttons width smaller. Make the rollback same-height as the commit. Have some space between them. Change the rollback label to &#34;Roll Back&#34;
 
 
 

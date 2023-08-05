@@ -6,7 +6,7 @@ const ChangeFinalization = () => {
   return (
     <>
       <CommitMessageInput />
-      <div className="flex justify-between mt-2">
+      <div className="flex justify-between mt-2 space-x-4">
         <CommitButton />
         <RollbackButton />
       </div>
