@@ -1,27 +1,5 @@
 # Working set
 
-src/frontend/components/ChangeFinalization.jsx:
-```
-import CommitMessageInput from './CommitMessageInput';
-import CommitButton from './CommitButton';
-import RollbackButton from './RollbackButton';
-
-const ChangeFinalization = () => {
-  return (
-    <>
-      <CommitMessageInput />
-      <div className="flex w-full mt-2 space-x-4">
-        <RollbackButton />
-        <CommitButton />
-      </div>
-    </>
-  );
-};
-
-export default ChangeFinalization;
-
-```
-
 src/frontend/components/RollbackButton.jsx:
 ```
 import { resetGit } from '../service/resetGit';
@@ -34,56 +12,51 @@ const RollbackButton = () => {
   };
 
   return (
-    <button className="w-full px-4 py-4 bg-red-700 text-white rounded mt-2" onClick={handleReset}>Roll Back</button>
+    <button className="w-full px-4 py-4 bg-red-700 text-white rounded" onClick={handleReset}>Roll Back</button>
   );
 };
 
 export default RollbackButton;
 
+
 ```
 
-src/frontend/components/CommitMessageInput.jsx:
+src/frontend/components/CommitButton.jsx:
 ```
+import { postCommit } from '../service/postCommit';
 import { commitMessage, setCommitMessage } from '../model/commitMessage';
-import monitorChange from '../model/monitorChange';
+import { fetchGitStatus } from '../service/fetchGitStatus';
+import { setExecutionResult } from '../model/executionResult';
+import { setPrompt } from '../model/prompt';
+import { setChange } from '../model/change';
 
-const CommitMessageInput = (props) => {
-  // Start monitoring when mounting
-  monitorChange();
-
-  const handleChange = (e) => {
-    setCommitMessage(e.target.value);
+const CommitButton = () => {
+  const handleCommit = async () => {
+    const response = await postCommit(commitMessage());
+    console.log(response.message);
+    const status = await fetchGitStatus();
+    console.log(status);
+    setChange(''); // Clearing the change after commit
+    setExecutionResult('');
+    setCommitMessage('');
+    setPrompt('');
   };
 
   return (
-    <input type="text" className="w-full px-4 py-2 border rounded bg-emphasize text-emphasize" placeholder="Commit message..." value={commitMessage()} onInput={handleChange} />
+    <button className="w-full px-4 py-4 bg-green-700 text-white rounded mt-2" onClick={handleCommit}>Commit</button>
   );
 };
 
-export default CommitMessageInput;
+export default CommitButton;
 
 ```
 
 
 # Task
 
-Implement the following feature!
+Fix the following issue!
 
-- Create a plan!
-- Create new files when needed!
-
-Requirements:
-
-Reduce the vertical space between the input and the buttons
-
-
-
-## Project Specifics
-
-- Every js file should *only export a single function*!
-- Use *ES6 imports*!
-- Prefer *async/await* over promises!
-- The frontend uses *Solidjs*, edit .jsx file accordingly
+Make CommitButton look exactly the same as rollback, except color!
 
 
 # Output Format

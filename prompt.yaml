@@ -1,8 +1,7 @@
-task: prompt/task/feature/implement.md
+task: prompt/task/bug/fix.md
 attention:
-  - src/frontend/components/ChangeFinalization.jsx
   - src/frontend/components/RollbackButton.jsx
-  - src/frontend/components/CommitMessageInput.jsx
+  - src/frontend/components/CommitButton.jsx
 requirements: |
-  Reduce the vertical space between the input and the buttons
+  Make CommitButton look exactly the same as rollback, except color!
 os: OSX

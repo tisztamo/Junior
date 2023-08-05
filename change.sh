@@ -1,50 +1,35 @@
 #!/bin/sh
 set -e
-goal="Reduce vertical space between input and buttons"
+goal="Make CommitButton look same as rollback except color"
 echo "Plan:"
-echo "1. Remove the 'mt-2' class from the RollbackButton component to reduce the vertical space."
-echo "2. Change the 'mt-2' margin class in the container div in ChangeFinalization component to a smaller value like 'mt-1' to reduce the space between the input and the buttons."
+echo "1. Update CommitButton.jsx to make it look exactly like RollbackButton but with different color."
 
-# Step 1: Update RollbackButton.jsx
-cat > src/frontend/components/RollbackButton.jsx << 'EOF'
-import { resetGit } from '../service/resetGit';
+cat > src/frontend/components/CommitButton.jsx << 'EOF'
+import { postCommit } from '../service/postCommit';
+import { commitMessage, setCommitMessage } from '../model/commitMessage';
+import { fetchGitStatus } from '../service/fetchGitStatus';
+import { setExecutionResult } from '../model/executionResult';
+import { setPrompt } from '../model/prompt';
+import { setChange } from '../model/change';
 
-const RollbackButton = () => {
-  const handleReset = async () => {
-    const response = await resetGit();
-
+const CommitButton = () => {
+  const handleCommit = async () => {
+    const response = await postCommit(commitMessage());
     console.log(response.message);
+    const status = await fetchGitStatus();
+    console.log(status);
+    setChange(''); // Clearing the change after commit
+    setExecutionResult('');
+    setCommitMessage('');
+    setPrompt('');
   };
 
   return (
-    <button className="w-full px-4 py-4 bg-red-700 text-white rounded" onClick={handleReset}>Roll Back</button>
+    <button className="w-full px-4 py-4 bg-green-700 text-white rounded" onClick={handleCommit}>Commit</button>
   );
 };
 
-export default RollbackButton;
-
-EOF
-
-# Step 2: Update ChangeFinalization.jsx
-cat > src/frontend/components/ChangeFinalization.jsx << 'EOF'
-import CommitMessageInput from './CommitMessageInput';
-import CommitButton from './CommitButton';
-import RollbackButton from './RollbackButton';
-
-const ChangeFinalization = () => {
-  return (
-    <>
-      <CommitMessageInput />
-      <div className="flex w-full mt-1 space-x-4">
-        <RollbackButton />
-        <CommitButton />
-      </div>
-    </>
-  );
-};
-
-export default ChangeFinalization;
-
+export default CommitButton;
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"
