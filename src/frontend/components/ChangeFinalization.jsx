@@ -7,8 +7,8 @@ const ChangeFinalization = () => {
     <>
       <CommitMessageInput />
       <div className="flex w-full mt-2 space-x-4">
-        <CommitButton />
         <RollbackButton />
+        <CommitButton />
       </div>
     </>
   );

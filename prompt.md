@@ -10,7 +10,7 @@ const ChangeFinalization = () => {
   return (
     <>
       <CommitMessageInput />
-      <div className="flex justify-between mt-2 space-x-4">
+      <div className="flex w-full mt-2 space-x-4">
         <CommitButton />
         <RollbackButton />
       </div>
@@ -19,56 +19,6 @@ const ChangeFinalization = () => {
 };
 
 export default ChangeFinalization;
-
-```
-
-src/frontend/components/RollbackButton.jsx:
-```
-import { resetGit } from '../service/resetGit';
-
-const RollbackButton = () => {
-  const handleReset = async () => {
-    const response = await resetGit();
-
-    console.log(response.message);
-  };
-
-  return (
-    <button className="w-48 px-4 py-4 bg-red-700 text-white rounded mt-2" onClick={handleReset}>Roll Back</button>
-  );
-};
-
-export default RollbackButton;
-
-```
-
-src/frontend/components/CommitButton.jsx:
-```
-import { postCommit } from '../service/postCommit';
-import { commitMessage, setCommitMessage } from '../model/commitMessage';
-import { fetchGitStatus } from '../service/fetchGitStatus';
-import { setExecutionResult } from '../model/executionResult';
-import { setPrompt } from '../model/prompt';
-import { setChange } from '../model/change'; // Importing setChange to clear the change
-
-const CommitButton = () => {
-  const handleCommit = async () => {
-    const response = await postCommit(commitMessage());
-    console.log(response.message);
-    const status = await fetchGitStatus();
-    console.log(status);
-    setChange(''); // Clearing the change after commit
-    setExecutionResult('');
-    setCommitMessage('');
-    setPrompt('');
-  };
-
-  return (
-    <button className="w-48 px-4 py-4 bg-green-700 text-white rounded mt-2" onClick={handleCommit}>Commit</button>
-  );
-};
-
-export default CommitButton;
 
 ```
 
@@ -82,7 +32,7 @@ Implement the following feature!
 
 Requirements:
 
-Change the layout so that the commit and rollback buttons fill the available space, but do not overflow horizontally.
+Switch the two buttons
 
 
 

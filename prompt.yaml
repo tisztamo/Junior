@@ -1,9 +1,6 @@
 task: prompt/task/feature/implement.md
 attention:
   - src/frontend/components/ChangeFinalization.jsx
-  - src/frontend/components/RollbackButton.jsx
-  - src/frontend/components/CommitButton.jsx
 requirements: >
-  Change the layout so that the commit and rollback buttons
-  fill the available space, but do not overflow horizontally.
+  Switch the two buttons
 os: OSX
