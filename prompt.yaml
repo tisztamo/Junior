@@ -1,6 +1,8 @@
 task: prompt/task/feature/implement.md
 attention:
   - src/frontend/components/ChangeFinalization.jsx
-requirements: >
-  Switch the two buttons
+  - src/frontend/components/RollbackButton.jsx
+  - src/frontend/components/CommitMessageInput.jsx
+requirements: |
+  Reduce the vertical space between the input and the buttons
 os: OSX

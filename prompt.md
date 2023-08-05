@@ -11,14 +11,56 @@ const ChangeFinalization = () => {
     <>
       <CommitMessageInput />
       <div className="flex w-full mt-2 space-x-4">
-        <CommitButton />
         <RollbackButton />
+        <CommitButton />
       </div>
     </>
   );
 };
 
 export default ChangeFinalization;
+
+```
+
+src/frontend/components/RollbackButton.jsx:
+```
+import { resetGit } from '../service/resetGit';
+
+const RollbackButton = () => {
+  const handleReset = async () => {
+    const response = await resetGit();
+
+    console.log(response.message);
+  };
+
+  return (
+    <button className="w-full px-4 py-4 bg-red-700 text-white rounded mt-2" onClick={handleReset}>Roll Back</button>
+  );
+};
+
+export default RollbackButton;
+
+```
+
+src/frontend/components/CommitMessageInput.jsx:
+```
+import { commitMessage, setCommitMessage } from '../model/commitMessage';
+import monitorChange from '../model/monitorChange';
+
+const CommitMessageInput = (props) => {
+  // Start monitoring when mounting
+  monitorChange();
+
+  const handleChange = (e) => {
+    setCommitMessage(e.target.value);
+  };
+
+  return (
+    <input type="text" className="w-full px-4 py-2 border rounded bg-emphasize text-emphasize" placeholder="Commit message..." value={commitMessage()} onInput={handleChange} />
+  );
+};
+
+export default CommitMessageInput;
 
 ```
 
@@ -32,7 +74,7 @@ Implement the following feature!
 
 Requirements:
 
-Switch the two buttons
+Reduce the vertical space between the input and the buttons
 
 
 

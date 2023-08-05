@@ -6,7 +6,7 @@ const ChangeFinalization = () => {
   return (
     <>
       <CommitMessageInput />
-      <div className="flex w-full mt-2 space-x-4">
+      <div className="flex w-full mt-1 space-x-4">
         <RollbackButton />
         <CommitButton />
       </div>
@@ -15,3 +15,4 @@ const ChangeFinalization = () => {
 };
 
 export default ChangeFinalization;
+

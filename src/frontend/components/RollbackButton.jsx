@@ -8,8 +8,9 @@ const RollbackButton = () => {
   };
 
   return (
-    <button className="w-full px-4 py-4 bg-red-700 text-white rounded mt-2" onClick={handleReset}>Roll Back</button>
+    <button className="w-full px-4 py-4 bg-red-700 text-white rounded" onClick={handleReset}>Roll Back</button>
   );
 };
 
 export default RollbackButton;
+
