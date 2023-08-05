@@ -1,38 +1,18 @@
 #!/bin/sh
 set -e
-goal="Adjust commit and rollback buttons style"
+goal="Change layout for commit and rollback buttons"
 echo "Plan:"
-echo "1. Modify the RollbackButton.jsx file to update the label, width and to make the height same as commit."
-echo "2. Modify the CommitButton.jsx file to update the width and to make sure there is space between it and the Rollback button."
-echo "3. Update ChangeFinalization.jsx to ensure proper space between the buttons."
+echo "1. Modify the styling of the CommitButton and RollbackButton components to fill the available space."
+echo "2. Simplify ChangeFinalization component to distribute the available space between the two buttons equally, filling the entire width."
 
-# Modify RollbackButton.jsx
-cat > src/frontend/components/RollbackButton.jsx << 'EOF'
-import { resetGit } from '../service/resetGit';
-
-const RollbackButton = () => {
-  const handleReset = async () => {
-    const response = await resetGit();
-
-    console.log(response.message);
-  };
-
-  return (
-    <button className="w-48 px-4 py-4 bg-red-700 text-white rounded mt-2" onClick={handleReset}>Roll Back</button>
-  );
-};
-
-export default RollbackButton;
-EOF
-
-# Modify CommitButton.jsx
-cat > src/frontend/components/CommitButton.jsx << 'EOF'
+# Modify CommitButton.jsx to fill half the available space without overflowing horizontally
+cat << 'EOF' > src/frontend/components/CommitButton.jsx
 import { postCommit } from '../service/postCommit';
 import { commitMessage, setCommitMessage } from '../model/commitMessage';
 import { fetchGitStatus } from '../service/fetchGitStatus';
 import { setExecutionResult } from '../model/executionResult';
 import { setPrompt } from '../model/prompt';
-import { setChange } from '../model/change'; // Importing setChange to clear the change
+import { setChange } from '../model/change';
 
 const CommitButton = () => {
   const handleCommit = async () => {
@@ -47,15 +27,34 @@ const CommitButton = () => {
   };
 
   return (
-    <button className="w-48 px-4 py-4 bg-green-700 text-white rounded mt-2" onClick={handleCommit}>Commit</button>
+    <button className="w-full px-4 py-4 bg-green-700 text-white rounded mt-2" onClick={handleCommit}>Commit</button>
   );
 };
 
 export default CommitButton;
 EOF
 
-# Update ChangeFinalization.jsx
-cat > src/frontend/components/ChangeFinalization.jsx << 'EOF'
+# Modify RollbackButton.jsx to fill half the available space without overflowing horizontally
+cat << 'EOF' > src/frontend/components/RollbackButton.jsx
+import { resetGit } from '../service/resetGit';
+
+const RollbackButton = () => {
+  const handleReset = async () => {
+    const response = await resetGit();
+
+    console.log(response.message);
+  };
+
+  return (
+    <button className="w-full px-4 py-4 bg-red-700 text-white rounded mt-2" onClick={handleReset}>Roll Back</button>
+  );
+};
+
+export default RollbackButton;
+EOF
+
+# Update ChangeFinalization.jsx to remove unnecessary div and ensure the buttons equally share the available space, filling the entire width
+cat << 'EOF' > src/frontend/components/ChangeFinalization.jsx
 import CommitMessageInput from './CommitMessageInput';
 import CommitButton from './CommitButton';
 import RollbackButton from './RollbackButton';
@@ -64,7 +63,7 @@ const ChangeFinalization = () => {
   return (
     <>
       <CommitMessageInput />
-      <div className="flex justify-between mt-2 space-x-4">
+      <div className="flex w-full mt-2 space-x-4">
         <CommitButton />
         <RollbackButton />
       </div>

@@ -4,8 +4,6 @@ attention:
   - src/frontend/components/RollbackButton.jsx
   - src/frontend/components/CommitButton.jsx
 requirements: >
-  Make the commit and rollback buttons width smaller.
-  Make the rollback same-height as the commit.
-  Have some space between them.
-  Change the rollback label to "Roll Back"
+  Change the layout so that the commit and rollback buttons
+  fill the available space, but do not overflow horizontally.
 os: OSX

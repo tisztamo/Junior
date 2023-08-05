@@ -3,7 +3,7 @@ import { commitMessage, setCommitMessage } from '../model/commitMessage';
 import { fetchGitStatus } from '../service/fetchGitStatus';
 import { setExecutionResult } from '../model/executionResult';
 import { setPrompt } from '../model/prompt';
-import { setChange } from '../model/change'; // Importing setChange to clear the change
+import { setChange } from '../model/change';
 
 const CommitButton = () => {
   const handleCommit = async () => {
@@ -18,7 +18,7 @@ const CommitButton = () => {
   };
 
   return (
-    <button className="w-48 px-4 py-4 bg-green-700 text-white rounded mt-2" onClick={handleCommit}>Commit</button>
+    <button className="w-full px-4 py-4 bg-green-700 text-white rounded mt-2" onClick={handleCommit}>Commit</button>
   );
 };
 

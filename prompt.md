@@ -10,7 +10,7 @@ const ChangeFinalization = () => {
   return (
     <>
       <CommitMessageInput />
-      <div className="flex justify-between mt-2">
+      <div className="flex justify-between mt-2 space-x-4">
         <CommitButton />
         <RollbackButton />
       </div>
@@ -34,7 +34,7 @@ const RollbackButton = () => {
   };
 
   return (
-    <button class="w-64 px-4 py-4 bg-red-700 text-white rounded" onClick={handleReset}>Roll Back to Last Commit</button>
+    <button className="w-48 px-4 py-4 bg-red-700 text-white rounded mt-2" onClick={handleReset}>Roll Back</button>
   );
 };
 
@@ -64,7 +64,7 @@ const CommitButton = () => {
   };
 
   return (
-    <button className="w-64 px-4 py-4 bg-green-700 text-white rounded mt-2" onClick={handleCommit}>Commit</button>
+    <button className="w-48 px-4 py-4 bg-green-700 text-white rounded mt-2" onClick={handleCommit}>Commit</button>
   );
 };
 
@@ -82,7 +82,7 @@ Implement the following feature!
 
 Requirements:
 
-Make the commit and rollback buttons width smaller. Make the rollback same-height as the commit. Have some space between them. Change the rollback label to &#34;Roll Back&#34;
+Change the layout so that the commit and rollback buttons fill the available space, but do not overflow horizontally.
 
 
 
