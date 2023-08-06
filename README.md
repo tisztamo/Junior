@@ -2,7 +2,7 @@ Warn: This README is AI generated, just like all the source files of this projec
 
 # Junior - Your AI contributor which codes itself.
 
-[![Video: Junior codes itself](doc/assets/video_cover.jpg)](https://www.youtube.com/watch?v=W_iwry8uT7E)
+[![Video: Junior codes itself](docs/assets/video_cover.jpg)](https://www.youtube.com/watch?v=W_iwry8uT7E)
 
 *"Video: Junior codes itself"*
 ## Description
@@ -23,7 +23,7 @@ To install, clone the repository and run `npm install` in the root directory. Ad
 
 #### Web Interface
 
-Run the application with `npm start` to start a local server, where you can generate a prompt and automatically copy it to paste into ChatGPT. The web interface is designed for use with ChatGPT Pro and doesn't require an API key. For more information about the web interface, please refer to [doc/web.md](doc/web.md).
+Run the application with `npm start` to start a local server, where you can generate a prompt and automatically copy it to paste into ChatGPT. The web interface is designed for use with ChatGPT Pro and doesn't require an API key. For more information about the web interface, please refer to [docs/web.md](docs/web.md).
 
 #### Command-line interface (CLI)
 

@@ -1,9 +1,7 @@
 task: prompt/task/feature/implement.md
 attention:
-  - ./docs/index.html
+  - ./README.md
 requirements: |
-  Configure docsify to use a sidebar
-  Link README.md, roadmap.md and web.md from the sidebar
-  delete example.md and screenshot.md
-  (all mentioned files are in docs/)
+  doc/ was renamed to docs/
+  Update references accordingly!
 os: OSX
