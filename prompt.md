@@ -1,95 +1,29 @@
 # Working set
 
+./docs/index.html:
 ```
-./
-├── .DS_Store
-├── .git/...
-├── .github/...
-├── .gitignore
-├── .vscode/...
-├── README.md
-├── change.sh
-├── doc/...
-├── integrations/...
-├── node_modules/...
-├── package-lock.json
-├── package.json
-├── prompt/...
-├── prompt.md
-├── prompt.yaml
-├── src/...
-
-```
-```
-./doc/
-├── assets/...
-├── example.html
-├── example.md
-├── index.html
-├── roadmap.html
-├── roadmap.md
-├── screenshot.png
-├── web.html
-├── web.md
-
-```
-package.json:
-```
-{
-  "name": "@aijunior/dev",
-  "version": "0.1.1",
-  "description": "Your AI Contributor which codes itself",
-  "type": "module",
-  "main": "src/main.js",
-  "bin": {
-    "junior": "src/main.js",
-    "junior-web": "src/web.js",
-    "junior-init": "src/init.js"
-  },
-  "scripts": {
-    "cli": "node src/main.js",
-    "start": "node src/web.js",
-    "build:css": "postcss ./src/frontend/styles.css -o ./dist/styles.css",
-    "build:doc": "node ./src/doc/buildDoc.js"
-  },
-  "keywords": [
-    "cli",
-    "uppercase"
-  ],
-  "author": "",
-  "license": "GPL",
-  "dependencies": {
-    "@types/js-yaml": "^4.0.5",
-    "autoprefixer": "^10.4.14",
-    "chatgpt": "^5.2.4",
-    "cors": "^2.8.5",
-    "ejs": "^3.1.9",
-    "express": "^4.18.2",
-    "highlight.js": "^11.8.0",
-    "js-yaml": "^4.1.0",
-    "markdown-it": "^13.0.1",
-    "marked": "^5.1.0",
-    "postcss": "^8.4.26",
-    "postcss-nested": "^6.0.1",
-    "simple-git": "^3.19.1",
-    "solid-js": "^1.7.7",
-    "tailwindcss": "^3.3.3",
-    "vite": "^4.3.9",
-    "vite-plugin-solid": "^2.7.0",
-    "ws": "^8.13.0"
-  },
-  "directories": {
-    "doc": "doc"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/tisztamo/Junior.git"
-  },
-  "bugs": {
-    "url": "https://github.com/tisztamo/Junior/issues"
-  },
-  "homepage": "https://github.com/tisztamo/Junior#readme"
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="description" content="Description">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+</head>
+<body>
+  <div id="app"></div>
+  <script>
+    window.$docsify = {
+      name: '',
+      repo: ''
+    }
+  </script>
+  <!-- Docsify v4 -->
+  <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+</body>
+</html>
 
 ```
 
@@ -103,11 +37,10 @@ Implement the following feature!
 
 Requirements:
 
-- Install docsify-cli locally
-- npx run docsify init ./docs
-- Move md and png files and assets dir from doc to docs
-- Delete doc/
-- Delete the docs build command from package.json
+Configure docsify to use a sidebar
+Link README.md, roadmap.md and web.md from the sidebar
+delete example.md and screenshot.md
+(all mentioned files are in docs/)
 
 
 

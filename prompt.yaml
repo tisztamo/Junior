@@ -1,12 +1,9 @@
 task: prompt/task/feature/implement.md
 attention:
-  - ./
-  - ./doc/
-  - package.json
+  - ./docs/index.html
 requirements: |
-  - Install docsify-cli locally
-  - npx run docsify init ./docs
-  - Move md and png files and assets dir from doc to docs
-  - Delete doc/
-  - Delete the docs build command from package.json
+  Configure docsify to use a sidebar
+  Link README.md, roadmap.md and web.md from the sidebar
+  delete example.md and screenshot.md
+  (all mentioned files are in docs/)
 os: OSX
