@@ -1,7 +1,12 @@
 task: prompt/task/feature/implement.md
 attention:
-  - ./README.md
+  - ./
+  - ./docs/assets/
 requirements: |
-  doc/ was renamed to docs/
-  Update references accordingly!
+  Create a new 1:1 logo and save it as logo.svg! Then convert to png and overwrite the old one!
+  The logo consists of three same-height row stacked on each other with some space inbetween.
+  The first row is filled by a blue rounded rectangle
+  The second one is filled by an orange rounded rectangle
+  The last one contains two rounded rectangles: On the left a red one and on the right a green one. The two fill the row fully and there is some space between them
+  convert is installed
 os: OSX
