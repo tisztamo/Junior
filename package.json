@@ -12,8 +12,7 @@
   "scripts": {
     "cli": "node src/main.js",
     "start": "node src/web.js",
-    "build:css": "postcss ./src/frontend/styles.css -o ./dist/styles.css",
-    "build:doc": "node ./src/doc/buildDoc.js"
+    "build:css": "postcss ./src/frontend/styles.css -o ./dist/styles.css"
   },
   "keywords": [
     "cli",
@@ -39,10 +38,11 @@
     "tailwindcss": "^3.3.3",
     "vite": "^4.3.9",
     "vite-plugin-solid": "^2.7.0",
-    "ws": "^8.13.0"
+    "ws": "^8.13.0",
+    "docsify-cli": "^4.4.7"
   },
   "directories": {
-    "doc": "doc"
+    "doc": "docs"
   },
   "repository": {
     "type": "git",

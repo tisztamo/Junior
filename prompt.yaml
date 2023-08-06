@@ -1,7 +1,12 @@
-task: prompt/task/bug/fix.md
+task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/components/RollbackButton.jsx
-  - src/frontend/components/CommitButton.jsx
+  - ./
+  - ./doc/
+  - package.json
 requirements: |
-  Make CommitButton look exactly the same as rollback, except color!
+  - Install docsify-cli locally
+  - npx run docsify init ./docs
+  - Move md and png files and assets dir from doc to docs
+  - Delete doc/
+  - Delete the docs build command from package.json
 os: OSX

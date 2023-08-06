@@ -1,62 +1,122 @@
 # Working set
 
-src/frontend/components/RollbackButton.jsx:
 ```
-import { resetGit } from '../service/resetGit';
-
-const RollbackButton = () => {
-  const handleReset = async () => {
-    const response = await resetGit();
-
-    console.log(response.message);
-  };
-
-  return (
-    <button className="w-full px-4 py-4 bg-red-700 text-white rounded" onClick={handleReset}>Roll Back</button>
-  );
-};
-
-export default RollbackButton;
-
+./
+├── .DS_Store
+├── .git/...
+├── .github/...
+├── .gitignore
+├── .vscode/...
+├── README.md
+├── change.sh
+├── doc/...
+├── integrations/...
+├── node_modules/...
+├── package-lock.json
+├── package.json
+├── prompt/...
+├── prompt.md
+├── prompt.yaml
+├── src/...
 
 ```
-
-src/frontend/components/CommitButton.jsx:
 ```
-import { postCommit } from '../service/postCommit';
-import { commitMessage, setCommitMessage } from '../model/commitMessage';
-import { fetchGitStatus } from '../service/fetchGitStatus';
-import { setExecutionResult } from '../model/executionResult';
-import { setPrompt } from '../model/prompt';
-import { setChange } from '../model/change';
+./doc/
+├── assets/...
+├── example.html
+├── example.md
+├── index.html
+├── roadmap.html
+├── roadmap.md
+├── screenshot.png
+├── web.html
+├── web.md
 
-const CommitButton = () => {
-  const handleCommit = async () => {
-    const response = await postCommit(commitMessage());
-    console.log(response.message);
-    const status = await fetchGitStatus();
-    console.log(status);
-    setChange(''); // Clearing the change after commit
-    setExecutionResult('');
-    setCommitMessage('');
-    setPrompt('');
-  };
-
-  return (
-    <button className="w-full px-4 py-4 bg-green-700 text-white rounded mt-2" onClick={handleCommit}>Commit</button>
-  );
-};
-
-export default CommitButton;
+```
+package.json:
+```
+{
+  "name": "@aijunior/dev",
+  "version": "0.1.1",
+  "description": "Your AI Contributor which codes itself",
+  "type": "module",
+  "main": "src/main.js",
+  "bin": {
+    "junior": "src/main.js",
+    "junior-web": "src/web.js",
+    "junior-init": "src/init.js"
+  },
+  "scripts": {
+    "cli": "node src/main.js",
+    "start": "node src/web.js",
+    "build:css": "postcss ./src/frontend/styles.css -o ./dist/styles.css",
+    "build:doc": "node ./src/doc/buildDoc.js"
+  },
+  "keywords": [
+    "cli",
+    "uppercase"
+  ],
+  "author": "",
+  "license": "GPL",
+  "dependencies": {
+    "@types/js-yaml": "^4.0.5",
+    "autoprefixer": "^10.4.14",
+    "chatgpt": "^5.2.4",
+    "cors": "^2.8.5",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "highlight.js": "^11.8.0",
+    "js-yaml": "^4.1.0",
+    "markdown-it": "^13.0.1",
+    "marked": "^5.1.0",
+    "postcss": "^8.4.26",
+    "postcss-nested": "^6.0.1",
+    "simple-git": "^3.19.1",
+    "solid-js": "^1.7.7",
+    "tailwindcss": "^3.3.3",
+    "vite": "^4.3.9",
+    "vite-plugin-solid": "^2.7.0",
+    "ws": "^8.13.0"
+  },
+  "directories": {
+    "doc": "doc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tisztamo/Junior.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tisztamo/Junior/issues"
+  },
+  "homepage": "https://github.com/tisztamo/Junior#readme"
+}
 
 ```
 
 
 # Task
 
-Fix the following issue!
+Implement the following feature!
 
-Make CommitButton look exactly the same as rollback, except color!
+- Create a plan!
+- Create new files when needed!
+
+Requirements:
+
+- Install docsify-cli locally
+- npx run docsify init ./docs
+- Move md and png files and assets dir from doc to docs
+- Delete doc/
+- Delete the docs build command from package.json
+
+
+
+## Project Specifics
+
+- Every js file should *only export a single function*!
+- Use *ES6 imports*!
+- Prefer *async/await* over promises!
+- The frontend uses *Solidjs*, edit .jsx file accordingly
 
 
 # Output Format
