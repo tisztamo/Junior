@@ -9,88 +9,59 @@ docs/
 ├── index.html
 ├── roadmap.md
 ├── screenshot.png
+├── usage.md
 ├── web.md
 
 ```
-docs/_sidebar.md:
+docs/usage.md:
 ```
-* [Home](./README.md)
-* [Roadmap](./roadmap.md)
-* [Web](./web.md)
+# Developing External Projects with Junior
+
+## Installation
+
+Install Junior as a development dependency by running the following command:
 
 ```
-
-README.md:
-```
-Warn: This README is AI generated, just like all the source files of this project.
-
-# Junior - Your AI contributor which codes itself.
-
-[![Video: Junior codes itself](docs/assets/video_cover.jpg)](https://www.youtube.com/watch?v=W_iwry8uT7E)
-
-*"Video: Junior codes itself"*
-## Description
-
-Junior is an exploratory project aimed at revolutionizing the way programmers interact with the development process. Just like how Linus Torvalds oversees the Linux Kernel development without coding himself, this project allows developers to communicate with the AI and supervise the development process.
-
-Isn't that already possible with ChatGPT? No, LLMs have very limited "working memory", so it is not possible to directly work with them on large codebases.
-
-By providing specific task details in a prompt descriptor and highlighting the relevant parts of your project, you can delegate code implementation, documentation, testing, and more to your AI Junior.
-
-## Getting Started
-
-### Installation
-
-To install, clone the repository and run `npm install` in the root directory. Additionally, you can install the "Junior" vscode extension from the vscode extension marketplace.
-
-### Usage
-
-#### Web Interface
-
-Run the application with `npm start` to start a local server, where you can generate a prompt and automatically copy it to paste into ChatGPT. The web interface is designed for use with ChatGPT Pro and doesn't require an API key. For more information about the web interface, please refer to [docs/web.md](docs/web.md).
-
-#### Command-line interface (CLI)
-
-To start the CLI, use `npm run cli`. This mode uses the ChatGPT API, and you'll need an API key stored in the `OPENAI_API_KEY` environment variable.
-
-### The Prompt Descriptor
-
-A prompt descriptor is a YAML file (`prompt.yaml`) outlining the details necessary for generating a task prompt for the AI model.
-
-Here's an example of a prompt descriptor:
-
-```yaml
-task: prompt/task/feature/implement.md
-attention:
-  - src/interactiveSession/startInteractiveSession.js
-  - src/prompt/createPrompt.js
-  - src/attention/readAttention.js
-  - prompt.yaml
-requirements: >
-  Write a README.md for this _exploratory_ project!
-format: prompt/format/new_file_version.md
+npm add @aijunior/dev --save-dev
 ```
 
-Each element in the descriptor serves a specific purpose:
-- `task`: Describes the task type and scope. For example, `feature/implement`, `bug/fix`, or `refactor/`. You can check out the [prompt/task/feature/implement.md](prompt/task/feature/implement.md) file as an example.
-- `attention`: Lists the files and directories most relevant to the task.
-- `requirements`: Describes the actual task in a human-readable format.
-- `format`: Determines how the output will be formatted.
+## Initialization
 
-### Attention Mechanism
+You can initialize the necessary files in the repository with the command:
 
-The attention mechanism guides the AI model by providing it with a working set. It helps overcome the limited working memory of large language models.
+```
+npx junior-init
+```
 
-The working set is a subset of the entire project that's currently in focus. It includes both files and directories. For files, the content is directly provided to the AI. For directories, a brief list of files and subdirectories within them is presented.
+This will create the following files:
 
-## Contributing and Support
+```
+ko@MacBook-Pro-5 x % npx junior-init
+Initialized empty Git repository in /Users/ko/projects-new/tmp/juniortest/x/.git/
+[master (root-commit) 5c5c155] Junior init
+2 files changed, 6 insertions(+)
+create mode 100644 .gitignore
+create mode 100644 prompt/projectSpecifics.md
+Repo initialized for Junior development
+ko@MacBook-Pro-5 x % ls -a . .. .git .gitignore prompt prompt.yaml
+ko@MacBook-Pro-5 x % ls -a prompt . .. projectSpecifics.md
+```
 
-Contributions are welcome! Remember, we eat our own dog food in this project. Junior is designed to write itself. Your main role will be to oversee the work, provide detailed prompts, and review the outcomes.
+The prompt files will be gitignored.
 
-For support, please create an issue in the GitHub repository.
+### Project Specifics
 
-**Note:** For meaningful results, it's recommended to use the GPT-4 model or a more recent version.
+`prompt/projectSpecifics.md` is used to provide instructions about the codebase that Junior is working on, like preferred tools. It is important to keep this file minimal as it will be included in most prompts, and unnecessary complexity may result in the language model losing track and failing to solve the task.
 
+## Starting Junior
+
+You can start Junior with:
+
+```
+npx junior-web
+```
+
+For more information about the web interface, please refer to [web.md](./web.md).
 
 ```
 
@@ -99,7 +70,10 @@ For support, please create an issue in the GitHub repository.
 
 Improve the documentation!
 
-Write docs about developing external projects with Junior to docs/usage.md and link it from _sidebar.md! Info to include (Also read README.md for what Junior is, but do not repeat much from it.): npm add @aijunior/dev --save-dev to install `npx junior-init` creates the necessary files in the repo. They are currently: ``` ko@MacBook-Pro-5 x % npx junior-init Initialized empty Git repository in /Users/ko/projects-new/tmp/juniortest/x/.git/ [master (root-commit) 5c5c155] Junior init 2 files changed, 6 insertions(+) create mode 100644 .gitignore create mode 100644 prompt/projectSpecifics.md Repo initialized for Junior development ko@MacBook-Pro-5 x % ls -a .		..		.git		.gitignore	prompt		prompt.yaml ko@MacBook-Pro-5 x % ls -a prompt .			..			projectSpecifics.md ``` The prompt files will be gitignored. prompt/projectSpecifics.md is for instructions about the codebase Junior working on, like the preferred tools. Note: projectSpecifics.md will be included in most prompts, so it adds complexity, which may result in the language model loosing track and failing to solve the task. So projectSpecifics.md should be kept minimal. `npx junior-web` starts Junior. Link web.md (We are using docsify!) for more info!
+After &#34;This will create the following files:&#34; show only the files (dir was empty before junior init)! In &#34;The prompt files will be gitignored.&#34;, mention
+  - prompt.yaml, the prompt descriptor filled by the user (link to descriptor.md)
+  - prompt.md, the generated prompt by Junior
+  - change.sh, the changeset generated by the language model
 
 
 # Output Format
