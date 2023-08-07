@@ -1,38 +1,29 @@
-task: prompt/task/bug/fix.md
+task: prompt/task/doc/improve.md
 attention:
-  - ./
-requirements: |
-  clean install gives: npm ERR! notarget No matching version found for docsify-cli@^4.4.7. #35
-  pbharrin opened this issue 3 hours ago · 3 comments
-  Comments
-  pbharrin commented 3 hours ago
-  A clean install gives me the following error:
-  npm ERR! notarget No matching version found for docsify-cli@^4.4.7.
-
-  Running npm view docsify-cli versions
-  returns
-  [ '0.1.0', '0.2.1',  '0.2.2',  '1.0.0',  '1.1.0', '1.1.1', '1.2.0',  '1.2.1',  '1.3.0',  '1.4.0', '1.5.0', '1.5.1',  '2.0.0',  '2.1.0',  '3.0.0', '3.0.1', '3.0.2',  '3.1.0',  '3.1.1',  '3.2.0', '3.2.1', '3.2.2',  '3.2.3',  '3.2.4',  '3.2.5', '3.3.0', '3.3.1',  '3.3.2',  '4.0.0',  '4.0.1', '4.0.2', '4.1.0',  '4.1.1',  '4.1.2',  '4.1.3', '4.1.4', '4.1.5',  '4.1.6',  '4.1.7',  '4.1.8', '4.1.9', '4.1.10', '4.1.11', '4.1.12', '4.2.0', '4.2.1', '4.3.0',  '4.4.0',  '4.4.1',  '4.4.2', '4.4.3', '4.4.4' ]
-
-  No version 4.4.7 has been published.
-
-  @pbharrin
-  Tip
-  Author
-  pbharrin commented 3 hours ago
-  I also looked into the source of docsify-cli and could not find a 4.4.7.
-
-  @tisztamo
-  Tip
-  Owner
-  tisztamo commented 3 hours ago
-  Uh, it was added today, I will check it soon but currently on mobile. Try to go back a few commits please!
-
-  @tisztamo
-  Tip
-  Owner
-  tisztamo commented 3 hours ago
-  Found the cause here:
-  https://chat.openai.com/share/937d8682-300c-4e1f-84e5-607425cc4b21
-
-  I asked gpt both to install docsify-cli and also to edit package.json by heredocing the full file, in the same script. So it guessed the version in order to not loose the newly installed dep.
+  - docs/
+  - docs/_sidebar.md
+  - README.md
+requirements: >
+  Write docs about developing external projects with Junior to docs/usage.md and link it from _sidebar.md!
+  Info to include (Also read README.md for what Junior is, but do not repeat much from it.):
+  npm add @aijunior/dev --save-dev to install
+  `npx junior-init` creates the necessary files in the repo.
+  They are currently:
+  ```
+  ko@MacBook-Pro-5 x % npx junior-init
+  Initialized empty Git repository in /Users/ko/projects-new/tmp/juniortest/x/.git/
+  [master (root-commit) 5c5c155] Junior init
+  2 files changed, 6 insertions(+)
+  create mode 100644 .gitignore
+  create mode 100644 prompt/projectSpecifics.md
+  Repo initialized for Junior development
+  ko@MacBook-Pro-5 x % ls -a
+  .		..		.git		.gitignore	prompt		prompt.yaml
+  ko@MacBook-Pro-5 x % ls -a prompt
+  .			..			projectSpecifics.md
+  ```
+  The prompt files will be gitignored.
+  prompt/projectSpecifics.md is for instructions about the codebase Junior working on, like the preferred tools.
+  Note: projectSpecifics.md will be included in most prompts, so it adds complexity, which may result in the language model loosing track and failing to solve the task. So projectSpecifics.md should be kept minimal.
+  `npx junior-web` starts Junior. Link web.md (We are using docsify!) for more info!
 os: OSX

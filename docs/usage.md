@@ -1,13 +1,3 @@
-#!/bin/sh
-set -e
-goal="Add Junior usage documentation"
-echo "Plan:"
-echo "1. Create docs/usage.md"
-echo "2. Add content to docs/usage.md about developing external projects with Junior"
-echo "3. Add a link to docs/usage.md in _sidebar.md"
-
-# Step 1: Create docs/usage.md
-cat > docs/usage.md << 'EOF'
 # Developing External Projects with Junior
 
 ## Installation
@@ -55,9 +45,3 @@ npx junior-web
 ```
 
 For more information about the web interface, please refer to [web.md](./web.md).
-EOF
-
-# Step 2: Add link to _sidebar.md
-echo "* [Usage](./usage.md)" >> docs/_sidebar.md
-
-echo "\033[32mDone: $goal\033[0m\n"
