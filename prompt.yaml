@@ -1,15 +1,8 @@
 task: prompt/task/doc/improve.md
 attention:
-  - README.md
   - docs/usage.md
 requirements: >
-  When talking about gitignored files,
-  instead of "prompt files" we should say something like "Xx files".
-  Find the best word to grasp them!
-  Forget file names, their content follows:
-    - .yaml is input by user
-    - .md is debug info: AI prompt formatted as markdown
-    - .sh is changeset packaged as executable, created by AI
-  What kind of files are they?
-  Fill in Xx!
+  - "This will create the following files:": edit or create
+  - Remove "link to", unnecessary
+  - Add abbreviaton: TIF
 os: OSX
