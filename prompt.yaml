@@ -1,9 +1,9 @@
 task: prompt/task/doc/improve.md
 attention:
   - docs/descriptor.md
-  - prompt/task/feature/implement.md
 requirements: >
+  There was an editing error, scrumbling things here.
   In docs/descriptor.md, fix "- installedTools: Allows to overwrite attributes in prompt.yaml or create prompt/attributeName.md with the content."!
-  installedTools is by default "npm, jq", and the user can mention his tools in prompt/installedTools.md.
-  Also mention that the user can overwrite attributes in prompt.yaml or create prompt/attributeName.md with the content for any attribute, including ones not listed here.  
+  installedTools is not defined like this. It allows the user to mention his tools, e.g. when drawing. By default it is "npm, jq" The user can create prompt/installedTools.md to overwrite.
+  What was the previous definition of installedTools is instead a separate topic, put it to a separate paragraph and reword it: That the user can overwrite attributes in prompt.yaml or create prompt/attributeName.md with the content for any attribute, including ones not listed here.
 os: OSX

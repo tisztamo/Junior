@@ -26,7 +26,7 @@ requirements: >
 - requirements: Describes the actual task in a human-readable format.
 - format: (Optional and half-working) Determines how the output will be formatted. It should be avoided for now.
 - os: (Default: "Debian") Specifies the operating system.
-- installedTools: Allows to overwrite attributes in prompt.yaml or create prompt/attributeName.md with the content.
+- installedTools: By default, this includes "npm, jq." Allows the user to overwrite attributes in prompt.yaml or create prompt/attributeName.md with the content for any attribute, including those not listed here.
 
 ## Attributes referencing .md files
 
@@ -54,26 +54,12 @@ Prompt parts are markdown template files, and [ejs](https://ejs.co/) runs on the
 
 ```
 
-prompt/task/feature/implement.md:
-```
-Implement the following feature!
-
-- Create a plan!
-- Create new files when needed!
-
-Requirements:
-
-<%= requirements %>
-
-<%= projectSpecifics %>
-```
-
 
 # Task
 
 Improve the documentation!
 
-In docs/descriptor.md, fix &#34;- installedTools: Allows to overwrite attributes in prompt.yaml or create prompt/attributeName.md with the content.&#34;! installedTools is by default &#34;npm, jq&#34;, and the user can mention his tools in prompt/installedTools.md. Also mention that the user can overwrite attributes in prompt.yaml or create prompt/attributeName.md with the content for any attribute, including ones not listed here.  
+There was an editing error, scrumbling things here. In docs/descriptor.md, fix &#34;- installedTools: Allows to overwrite attributes in prompt.yaml or create prompt/attributeName.md with the content.&#34;! installedTools is not defined like this. It allows the user to mention his tools, e.g. when drawing. By default it is &#34;npm, jq&#34; The user can create prompt/installedTools.md to overwrite. What was the previous definition of installedTools is instead a separate topic, put it to a separate paragraph and reword it: That the user can overwrite attributes in prompt.yaml or create prompt/attributeName.md with the content for any attribute, including ones not listed here.
 
 
 # Output Format
