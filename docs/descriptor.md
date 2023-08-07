@@ -28,7 +28,7 @@ Additionally, users can overwrite attributes in prompt.yaml or create prompt/att
 
 ## Attributes referencing .md files
 
-When a yaml attribute refers to an existing file, its content will be used. For example, the line task: prompt/task/feature/implement.md in the example yaml refers to an existing markdown file and its content is injected into the task.
+When a yaml attribute refers to an existing file, its content will be used. For example, the line `task: prompt/task/feature/implement.md` in the example yaml refers to an existing markdown file and its content is injected into the task.
 
 Here's the content of prompt/task/feature/implement.md as a supplement to the example:
 
@@ -47,7 +47,7 @@ Requirements:
 
 ## Template Files
 
-Prompt parts are markdown template files, and [ejs](https://ejs.co/) runs on them. Attributes from the yaml file are available in the template, e.g., <%= requirements %> injects the requirements.
+Prompt parts are markdown template files, and [ejs](https://ejs.co/) runs on them. Attributes from the yaml file are available in the template, e.g., `<%= requirements %>` injects the requirements.
 
 ```
 
