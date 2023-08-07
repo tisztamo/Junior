@@ -1,13 +1,11 @@
 #!/bin/sh
 set -e
-goal="Improve documentation for referencing .md files"
+goal="Improve the prompt descriptor documentation"
 echo "Plan:"
-echo "1. Add a new section called 'Attributes referencing .md files' between 'Attributes' and 'Template Files'"
-echo "2. Include an example referring to the task: prompt/task/feature/implement.md line in the example yaml"
-echo "3. Show the content of prompt/task/feature/implement.md to supplement the example"
+echo "1. Modify the 'installedTools' section in docs/descriptor.md"
+echo "2. Explain that users can overwrite attributes or create files with the content for any attribute"
 
-# Step 1: Insert the new section
-cat << 'EOF' > docs/temp_descriptor.md
+cat << 'EOF' > docs/descriptor.md
 # Prompt Descriptor
 
 The prompt descriptor is a YAML file (prompt.yaml) that outlines the details necessary for generating a task prompt for the AI model. It is used to specify the task, attention, requirements, and other attributes.
@@ -32,7 +30,7 @@ requirements: >
 - requirements: Describes the actual task in a human-readable format.
 - format: (Optional and half-working) Determines how the output will be formatted. It should be avoided for now.
 - os: (Default: "Debian") Specifies the operating system.
-- installedTools: Allows to overwrite attributes in prompt.yaml or create prompt/attributeName.md with the content.
+- installedTools: By default, this includes "npm, jq." Allows the user to overwrite attributes in prompt.yaml or create prompt/attributeName.md with the content for any attribute, including those not listed here.
 
 ## Attributes referencing .md files
 
@@ -58,8 +56,5 @@ Requirements:
 Prompt parts are markdown template files, and [ejs](https://ejs.co/) runs on them. Attributes from the yaml file are available in the template, e.g., <%= requirements %> injects the requirements.
 
 EOF
-
-# Step 2: Replace the original descriptor file with the new version
-mv docs/temp_descriptor.md docs/descriptor.md
 
 echo "\033[32mDone: $goal\033[0m\n"

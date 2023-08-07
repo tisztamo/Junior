@@ -3,9 +3,7 @@ attention:
   - docs/descriptor.md
   - prompt/task/feature/implement.md
 requirements: >
-  In docs/descriptor.md, instead of just "When a yaml attribute refers to an existing file, its content will be used.",
-  make a whole section: "Attributes referencing .md files"!
-  - Put it between "Attributes" and "Template Files"
-  - Also write about an example in the new section: the task: prompt/task/feature/implement.md line in the example yaml
-  - Show the content of prompt/task/feature/implement.md to supplement the example
+  In docs/descriptor.md, fix "- installedTools: Allows to overwrite attributes in prompt.yaml or create prompt/attributeName.md with the content."!
+  installedTools is by default "npm, jq", and the user can mention his tools in prompt/installedTools.md.
+  Also mention that the user can overwrite attributes in prompt.yaml or create prompt/attributeName.md with the content for any attribute, including ones not listed here.  
 os: OSX

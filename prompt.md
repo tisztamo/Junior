@@ -4,7 +4,7 @@ docs/descriptor.md:
 ```
 # Prompt Descriptor
 
-The prompt descriptor is a YAML file (`prompt.yaml`) that outlines the details necessary for generating a task prompt for the AI model. It is used to specify the task, attention, requirements, and other attributes.
+The prompt descriptor is a YAML file (prompt.yaml) that outlines the details necessary for generating a task prompt for the AI model. It is used to specify the task, attention, requirements, and other attributes.
 
 ## Example
 
@@ -21,18 +21,36 @@ requirements: >
 
 ## Attributes
 
-- `task`: Describes the task type and scope.
-- `attention`: Lists the files and directories most relevant to the task.
-- `requirements`: Describes the actual task in a human-readable format.
-- `format`: (Optional and half-working) Determines how the output will be formatted. It should be avoided for now.
-- `os`: (Default: "Debian") Specifies the operating system.
-- `installedTools`: Allows to overwrite attributes in prompt.yaml or create prompt/attributeName.md with the content.
+- task: Describes the task type and scope.
+- attention: Lists the files and directories most relevant to the task.
+- requirements: Describes the actual task in a human-readable format.
+- format: (Optional and half-working) Determines how the output will be formatted. It should be avoided for now.
+- os: (Default: "Debian") Specifies the operating system.
+- installedTools: Allows to overwrite attributes in prompt.yaml or create prompt/attributeName.md with the content.
+
+## Attributes referencing .md files
+
+When a yaml attribute refers to an existing file, its content will be used. For example, the line task: prompt/task/feature/implement.md in the example yaml refers to an existing markdown file and its content is injected into the task.
+
+Here's the content of prompt/task/feature/implement.md as a supplement to the example:
+
+```
+Implement the following feature!
+
+- Create a plan!
+- Create new files when needed!
+
+Requirements:
+
+<%= requirements %>
+
+<%= projectSpecifics %>
+```
 
 ## Template Files
 
-Prompt parts are markdown template files, and [ejs](https://ejs.co/) runs on them. Attributes from the yaml file are available in the template, e.g., `<%= requirements %>` injects the requirements.
+Prompt parts are markdown template files, and [ejs](https://ejs.co/) runs on them. Attributes from the yaml file are available in the template, e.g., <%= requirements %> injects the requirements.
 
-When a yaml attribute refers to an existing file, its content will be used.
 
 ```
 
@@ -55,7 +73,7 @@ Requirements:
 
 Improve the documentation!
 
-In docs/descriptor.md, instead of just &#34;When a yaml attribute refers to an existing file, its content will be used.&#34;, make a whole section: &#34;Attributes referencing .md files&#34;! - Put it between &#34;Attributes&#34; and &#34;Template Files&#34; - Also write about an example in the new section: the task: prompt/task/feature/implement.md line in the example yaml - Show the content of prompt/task/feature/implement.md to supplement the example
+In docs/descriptor.md, fix &#34;- installedTools: Allows to overwrite attributes in prompt.yaml or create prompt/attributeName.md with the content.&#34;! installedTools is by default &#34;npm, jq&#34;, and the user can mention his tools in prompt/installedTools.md. Also mention that the user can overwrite attributes in prompt.yaml or create prompt/attributeName.md with the content for any attribute, including ones not listed here.  
 
 
 # Output Format
