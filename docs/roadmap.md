@@ -2,7 +2,7 @@
 ## Usability & fixes
 - ✅ Done: Implement the four buttons
 - Fix every major bug
-- Write docs to allow using Junior for developing external projects
+- ✅ Done: Write docs to allow using Junior for developing external projects
 
 ## Programming on mobile
 - Develop a file browser to allow the user to select attention files from mobile

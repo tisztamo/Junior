@@ -2,5 +2,5 @@ task: prompt/task/doc/improve.md
 attention:
   - docs/roadmap.md
 requirements: >
-  "Implement the four buttons" is done. Add a nice unicode character and a single word to show this.
+  "Write docs to allow using Junior for developing external projects" is also done.
 os: OSX

@@ -4,7 +4,7 @@ docs/roadmap.md:
 ```
 # Roadmap
 ## Usability & fixes
-- Implement the four buttons
+- ✅ Done: Implement the four buttons
 - Fix every major bug
 - Write docs to allow using Junior for developing external projects
 
@@ -28,7 +28,7 @@ docs/roadmap.md:
 
 Improve the documentation!
 
-&#34;Implement the four buttons&#34; is done. Add a nice unicode character and a single word to show this.
+&#34;Write docs to allow using Junior for developing external projects&#34; is also done.
 
 
 # Output Format
