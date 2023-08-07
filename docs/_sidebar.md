@@ -2,3 +2,4 @@
 * [Roadmap](./roadmap.md)
 * [Web](./web.md)
 * [Usage](./usage.md)
+* [Prompt Descriptor](./descriptor.md)
