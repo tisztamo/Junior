@@ -1,62 +1,47 @@
 #!/bin/sh
 set -e
-goal="Fix description of installedTools in docs/descriptor.md"
+goal="Update application start command in docs"
 echo "Plan:"
-echo "1. Fix the description of 'installedTools' attribute"
-echo "2. Separate the previous definition into its own paragraph and reword it"
+echo "1. Change the command to run the application from 'npm start' to 'npx junior-web' or 'npm start' from Junior itself."
 
-cat > docs/descriptor.md << 'EOF'
-# Prompt Descriptor
+cat << 'EOF' > docs/web.md
+# Web Interface
 
-The prompt descriptor is a YAML file (prompt.yaml) that outlines the details necessary for generating a task prompt for the AI model. It is used to specify the task, attention, requirements, and other attributes.
+Junior's web interface was designed for use with ChatGPT Pro and doesn't require an API key.
 
-## Example
+## Architecture
 
-```yaml
-task: prompt/task/feature/implement.md
-attention:
-  - src/interactiveSession/startInteractiveSession.js
-  - src/prompt/createPrompt.js
-  - src/attention/readAttention.js
-  - prompt.yaml
-requirements: >
-  Write a README.md for this _exploratory_ project!
-```
+The web interface is composed of two different servers: a frontend and a backend. The frontend server runs on port 5173, and the backend server runs on port 10101.
 
-## Attributes
+## Starting the Web Interface
 
-- task: Describes the task type and scope.
-- attention: Lists the files and directories most relevant to the task.
-- requirements: Describes the actual task in a human-readable format.
-- format: (Optional and half-working) Determines how the output will be formatted. It should be avoided for now.
-- os: (Default: "Debian") Specifies the operating system.
-- installedTools: By default, this includes "npm, jq." Allows the user to mention his tools, e.g. when drawing. The user can create prompt/installedTools.md to overwrite.
+Run the application with `npx junior-web` from your project or with `npm start` from Junior itself. A web browser window will automatically open at `http://localhost:5173`, which is where you can access the web interface.
 
-Additionally, users can overwrite attributes in prompt.yaml or create prompt/attributeName.md with the content for any attribute, including those not listed here.
+## Workflow
 
-## Attributes referencing .md files
+The typical workflow begins with editing the `prompt.yaml` file in your code editor of choice (we recommend Visual Studio Code with the Junior plugin for an optimal experience). Once you're satisfied with your task setup, you proceed to the web interface for execution and monitoring.
 
-When a yaml attribute refers to an existing file, its content will be used. For example, the line task: prompt/task/feature/implement.md in the example yaml refers to an existing markdown file and its content is injected into the task.
+## Usage
 
-Here's the content of prompt/task/feature/implement.md as a supplement to the example:
+The web interface has a few interactive components:
 
-```
-Implement the following feature!
+![Web Interface](./screenshot.png)
 
-- Create a plan!
-- Create new files when needed!
+- **Generate & Copy Prompt button (Blue)**: Click this to generate a task prompt based on your `prompt.yaml` file and copy it to your clipboard. The copied prompt should be pasted to ChatGPT 4 or similar for execution.
 
-Requirements:
+- **Paste & Execute Change button (Orange)**: Paste the response from the AI model (a shell script) into the input field and click this button to execute the changes.
 
-<%= requirements %>
+- **Roll Back to Last Commit button (Red)**: If you made a mistake or aren't happy with the changes, click this button to revert to the last commit. Please note, the rollback operation preserves the `prompt.yaml` file, but drops every change since the last commit, including new files created in the meantime, even if they were not created by Junior.
 
-<%= projectSpecifics %>
-```
+- **Terminal**: Displays the output of your command execution. It's a simple console that shows the progress of the task.
 
-## Template Files
+For a more detailed guide on using the web interface, refer to our video tutorial [here](https://youtu.be/W_iwry8uT7E).
 
-Prompt parts are markdown template files, and [ejs](https://ejs.co/) runs on them. Attributes from the yaml file are available in the template, e.g., <%= requirements %> injects the requirements.
+Remember, you can always refer to your `prompt.yaml` file to modify the task details or attention mechanism.
 
-```
+At the end of your development, make sure to run `npm run build:doc` to regenerate the web.html document reflecting the latest changes.
+
+Happy developing with your AI contributor!
+EOF
 
 echo "\033[32mDone: $goal\033[0m\n"

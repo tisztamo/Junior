@@ -8,7 +8,7 @@ The web interface is composed of two different servers: a frontend and a backend
 
 ## Starting the Web Interface
 
-Run the application with `npm start` to start both servers. A web browser window will automatically open at `http://localhost:5173`, which is where you can access the web interface.
+Run the application with `npx junior-web` from your project or with `npm start` from Junior itself. A web browser window will automatically open at `http://localhost:5173`, which is where you can access the web interface.
 
 ## Workflow
 
@@ -35,4 +35,3 @@ Remember, you can always refer to your `prompt.yaml` file to modify the task det
 At the end of your development, make sure to run `npm run build:doc` to regenerate the web.html document reflecting the latest changes.
 
 Happy developing with your AI contributor!
-

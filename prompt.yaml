@@ -1,9 +1,7 @@
 task: prompt/task/doc/improve.md
 attention:
-  - docs/descriptor.md
+  - docs/web.md
 requirements: >
-  There was an editing error, scrumbling things here.
-  In docs/descriptor.md, fix "- installedTools: Allows to overwrite attributes in prompt.yaml or create prompt/attributeName.md with the content."!
-  installedTools is not defined like this. It allows the user to mention his tools, e.g. when drawing. By default it is "npm, jq" The user can create prompt/installedTools.md to overwrite.
-  What was the previous definition of installedTools is instead a separate topic, put it to a separate paragraph and reword it: That the user can overwrite attributes in prompt.yaml or create prompt/attributeName.md with the content for any attribute, including ones not listed here.
+  Update the info:
+  Run the application with `npx junior-web` from your project or with `npm start` from Junior itself.
 os: OSX
