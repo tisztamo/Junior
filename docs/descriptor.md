@@ -22,7 +22,9 @@ requirements: >
 - requirements: Describes the actual task in a human-readable format.
 - format: (Optional and half-working) Determines how the output will be formatted. It should be avoided for now.
 - os: (Default: "Debian") Specifies the operating system.
-- installedTools: By default, this includes "npm, jq." Allows the user to overwrite attributes in prompt.yaml or create prompt/attributeName.md with the content for any attribute, including those not listed here.
+- installedTools: By default, this includes "npm, jq." Allows the user to mention his tools, e.g. when drawing. The user can create prompt/installedTools.md to overwrite.
+
+Additionally, users can overwrite attributes in prompt.yaml or create prompt/attributeName.md with the content for any attribute, including those not listed here.
 
 ## Attributes referencing .md files
 
@@ -47,3 +49,6 @@ Requirements:
 
 Prompt parts are markdown template files, and [ejs](https://ejs.co/) runs on them. Attributes from the yaml file are available in the template, e.g., <%= requirements %> injects the requirements.
 
+```
+
+echo "\033[32mDone: $goal\033[0m\n"
