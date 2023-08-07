@@ -1,9 +1,7 @@
-task: prompt/task/doc/improve.md
+task: prompt/task/feature/implement.md
 attention:
-  - docs/docsifyConfig.js
+  - src/frontend/components/NavBar.jsx
 requirements: |
-  Add the following configs:
-  - autoHeader: true
-  - logo: "assets/logo.svg"
-  - nameLink: Use the repo url
+  - Also make a link from the title
+  - Do not underline the links
 os: OSX

@@ -10,8 +10,8 @@ const NavBar = () => {
         <ThemeSwitcher />
       </div>
       <div class="flex flex-col items-center justify-center">
-        <h1 class="text-center text-3xl mt-6">{title}</h1>
-        <a href="https://github.com/tisztamo/Junior" class="text-center text-xl underline cursor-pointer">Your AI contributor</a>
+        <a href="https://github.com/tisztamo/Junior" class="text-center text-3xl mt-6 no-underline">{title}</a>
+        <a href="https://github.com/tisztamo/Junior" class="text-center text-xl no-underline cursor-pointer">Your AI contributor</a>
       </div>
     </div>
   );

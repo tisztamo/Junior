@@ -1,23 +1,51 @@
 # Working set
 
-docs/docsifyConfig.js:
+src/frontend/components/NavBar.jsx:
 ```
-window.$docsify = {
-  name: 'Junior',
-  repo: 'https://github.com/tisztamo/Junior',
-  loadSidebar: true
-}
+import { createSignal } from 'solid-js';
+import ThemeSwitcher from './ThemeSwitcher';
+
+const NavBar = () => {
+  const title = 'Junior';
+
+  return (
+    <div class="relative w-full">
+      <div class="absolute top-0 right-0 m-4">
+        <ThemeSwitcher />
+      </div>
+      <div class="flex flex-col items-center justify-center">
+        <h1 class="text-center text-3xl mt-6">{title}</h1>
+        <a href="https://github.com/tisztamo/Junior" class="text-center text-xl underline cursor-pointer">Your AI contributor</a>
+      </div>
+    </div>
+  );
+};
+
+export default NavBar;
+
 ```
 
 
 # Task
 
-Improve the documentation!
+Implement the following feature!
 
-Add the following configs:
-- autoHeader: true
-- logo: &#34;assets/logo.svg&#34;
-- nameLink: Use the repo url
+- Create a plan!
+- Create new files when needed!
+
+Requirements:
+
+- Also make a link from the title
+- Do not underline the links
+
+
+
+## Project Specifics
+
+- Every js file should *only export a single function*!
+- Use *ES6 imports*!
+- Prefer *async/await* over promises!
+- The frontend uses *Solidjs*, edit .jsx file accordingly
 
 
 # Output Format
