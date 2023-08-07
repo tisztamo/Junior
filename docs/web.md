@@ -1,6 +1,6 @@
 # Web Interface
 
-The Contributor project provides a web interface to automate making changes with the help of the Language Learning Model (LLM). It's designed for use with ChatGPT Pro and doesn't require an API key.
+Junior's web interface was designed for use with ChatGPT Pro and doesn't require an API key.
 
 ## Architecture
 
