@@ -1,26 +1,12 @@
 # Working set
 
-docs/roadmap.md:
+docs/docsifyConfig.js:
 ```
-# Roadmap
-## Usability & fixes
-- ✅ Done: Implement the four buttons
-- Fix every major bug
-- Write docs to allow using Junior for developing external projects
-
-## Programming on mobile
-- Develop a file browser to allow the user to select attention files from mobile
-- Create an app by wrapping the frontend
-- Test it by developing at the local Playground and while commuting
-
-## Auto-attention
-- Propose an attention based on the requirements and task the user selected
-- Embed every file in the project
-- Store the embeddings in an (embedded) vector database
-
-## Prompt herds
-- Scan and transform (refactor) the codebase gradually
-
+window.$docsify = {
+  name: 'Junior',
+  repo: 'https://github.com/tisztamo/Junior',
+  loadSidebar: true
+}
 ```
 
 
@@ -28,7 +14,10 @@ docs/roadmap.md:
 
 Improve the documentation!
 
-&#34;Write docs to allow using Junior for developing external projects&#34; is also done.
+Add the following configs:
+- autoHeader: true
+- logo: &#34;assets/logo.svg&#34;
+- nameLink: Use the repo url
 
 
 # Output Format

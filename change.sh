@@ -1,28 +1,18 @@
 #!/bin/sh
 set -e
-goal="Update roadmap.md with completed task"
+goal="Improving documentation config"
 echo "Plan:"
-echo "1. Modify docs/roadmap.md file to mark the 'Write docs to allow using Junior for developing external projects' task as completed."
+echo "1. Update docs/docsifyConfig.js with new configs."
 
-cat > docs/roadmap.md << 'EOF'
-# Roadmap
-## Usability & fixes
-- ✅ Done: Implement the four buttons
-- Fix every major bug
-- ✅ Done: Write docs to allow using Junior for developing external projects
-
-## Programming on mobile
-- Develop a file browser to allow the user to select attention files from mobile
-- Create an app by wrapping the frontend
-- Test it by developing at the local Playground and while commuting
-
-## Auto-attention
-- Propose an attention based on the requirements and task the user selected
-- Embed every file in the project
-- Store the embeddings in an (embedded) vector database
-
-## Prompt herds
-- Scan and transform (refactor) the codebase gradually
+cat > docs/docsifyConfig.js << 'EOF'
+window.$docsify = {
+  name: 'Junior',
+  repo: 'https://github.com/tisztamo/Junior',
+  loadSidebar: true,
+  autoHeader: true,
+  logo: "assets/logo.svg",
+  nameLink: 'https://github.com/tisztamo/Junior'
+}
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"

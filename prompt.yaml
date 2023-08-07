@@ -1,6 +1,9 @@
 task: prompt/task/doc/improve.md
 attention:
-  - docs/roadmap.md
-requirements: >
-  "Write docs to allow using Junior for developing external projects" is also done.
+  - docs/docsifyConfig.js
+requirements: |
+  Add the following configs:
+  - autoHeader: true
+  - logo: "assets/logo.svg"
+  - nameLink: Use the repo url
 os: OSX
