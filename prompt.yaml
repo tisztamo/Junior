@@ -1,18 +1,11 @@
 task: prompt/task/doc/improve.md
 attention:
-  - README.md
-  - docs/
-  - docs/_sidebar.md
+  - docs/descriptor.md
+  - prompt/task/feature/implement.md
 requirements: >
-  Create docs/descriptor.md and link as "Prompt Descriptor" from _sidebar.md
-  README.md is for your reference, do not modify it.
-  Present the info as an introduction with example and reference of attributes.
-  Also incorporate the followings:
-  - "format:" is optional and half-working, it should be avoided for now. (Remove "format:" from the introductory example!)
-  - "os:" is by default: "Debian".
-  - "installedTools:""
-  - Overwrite attributes in prompt.yaml or create prompt/attributeName.md with the content
-  - Prompt parts are markdown template files, ejs runs on them (also link ejs)
-  - Attributes from the yaml file are available in the template, e.g. `<%= requirements %>` injects the requirements
-  - When a yaml attribute refers to an existing file, it's content will be used.
+  In docs/descriptor.md, instead of just "When a yaml attribute refers to an existing file, its content will be used.",
+  make a whole section: "Attributes referencing .md files"!
+  - Put it between "Attributes" and "Template Files"
+  - Also write about an example in the new section: the task: prompt/task/feature/implement.md line in the example yaml
+  - Show the content of prompt/task/feature/implement.md to supplement the example
 os: OSX
