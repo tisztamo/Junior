@@ -1,7 +1,6 @@
 task: prompt/task/doc/improve.md
 attention:
-  - docs/web.md
+  - docs/roadmap.md
 requirements: >
-  Update the info:
-  Run the application with `npx junior-web` from your project or with `npm start` from Junior itself.
+  "Implement the four buttons" is done. Add a nice unicode character and a single word to show this.
 os: OSX

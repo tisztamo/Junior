@@ -1,6 +1,6 @@
 # Roadmap
 ## Usability & fixes
-- Implement the four buttons
+- ✅ Done: Implement the four buttons
 - Fix every major bug
 - Write docs to allow using Junior for developing external projects
 
