@@ -1,6 +1,9 @@
-task: prompt/task/doc/improve.md
+task: prompt/task/refactor/move_files.md
 attention:
-  - README.md
+  - src/prompt/promptProcessing.js
+  - src/backend/handlers/generateHandler.js
+  - src/interactiveSession/startInteractiveSession.js
 requirements: |
-  Add a badge linking to the docs: https://tisztamo.github.io/Junior/#/
+  - Rename promptProcessing to processPrompt.js
+  - Eliminate last_command_result
 os: OSX

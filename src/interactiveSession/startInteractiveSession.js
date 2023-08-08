@@ -1,5 +1,5 @@
 import { saveAndSendPrompt } from './saveAndSendPrompt.js';
-import processPrompt from '../prompt/promptProcessing.js';
+import processPrompt from '../prompt/processPrompt.js';
 import { loadPromptDescriptor } from '../prompt/loadPromptDescriptor.js';
 import watchPromptDescriptor from '../prompt/watchPromptDescriptor.js';
 import { rl } from '../config.js';
@@ -21,3 +21,4 @@ watchPromptDescriptor(console.log);
 };
 
 export { startInteractiveSession };
+
