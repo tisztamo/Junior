@@ -7,6 +7,7 @@ Install Junior as a development dependency by running the following command:
 ```
 npm add @aijunior/dev --save-dev
 ```
+Additionally, you can install the "Junior" vscode extension from the vscode extension marketplace.
 
 ## Initialization
 

@@ -1,6 +1,7 @@
 task: prompt/task/feature/implement.md
 attention:
-  - docs/_sidebar.md
-requirements: |
-  Rename "Home" to "Junior Docs"
+  - docs/usage.md
+requirements: >
+  - Add the sentence "Additionally, you can install the "Junior" vscode extension from the
+  vscode extension marketplace." to the installation section.
 os: OSX
