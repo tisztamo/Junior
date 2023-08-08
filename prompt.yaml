@@ -1,6 +1,6 @@
 task: prompt/task/doc/improve.md
 attention:
-  - docs/_sidebar.md
+  - README.md
 requirements: |
-  Reorder: readme, usage, web, prompt descriptor, roadmap
+  Add a badge linking to the docs: https://tisztamo.github.io/Junior/#/
 os: OSX

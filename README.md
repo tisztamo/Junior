@@ -1,3 +1,4 @@
+[![Docs: Junior Documentation](https://img.shields.io/badge/docs-Junior-blue)](https://tisztamo.github.io/Junior/#/)
 Warn: This README is AI generated, just like all the source files of this project.
 
 # Junior - Your AI contributor which codes itself.
@@ -66,4 +67,3 @@ Contributions are welcome! Remember, we eat our own dog food in this project. Ju
 For support, please create an issue in the GitHub repository.
 
 **Note:** For meaningful results, it's recommended to use the GPT-4 model or a more recent version.
-
