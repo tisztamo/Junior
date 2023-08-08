@@ -1,8 +1,6 @@
 task: prompt/task/feature/implement.md
 attention:
-  - docs/assets/
-  - docs/index.html
+  - docs/_sidebar.md
 requirements: |
-  Generate favicon from logo
-  Add favicon to html
+  Rename "Home" to "Junior Docs"
 os: OSX
