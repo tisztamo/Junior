@@ -1,10 +1,7 @@
-task: prompt/task/doc/improve.md
+task: prompt/task/refactor/custom.md
 attention:
-  - ./
-  - ./src/
-  - convert-svg-to-png.cjs
+  - scripts/convert-svg-to-png.cjs
   - package.json
 requirements: |
-  Find a place for this .cjs, move it there, and
-  Create a new npm run command for the logo updating workflow.
+  Rename the .cjs to updateLogo.js.
 os: OSX

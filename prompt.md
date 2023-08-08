@@ -1,45 +1,6 @@
 # Working set
 
-```
-./
-├── .DS_Store
-├── .git/...
-├── .github/...
-├── .gitignore
-├── .vscode/...
-├── README.md
-├── change.sh
-├── convert-svg-to-png.cjs
-├── docs/...
-├── integrations/...
-├── node_modules/...
-├── package-lock.json
-├── package.json
-├── prompt/...
-├── prompt.md
-├── prompt.yaml
-├── src/...
-
-```
-```
-./src/
-├── .DS_Store
-├── attention/...
-├── backend/...
-├── config.js
-├── doc/...
-├── execute/...
-├── frontend/...
-├── git/...
-├── init.js
-├── interactiveSession/...
-├── llm/...
-├── main.js
-├── prompt/...
-├── web.js
-
-```
-convert-svg-to-png.cjs:
+scripts/convert-svg-to-png.cjs:
 ```
 const sharp = require('sharp');
 const fs = require('fs');
@@ -72,7 +33,8 @@ package.json:
   "scripts": {
     "cli": "node src/main.js",
     "start": "node src/web.js",
-    "build:css": "postcss ./src/frontend/styles.css -o ./dist/styles.css"
+    "build:css": "postcss ./src/frontend/styles.css -o ./dist/styles.css",
+    "update-logo": "node ./scripts/convert-svg-to-png.cjs"
   },
   "keywords": [
     "cli",
@@ -120,10 +82,18 @@ package.json:
 
 # Task
 
-Improve the documentation!
+Refactor!
 
-Find a place for this .cjs, move it there, and
-Create a new npm run command for the logo updating workflow.
+Rename the .cjs to updateLogo.js.
+
+
+
+## Project Specifics
+
+- Every js file should *only export a single function*!
+- Use *ES6 imports*!
+- Prefer *async/await* over promises!
+- The frontend uses *Solidjs*, edit .jsx file accordingly
 
 
 # Output Format

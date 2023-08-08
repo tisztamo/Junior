@@ -13,7 +13,7 @@
     "cli": "node src/main.js",
     "start": "node src/web.js",
     "build:css": "postcss ./src/frontend/styles.css -o ./dist/styles.css",
-    "update-logo": "node ./scripts/convert-svg-to-png.cjs"
+    "update-logo": "node ./scripts/updateLogo.js"
   },
   "keywords": [
     "cli",
