@@ -1,7 +1,8 @@
 task: prompt/task/refactor/custom.md
 attention:
-  - scripts/convert-svg-to-png.cjs
-  - package.json
+  - src/git/resetGit.js
 requirements: |
-  Rename the .cjs to updateLogo.js.
+  - Prefer await
+  - Print the command before its stdout
+  - Treat prompt.md like prompt.yaml
 os: OSX

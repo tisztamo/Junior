@@ -1,36 +1,42 @@
 #!/bin/sh
 set -e
-goal="Rename and refactor SVG to PNG converter"
+goal="Refactor resetGit.js to use async/await and updated instructions"
 echo "Plan:"
-echo "1. Rename convert-svg-to-png.cjs to updateLogo.js"
-echo "2. Refactor updateLogo.js to use ES6 imports and async/await, and invoke the conversion function"
-echo "3. Update package.json script for update-logo to use the new script name"
+echo "1. Backup the existing resetGit.js"
+echo "2. Modify the resetGit.js to use async/await and handle both prompt.yaml and prompt.md"
+echo "3. Replace the content of resetGit.js with the refactored version"
 
-# Step 1: Rename convert-svg-to-png.cjs to updateLogo.js
-mv scripts/convert-svg-to-png.cjs scripts/updateLogo.js
+# Step 1: Backup the existing resetGit.js
+cp src/git/resetGit.js src/git/resetGit.js.bak
 
-# Step 2: Refactor updateLogo.js
-cat << 'EOF' > scripts/updateLogo.js
-import sharp from 'sharp';
-import { writeFileSync } from 'fs';
+# Step 2: Modify the resetGit.js to use async/await and handle both prompt.yaml and prompt.md
+# Step 3: Replace the content of resetGit.js with the refactored version
+cat > src/git/resetGit.js << 'EOF'
+import { promisify } from 'util';
+import { exec as execCb } from 'child_process';
 
-const inputSVGPath = 'docs/assets/logo.svg';
-const outputPNGPath = 'docs/assets/logo.png';
+const exec = promisify(execCb);
 
-const updateLogo = async () => {
+export default async function resetGit() {
   try {
-    const buffer = await sharp(inputSVGPath).png().toBuffer();
-    writeFileSync(outputPNGPath, buffer);
+    await executeCommand('git stash -u');
+
+    await executeCommand('git clean -f -d && git reset --hard');
+
+    await executeCommand('git checkout stash@{0} -- prompt.yaml');
+    await executeCommand('git checkout stash@{0} -- prompt.md');
+
+    await executeCommand('git stash drop');
   } catch (err) {
-    throw err;
+    console.error(`An error occurred: ${err}`);
   }
-};
+}
 
-updateLogo();
+async function executeCommand(command) {
+  console.log(`Running command: ${command}`);
+  const { stdout } = await exec(command);
+  console.log(`stdout: ${stdout}`);
+}
 EOF
-
-# Step 3: Update package.json script
-tmpfile=$(mktemp)
-jq '.scripts["update-logo"] = "node ./scripts/updateLogo.js"' package.json > "$tmpfile" && mv "$tmpfile" package.json
 
 echo "\033[32mDone: $goal\033[0m\n"
