@@ -2,7 +2,7 @@ Warn: This README is AI generated, just like all the source files of this projec
 
 # Junior - Your AI contributor which codes itself.
 
-[![Video: Junior codes itself](doc/assets/video_cover.jpg)](https://www.youtube.com/watch?v=W_iwry8uT7E)
+[![Video: Junior codes itself](/assets/video_cover.jpg)](https://www.youtube.com/watch?v=W_iwry8uT7E)
 
 *"Video: Junior codes itself"*
 ## Description
@@ -31,27 +31,7 @@ To start the CLI, use `npm run cli`. This mode uses the ChatGPT API, and you'll 
 
 ### The Prompt Descriptor
 
-A prompt descriptor is a YAML file (`prompt.yaml`) outlining the details necessary for generating a task prompt for the AI model.
-
-Here's an example of a prompt descriptor:
-
-```yaml
-task: prompt/task/feature/implement.md
-attention:
-  - src/interactiveSession/startInteractiveSession.js
-  - src/prompt/createPrompt.js
-  - src/attention/readAttention.js
-  - prompt.yaml
-requirements: >
-  Write a README.md for this _exploratory_ project!
-format: prompt/format/new_file_version.md
-```
-
-Each element in the descriptor serves a specific purpose:
-- `task`: Describes the task type and scope. For example, `feature/implement`, `bug/fix`, or `refactor/`. You can check out the [prompt/task/feature/implement.md](prompt/task/feature/implement.md) file as an example.
-- `attention`: Lists the files and directories most relevant to the task.
-- `requirements`: Describes the actual task in a human-readable format.
-- `format`: Determines how the output will be formatted.
+The prompt descriptor is a YAML file that outlines the details necessary for generating a task prompt for the AI model. For more details, refer to [descriptor.md](descriptor.md).
 
 ### Attention Mechanism
 

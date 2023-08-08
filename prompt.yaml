@@ -1,7 +1,7 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/components/NavBar.jsx
+  - docs/README.md
 requirements: |
-  - Also make a link from the title
-  - Do not underline the links
+  - The image url is /assets/video_cover.jpg
+  - Remove all the details in section "### The Prompt Descriptor", instead write a single sentence about the prompt descriptor and link descriptor.md for details
 os: OSX
