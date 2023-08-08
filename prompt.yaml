@@ -1,8 +1,6 @@
-task: prompt/task/refactor/custom.md
+task: prompt/task/feature/implement.md
 attention:
   - src/git/resetGit.js
 requirements: |
-  - Prefer await
-  - Print the command before its stdout
-  - Treat prompt.md like prompt.yaml
+  - When checkouts fail, e.g. one of the prompt files is missing, continue.
 os: OSX

@@ -2,44 +2,30 @@
 
 src/git/resetGit.js:
 ```
-import { exec } from 'child_process';
+import { promisify } from 'util';
+import { exec as execCb } from 'child_process';
 
-export default function resetGit() {
-  // Stash all changes including untracked files
-  exec('git stash -u', (err, stdout, stderr) => {
-    if (err) {
-      console.error(`exec error: ${err}`);
-      return;
-    }
-    console.log(`stdout: ${stdout}`);
+const exec = promisify(execCb);
 
-    // Clean the repository and reset to the latest commit
-    exec('git clean -f -d && git reset --hard', (err, stdout, stderr) => {
-      if (err) {
-        console.error(`exec error: ${err}`);
-        return;
-      }
-      console.log(`stdout: ${stdout}`);
+export default async function resetGit() {
+  try {
+    await executeCommand('git stash -u');
 
-      // Checkout prompt.yaml from stash
-      exec('git checkout stash@{0} -- prompt.yaml', (err, stdout, stderr) => {
-        if (err) {
-          console.error(`exec error: ${err}`);
-          return;
-        }
-        console.log(`stdout: ${stdout}`);
+    await executeCommand('git clean -f -d && git reset --hard');
 
-        // Drop the stash
-        exec('git stash drop', (err, stdout, stderr) => {
-          if (err) {
-            console.error(`exec error: ${err}`);
-            return;
-          }
-          console.log(`stdout: ${stdout}`);
-        });
-      });
-    });
-  });
+    await executeCommand('git checkout stash@{0} -- prompt.yaml');
+    await executeCommand('git checkout stash@{0} -- prompt.md');
+
+    await executeCommand('git stash drop');
+  } catch (err) {
+    console.error(`An error occurred: ${err}`);
+  }
+}
+
+async function executeCommand(command) {
+  console.log(`Running command: ${command}`);
+  const { stdout } = await exec(command);
+  console.log(`stdout: ${stdout}`);
 }
 
 ```
@@ -47,11 +33,14 @@ export default function resetGit() {
 
 # Task
 
-Refactor!
+Implement the following feature!
 
-- Prefer await
-- Print the command before its stdout
-- Treat prompt.md like prompt.yaml
+- Create a plan!
+- Create new files when needed!
+
+Requirements:
+
+- When checkouts fail, e.g. one of the prompt files is missing, continue.
 
 
 

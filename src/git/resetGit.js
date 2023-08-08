@@ -9,8 +9,8 @@ export default async function resetGit() {
 
     await executeCommand('git clean -f -d && git reset --hard');
 
-    await executeCommand('git checkout stash@{0} -- prompt.yaml');
-    await executeCommand('git checkout stash@{0} -- prompt.md');
+    await executeCommand('git checkout stash@{0} -- prompt.yaml', true);
+    await executeCommand('git checkout stash@{0} -- prompt.md', true);
 
     await executeCommand('git stash drop');
   } catch (err) {
@@ -18,8 +18,15 @@ export default async function resetGit() {
   }
 }
 
-async function executeCommand(command) {
-  console.log(`Running command: ${command}`);
-  const { stdout } = await exec(command);
-  console.log(`stdout: ${stdout}`);
+async function executeCommand(command, ignoreErrors = false) {
+  try {
+    console.log(`Running command: ${command}`);
+    const { stdout } = await exec(command);
+    console.log(`stdout: ${stdout}`);
+  } catch (err) {
+    if (!ignoreErrors) {
+      throw err;
+    }
+    console.warn(`An error occurred while executing the command: ${command}. Continuing...`);
+  }
 }
