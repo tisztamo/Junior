@@ -49,6 +49,3 @@ Requirements:
 
 Prompt parts are markdown template files, and [ejs](https://ejs.co/) runs on them. Attributes from the yaml file are available in the template, e.g., `<%= requirements %>` injects the requirements.
 
-```
-
-echo "\033[32mDone: $goal\033[0m\n"
