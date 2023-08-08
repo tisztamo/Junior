@@ -1,7 +1,7 @@
 task: prompt/task/feature/implement.md
 attention:
-  - docs/usage.md
+  - docs/README.md
 requirements: >
-  - Add the sentence "Additionally, you can install the "Junior" vscode extension from the
-  vscode extension marketplace." to the installation section.
+  - Remove every detail and subsection from "## Getting Started"
+  - Instead add a link to usage.md "usage", in short call-to-action sentence. The file already exists, do not edit.
 os: OSX

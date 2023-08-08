@@ -15,29 +15,7 @@ By providing specific task details in a prompt descriptor and highlighting the r
 
 ## Getting Started
 
-### Installation
-
-To install, clone the repository and run `npm install` in the root directory. Additionally, you can install the "Junior" vscode extension from the vscode extension marketplace.
-
-### Usage
-
-#### Web Interface
-
-Run the application with `npm start` to start a local server, where you can generate a prompt and automatically copy it to paste into ChatGPT. The web interface is designed for use with ChatGPT Pro and doesn't require an API key. For more information about the web interface, please refer to [doc/web.md](doc/web.md).
-
-#### Command-line interface (CLI)
-
-To start the CLI, use `npm run cli`. This mode uses the ChatGPT API, and you'll need an API key stored in the `OPENAI_API_KEY` environment variable.
-
-### The Prompt Descriptor
-
-The prompt descriptor is a YAML file that outlines the details necessary for generating a task prompt for the AI model. For more details, refer to [descriptor.md](descriptor.md).
-
-### Attention Mechanism
-
-The attention mechanism guides the AI model by providing it with a working set. It helps overcome the limited working memory of large language models.
-
-The working set is a subset of the entire project that's currently in focus. It includes both files and directories. For files, the content is directly provided to the AI. For directories, a brief list of files and subdirectories within them is presented.
+For more details on getting started, please refer to [usage.md](usage.md).
 
 ## Contributing and Support
 
@@ -46,4 +24,3 @@ Contributions are welcome! Remember, we eat our own dog food in this project. Ju
 For support, please create an issue in the GitHub repository.
 
 **Note:** For meaningful results, it's recommended to use the GPT-4 model or a more recent version.
-
