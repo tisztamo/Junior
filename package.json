@@ -12,7 +12,8 @@
   "scripts": {
     "cli": "node src/main.js",
     "start": "node src/web.js",
-    "build:css": "postcss ./src/frontend/styles.css -o ./dist/styles.css"
+    "build:css": "postcss ./src/frontend/styles.css -o ./dist/styles.css",
+    "update-logo": "node ./scripts/convert-svg-to-png.cjs"
   },
   "keywords": [
     "cli",

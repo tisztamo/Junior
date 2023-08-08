@@ -1,9 +1,10 @@
 task: prompt/task/doc/improve.md
 attention:
-  - docs/assets/
-  - docs/assets/logo.svg
+  - ./
+  - ./src/
+  - convert-svg-to-png.cjs
+  - package.json
 requirements: |
-  Favicon háttere fehér.
-  Legyen átlátszó!
-  svg -> png -> ico, convert van.
+  Find a place for this .cjs, move it there, and
+  Create a new npm run command for the logo updating workflow.
 os: OSX
