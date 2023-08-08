@@ -1,7 +1,8 @@
 task: prompt/task/feature/implement.md
 attention:
-  - docs/README.md
+  - docs/assets/
+  - docs/index.html
 requirements: |
-  - The image url is /assets/video_cover.jpg
-  - Remove all the details in section "### The Prompt Descriptor", instead write a single sentence about the prompt descriptor and link descriptor.md for details
+  Generate favicon from logo
+  Add favicon to html
 os: OSX
