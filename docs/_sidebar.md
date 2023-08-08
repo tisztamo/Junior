@@ -1,5 +1,5 @@
 * [Junior Docs](./README.md)
-* [Roadmap](./roadmap.md)
-* [Web](./web.md)
 * [Usage](./usage.md)
+* [Web](./web.md)
 * [Prompt Descriptor](./descriptor.md)
+* [Roadmap](./roadmap.md)

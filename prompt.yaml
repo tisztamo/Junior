@@ -1,7 +1,6 @@
-task: prompt/task/feature/implement.md
+task: prompt/task/doc/improve.md
 attention:
-  - docs/README.md
-requirements: >
-  - Remove every detail and subsection from "## Getting Started"
-  - Instead add a link to usage.md "usage", in short call-to-action sentence. The file already exists, do not edit.
+  - docs/_sidebar.md
+requirements: |
+  Reorder: readme, usage, web, prompt descriptor, roadmap
 os: OSX
