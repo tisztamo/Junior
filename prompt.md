@@ -1,75 +1,32 @@
 # Working set
 
-src/prompt/promptProcessing.js:
 ```
-import { createPrompt } from './createPrompt.js';
-import fs from 'fs/promises';
-
-const processPrompt = async (task, last_command_result, saveto = 'prompt.md', parent_message_id = null) => {
-  const { prompt, saveto: newSaveto } = await createPrompt(task, last_command_result);
-  await fs.writeFile(newSaveto || saveto, prompt);
-  return { prompt, parent_message_id };
-}
-
-export default processPrompt;
+docs/assets/
+├── favicon.ico
+├── logo.png
+├── logo.svg
+├── video_cover.jpg
 
 ```
-
-src/backend/handlers/generateHandler.js:
+docs/assets/logo.svg:
 ```
-import processPrompt from '../../prompt/promptProcessing.js';
-
-export const generateHandler = async (req, res) => {
-  const { notes } = req.body;
-  const { prompt } = await processPrompt(notes);
-  res.json({ prompt: prompt });
-};
-
-```
-
-src/interactiveSession/startInteractiveSession.js:
-```
-import { saveAndSendPrompt } from './saveAndSendPrompt.js';
-import processPrompt from '../prompt/promptProcessing.js';
-import { loadPromptDescriptor } from '../prompt/loadPromptDescriptor.js';
-import watchPromptDescriptor from '../prompt/watchPromptDescriptor.js';
-import { rl } from '../config.js';
-
-const startInteractiveSession = async () => {
-  await loadPromptDescriptor(console.log);
-watchPromptDescriptor(console.log);
-  rl.question('Notes: ', async (task) => {
-    let { prompt } = await processPrompt(task);
-    console.log("Your prompt: ", prompt);
-    rl.question('Do you want to send this prompt? (y/n): ', async (confirmation) => {
-      if (confirmation.toLowerCase() === 'y') {
-        await saveAndSendPrompt(prompt, task);
-      } else {
-        startInteractiveSession();
-      }
-    });
-  });
-};
-
-export { startInteractiveSession };
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    <rect x="0" y="0" rx="10" ry="10" width="100" height="30" style="fill:blue;" />
+    <rect x="0" y="33" rx="10" ry="10" width="100" height="30" style="fill:orange;" />
+    <rect x="0" y="66" rx="10" ry="10" width="48" height="34" style="fill:red;" />
+    <rect x="52" y="66" rx="10" ry="10" width="48" height="34" style="fill:green;" />
+</svg>
 
 ```
 
 
 # Task
 
-Move the following files to the specified target dirs!
+Improve the documentation!
 
-Find out the best target dir if it is not specified!
-
-You need to follow dependencies to maintain coherence.
-
-Before executing, write a concise plan! The plan should show:
- - How do you avoid breaking other parts of the code.
- - If you had to choose, your way of thinking.
-
-- Rename promptProcessing to processPrompt.js
-- Eliminate last_command_result
+Favicon háttere fehér.
+Legyen átlátszó!
+svg -&gt; png -&gt; ico, convert van.
 
 
 # Output Format

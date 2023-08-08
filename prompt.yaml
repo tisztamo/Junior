@@ -1,9 +1,9 @@
-task: prompt/task/refactor/move_files.md
+task: prompt/task/doc/improve.md
 attention:
-  - src/prompt/promptProcessing.js
-  - src/backend/handlers/generateHandler.js
-  - src/interactiveSession/startInteractiveSession.js
+  - docs/assets/
+  - docs/assets/logo.svg
 requirements: |
-  - Rename promptProcessing to processPrompt.js
-  - Eliminate last_command_result
+  Favicon háttere fehér.
+  Legyen átlátszó!
+  svg -> png -> ico, convert van.
 os: OSX
