@@ -23,8 +23,8 @@ const ConfirmationDialog = (props) => {
         <div className="bg-main p-8 rounded shadow-lg text-text">
           <h3 className="text-xl mb-4">Are you sure you want to roll back?</h3>
           <p>This will reset the repo to the last commit and delete new files.</p>
-          <label>
-            <input type="checkbox" checked={disableConfirmation()} onChange={handleCheckboxChange} />
+          <label style={{ display: 'flex', alignItems: 'center', margin: '10px 0' }}>
+            <input type="checkbox" style={{ marginRight: '10px' }} checked={disableConfirmation()} onChange={handleCheckboxChange} />
             Never show this again
           </label>
           <div>
@@ -42,26 +42,61 @@ export default ConfirmationDialog;
 
 ```
 
+src/frontend/components/RollbackButton.jsx:
+```
+import { createSignal } from "solid-js";
+import { resetGit } from '../service/resetGit';
+import ConfirmationDialog from './ConfirmationDialog';
+
+const RollbackButton = () => {
+  const [showConfirmation, setShowConfirmation] = createSignal(false);
+
+  const handleReset = async () => {
+    const response = await resetGit();
+
+    console.log(response.message);
+  };
+
+  const handleConfirm = () => {
+    setShowConfirmation(false);
+    handleReset();
+  };
+
+  const handleRollbackClick = () => {
+    const disableConfirmation = localStorage.getItem('Junior.disableRollbackConfirmation') === 'true';
+    if (disableConfirmation) {
+      handleReset();
+    } else {
+      setShowConfirmation(true);
+    }
+  };
+
+  return (
+    <>
+      <button className="w-full px-4 py-4 bg-red-700 text-white rounded" onClick={handleRollbackClick}>Roll Back</button>
+      <ConfirmationDialog visible={showConfirmation()} onConfirm={handleConfirm} onCancel={() => setShowConfirmation(false)} />
+    </>
+  );
+};
+
+export default RollbackButton;
+
+```
+
 
 # Task
 
-Implement the following feature!
+Move the following files to the specified target dirs!
 
-- Create a plan!
-- Create new files when needed!
+Find out the best target dir if it is not specified!
 
-Requirements:
+You need to follow dependencies to maintain coherence.
 
-Add space above and below the checkbox, and also between the checkbox and its label.
+Before executing, write a concise plan! The plan should show:
+ - How do you avoid breaking other parts of the code.
+ - If you had to choose, your way of thinking.
 
-
-
-## Project Specifics
-
-- Every js file should *only export a single function*!
-- Use *ES6 imports*!
-- Prefer *async/await* over promises!
-- The frontend uses *Solidjs*, edit .jsx file accordingly
+- Rename it to RollbackConfirmationDialog - Also change the bg-emphasize button background to red, and the label to &#34;Yes, Roll Back&#34;
 
 
 # Output Format

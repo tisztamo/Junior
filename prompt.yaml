@@ -1,6 +1,8 @@
-task: prompt/task/feature/implement.md
+task: prompt/task/refactor/move_files.md
 attention:
   - src/frontend/components/ConfirmationDialog.jsx
+  - src/frontend/components/RollbackButton.jsx
 requirements: >
-  Add space above and below the checkbox, and also between the checkbox and its label.
+  - Rename it to RollbackConfirmationDialog
+  - Also change the bg-emphasize button background to red, and the label to "Yes, Roll Back"
 os: OSX

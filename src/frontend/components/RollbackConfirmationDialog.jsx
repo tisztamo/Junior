@@ -1,6 +1,6 @@
 import { createEffect, createSignal } from "solid-js";
 
-const ConfirmationDialog = (props) => {
+const RollbackConfirmationDialog = (props) => {
   const [visible, setVisible] = createSignal(false);
   const [disableConfirmation, setDisableConfirmation] = createSignal(false);
 
@@ -19,12 +19,12 @@ const ConfirmationDialog = (props) => {
         <div className="bg-main p-8 rounded shadow-lg text-text">
           <h3 className="text-xl mb-4">Are you sure you want to roll back?</h3>
           <p>This will reset the repo to the last commit and delete new files.</p>
-          <label style={{ display: 'flex', alignItems: 'center', margin: '10px 0' }}>
-            <input type="checkbox" style={{ marginRight: '10px' }} checked={disableConfirmation()} onChange={handleCheckboxChange} />
+          <label className="flex items-center my-2">
+            <input type="checkbox" className="mr-3" checked={disableConfirmation()} onChange={handleCheckboxChange} />
             Never show this again
           </label>
           <div>
-            <button className="bg-emphasize text-white px-4 py-2 rounded mr-4" onClick={props.onConfirm}>Confirm</button>
+            <button className="bg-red-500 text-white px-4 py-2 rounded mr-4" onClick={props.onConfirm}>Yes, Roll Back</button>
             <button className="bg-gray-400 text-white px-4 py-2 rounded" onClick={props.onCancel}>Cancel</button>
           </div>
         </div>
@@ -34,4 +34,4 @@ const ConfirmationDialog = (props) => {
   );
 };
 
-export default ConfirmationDialog;
+export default RollbackConfirmationDialog;

@@ -1,6 +1,6 @@
 import { createSignal } from "solid-js";
 import { resetGit } from '../service/resetGit';
-import ConfirmationDialog from './ConfirmationDialog';
+import RollbackConfirmationDialog from './RollbackConfirmationDialog';
 
 const RollbackButton = () => {
   const [showConfirmation, setShowConfirmation] = createSignal(false);
@@ -28,7 +28,7 @@ const RollbackButton = () => {
   return (
     <>
       <button className="w-full px-4 py-4 bg-red-700 text-white rounded" onClick={handleRollbackClick}>Roll Back</button>
-      <ConfirmationDialog visible={showConfirmation()} onConfirm={handleConfirm} onCancel={() => setShowConfirmation(false)} />
+      <RollbackConfirmationDialog visible={showConfirmation()} onConfirm={handleConfirm} onCancel={() => setShowConfirmation(false)} />
     </>
   );
 };
