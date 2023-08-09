@@ -1,4 +1,4 @@
-import useKeyBindings from './useKeyBindings';
+import useKeyBindings from './service/useKeyBindings';
 import keyBindings from './config/keyBindings';
 import NavBar from './components/NavBar';
 import PromptCreation from './components/PromptCreation';

@@ -1,83 +1,80 @@
+You are Junior, an AI system aiding developers. You are working with a part of a large program called the "Working Set." Ask for contents of subdirectories if needed. Some files are printed in the working set. Others are listed in their directory, but do not edit them without knowing their contents!
+
 # Working set
 
-src/frontend/components/ExecutionResultDisplay.jsx:
+src/frontend/useKeyBindings.js:
 ```
-import { createEffect, createSignal } from 'solid-js';
-import { executionResult } from '../model/executionResult';
-import ansiToHtml from '../../execute/ansiToHtml';
-
-const ExecutionResultDisplay = () => {
-  let container;
-  const [copyText, setCopyText] = createSignal('copy');
-
-  const copyToClipboard = async (e) => {
-    e.preventDefault(); // Prevent page load on click
-    try {
-      await navigator.clipboard.writeText(executionResult());
-      setCopyText('copied');
-      setTimeout(() => setCopyText('copy'), 2000);
-    } catch (err) {
-      alert("Failed to copy text!");
-      console.warn("Copy operation failed:", err);
+const useKeyBindings = (bindings) => {
+  const handler = (e) => {
+    // Ignore bindings if target is input or textarea
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+      return;
+    }
+    const action = bindings[e.key.toUpperCase()];
+    if (action) {
+      action(e);
     }
   };
 
-  createEffect(() => {
-    if (container && executionResult() !== '') {
-      const convertedHtml = ansiToHtml(executionResult());
-      container.innerHTML = convertedHtml;
-    }
-  });
+  window.addEventListener('keydown', handler);
+
+  return () => {
+    window.removeEventListener('keydown', handler);
+  };
+};
+
+export default useKeyBindings;
+
+```
+
+src/frontend/App.jsx:
+```
+import useKeyBindings from './useKeyBindings';
+import keyBindings from './config/keyBindings';
+import NavBar from './components/NavBar';
+import PromptCreation from './components/PromptCreation';
+import ChangeExecution from './components/ChangeExecution';
+import ChangeInspection from './components/ChangeInspection';
+import ChangeFinalization from './components/ChangeFinalization';
+
+const App = () => {
+  // Define key bindings
+  const bindings = keyBindings();
+
+  // Use key bindings
+  useKeyBindings(bindings);
 
   return (
-    <div class={`relative bg-gray-900 text-white p-4 rounded ${executionResult() !== '' ? 'block' : 'hidden'}`}>
-      <a href="#" class="underline absolute top-0 right-0 m-4" onClick={copyToClipboard}>{copyText()}</a>
-      <div class="font-mono text-sm">
-        <div ref={container} class="rounded overflow-auto max-w-full p-2" />
+    <div id="app" class="p-2">
+      <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
+        <NavBar />
+        <PromptCreation />
+        <ChangeExecution />
+        <ChangeInspection />
+        <ChangeFinalization />
       </div>
     </div>
   );
 };
 
-export default ExecutionResultDisplay;
-
-```
-
-src/execute/ansiToHtml.js:
-```
-const ANSI_COLORS = {
-  '30': 'black',
-  '31': 'red',
-  '32': 'lightgreen',
-  '33': 'yellow',
-  '34': 'blue',
-  '35': 'magenta',
-  '36': 'cyan',
-  '37': 'white',
-};
-
-const ansiToHtml = (terminalOutputStr) => {
-  let result = '<span>' + terminalOutputStr.replace(/\033\[([0-9]+)m/g, (match, p1) => {
-    const color = ANSI_COLORS[p1];
-    return color ? `</span><span style="color:${color}">` : '</span><span>';
-  });
-  result += '</span>';
-  return result.replace(/\n/g, '<br />');
-};
-
-export default ansiToHtml;
+export default App;
 
 ```
 
 
 # Task
 
-Fix the following issue!
+Move the following files to the specified target dirs!
 
-Uncaught (in promise) TypeError: Cannot read properties of undefined (reading &#39;replace&#39;)
-  at ansiToHtml (ansiToHtml.js:13:45)
-  at Object.fn (ExecutionResultDisplay.jsx:31:29)
+Find out the best target dir if it is not specified!
 
+You need to follow dependencies to maintain coherence.
+
+Before executing, write a concise plan! The plan should show:
+ - How do you avoid breaking other parts of the code.
+ - If you had to choose, your way of thinking.
+
+Move useKeyBindings to src/frontend/service/
 
 # Output Format
 

@@ -1,9 +1,5 @@
-task: prompt/task/bug/fix.md
+task: prompt/task/refactor/move_files.md
 attention:
-  - src/frontend/components/ExecutionResultDisplay.jsx
-  - src/execute/ansiToHtml.js
-requirements: >
-  Uncaught (in promise) TypeError: Cannot read properties of undefined (reading
-  'replace')
-    at ansiToHtml (ansiToHtml.js:13:45)
-    at Object.fn (ExecutionResultDisplay.jsx:31:29)
+  - src/frontend/useKeyBindings.js
+  - src/frontend/App.jsx
+requirements: Move useKeyBindings to src/frontend/service/
