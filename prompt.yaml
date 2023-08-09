@@ -1,13 +1,6 @@
 task: prompt/task/bug/fix.md
 attention:
-  - src/execute/executeAndForwardOutput.js
-  - src/backend/handlers/executeHandler.js
 requirements: |
-  TypeError: next is not a function
-    at ChildProcess.<anonymous> (file:///Users/ko/projects-new/Junior/src/execute/executeAndForwardOutput.js:27:7)
-    at ChildProcess.emit (node:events:537:28)
-    at maybeClose (node:internal/child_process:1091:16)
-    at Socket.<anonymous> (node:internal/child_process:449:11)
-    at Socket.emit (node:events:537:28)
-    at Pipe.<anonymous> (node:net:747:14)
+  ansiToHtml.js:13 Uncaught (in promise) TypeError: Cannot read properties of undefined (reading 'replace')
+  at ansiToHtml (ansiToHtml.js:13:45)
 os: OSX
