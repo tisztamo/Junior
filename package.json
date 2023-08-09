@@ -13,7 +13,8 @@
     "cli": "node src/main.js",
     "start": "node src/web.js",
     "build:css": "postcss ./src/frontend/styles.css -o ./dist/styles.css",
-    "update-logo": "node ./scripts/updateLogo.js"
+    "update-logo": "node ./scripts/updateLogo.js",
+    "delete-branches": "node ./src/git/deleteBranchesCommand.js"
   },
   "keywords": [
     "cli",
