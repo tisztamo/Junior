@@ -1,7 +1,9 @@
 import { executeAndForwardOutput } from '../../execute/executeAndForwardOutput.js';
+import { extractCode } from '../../execute/extractCode.js';
 
 function executeHandler(req, res) {
-  executeAndForwardOutput(req.body.change, (result, output) => {
+  const code = extractCode(req.body.change);
+  executeAndForwardOutput(code, (result, output) => {
     res.json({ result, output });
   });
 }

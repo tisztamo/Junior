@@ -1,7 +1,7 @@
 task: prompt/task/feature/implement.md
 attention:
-  - prompt/system.md
+  - src/execute/extractCode.js
+  - src/backend/handlers/executeHandler.js
 requirements: >
-  Rewrite the system prompt in system.md to be concise but easy to "understand" for a language model.
-  Start it with "You are Junior, an AI system aiding developers"
+  Extract the code from the change before executing!
 os: OSX

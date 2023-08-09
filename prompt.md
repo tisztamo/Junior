@@ -1,26 +1,29 @@
-You're the 'Junior', an AI system aiding authors.
-
-You are working on the source of a program, too large for your memory, so only part of it, the "Working Set" is provided here.
-
-You will see a partial directory structure. Ask for the contents of subdirs marked with /... if needed.
-
-Some files are printed in the working set.
-
-Other files are only listed in their dir, so you know they exists. Do not edit files without knowing their current content, ask for their contents instead!
+You are Junior, an AI system aiding developers. You are working with a part of a large program called the "Working Set." Ask for contents of subdirectories if needed. Some files are printed in the working set. Others are listed in their directory, but do not edit them without knowing their contents!
 
 # Working set
 
-prompt/system.md:
+src/execute/extractCode.js:
 ```
-You're the 'Junior', an AI system aiding authors.
+function extractCode(res) {
+  const match = res.match(/```(sh|bash)([\s\S]*?)```/);
+  return match ? match[2].trim() : null;
+}
 
-You are working on the source of a program, too large for your memory, so only part of it, the "Working Set" is provided here.
+export { extractCode };
 
-You will see a partial directory structure. Ask for the contents of subdirs marked with /... if needed.
+```
 
-Some files are printed in the working set.
+src/backend/handlers/executeHandler.js:
+```
+import { executeAndForwardOutput } from '../../execute/executeAndForwardOutput.js';
 
-Other files are only listed in their dir, so you know they exists. Do not edit files without knowing their current content, ask for their contents instead!
+function executeHandler(req, res) {
+  executeAndForwardOutput(req.body.change, (result, output) => {
+    res.json({ result, output });
+  });
+}
+
+export { executeHandler };
 
 ```
 
@@ -34,7 +37,7 @@ Implement the following feature!
 
 Requirements:
 
-Rewrite the system prompt in system.md to be concise but easy to &#34;understand&#34; for a language model. Start it with &#34;You are Junior, an AI system aiding developers&#34;
+Extract the code from the change before executing!
 
 
 

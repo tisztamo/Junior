@@ -1,13 +1,23 @@
 #!/bin/sh
 set -e
-goal="Rewrite system prompt in system.md to be concise"
+goal="Extract code from change before executing"
 echo "Plan:"
-echo "1. Rewrite the system prompt in system.md to be more concise."
-echo "2. Verify that the new content is correct."
+echo "1. Import the existing extractCode function in src/backend/handlers/executeHandler.js."
+echo "2. Update the executeHandler to call the extractCode function before executing the change."
 
-# Step 1: Rewrite the system prompt in system.md to be more concise
-cat > prompt/system.md << 'EOF'
-You are Junior, an AI system aiding developers. You are working with a part of a large program called the "Working Set." Ask for contents of subdirectories if needed. Some files are printed in the working set. Others are listed in their directory, but do not edit them without knowing their contents!
+# Step 1: Import the existing extractCode function and update the executeHandler
+cat > src/backend/handlers/executeHandler.js <<EOF
+import { executeAndForwardOutput } from '../../execute/executeAndForwardOutput.js';
+import { extractCode } from '../../execute/extractCode.js';
+
+function executeHandler(req, res) {
+  const code = extractCode(req.body.change);
+  executeAndForwardOutput(code, (result, output) => {
+    res.json({ result, output });
+  });
+}
+
+export { executeHandler };
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"
