@@ -1,26 +1,65 @@
-You're the 'Junior', an AI system aiding authors.
-
-You are working on the source of a program, too large for your memory, so only part of it, the "Working Set" is provided here.
-
-You will see a partial directory structure. Ask for the contents of subdirs marked with /... if needed.
-
-Some files are printed in the working set.
-
-Other files are only listed in their dir, so you know they exists. Do not edit files without knowing their current content, ask for their contents instead!
-
 # Working set
 
-prompt/system.md:
 ```
-You're the 'Junior', an AI system aiding authors.
+src/
+├── .DS_Store
+├── attention/...
+├── backend/...
+├── config.js
+├── doc/...
+├── execute/...
+├── frontend/...
+├── git/...
+├── init.js
+├── interactiveSession/...
+├── llm/...
+├── main.js
+├── prompt/...
+├── web.js
 
-You are working on the source of a program, too large for your memory, so only part of it, the "Working Set" is provided here.
+```
+```
+src/git/
+├── commitGit.js
+├── createGitignore.js
+├── gitStatus.js
+├── resetGit.js
 
-You will see a partial directory structure. Ask for the contents of subdirs marked with /... if needed.
+```
+src/git/resetGit.js:
+```
+import { promisify } from 'util';
+import { exec as execCb } from 'child_process';
 
-Some files are printed in the working set.
+const exec = promisify(execCb);
 
-Other files are only listed in their dir, so you know they exists. Do not edit files without knowing their current content, ask for their contents instead!
+export default async function resetGit() {
+  try {
+    await executeCommand('git stash -u');
+
+    await executeCommand('git clean -f -d && git reset --hard');
+
+    await executeCommand('git checkout stash@{0} -- prompt.yaml', true);
+    await executeCommand('git checkout stash@{0} -- prompt.md', true);
+
+    await executeCommand('git stash drop');
+  } catch (err) {
+    console.error(`An error occurred: ${err}`);
+  }
+}
+
+async function executeCommand(command, ignoreErrors = false) {
+  try {
+    console.log(`Running command: ${command}`);
+    const { stdout } = await exec(command);
+    console.log(`stdout: ${stdout}`);
+  } catch (err) {
+    if (!ignoreErrors) {
+      throw err;
+    }
+    console.warn(`An error occurred while executing the command: ${command}. Continuing...`);
+  }
+}
 
 ```
 
@@ -34,7 +73,8 @@ Implement the following feature!
 
 Requirements:
 
-Rewrite the system prompt in system.md to be concise but easy to &#34;understand&#34; for a language model. Start it with &#34;You are Junior, an AI system aiding developers&#34;
+Create a new fn that deletes every branch
+except the current one and the ones optionally listed.
 
 
 

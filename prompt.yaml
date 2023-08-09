@@ -1,7 +1,9 @@
 task: prompt/task/feature/implement.md
 attention:
-  - prompt/system.md
-requirements: >
-  Rewrite the system prompt in system.md to be concise but easy to "understand" for a language model.
-  Start it with "You are Junior, an AI system aiding developers"
+  - src/
+  - src/git/
+  - src/git/resetGit.js
+requirements: |
+  Create a new fn that deletes every branch
+  except the current one and the ones optionally listed.
 os: OSX
