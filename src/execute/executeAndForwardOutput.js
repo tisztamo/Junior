@@ -24,7 +24,7 @@ async function executeAndForwardOutput(code, next) {
     });
 
     child.on('close', (code) => {
-      if (typeof next === 'function') {
+      if (next && typeof next === 'function') {
         next(code, commandOutput);
       }
     });

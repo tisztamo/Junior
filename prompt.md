@@ -28,7 +28,9 @@ async function executeAndForwardOutput(code, next) {
     });
 
     child.on('close', (code) => {
-      next(code, commandOutput);
+      if (typeof next === 'function') {
+        next(code, commandOutput);
+      }
     });
   } catch (err) {
     console.log(err);
@@ -52,8 +54,9 @@ async function executeHandler(req, res) {
     code = extractCode(code);
   }
   
-  const output = await executeAndForwardOutput(code);
-  res.json(output);
+  await executeAndForwardOutput(code, (code, output) => {
+    res.json(output);
+  });
 }
 
 export { executeHandler };
