@@ -1,65 +1,6 @@
+You are Junior, an AI system aiding developers. You are working with a part of a large program called the "Working Set." Ask for contents of subdirectories if needed. Some files are printed in the working set. Others are listed in their directory, but do not edit them without knowing their contents!
+
 # Working set
-
-```
-./
-├── .DS_Store
-├── .git/...
-├── .github/...
-├── .gitignore
-├── .vscode/...
-├── README.md
-├── change.sh
-├── docs/...
-├── integrations/...
-├── node_modules/...
-├── package-lock.json
-├── package.json
-├── prompt/...
-├── prompt.md
-├── prompt.yaml
-├── scripts/...
-├── src/...
-├── x.sh
-
-```
-```
-scripts/
-├── updateLogo.js
-
-```
-src/git/deleteBranches.js:
-```
-import { promisify } from 'util';
-import { exec as execCb } from 'child_process';
-
-const exec = promisify(execCb);
-
-export default async function deleteBranches(exceptions = []) {
-  try {
-    const { stdout: currentBranch } = await exec('git rev-parse --abbrev-ref HEAD');
-    const { stdout: allBranches } = await exec('git for-each-ref --format="%(refname:short)" refs/heads');
-
-    const branches = allBranches.split('\n').filter(branch => branch !== currentBranch.trim() && !exceptions.includes(branch));
-
-    for (const branch of branches) {
-      await executeCommand(`git branch -d ${branch}`);
-    }
-  } catch (err) {
-    console.error(`An error occurred: ${err}`);
-  }
-}
-
-async function executeCommand(command) {
-  try {
-    console.log(`Running command: ${command}`);
-    const { stdout } = await exec(command);
-    console.log(`stdout: ${stdout}`);
-  } catch (err) {
-    throw err;
-  }
-}
-
-```
 
 package.json:
 ```
@@ -78,7 +19,8 @@ package.json:
     "cli": "node src/main.js",
     "start": "node src/web.js",
     "build:css": "postcss ./src/frontend/styles.css -o ./dist/styles.css",
-    "update-logo": "node ./scripts/updateLogo.js"
+    "update-logo": "node ./scripts/updateLogo.js",
+    "delete-branches": "node ./scripts/deleteBranchesCommand.js"
   },
   "keywords": [
     "cli",
@@ -123,27 +65,74 @@ package.json:
 
 ```
 
+src/git/deleteBranchesCommand.js:
+```
+import deleteBranches from './deleteBranches';
+
+const exceptions = process.argv.slice(2);
+
+async function run() {
+  try {
+    await deleteBranches(exceptions);
+    console.log('Branches deleted successfully.');
+  } catch (err) {
+    console.error(`An error occurred while deleting branches: ${err}`);
+    process.exit(1);
+  }
+}
+
+run();
+
+```
+
+src/git/deleteBranches.js:
+```
+import { promisify } from 'util';
+import { exec as execCb } from 'child_process';
+
+const exec = promisify(execCb);
+
+export default async function deleteBranches(exceptions = []) {
+  try {
+    const { stdout: currentBranch } = await exec('git rev-parse --abbrev-ref HEAD');
+    const { stdout: allBranches } = await exec('git for-each-ref --format="%(refname:short)" refs/heads');
+
+    const branches = allBranches.split('\n').filter(branch => branch !== currentBranch.trim() && !exceptions.includes(branch));
+
+    for (const branch of branches) {
+      await executeCommand(`git branch -d ${branch}`);
+    }
+  } catch (err) {
+    console.error(`An error occurred: ${err}`);
+  }
+}
+
+async function executeCommand(command) {
+  try {
+    console.log(`Running command: ${command}`);
+    const { stdout } = await exec(command);
+    console.log(`stdout: ${stdout}`);
+  } catch (err) {
+    throw err;
+  }
+}
+
+```
+
 
 # Task
 
-Implement the following feature!
+Move the following files to the specified target dirs!
 
-- Create a plan!
-- Create new files when needed!
+Find out the best target dir if it is not specified!
 
-Requirements:
+You need to follow dependencies to maintain coherence.
 
-Create a command for this function!
-Pass arguments!
+Before executing, write a concise plan! The plan should show:
+ - How do you avoid breaking other parts of the code.
+ - If you had to choose, your way of thinking.
 
-
-
-## Project Specifics
-
-- Every js file should *only export a single function*!
-- Use *ES6 imports*!
-- Prefer *async/await* over promises!
-- The frontend uses *Solidjs*, edit .jsx file accordingly
+rename deleteBranches to clearBranches
 
 
 # Output Format

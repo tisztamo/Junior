@@ -1,10 +1,8 @@
-task: prompt/task/feature/implement.md
+task: prompt/task/refactor/move_files.md
 attention:
-  - ./
-  - scripts/
-  - src/git/deleteBranches.js
   - package.json
+  - src/git/deleteBranchesCommand.js
+  - src/git/deleteBranches.js
 requirements: |
-  Create a command for this function!
-  Pass arguments!
+  rename deleteBranches to clearBranches
 os: OSX
