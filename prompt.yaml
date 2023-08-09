@@ -3,5 +3,6 @@ attention:
   - src/execute/extractCode.js
   - src/backend/handlers/executeHandler.js
 requirements: >
-  Extract the code from the change before executing!
+  If the change starts with shebang, execute it directly.
+  Otherwise call extractCode on it first.
 os: OSX

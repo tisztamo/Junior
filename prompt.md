@@ -16,9 +16,11 @@ export { extractCode };
 src/backend/handlers/executeHandler.js:
 ```
 import { executeAndForwardOutput } from '../../execute/executeAndForwardOutput.js';
+import { extractCode } from '../../execute/extractCode.js';
 
 function executeHandler(req, res) {
-  executeAndForwardOutput(req.body.change, (result, output) => {
+  const code = extractCode(req.body.change);
+  executeAndForwardOutput(code, (result, output) => {
     res.json({ result, output });
   });
 }
@@ -37,7 +39,7 @@ Implement the following feature!
 
 Requirements:
 
-Extract the code from the change before executing!
+If the change starts with shebang, execute it directly. Otherwise call extractCode on it first.
 
 
 
