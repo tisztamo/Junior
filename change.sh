@@ -1,37 +1,64 @@
 #!/bin/sh
 set -e
-goal="Fix TypeError in readAttention method"
+goal="Factor handleGeneratePrompt, bind G key to call it"
 echo "Plan:"
-echo "1. Check if the attentionArray is null or undefined before calling map on it."
-echo "2. Return an empty array if attentionArray is null or undefined."
+echo "1. Move the handleGeneratePrompt function to a new file src/frontend/service/handleGeneratePrompt.js"
+echo "2. Import and utilize handleGeneratePrompt in src/frontend/components/GenerateButton.jsx"
+echo "3. Modify src/frontend/config/keyBindings.js to call handleGeneratePrompt when the G key is pressed"
 
-cat > ./src/attention/readAttention.js << 'EOF'
-import { processFile } from './processFile.js';
-import { processInterfaceSection } from './processInterfaceSection.js';
-import { printFolderStructure } from './printFolderStructure.js';
+# Step 1: Create handleGeneratePrompt.js in the service directory with the handleGeneratePrompt function
+echo "src/frontend/service/handleGeneratePrompt.js" > src/frontend/service/handleGeneratePrompt.js
+cat <<EOF > src/frontend/service/handleGeneratePrompt.js
+import { generatePrompt } from '../generatePrompt';
+import { marked } from 'marked';
+import { setPrompt } from '../model/prompt';
 
-export const readAttention = async (attentionArray = [], attentionRootDir = '.') => {
-  try {
-    if (!attentionArray) {
-      return [];
-    }
-    const processedLines = await Promise.all(attentionArray.map(line => {
-      const trimmedLine = line.trim();
-      if (trimmedLine.endsWith(' iface')) {
-        const filePath = trimmedLine.slice(0, -6).trim();
-        return processInterfaceSection(attentionRootDir, filePath);
-      } else if (trimmedLine.endsWith('/')) {
-        return printFolderStructure(attentionRootDir, trimmedLine.slice(0, -1).trim());
-      } else {
-        return processFile(attentionRootDir, trimmedLine);
-      }
-    }));
-    return processedLines;
-  } catch (error) {
-    console.warn(error);
-    throw new Error("Error processing attention lines!");
-  }
+const handleGeneratePrompt = async () => {
+  const response = await generatePrompt();
+
+  navigator.clipboard.writeText(response.prompt)
+    .then(() => {
+      console.log('Prompt copied to clipboard!');
+    })
+    .catch(err => {
+      console.error('Failed to copy prompt: ', err);
+    });
+
+  const htmlPrompt = marked(response.prompt);
+
+  setPrompt(htmlPrompt);
 };
+
+export default handleGeneratePrompt;
+EOF
+
+# Step 2: Modify GenerateButton.jsx to import handleGeneratePrompt from the new file
+cat <<EOF > src/frontend/components/GenerateButton.jsx
+import handleGeneratePrompt from '../service/handleGeneratePrompt';
+
+const GenerateButton = () => {
+  return (
+    <button className="w-64 px-4 py-4 bg-blue-500 text-white rounded" onClick={handleGeneratePrompt}>Generate & Copy Prompt</button>
+  );
+};
+
+export default GenerateButton;
+EOF
+
+# Step 3: Modify keyBindings.js to call handleGeneratePrompt when G key is pressed
+cat <<EOF > src/frontend/config/keyBindings.js
+import handleGeneratePrompt from '../service/handleGeneratePrompt';
+
+const keyBindings = () => {
+  return {
+    'G': (e) => {
+      handleGeneratePrompt();
+      console.log('G key pressed'); // Temporary log
+    }
+  };
+};
+
+export default keyBindings;
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"

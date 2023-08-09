@@ -1,12 +1,8 @@
-task: prompt/task/bug/fix.md
+task: prompt/task/feature/implement.md
 attention:
-  - src/attention/readAttention.js
-  - src/prompt/createPrompt.js
-  - src/prompt/processPrompt.js
-  - src/backend/handlers/generateHandler.js
+  - src/frontend/
+  - src/frontend/config/keyBindings.js
+  - src/frontend/components/GenerateButton.jsx
 requirements: |
-  TypeError: Cannot read properties of null (reading 'map')
-    at readAttention (file:///Users/ko/projects-new/Junior/src/attention/readAttention.js:7:61)
-    at createPrompt (file:///Users/ko/projects-new/Junior/src/prompt/createPrompt.js:20:27)
-    at async processPrompt (file:///Users/ko/projects-new/Junior/src/prompt/processPrompt.js:5:41)
-    at async generateHandler (file:///Users/ko/projects-new/Junior/src/backend/handlers/generateHandler.js:5:22)os: OSX
+  Factor out handleGeneratePrompt to src/frontend/service/handleGeneratePrompt.js
+  When the G key is pressed, call it.

@@ -2,108 +2,95 @@ You are Junior, an AI system aiding developers. You are working with a part of a
 
 # Working set
 
-src/attention/readAttention.js:
 ```
-import { processFile } from './processFile.js';
-import { processInterfaceSection } from './processInterfaceSection.js';
-import { printFolderStructure } from './printFolderStructure.js';
-
-export const readAttention = async (attentionArray = [], attentionRootDir = '.') => {
-  try {
-    const processedLines = await Promise.all(attentionArray.map(line => {
-      const trimmedLine = line.trim();
-      if (trimmedLine.endsWith(' iface')) {
-        const filePath = trimmedLine.slice(0, -6).trim();
-        return processInterfaceSection(attentionRootDir, filePath);
-      } else if (trimmedLine.endsWith('/')) {
-        return printFolderStructure(attentionRootDir, trimmedLine.slice(0, -1).trim());
-      } else {
-        return processFile(attentionRootDir, trimmedLine);
-      }
-    }));
-    return processedLines;
-  } catch (error) {
-    console.warn(error);
-    throw new Error("Error processing attention lines!");
-  }
-};
+src/frontend/
+├── App.jsx
+├── assets/...
+├── components/...
+├── config/...
+├── fetchTasks.js
+├── generatePrompt.js
+├── getBaseUrl.js
+├── index.html
+├── index.jsx
+├── model/...
+├── postcss.config.cjs
+├── service/...
+├── startVite.js
+├── styles/...
+├── tailwind.config.cjs
+├── useKeyBindings.js
+├── vite.config.js
 
 ```
-
-src/prompt/createPrompt.js:
+src/frontend/config/keyBindings.js:
 ```
-import { readAttention } from "../attention/readAttention.js"
-import yaml from 'js-yaml';
-import { getSystemPromptIfNeeded } from './getSystemPromptIfNeeded.js';
-import { resolveTemplateVariables } from './resolveTemplateVariables.js';
-import { extractTemplateVars } from './extractTemplateVars.js';
-import { loadPromptDescriptor } from './loadPromptDescriptor.js';
-import { loadTaskTemplate } from './loadTaskTemplate.js';
-import { loadFormatTemplate } from './loadFormatTemplate.js';
-import promptDescriptorDefaults from './promptDescriptorDefaults.js';
-
-const createPrompt = async (userInput, forceSystemPrompt) => {
-  let promptDescriptor = yaml.load(await loadPromptDescriptor());
-  let promptDescriptorDefaultsData = await promptDescriptorDefaults();
-
-  promptDescriptor = { ...promptDescriptorDefaultsData, ...promptDescriptor };
-
-  let templateVars = extractTemplateVars(promptDescriptor);
-  templateVars = await resolveTemplateVariables(templateVars);
-
-  const attention = await readAttention(promptDescriptor.attention);
-  const task = await loadTaskTemplate(promptDescriptor.task, templateVars);
-
-  const format = await loadFormatTemplate(promptDescriptor.format, templateVars);
-  const system = await getSystemPromptIfNeeded(forceSystemPrompt);
-  const saveto = promptDescriptor.saveto;
+const keyBindings = () => {
   return {
-    prompt: `${system}# Working set\n\n${attention.join("\n")}\n\n# Task\n\n${task}\n\n# Output Format\n\n${format}\n\n${userInput ? userInput : ""}`,
-    saveto
+    'G': (e) => {
+      // Implement logic to press the generate button here
+      console.log('G key pressed'); // Temporary log
+    }
   };
-}
-
-export { createPrompt };
-
-```
-
-src/prompt/processPrompt.js:
-```
-import { createPrompt } from './createPrompt.js';
-import fs from 'fs/promises';
-
-const processPrompt = async (task, forceSystemPrompt = false, saveto = 'prompt.md', parent_message_id = null) => {
-  const { prompt, saveto: newSaveto } = await createPrompt(task, forceSystemPrompt);
-  await fs.writeFile(newSaveto || saveto, prompt);
-  return { prompt, parent_message_id };
-}
-
-export default processPrompt;
-
-```
-
-src/backend/handlers/generateHandler.js:
-```
-import processPrompt from '../../prompt/processPrompt.js';
-
-export const generateHandler = async (req, res) => {
-  const { notes, systemPrompt } = req.body;
-  const { prompt } = await processPrompt(notes, systemPrompt);
-  res.json({ prompt: prompt });
 };
+
+export default keyBindings;
+
+```
+
+src/frontend/components/GenerateButton.jsx:
+```
+import { generatePrompt } from '../generatePrompt';
+import { marked } from 'marked';
+import { setPrompt } from '../model/prompt';
+
+const GenerateButton = () => {
+  const handleGeneratePrompt = async () => {
+    const response = await generatePrompt();
+
+    navigator.clipboard.writeText(response.prompt)
+      .then(() => {
+        console.log('Prompt copied to clipboard!');
+      })
+      .catch(err => {
+        console.error('Failed to copy prompt: ', err);
+      });
+
+    const htmlPrompt = marked(response.prompt);
+
+    setPrompt(htmlPrompt);
+  };
+
+  return (
+    <button className="w-64 px-4 py-4 bg-blue-500 text-white rounded" onClick={handleGeneratePrompt}>Generate & Copy Prompt</button>
+  );
+};
+
+export default GenerateButton;
 
 ```
 
 
 # Task
 
-Fix the following issue!
+Implement the following feature!
 
-TypeError: Cannot read properties of null (reading &#39;map&#39;)
-  at readAttention (file:///Users/ko/projects-new/Junior/src/attention/readAttention.js:7:61)
-  at createPrompt (file:///Users/ko/projects-new/Junior/src/prompt/createPrompt.js:20:27)
-  at async processPrompt (file:///Users/ko/projects-new/Junior/src/prompt/processPrompt.js:5:41)
-  at async generateHandler (file:///Users/ko/projects-new/Junior/src/backend/handlers/generateHandler.js:5:22)os: OSX
+- Create a plan!
+- Create new files when needed!
+
+Requirements:
+
+Factor out handleGeneratePrompt to src/frontend/service/handleGeneratePrompt.js
+When the G key is pressed, call it.
+
+
+
+## Project Specifics
+
+- Every js file should *only export a single function*!
+- Use *ES6 imports*!
+- Prefer *async/await* over promises!
+- The frontend uses *Solidjs*, edit .jsx file accordingly
 
 
 # Output Format
