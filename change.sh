@@ -1,43 +1,70 @@
 #!/bin/sh
 set -e
-goal="Implement error handling in git checkout"
+goal="Implement rollback confirmation for reset functionality"
 echo "Plan:"
-echo "1. Modify the resetGit function to continue when checkouts fail"
-echo "2. Update the executeCommand function to catch errors and log them without propagating"
+echo "1. Create a new Solidjs component to handle the rollback confirmation."
+echo "2. Update the RollbackButton.jsx to include the new confirmation logic."
 
-cat > src/git/resetGit.js << 'EOF'
-import { promisify } from 'util';
-import { exec as execCb } from 'child_process';
+# Create a new file for the confirmation dialog
+cat > src/frontend/components/ConfirmationDialog.jsx << 'EOF'
+import { createEffect, createSignal } from "solid-js";
 
-const exec = promisify(execCb);
+const ConfirmationDialog = (props) => {
+  const [visible, setVisible] = createSignal(false);
 
-export default async function resetGit() {
-  try {
-    await executeCommand('git stash -u');
+  createEffect(() => {
+    setVisible(props.visible);
+  });
 
-    await executeCommand('git clean -f -d && git reset --hard');
+  return (
+    <div className={visible() ? "block" : "hidden"}>
+      <div className="fixed inset-0 flex items-center justify-center z-50">
+        <div className="bg-white p-8 rounded shadow-lg">
+          <p>Are you sure you want to roll back? This will reset the repo to the last commit and delete new files.</p>
+          <button className="bg-red-700 text-white px-4 py-2 rounded mr-4" onClick={props.onConfirm}>Confirm</button>
+          <button className="bg-gray-400 text-white px-4 py-2 rounded" onClick={props.onCancel}>Cancel</button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
-    await executeCommand('git checkout stash@{0} -- prompt.yaml', true);
-    await executeCommand('git checkout stash@{0} -- prompt.md', true);
+export default ConfirmationDialog;
+EOF
 
-    await executeCommand('git stash drop');
-  } catch (err) {
-    console.error(`An error occurred: ${err}`);
-  }
-}
+# Update RollbackButton.jsx file
+cat > src/frontend/components/RollbackButton.jsx << 'EOF'
+import { createSignal } from "solid-js";
+import { resetGit } from '../service/resetGit';
+import ConfirmationDialog from './ConfirmationDialog';
 
-async function executeCommand(command, ignoreErrors = false) {
-  try {
-    console.log(`Running command: ${command}`);
-    const { stdout } = await exec(command);
-    console.log(`stdout: ${stdout}`);
-  } catch (err) {
-    if (!ignoreErrors) {
-      throw err;
-    }
-    console.warn(`An error occurred while executing the command: ${command}. Continuing...`);
-  }
-}
+const RollbackButton = () => {
+  const [showConfirmation, setShowConfirmation] = createSignal(false);
+
+  const handleReset = async () => {
+    const response = await resetGit();
+
+    console.log(response.message);
+  };
+
+  const handleConfirm = () => {
+    setShowConfirmation(false);
+    handleReset();
+  };
+
+  const handleRollbackClick = () => {
+    setShowConfirmation(true);
+  };
+
+  return (
+    <>
+      <button className="w-full px-4 py-4 bg-red-700 text-white rounded" onClick={handleRollbackClick}>Roll Back</button>
+      <ConfirmationDialog visible={showConfirmation()} onConfirm={handleConfirm} onCancel={() => setShowConfirmation(false)} />
+    </>
+  );
+};
+
+export default RollbackButton;
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"

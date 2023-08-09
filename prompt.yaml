@@ -1,6 +1,6 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/git/resetGit.js
+  - src/frontend/components/RollbackButton.jsx
 requirements: |
-  - When checkouts fail, e.g. one of the prompt files is missing, continue.
+  Ask the user if really want to rollback: it will reset the repo to the last commit and delete new files even if they were not created by Junior.
 os: OSX

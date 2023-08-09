@@ -1,32 +1,23 @@
 # Working set
 
-src/git/resetGit.js:
+src/frontend/components/RollbackButton.jsx:
 ```
-import { promisify } from 'util';
-import { exec as execCb } from 'child_process';
+import { resetGit } from '../service/resetGit';
 
-const exec = promisify(execCb);
+const RollbackButton = () => {
+  const handleReset = async () => {
+    const response = await resetGit();
 
-export default async function resetGit() {
-  try {
-    await executeCommand('git stash -u');
+    console.log(response.message);
+  };
 
-    await executeCommand('git clean -f -d && git reset --hard');
+  return (
+    <button className="w-full px-4 py-4 bg-red-700 text-white rounded" onClick={handleReset}>Roll Back</button>
+  );
+};
 
-    await executeCommand('git checkout stash@{0} -- prompt.yaml');
-    await executeCommand('git checkout stash@{0} -- prompt.md');
+export default RollbackButton;
 
-    await executeCommand('git stash drop');
-  } catch (err) {
-    console.error(`An error occurred: ${err}`);
-  }
-}
-
-async function executeCommand(command) {
-  console.log(`Running command: ${command}`);
-  const { stdout } = await exec(command);
-  console.log(`stdout: ${stdout}`);
-}
 
 ```
 
@@ -40,7 +31,7 @@ Implement the following feature!
 
 Requirements:
 
-- When checkouts fail, e.g. one of the prompt files is missing, continue.
+Ask the user if really want to rollback: it will reset the repo to the last commit and delete new files even if they were not created by Junior.
 
 
 
