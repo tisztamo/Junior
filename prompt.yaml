@@ -4,5 +4,5 @@ attention:
   - src/git/deleteBranchesCommand.js
   - src/git/deleteBranches.js
 requirements: |
-  rename deleteBranches to clearBranches
+  rename deleteBranchesCommand to clearBranchesCommand
 os: OSX

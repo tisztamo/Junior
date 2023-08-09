@@ -67,13 +67,13 @@ package.json:
 
 src/git/deleteBranchesCommand.js:
 ```
-import deleteBranches from './deleteBranches';
+import clearBranches from './clearBranches';
 
 const exceptions = process.argv.slice(2);
 
 async function run() {
   try {
-    await deleteBranches(exceptions);
+    await clearBranches(exceptions);
     console.log('Branches deleted successfully.');
   } catch (err) {
     console.error(`An error occurred while deleting branches: ${err}`);
@@ -83,41 +83,10 @@ async function run() {
 
 run();
 
-```
-
-src/git/deleteBranches.js:
-```
-import { promisify } from 'util';
-import { exec as execCb } from 'child_process';
-
-const exec = promisify(execCb);
-
-export default async function deleteBranches(exceptions = []) {
-  try {
-    const { stdout: currentBranch } = await exec('git rev-parse --abbrev-ref HEAD');
-    const { stdout: allBranches } = await exec('git for-each-ref --format="%(refname:short)" refs/heads');
-
-    const branches = allBranches.split('\n').filter(branch => branch !== currentBranch.trim() && !exceptions.includes(branch));
-
-    for (const branch of branches) {
-      await executeCommand(`git branch -d ${branch}`);
-    }
-  } catch (err) {
-    console.error(`An error occurred: ${err}`);
-  }
-}
-
-async function executeCommand(command) {
-  try {
-    console.log(`Running command: ${command}`);
-    const { stdout } = await exec(command);
-    console.log(`stdout: ${stdout}`);
-  } catch (err) {
-    throw err;
-  }
-}
 
 ```
+
+src/git/deleteBranches.js: err!
 
 
 # Task
@@ -132,7 +101,7 @@ Before executing, write a concise plan! The plan should show:
  - How do you avoid breaking other parts of the code.
  - If you had to choose, your way of thinking.
 
-rename deleteBranches to clearBranches
+rename deleteBranchesCommand to clearBranchesCommand
 
 
 # Output Format
