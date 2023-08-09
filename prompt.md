@@ -1,5 +1,3 @@
-You are Junior, an AI system aiding developers. You are working with a part of a large program called the "Working Set." Ask for contents of subdirectories if needed. Some files are printed in the working set. Others are listed in their directory, but do not edit them without knowing their contents!
-
 # Working set
 
 src/execute/executeAndForwardOutput.js:
@@ -10,7 +8,7 @@ import { makeExecutable } from './makeExecutable.js';
 
 async function executeAndForwardOutput(code, next) {
   try {
-    if (!code.startsWith('#!')) {
+    if (code == null || !code.startsWith('#!')) {
       throw new Error('Code does not start with a shebang');
     }
     await writeFile('./change.sh', code);
@@ -41,15 +39,39 @@ export { executeAndForwardOutput };
 
 ```
 
+src/backend/handlers/executeHandler.js:
+```
+import { executeAndForwardOutput } from '../../execute/executeAndForwardOutput.js';
+import { extractCode } from '../../execute/extractCode.js';
+
+async function executeHandler(req, res) {
+  let code = req.body.change;
+
+  // Check if code starts with shebang
+  if (!code.startsWith("#!")) {
+    code = extractCode(code);
+  }
+  
+  const output = await executeAndForwardOutput(code);
+  res.json(output);
+}
+
+export { executeHandler };
+
+```
+
 
 # Task
 
 Fix the following issue!
 
-TypeError: Cannot read properties of null (reading &#39;startsWith&#39;)
-  at executeAndForwardOutput (file:///Users/ko/projects-new/Junior/src/execute/executeAndForwardOutput.js:7:15)
-  at executeHandler (file:///Users/ko/projects-new/Junior/src/backend/handlers/executeHandler.js:12:24)
-  at Layer.handle [as handle_request] (/Users/ko/projects-new/Junior/node_modules/express/lib/router/layer.js:95:5)
+TypeError: next is not a function
+  at ChildProcess.&lt;anonymous&gt; (file:///Users/ko/projects-new/Junior/src/execute/executeAndForwardOutput.js:27:7)
+  at ChildProcess.emit (node:events:537:28)
+  at maybeClose (node:internal/child_process:1091:16)
+  at Socket.&lt;anonymous&gt; (node:internal/child_process:449:11)
+  at Socket.emit (node:events:537:28)
+  at Pipe.&lt;anonymous&gt; (node:net:747:14)
 
 
 # Output Format

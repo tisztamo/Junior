@@ -1,10 +1,11 @@
 #!/bin/sh
 set -e
-goal="Fix TypeError in executeAndForwardOutput function"
+goal="Fix TypeError issue by handling callback properly"
 echo "Plan:"
-echo "1. Add a check to see if 'code' is null or undefined before calling startsWith on it."
-echo "2. Modify executeAndForwardOutput.js file to include the null or undefined check for the 'code' parameter."
+echo "1. Change the function executeAndForwardOutput in executeAndForwardOutput.js to accept a next callback"
+echo "2. Modify the executeHandler.js to provide a proper callback to executeAndForwardOutput"
 
+# Step 1: Update executeAndForwardOutput.js to correct the usage of next
 cat > src/execute/executeAndForwardOutput.js << 'EOF'
 import { writeFile } from 'fs/promises';
 import { spawn } from 'child_process';
@@ -32,7 +33,9 @@ async function executeAndForwardOutput(code, next) {
     });
 
     child.on('close', (code) => {
-      next(code, commandOutput);
+      if (typeof next === 'function') {
+        next(code, commandOutput);
+      }
     });
   } catch (err) {
     console.log(err);
@@ -40,6 +43,27 @@ async function executeAndForwardOutput(code, next) {
 }
 
 export { executeAndForwardOutput };
+EOF
+
+# Step 2: Update executeHandler.js to provide the proper callback to executeAndForwardOutput
+cat > src/backend/handlers/executeHandler.js << 'EOF'
+import { executeAndForwardOutput } from '../../execute/executeAndForwardOutput.js';
+import { extractCode } from '../../execute/extractCode.js';
+
+async function executeHandler(req, res) {
+  let code = req.body.change;
+
+  // Check if code starts with shebang
+  if (!code.startsWith("#!")) {
+    code = extractCode(code);
+  }
+  
+  await executeAndForwardOutput(code, (code, output) => {
+    res.json(output);
+  });
+}
+
+export { executeHandler };
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"

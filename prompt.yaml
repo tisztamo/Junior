@@ -1,9 +1,13 @@
 task: prompt/task/bug/fix.md
 attention:
   - src/execute/executeAndForwardOutput.js
+  - src/backend/handlers/executeHandler.js
 requirements: |
-  TypeError: Cannot read properties of null (reading 'startsWith')
-    at executeAndForwardOutput (file:///Users/ko/projects-new/Junior/src/execute/executeAndForwardOutput.js:7:15)
-    at executeHandler (file:///Users/ko/projects-new/Junior/src/backend/handlers/executeHandler.js:12:24)
-    at Layer.handle [as handle_request] (/Users/ko/projects-new/Junior/node_modules/express/lib/router/layer.js:95:5)
+  TypeError: next is not a function
+    at ChildProcess.<anonymous> (file:///Users/ko/projects-new/Junior/src/execute/executeAndForwardOutput.js:27:7)
+    at ChildProcess.emit (node:events:537:28)
+    at maybeClose (node:internal/child_process:1091:16)
+    at Socket.<anonymous> (node:internal/child_process:449:11)
+    at Socket.emit (node:events:537:28)
+    at Pipe.<anonymous> (node:net:747:14)
 os: OSX

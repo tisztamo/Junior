@@ -9,8 +9,9 @@ async function executeHandler(req, res) {
     code = extractCode(code);
   }
   
-  const output = await executeAndForwardOutput(code);
-  res.json(output);
+  await executeAndForwardOutput(code, (code, output) => {
+    res.json(output);
+  });
 }
 
 export { executeHandler };

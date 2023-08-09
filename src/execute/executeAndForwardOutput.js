@@ -24,7 +24,9 @@ async function executeAndForwardOutput(code, next) {
     });
 
     child.on('close', (code) => {
-      next(code, commandOutput);
+      if (typeof next === 'function') {
+        next(code, commandOutput);
+      }
     });
   } catch (err) {
     console.log(err);
