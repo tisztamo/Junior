@@ -3,6 +3,6 @@ attention:
   - src/frontend/components/RollbackButton.jsx
   - src/frontend/components/ConfirmationDialog.jsx
 requirements: >
-  - Make the confirmation question a bit more visible and separated from the rest of the text.
-  - Fade the ui outside of the dialog while it is opened
+  Add a checkbox to the confirmation dialog for the user to never see the dialog again.
+  Save it to localStorage as "Junior.disableRollbackConfirmation"
 os: OSX

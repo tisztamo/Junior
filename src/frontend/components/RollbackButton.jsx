@@ -17,7 +17,12 @@ const RollbackButton = () => {
   };
 
   const handleRollbackClick = () => {
-    setShowConfirmation(true);
+    const disableConfirmation = localStorage.getItem('Junior.disableRollbackConfirmation') === 'true';
+    if (disableConfirmation) {
+      handleReset();
+    } else {
+      setShowConfirmation(true);
+    }
   };
 
   return (
