@@ -8,11 +8,10 @@ import { loadTaskTemplate } from './loadTaskTemplate.js';
 import { loadFormatTemplate } from './loadFormatTemplate.js';
 import promptDescriptorDefaults from './promptDescriptorDefaults.js';
 
-const createPrompt = async (userInput) => {
+const createPrompt = async (userInput, forceSystemPrompt) => {
   let promptDescriptor = yaml.load(await loadPromptDescriptor());
   let promptDescriptorDefaultsData = await promptDescriptorDefaults();
 
-  // Fill in the defaults from promptDescriptorDefaults.js
   promptDescriptor = { ...promptDescriptorDefaultsData, ...promptDescriptor };
 
   let templateVars = extractTemplateVars(promptDescriptor);
@@ -22,7 +21,7 @@ const createPrompt = async (userInput) => {
   const task = await loadTaskTemplate(promptDescriptor.task, templateVars);
 
   const format = await loadFormatTemplate(promptDescriptor.format, templateVars);
-  const system = await getSystemPromptIfNeeded();
+  const system = await getSystemPromptIfNeeded(forceSystemPrompt);
   const saveto = promptDescriptor.saveto;
   return {
     prompt: `${system}# Working set\n\n${attention.join("\n")}\n\n# Task\n\n${task}\n\n# Output Format\n\n${format}\n\n${userInput ? userInput : ""}`,

@@ -1,95 +1,106 @@
 #!/bin/sh
 set -e
-goal="Rename ConfirmationDialog, update properties, and style with Tailwind"
+goal="Implement systemPrompt feature in prompt generation"
 echo "Plan:"
-echo "1. Rename ConfirmationDialog to RollbackConfirmationDialog"
-echo "2. Update the bg-emphasize button background to a red color from Tailwind classes, and the label to 'Yes, Roll Back'"
-echo "3. Add more space between the checkbox and its label using Tailwind classes"
-echo "4. Update the RollbackButton component to use the new name RollbackConfirmationDialog and reflect changes"
-echo "5. Ensure all the dependencies and references are updated to maintain coherence in the codebase"
+echo "1. Modify generateHandler.js to forward systemPrompt from request."
+echo "2. Modify processPrompt.js to take a second argument forceSystemPrompt."
+echo "3. Modify getSystemPromptIfNeeded.js to accept a force argument."
+echo "4. Modify createPrompt.js to forward forceSystemPrompt value."
+echo "5. Modify generatePrompt.js on the frontend to send systemPrompt: true with the request."
 
-# Step 1: Rename ConfirmationDialog to RollbackConfirmationDialog and make necessary changes
-cat > src/frontend/components/RollbackConfirmationDialog.jsx <<EOF
-import { createEffect, createSignal } from "solid-js";
+echo "\nStep 1: Modifying generateHandler.js"
+cat > src/backend/handlers/generateHandler.js << 'EOF'
+import processPrompt from '../../prompt/processPrompt.js';
 
-const RollbackConfirmationDialog = (props) => {
-  const [visible, setVisible] = createSignal(false);
-  const [disableConfirmation, setDisableConfirmation] = createSignal(false);
+export const generateHandler = async (req, res) => {
+  const { notes, systemPrompt } = req.body;
+  const { prompt } = await processPrompt(notes, systemPrompt);
+  res.json({ prompt: prompt });
+};
+EOF
 
-  const handleCheckboxChange = (event) => {
-    setDisableConfirmation(event.target.checked);
-    localStorage.setItem('Junior.disableRollbackConfirmation', event.target.checked);
+echo "Step 2: Modifying processPrompt.js"
+cat > src/prompt/processPrompt.js << 'EOF'
+import { createPrompt } from './createPrompt.js';
+import fs from 'fs/promises';
+
+const processPrompt = async (task, forceSystemPrompt = false, saveto = 'prompt.md', parent_message_id = null) => {
+  const { prompt, saveto: newSaveto } = await createPrompt(task, forceSystemPrompt);
+  await fs.writeFile(newSaveto || saveto, prompt);
+  return { prompt, parent_message_id };
+}
+
+export default processPrompt;
+EOF
+
+echo "Step 3: Modifying getSystemPromptIfNeeded.js"
+cat > src/prompt/getSystemPromptIfNeeded.js << 'EOF'
+import { getSystemPrompt } from "./getSystemPrompt.js";
+
+async function getSystemPromptIfNeeded(force = false) {
+  if (force || process.argv.includes("--system-prompt") || process.argv.includes("-s")) {
+    return `${await getSystemPrompt()}\n`;
+  }
+  return "";
+}
+
+export { getSystemPromptIfNeeded };
+EOF
+
+echo "Step 4: Modifying createPrompt.js"
+cat > src/prompt/createPrompt.js << 'EOF'
+import { readAttention } from "../attention/readAttention.js"
+import yaml from 'js-yaml';
+import { getSystemPromptIfNeeded } from './getSystemPromptIfNeeded.js';
+import { resolveTemplateVariables } from './resolveTemplateVariables.js';
+import { extractTemplateVars } from './extractTemplateVars.js';
+import { loadPromptDescriptor } from './loadPromptDescriptor.js';
+import { loadTaskTemplate } from './loadTaskTemplate.js';
+import { loadFormatTemplate } from './loadFormatTemplate.js';
+import promptDescriptorDefaults from './promptDescriptorDefaults.js';
+
+const createPrompt = async (userInput, forceSystemPrompt) => {
+  let promptDescriptor = yaml.load(await loadPromptDescriptor());
+  let promptDescriptorDefaultsData = await promptDescriptorDefaults();
+
+  promptDescriptor = { ...promptDescriptorDefaultsData, ...promptDescriptor };
+
+  let templateVars = extractTemplateVars(promptDescriptor);
+  templateVars = await resolveTemplateVariables(templateVars);
+
+  const attention = await readAttention(promptDescriptor.attention);
+  const task = await loadTaskTemplate(promptDescriptor.task, templateVars);
+
+  const format = await loadFormatTemplate(promptDescriptor.format, templateVars);
+  const system = await getSystemPromptIfNeeded(forceSystemPrompt);
+  const saveto = promptDescriptor.saveto;
+  return {
+    prompt: `${system}# Working set\n\n${attention.join("\n")}\n\n# Task\n\n${task}\n\n# Output Format\n\n${format}\n\n${userInput ? userInput : ""}`,
+    saveto
   };
+}
 
-  createEffect(() => {
-    setVisible(props.visible);
+export { createPrompt };
+EOF
+
+echo "Step 5: Modifying generatePrompt.js on the frontend"
+cat > src/frontend/generatePrompt.js << 'EOF'
+import { getBaseUrl } from './getBaseUrl';
+
+const generatePrompt = async (notes) => {
+  const baseUrl = getBaseUrl();
+  const response = await fetch(`${baseUrl}/generate`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ notes, systemPrompt: true })
   });
 
-  return (
-    <div className={visible() ? "block" : "hidden"}>
-      <div className="fixed inset-0 flex items-center justify-center z-50" style={{ backgroundColor: "var(--background-color)" }}>
-        <div className="bg-main p-8 rounded shadow-lg text-text">
-          <h3 className="text-xl mb-4">Are you sure you want to roll back?</h3>
-          <p>This will reset the repo to the last commit and delete new files.</p>
-          <label className="flex items-center my-2">
-            <input type="checkbox" className="mr-3" checked={disableConfirmation()} onChange={handleCheckboxChange} />
-            Never show this again
-          </label>
-          <div>
-            <button className="bg-red-500 text-white px-4 py-2 rounded mr-4" onClick={props.onConfirm}>Yes, Roll Back</button>
-            <button className="bg-gray-400 text-white px-4 py-2 rounded" onClick={props.onCancel}>Cancel</button>
-          </div>
-        </div>
-      </div>
-      <div className={visible() ? "fixed inset-0 bg-black opacity-50" : "hidden"}></div>
-    </div>
-  );
+  const data = await response.json();
+
+  return data;
 };
 
-export default RollbackConfirmationDialog;
+export { generatePrompt };
 EOF
-
-# Step 2: Update RollbackButton component to use the new name RollbackConfirmationDialog
-cat > src/frontend/components/RollbackButton.jsx <<EOF
-import { createSignal } from "solid-js";
-import { resetGit } from '../service/resetGit';
-import RollbackConfirmationDialog from './RollbackConfirmationDialog';
-
-const RollbackButton = () => {
-  const [showConfirmation, setShowConfirmation] = createSignal(false);
-
-  const handleReset = async () => {
-    const response = await resetGit();
-
-    console.log(response.message);
-  };
-
-  const handleConfirm = () => {
-    setShowConfirmation(false);
-    handleReset();
-  };
-
-  const handleRollbackClick = () => {
-    const disableConfirmation = localStorage.getItem('Junior.disableRollbackConfirmation') === 'true';
-    if (disableConfirmation) {
-      handleReset();
-    } else {
-      setShowConfirmation(true);
-    }
-  };
-
-  return (
-    <>
-      <button className="w-full px-4 py-4 bg-red-700 text-white rounded" onClick={handleRollbackClick}>Roll Back</button>
-      <RollbackConfirmationDialog visible={showConfirmation()} onConfirm={handleConfirm} onCancel={() => setShowConfirmation(false)} />
-    </>
-  );
-};
-
-export default RollbackButton;
-EOF
-
-# Removing the old file
-rm src/frontend/components/ConfirmationDialog.jsx
 
 echo "\033[32mDone: $goal\033[0m\n"

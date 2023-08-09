@@ -1,8 +1,13 @@
-task: prompt/task/refactor/move_files.md
+task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/components/ConfirmationDialog.jsx
-  - src/frontend/components/RollbackButton.jsx
+  - src/backend/handlers/generateHandler.js
+  - src/prompt/processPrompt.js
+  - src/prompt/createPrompt.js
+  - src/prompt/getSystemPromptIfNeeded.js
+  - src/frontend/generatePrompt.js
 requirements: >
-  - Rename it to RollbackConfirmationDialog
-  - Also change the bg-emphasize button background to red, and the label to "Yes, Roll Back"
+  When generating the prompt from the web, send "systemPrompt": true with the
+  request. Add a force=false argument to getSystemPromptIfNeeded Make sure the
+  handler forwards the systemPrompt value to processPrompt. Create a new argument "forceSystemPrompt = false" for processPrompt as its _second_
+  argument. Also update createPrompt to forward the value.
 os: OSX

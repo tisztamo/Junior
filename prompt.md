@@ -1,102 +1,135 @@
+You're the 'Junior', an AI system aiding authors.
+
+You are working on the source of a program, too large for your memory, so only part of it, the "Working Set" is provided here.
+
+You will see a partial directory structure. Ask for the contents of subdirs marked with /... if needed.
+
+Some files are printed in the working set.
+
+Other files are only listed in their dir, so you know they exists. Do not edit files without knowing their current content, ask for their contents instead!
+
 # Working set
 
-src/frontend/components/ConfirmationDialog.jsx:
+src/backend/handlers/generateHandler.js:
 ```
-import { createEffect, createSignal } from "solid-js";
+import processPrompt from '../../prompt/processPrompt.js';
 
-const ConfirmationDialog = (props) => {
-  const [visible, setVisible] = createSignal(false);
-  const [disableConfirmation, setDisableConfirmation] = createSignal(false);
+export const generateHandler = async (req, res) => {
+  const { notes, systemPrompt } = req.body;
+  const { prompt } = await processPrompt(notes, systemPrompt);
+  res.json({ prompt: prompt });
+};
 
-  const handleCheckboxChange = (event) => {
-    setDisableConfirmation(event.target.checked);
-    localStorage.setItem('Junior.disableRollbackConfirmation', event.target.checked);
+```
+
+src/prompt/processPrompt.js:
+```
+import { createPrompt } from './createPrompt.js';
+import fs from 'fs/promises';
+
+const processPrompt = async (task, forceSystemPrompt = false, saveto = 'prompt.md', parent_message_id = null) => {
+  const { prompt, saveto: newSaveto } = await createPrompt(task, forceSystemPrompt);
+  await fs.writeFile(newSaveto || saveto, prompt);
+  return { prompt, parent_message_id };
+}
+
+export default processPrompt;
+
+```
+
+src/prompt/createPrompt.js:
+```
+import { readAttention } from "../attention/readAttention.js"
+import yaml from 'js-yaml';
+import { getSystemPromptIfNeeded } from './getSystemPromptIfNeeded.js';
+import { resolveTemplateVariables } from './resolveTemplateVariables.js';
+import { extractTemplateVars } from './extractTemplateVars.js';
+import { loadPromptDescriptor } from './loadPromptDescriptor.js';
+import { loadTaskTemplate } from './loadTaskTemplate.js';
+import { loadFormatTemplate } from './loadFormatTemplate.js';
+import promptDescriptorDefaults from './promptDescriptorDefaults.js';
+
+const createPrompt = async (userInput, forceSystemPrompt) => {
+  let promptDescriptor = yaml.load(await loadPromptDescriptor());
+  let promptDescriptorDefaultsData = await promptDescriptorDefaults();
+
+  promptDescriptor = { ...promptDescriptorDefaultsData, ...promptDescriptor };
+
+  let templateVars = extractTemplateVars(promptDescriptor);
+  templateVars = await resolveTemplateVariables(templateVars);
+
+  const attention = await readAttention(promptDescriptor.attention);
+  const task = await loadTaskTemplate(promptDescriptor.task, templateVars);
+
+  const format = await loadFormatTemplate(promptDescriptor.format, templateVars);
+  const system = await getSystemPromptIfNeeded(forceSystemPrompt);
+  const saveto = promptDescriptor.saveto;
+  return {
+    prompt: `${system}# Working set\n\n${attention.join("\n")}\n\n# Task\n\n${task}\n\n# Output Format\n\n${format}\n\n${userInput ? userInput : ""}`,
+    saveto
   };
+}
 
-  createEffect(() => {
-    setVisible(props.visible);
+export { createPrompt };
+
+```
+
+src/prompt/getSystemPromptIfNeeded.js:
+```
+import { getSystemPrompt } from "./getSystemPrompt.js";
+
+async function getSystemPromptIfNeeded(force = false) {
+  if (force || process.argv.includes("--system-prompt") || process.argv.includes("-s")) {
+    return `${await getSystemPrompt()}\n`;
+  }
+  return "";
+}
+
+export { getSystemPromptIfNeeded };
+
+```
+
+src/frontend/generatePrompt.js:
+```
+import { getBaseUrl } from './getBaseUrl';
+
+const generatePrompt = async (notes) => {
+  const baseUrl = getBaseUrl();
+  const response = await fetch(`${baseUrl}/generate`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ notes, systemPrompt: true })
   });
 
-  return (
-    <div className={visible() ? "block" : "hidden"}>
-      <div className="fixed inset-0 flex items-center justify-center z-50" style={{ backgroundColor: "var(--background-color)" }}>
-        <div className="bg-main p-8 rounded shadow-lg text-text">
-          <h3 className="text-xl mb-4">Are you sure you want to roll back?</h3>
-          <p>This will reset the repo to the last commit and delete new files.</p>
-          <label style={{ display: 'flex', alignItems: 'center', margin: '10px 0' }}>
-            <input type="checkbox" style={{ marginRight: '10px' }} checked={disableConfirmation()} onChange={handleCheckboxChange} />
-            Never show this again
-          </label>
-          <div>
-            <button className="bg-emphasize text-white px-4 py-2 rounded mr-4" onClick={props.onConfirm}>Confirm</button>
-            <button className="bg-gray-400 text-white px-4 py-2 rounded" onClick={props.onCancel}>Cancel</button>
-          </div>
-        </div>
-      </div>
-      <div className={visible() ? "fixed inset-0 bg-black opacity-50" : "hidden"}></div>
-    </div>
-  );
+  const data = await response.json();
+
+  return data;
 };
 
-export default ConfirmationDialog;
-
-```
-
-src/frontend/components/RollbackButton.jsx:
-```
-import { createSignal } from "solid-js";
-import { resetGit } from '../service/resetGit';
-import ConfirmationDialog from './ConfirmationDialog';
-
-const RollbackButton = () => {
-  const [showConfirmation, setShowConfirmation] = createSignal(false);
-
-  const handleReset = async () => {
-    const response = await resetGit();
-
-    console.log(response.message);
-  };
-
-  const handleConfirm = () => {
-    setShowConfirmation(false);
-    handleReset();
-  };
-
-  const handleRollbackClick = () => {
-    const disableConfirmation = localStorage.getItem('Junior.disableRollbackConfirmation') === 'true';
-    if (disableConfirmation) {
-      handleReset();
-    } else {
-      setShowConfirmation(true);
-    }
-  };
-
-  return (
-    <>
-      <button className="w-full px-4 py-4 bg-red-700 text-white rounded" onClick={handleRollbackClick}>Roll Back</button>
-      <ConfirmationDialog visible={showConfirmation()} onConfirm={handleConfirm} onCancel={() => setShowConfirmation(false)} />
-    </>
-  );
-};
-
-export default RollbackButton;
+export { generatePrompt };
 
 ```
 
 
 # Task
 
-Move the following files to the specified target dirs!
+Implement the following feature!
 
-Find out the best target dir if it is not specified!
+- Create a plan!
+- Create new files when needed!
 
-You need to follow dependencies to maintain coherence.
+Requirements:
 
-Before executing, write a concise plan! The plan should show:
- - How do you avoid breaking other parts of the code.
- - If you had to choose, your way of thinking.
+When generating the prompt from the web, send &#34;systemPrompt&#34;: true with the request. Add a force=false argument to getSystemPromptIfNeeded Make sure the handler forwards the systemPrompt value to processPrompt. Create a new argument &#34;forceSystemPrompt = false&#34; for processPrompt as its _second_ argument. Also update createPrompt to forward the value.
 
-- Rename it to RollbackConfirmationDialog - Also change the bg-emphasize button background to red, and the label to &#34;Yes, Roll Back&#34;
+
+
+## Project Specifics
+
+- Every js file should *only export a single function*!
+- Use *ES6 imports*!
+- Prefer *async/await* over promises!
+- The frontend uses *Solidjs*, edit .jsx file accordingly
 
 
 # Output Format
