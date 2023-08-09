@@ -4,7 +4,7 @@ import { makeExecutable } from './makeExecutable.js';
 
 async function executeAndForwardOutput(code, next) {
   try {
-    if (!code.startsWith('#!')) {
+    if (code == null || !code.startsWith('#!')) {
       throw new Error('Code does not start with a shebang');
     }
     await writeFile('./change.sh', code);

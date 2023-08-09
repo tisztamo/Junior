@@ -1,14 +1,9 @@
-task: prompt/task/feature/implement.md
+task: prompt/task/bug/fix.md
 attention:
-  - ./
-  - src/frontend/
-  - src/frontend/App.jsx
+  - src/execute/executeAndForwardOutput.js
 requirements: |
-  Create keyboard bindings
-
-  We need a simple framework for working with keyboard bindings.
-  
-  We will need to configure bindings on the fly from some UI. Do not create the UI, only the framework.
-
-  For the beginning, bind key "G" to pressing the generate button.
+  TypeError: Cannot read properties of null (reading 'startsWith')
+    at executeAndForwardOutput (file:///Users/ko/projects-new/Junior/src/execute/executeAndForwardOutput.js:7:15)
+    at executeHandler (file:///Users/ko/projects-new/Junior/src/backend/handlers/executeHandler.js:12:24)
+    at Layer.handle [as handle_request] (/Users/ko/projects-new/Junior/node_modules/express/lib/router/layer.js:95:5)
 os: OSX

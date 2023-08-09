@@ -1,97 +1,55 @@
+You are Junior, an AI system aiding developers. You are working with a part of a large program called the "Working Set." Ask for contents of subdirectories if needed. Some files are printed in the working set. Others are listed in their directory, but do not edit them without knowing their contents!
+
 # Working set
 
+src/execute/executeAndForwardOutput.js:
 ```
-./
-├── .DS_Store
-├── .git/...
-├── .github/...
-├── .gitignore
-├── .vscode/...
-├── README.md
-├── change.sh
-├── docs/...
-├── integrations/...
-├── node_modules/...
-├── package-lock.json
-├── package.json
-├── prompt/...
-├── prompt.md
-├── prompt.yaml
-├── scripts/...
-├── src/...
+import { writeFile } from 'fs/promises';
+import { spawn } from 'child_process';
+import { makeExecutable } from './makeExecutable.js';
 
-```
-```
-src/frontend/
-├── App.jsx
-├── assets/...
-├── components/...
-├── fetchTasks.js
-├── generatePrompt.js
-├── getBaseUrl.js
-├── index.html
-├── index.jsx
-├── model/...
-├── postcss.config.cjs
-├── service/...
-├── startVite.js
-├── styles/...
-├── tailwind.config.cjs
-├── vite.config.js
+async function executeAndForwardOutput(code, next) {
+  try {
+    if (!code.startsWith('#!')) {
+      throw new Error('Code does not start with a shebang');
+    }
+    await writeFile('./change.sh', code);
+    await makeExecutable('./change.sh');
+    
+    const child = spawn('./change.sh', [], { shell: true });
+    let commandOutput = '';
 
-```
-src/frontend/App.jsx:
-```
-import NavBar from './components/NavBar';
-import PromptCreation from './components/PromptCreation';
-import ChangeExecution from './components/ChangeExecution';
-import ChangeInspection from './components/ChangeInspection';
-import ChangeFinalization from './components/ChangeFinalization';
+    child.stdout.on('data', (data) => {
+      console.log(`${data}`);
+      commandOutput += data;
+    });
 
-const App = () => {
-  return (
-    <div id="app" class="p-2">
-      <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
-        <NavBar />
-        <PromptCreation />
-        <ChangeExecution />
-        <ChangeInspection />
-        <ChangeFinalization />
-      </div>
-    </div>
-  );
-};
+    child.stderr.on('data', (data) => {
+      console.error(`${data}`);
+      commandOutput += data;
+    });
 
-export default App;
+    child.on('close', (code) => {
+      next(code, commandOutput);
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+export { executeAndForwardOutput };
 
 ```
 
 
 # Task
 
-Implement the following feature!
+Fix the following issue!
 
-- Create a plan!
-- Create new files when needed!
-
-Requirements:
-
-Create keyboard bindings
-
-We need a simple framework for working with keyboard bindings.
-
-We will need to configure bindings on the fly from some UI. Do not create the UI, only the framework.
-
-For the beginning, bind key &#34;G&#34; to pressing the generate button.
-
-
-
-## Project Specifics
-
-- Every js file should *only export a single function*!
-- Use *ES6 imports*!
-- Prefer *async/await* over promises!
-- The frontend uses *Solidjs*, edit .jsx file accordingly
+TypeError: Cannot read properties of null (reading &#39;startsWith&#39;)
+  at executeAndForwardOutput (file:///Users/ko/projects-new/Junior/src/execute/executeAndForwardOutput.js:7:15)
+  at executeHandler (file:///Users/ko/projects-new/Junior/src/backend/handlers/executeHandler.js:12:24)
+  at Layer.handle [as handle_request] (/Users/ko/projects-new/Junior/node_modules/express/lib/router/layer.js:95:5)
 
 
 # Output Format

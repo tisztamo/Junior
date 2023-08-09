@@ -1,77 +1,45 @@
 #!/bin/sh
 set -e
-goal="Implement keyboard bindings framework"
+goal="Fix TypeError in executeAndForwardOutput function"
 echo "Plan:"
-echo "1. Create a 'useKeyBindings.js' file in the 'src/frontend/' directory to handle the keyboard bindings."
-echo "2. Create a 'keyBindings.js' file in the 'src/frontend/config/' directory to store the keyboard bindings function."
-echo "3. Modify the 'App.jsx' file to import and use the new 'keyBindings.js' file and 'useKeyBindings.js' and bind the key 'G' to the generate button."
+echo "1. Add a check to see if 'code' is null or undefined before calling startsWith on it."
+echo "2. Modify executeAndForwardOutput.js file to include the null or undefined check for the 'code' parameter."
 
-# Step 1: Create 'useKeyBindings.js' in 'src/frontend/'
-cat > ./src/frontend/useKeyBindings.js << 'EOF'
-const useKeyBindings = (bindings) => {
-  const handler = (e) => {
-    const action = bindings[e.key.toUpperCase()];
-    if (action) {
-      action(e);
+cat > src/execute/executeAndForwardOutput.js << 'EOF'
+import { writeFile } from 'fs/promises';
+import { spawn } from 'child_process';
+import { makeExecutable } from './makeExecutable.js';
+
+async function executeAndForwardOutput(code, next) {
+  try {
+    if (code == null || !code.startsWith('#!')) {
+      throw new Error('Code does not start with a shebang');
     }
-  };
+    await writeFile('./change.sh', code);
+    await makeExecutable('./change.sh');
+    
+    const child = spawn('./change.sh', [], { shell: true });
+    let commandOutput = '';
 
-  window.addEventListener('keydown', handler);
+    child.stdout.on('data', (data) => {
+      console.log(`${data}`);
+      commandOutput += data;
+    });
 
-  return () => {
-    window.removeEventListener('keydown', handler);
-  };
-};
+    child.stderr.on('data', (data) => {
+      console.error(`${data}`);
+      commandOutput += data;
+    });
 
-export default useKeyBindings;
-EOF
+    child.on('close', (code) => {
+      next(code, commandOutput);
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}
 
-# Step 2: Create 'keyBindings.js' in 'src/frontend/config/'
-mkdir -p ./src/frontend/config
-cat > ./src/frontend/config/keyBindings.js << 'EOF'
-const keyBindings = () => {
-  return {
-    'G': (e) => {
-      // Implement logic to press the generate button here
-      console.log('G key pressed'); // Temporary log
-    }
-  };
-};
-
-export default keyBindings;
-EOF
-
-# Step 3: Modify 'App.jsx' to use 'keyBindings.js' and 'useKeyBindings.js'
-cat > ./src/frontend/App.jsx << 'EOF'
-import useKeyBindings from './useKeyBindings';
-import keyBindings from './config/keyBindings';
-import NavBar from './components/NavBar';
-import PromptCreation from './components/PromptCreation';
-import ChangeExecution from './components/ChangeExecution';
-import ChangeInspection from './components/ChangeInspection';
-import ChangeFinalization from './components/ChangeFinalization';
-
-const App = () => {
-  // Define key bindings
-  const bindings = keyBindings();
-
-  // Use key bindings
-  useKeyBindings(bindings);
-
-  return (
-    <div id="app" class="p-2">
-      <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
-        <NavBar />
-        <PromptCreation />
-        <ChangeExecution />
-        <ChangeInspection />
-        <ChangeFinalization />
-      </div>
-    </div>
-  );
-};
-
-export default App;
+export { executeAndForwardOutput };
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"
