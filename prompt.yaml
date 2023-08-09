@@ -1,8 +1,9 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/components/RollbackButton.jsx
   - src/frontend/components/ConfirmationDialog.jsx
+  - src/frontend/tailwind.config.cjs
+  - src/frontend/styles/colors.css
 requirements: >
-  Add a checkbox to the confirmation dialog for the user to never see the dialog again.
-  Save it to localStorage as "Junior.disableRollbackConfirmation"
+  Make the dialog theme-aware, use the colors already defined if possible!
+  If you need new colors, define them for tailwind and in the css!
 os: OSX
