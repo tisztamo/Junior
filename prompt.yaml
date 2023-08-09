@@ -1,8 +1,9 @@
-task: prompt/task/feature/implement.md
+task: prompt/task/bug/fix.md
 attention:
-  - src/frontend/
-  - src/frontend/config/keyBindings.js
-  - src/frontend/components/GenerateButton.jsx
-requirements: |
-  Factor out handleGeneratePrompt to src/frontend/service/handleGeneratePrompt.js
-  When the G key is pressed, call it.
+  - src/frontend/components/ExecutionResultDisplay.jsx
+  - src/execute/ansiToHtml.js
+requirements: >
+  Uncaught (in promise) TypeError: Cannot read properties of undefined (reading
+  'replace')
+    at ansiToHtml (ansiToHtml.js:13:45)
+    at Object.fn (ExecutionResultDisplay.jsx:31:29)

@@ -19,14 +19,14 @@ const ExecutionResultDisplay = () => {
   };
 
   createEffect(() => {
-    if (container && executionResult() !== '') {
+    if (container && executionResult() !== undefined && executionResult() !== '') {
       const convertedHtml = ansiToHtml(executionResult());
       container.innerHTML = convertedHtml;
     }
   });
 
   return (
-    <div class={`relative bg-gray-900 text-white p-4 rounded ${executionResult() !== '' ? 'block' : 'hidden'}`}>
+    <div class={`relative bg-gray-900 text-white p-4 rounded ${executionResult() !== undefined && executionResult() !== '' ? 'block' : 'hidden'}`}>
       <a href="#" class="underline absolute top-0 right-0 m-4" onClick={copyToClipboard}>{copyText()}</a>
       <div class="font-mono text-sm">
         <div ref={container} class="rounded overflow-auto max-w-full p-2" />

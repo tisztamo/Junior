@@ -1,96 +1,82 @@
-You are Junior, an AI system aiding developers. You are working with a part of a large program called the "Working Set." Ask for contents of subdirectories if needed. Some files are printed in the working set. Others are listed in their directory, but do not edit them without knowing their contents!
-
 # Working set
 
+src/frontend/components/ExecutionResultDisplay.jsx:
 ```
-src/frontend/
-├── App.jsx
-├── assets/...
-├── components/...
-├── config/...
-├── fetchTasks.js
-├── generatePrompt.js
-├── getBaseUrl.js
-├── index.html
-├── index.jsx
-├── model/...
-├── postcss.config.cjs
-├── service/...
-├── startVite.js
-├── styles/...
-├── tailwind.config.cjs
-├── useKeyBindings.js
-├── vite.config.js
+import { createEffect, createSignal } from 'solid-js';
+import { executionResult } from '../model/executionResult';
+import ansiToHtml from '../../execute/ansiToHtml';
 
-```
-src/frontend/config/keyBindings.js:
-```
-const keyBindings = () => {
-  return {
-    'G': (e) => {
-      // Implement logic to press the generate button here
-      console.log('G key pressed'); // Temporary log
+const ExecutionResultDisplay = () => {
+  let container;
+  const [copyText, setCopyText] = createSignal('copy');
+
+  const copyToClipboard = async (e) => {
+    e.preventDefault(); // Prevent page load on click
+    try {
+      await navigator.clipboard.writeText(executionResult());
+      setCopyText('copied');
+      setTimeout(() => setCopyText('copy'), 2000);
+    } catch (err) {
+      alert("Failed to copy text!");
+      console.warn("Copy operation failed:", err);
     }
   };
-};
 
-export default keyBindings;
-
-```
-
-src/frontend/components/GenerateButton.jsx:
-```
-import { generatePrompt } from '../generatePrompt';
-import { marked } from 'marked';
-import { setPrompt } from '../model/prompt';
-
-const GenerateButton = () => {
-  const handleGeneratePrompt = async () => {
-    const response = await generatePrompt();
-
-    navigator.clipboard.writeText(response.prompt)
-      .then(() => {
-        console.log('Prompt copied to clipboard!');
-      })
-      .catch(err => {
-        console.error('Failed to copy prompt: ', err);
-      });
-
-    const htmlPrompt = marked(response.prompt);
-
-    setPrompt(htmlPrompt);
-  };
+  createEffect(() => {
+    if (container && executionResult() !== '') {
+      const convertedHtml = ansiToHtml(executionResult());
+      container.innerHTML = convertedHtml;
+    }
+  });
 
   return (
-    <button className="w-64 px-4 py-4 bg-blue-500 text-white rounded" onClick={handleGeneratePrompt}>Generate & Copy Prompt</button>
+    <div class={`relative bg-gray-900 text-white p-4 rounded ${executionResult() !== '' ? 'block' : 'hidden'}`}>
+      <a href="#" class="underline absolute top-0 right-0 m-4" onClick={copyToClipboard}>{copyText()}</a>
+      <div class="font-mono text-sm">
+        <div ref={container} class="rounded overflow-auto max-w-full p-2" />
+      </div>
+    </div>
   );
 };
 
-export default GenerateButton;
+export default ExecutionResultDisplay;
+
+```
+
+src/execute/ansiToHtml.js:
+```
+const ANSI_COLORS = {
+  '30': 'black',
+  '31': 'red',
+  '32': 'lightgreen',
+  '33': 'yellow',
+  '34': 'blue',
+  '35': 'magenta',
+  '36': 'cyan',
+  '37': 'white',
+};
+
+const ansiToHtml = (terminalOutputStr) => {
+  let result = '<span>' + terminalOutputStr.replace(/\033\[([0-9]+)m/g, (match, p1) => {
+    const color = ANSI_COLORS[p1];
+    return color ? `</span><span style="color:${color}">` : '</span><span>';
+  });
+  result += '</span>';
+  return result.replace(/\n/g, '<br />');
+};
+
+export default ansiToHtml;
 
 ```
 
 
 # Task
 
-Implement the following feature!
+Fix the following issue!
 
-- Create a plan!
-- Create new files when needed!
-
-Requirements:
-
-Factor out handleGeneratePrompt to src/frontend/service/handleGeneratePrompt.js
-When the G key is pressed, call it.
-
-
-
-## Project Specifics
-
-- Every js file should *only export a single function*!
-- Use *ES6 imports*!
-- Prefer *async/await* over promises!
-- The frontend uses *Solidjs*, edit .jsx file accordingly
+Uncaught (in promise) TypeError: Cannot read properties of undefined (reading &#39;replace&#39;)
+  at ansiToHtml (ansiToHtml.js:13:45)
+  at Object.fn (ExecutionResultDisplay.jsx:31:29)
 
 
 # Output Format
