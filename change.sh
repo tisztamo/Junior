@@ -1,13 +1,9 @@
 #!/bin/sh
 set -e
-goal="Make the dialog theme-aware with defined colors"
+goal="Add space to checkbox and label in ConfirmationDialog"
 echo "Plan:"
-echo "1. Update ConfirmationDialog.jsx to use the CSS variables defined in colors.css"
-echo "2. Update the Tailwind configuration to reflect any new color definitions if needed"
-echo "3. Ensure that the styles adapt based on the user's theme preference"
-
-# Step 1: Update ConfirmationDialog.jsx to use the CSS variables defined in colors.css
-cat << 'EOF' > src/frontend/components/ConfirmationDialog.jsx
+echo "1. Add margin styles to the checkbox and label in ConfirmationDialog.jsx component to ensure spacing according to the requirements."
+cat > src/frontend/components/ConfirmationDialog.jsx << 'EOF'
 import { createEffect, createSignal } from "solid-js";
 
 const ConfirmationDialog = (props) => {
@@ -29,8 +25,8 @@ const ConfirmationDialog = (props) => {
         <div className="bg-main p-8 rounded shadow-lg text-text">
           <h3 className="text-xl mb-4">Are you sure you want to roll back?</h3>
           <p>This will reset the repo to the last commit and delete new files.</p>
-          <label>
-            <input type="checkbox" checked={disableConfirmation()} onChange={handleCheckboxChange} />
+          <label style={{ display: 'flex', alignItems: 'center', margin: '10px 0' }}>
+            <input type="checkbox" style={{ marginRight: '10px' }} checked={disableConfirmation()} onChange={handleCheckboxChange} />
             Never show this again
           </label>
           <div>
@@ -46,5 +42,4 @@ const ConfirmationDialog = (props) => {
 
 export default ConfirmationDialog;
 EOF
-
 echo "\033[32mDone: $goal\033[0m\n"

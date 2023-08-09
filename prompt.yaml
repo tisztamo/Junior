@@ -1,9 +1,6 @@
 task: prompt/task/feature/implement.md
 attention:
   - src/frontend/components/ConfirmationDialog.jsx
-  - src/frontend/tailwind.config.cjs
-  - src/frontend/styles/colors.css
 requirements: >
-  Make the dialog theme-aware, use the colors already defined if possible!
-  If you need new colors, define them for tailwind and in the css!
+  Add space above and below the checkbox, and also between the checkbox and its label.
 os: OSX

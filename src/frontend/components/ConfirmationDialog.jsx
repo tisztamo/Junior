@@ -19,8 +19,8 @@ const ConfirmationDialog = (props) => {
         <div className="bg-main p-8 rounded shadow-lg text-text">
           <h3 className="text-xl mb-4">Are you sure you want to roll back?</h3>
           <p>This will reset the repo to the last commit and delete new files.</p>
-          <label>
-            <input type="checkbox" checked={disableConfirmation()} onChange={handleCheckboxChange} />
+          <label style={{ display: 'flex', alignItems: 'center', margin: '10px 0' }}>
+            <input type="checkbox" style={{ marginRight: '10px' }} checked={disableConfirmation()} onChange={handleCheckboxChange} />
             Never show this again
           </label>
           <div>
