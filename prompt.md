@@ -10,103 +10,17 @@ Other files are only listed in their dir, so you know they exists. Do not edit f
 
 # Working set
 
-src/backend/handlers/generateHandler.js:
+prompt/system.md:
 ```
-import processPrompt from '../../prompt/processPrompt.js';
+You're the 'Junior', an AI system aiding authors.
 
-export const generateHandler = async (req, res) => {
-  const { notes, systemPrompt } = req.body;
-  const { prompt } = await processPrompt(notes, systemPrompt);
-  res.json({ prompt: prompt });
-};
+You are working on the source of a program, too large for your memory, so only part of it, the "Working Set" is provided here.
 
-```
+You will see a partial directory structure. Ask for the contents of subdirs marked with /... if needed.
 
-src/prompt/processPrompt.js:
-```
-import { createPrompt } from './createPrompt.js';
-import fs from 'fs/promises';
+Some files are printed in the working set.
 
-const processPrompt = async (task, forceSystemPrompt = false, saveto = 'prompt.md', parent_message_id = null) => {
-  const { prompt, saveto: newSaveto } = await createPrompt(task, forceSystemPrompt);
-  await fs.writeFile(newSaveto || saveto, prompt);
-  return { prompt, parent_message_id };
-}
-
-export default processPrompt;
-
-```
-
-src/prompt/createPrompt.js:
-```
-import { readAttention } from "../attention/readAttention.js"
-import yaml from 'js-yaml';
-import { getSystemPromptIfNeeded } from './getSystemPromptIfNeeded.js';
-import { resolveTemplateVariables } from './resolveTemplateVariables.js';
-import { extractTemplateVars } from './extractTemplateVars.js';
-import { loadPromptDescriptor } from './loadPromptDescriptor.js';
-import { loadTaskTemplate } from './loadTaskTemplate.js';
-import { loadFormatTemplate } from './loadFormatTemplate.js';
-import promptDescriptorDefaults from './promptDescriptorDefaults.js';
-
-const createPrompt = async (userInput, forceSystemPrompt) => {
-  let promptDescriptor = yaml.load(await loadPromptDescriptor());
-  let promptDescriptorDefaultsData = await promptDescriptorDefaults();
-
-  promptDescriptor = { ...promptDescriptorDefaultsData, ...promptDescriptor };
-
-  let templateVars = extractTemplateVars(promptDescriptor);
-  templateVars = await resolveTemplateVariables(templateVars);
-
-  const attention = await readAttention(promptDescriptor.attention);
-  const task = await loadTaskTemplate(promptDescriptor.task, templateVars);
-
-  const format = await loadFormatTemplate(promptDescriptor.format, templateVars);
-  const system = await getSystemPromptIfNeeded(forceSystemPrompt);
-  const saveto = promptDescriptor.saveto;
-  return {
-    prompt: `${system}# Working set\n\n${attention.join("\n")}\n\n# Task\n\n${task}\n\n# Output Format\n\n${format}\n\n${userInput ? userInput : ""}`,
-    saveto
-  };
-}
-
-export { createPrompt };
-
-```
-
-src/prompt/getSystemPromptIfNeeded.js:
-```
-import { getSystemPrompt } from "./getSystemPrompt.js";
-
-async function getSystemPromptIfNeeded(force = false) {
-  if (force || process.argv.includes("--system-prompt") || process.argv.includes("-s")) {
-    return `${await getSystemPrompt()}\n`;
-  }
-  return "";
-}
-
-export { getSystemPromptIfNeeded };
-
-```
-
-src/frontend/generatePrompt.js:
-```
-import { getBaseUrl } from './getBaseUrl';
-
-const generatePrompt = async (notes) => {
-  const baseUrl = getBaseUrl();
-  const response = await fetch(`${baseUrl}/generate`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ notes, systemPrompt: true })
-  });
-
-  const data = await response.json();
-
-  return data;
-};
-
-export { generatePrompt };
+Other files are only listed in their dir, so you know they exists. Do not edit files without knowing their current content, ask for their contents instead!
 
 ```
 
@@ -120,7 +34,7 @@ Implement the following feature!
 
 Requirements:
 
-When generating the prompt from the web, send &#34;systemPrompt&#34;: true with the request. Add a force=false argument to getSystemPromptIfNeeded Make sure the handler forwards the systemPrompt value to processPrompt. Create a new argument &#34;forceSystemPrompt = false&#34; for processPrompt as its _second_ argument. Also update createPrompt to forward the value.
+Rewrite the system prompt in system.md to be concise but easy to &#34;understand&#34; for a language model. Start it with &#34;You are Junior, an AI system aiding developers&#34;
 
 
 
