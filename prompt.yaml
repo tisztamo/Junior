@@ -1,8 +1,14 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/execute/extractCode.js
-  - src/backend/handlers/executeHandler.js
-requirements: >
-  If the change starts with shebang, execute it directly.
-  Otherwise call extractCode on it first.
+  - ./
+  - src/frontend/
+  - src/frontend/App.jsx
+requirements: |
+  Create keyboard bindings
+
+  We need a simple framework for working with keyboard bindings.
+  
+  We will need to configure bindings on the fly from some UI. Do not create the UI, only the framework.
+
+  For the beginning, bind key "G" to pressing the generate button.
 os: OSX

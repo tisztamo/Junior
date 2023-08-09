@@ -1,31 +1,68 @@
-You are Junior, an AI system aiding developers. You are working with a part of a large program called the "Working Set." Ask for contents of subdirectories if needed. Some files are printed in the working set. Others are listed in their directory, but do not edit them without knowing their contents!
-
 # Working set
 
-src/execute/extractCode.js:
 ```
-function extractCode(res) {
-  const match = res.match(/```(sh|bash)([\s\S]*?)```/);
-  return match ? match[2].trim() : null;
-}
-
-export { extractCode };
+./
+├── .DS_Store
+├── .git/...
+├── .github/...
+├── .gitignore
+├── .vscode/...
+├── README.md
+├── change.sh
+├── docs/...
+├── integrations/...
+├── node_modules/...
+├── package-lock.json
+├── package.json
+├── prompt/...
+├── prompt.md
+├── prompt.yaml
+├── scripts/...
+├── src/...
 
 ```
-
-src/backend/handlers/executeHandler.js:
 ```
-import { executeAndForwardOutput } from '../../execute/executeAndForwardOutput.js';
-import { extractCode } from '../../execute/extractCode.js';
+src/frontend/
+├── App.jsx
+├── assets/...
+├── components/...
+├── fetchTasks.js
+├── generatePrompt.js
+├── getBaseUrl.js
+├── index.html
+├── index.jsx
+├── model/...
+├── postcss.config.cjs
+├── service/...
+├── startVite.js
+├── styles/...
+├── tailwind.config.cjs
+├── vite.config.js
 
-function executeHandler(req, res) {
-  const code = extractCode(req.body.change);
-  executeAndForwardOutput(code, (result, output) => {
-    res.json({ result, output });
-  });
-}
+```
+src/frontend/App.jsx:
+```
+import NavBar from './components/NavBar';
+import PromptCreation from './components/PromptCreation';
+import ChangeExecution from './components/ChangeExecution';
+import ChangeInspection from './components/ChangeInspection';
+import ChangeFinalization from './components/ChangeFinalization';
 
-export { executeHandler };
+const App = () => {
+  return (
+    <div id="app" class="p-2">
+      <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
+        <NavBar />
+        <PromptCreation />
+        <ChangeExecution />
+        <ChangeInspection />
+        <ChangeFinalization />
+      </div>
+    </div>
+  );
+};
+
+export default App;
 
 ```
 
@@ -39,7 +76,13 @@ Implement the following feature!
 
 Requirements:
 
-If the change starts with shebang, execute it directly. Otherwise call extractCode on it first.
+Create keyboard bindings
+
+We need a simple framework for working with keyboard bindings.
+
+We will need to configure bindings on the fly from some UI. Do not create the UI, only the framework.
+
+For the beginning, bind key &#34;G&#34; to pressing the generate button.
 
 
 
