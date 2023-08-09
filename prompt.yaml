@@ -1,6 +1,8 @@
 task: prompt/task/feature/implement.md
 attention:
   - src/frontend/components/RollbackButton.jsx
-requirements: |
-  Ask the user if really want to rollback: it will reset the repo to the last commit and delete new files even if they were not created by Junior.
+  - src/frontend/components/ConfirmationDialog.jsx
+requirements: >
+  - Make the confirmation question a bit more visible and separated from the rest of the text.
+  - Fade the ui outside of the dialog while it is opened
 os: OSX
