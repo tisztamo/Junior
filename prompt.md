@@ -1,65 +1,96 @@
+You are Junior, an AI system aiding developers. You are working with a part of a large program called the "Working Set." Ask for contents of subdirectories if needed. Some files are printed in the working set. Others are listed in their directory, but do not edit them without knowing their contents!
+
 # Working set
 
-src/execute/executeAndForwardOutput.js:
+src/attention/readAttention.js:
 ```
-import { writeFile } from 'fs/promises';
-import { spawn } from 'child_process';
-import { makeExecutable } from './makeExecutable.js';
+import { processFile } from './processFile.js';
+import { processInterfaceSection } from './processInterfaceSection.js';
+import { printFolderStructure } from './printFolderStructure.js';
 
-async function executeAndForwardOutput(code, next) {
+export const readAttention = async (attentionArray = [], attentionRootDir = '.') => {
   try {
-    if (code == null || !code.startsWith('#!')) {
-      throw new Error('Code does not start with a shebang');
-    }
-    await writeFile('./change.sh', code);
-    await makeExecutable('./change.sh');
-    
-    const child = spawn('./change.sh', [], { shell: true });
-    let commandOutput = '';
-
-    child.stdout.on('data', (data) => {
-      console.log(`${data}`);
-      commandOutput += data;
-    });
-
-    child.stderr.on('data', (data) => {
-      console.error(`${data}`);
-      commandOutput += data;
-    });
-
-    child.on('close', (code) => {
-      if (typeof next === 'function') {
-        next(code, commandOutput);
+    const processedLines = await Promise.all(attentionArray.map(line => {
+      const trimmedLine = line.trim();
+      if (trimmedLine.endsWith(' iface')) {
+        const filePath = trimmedLine.slice(0, -6).trim();
+        return processInterfaceSection(attentionRootDir, filePath);
+      } else if (trimmedLine.endsWith('/')) {
+        return printFolderStructure(attentionRootDir, trimmedLine.slice(0, -1).trim());
+      } else {
+        return processFile(attentionRootDir, trimmedLine);
       }
-    });
-  } catch (err) {
-    console.log(err);
+    }));
+    return processedLines;
+  } catch (error) {
+    console.warn(error);
+    throw new Error("Error processing attention lines!");
   }
-}
-
-export { executeAndForwardOutput };
+};
 
 ```
 
-src/backend/handlers/executeHandler.js:
+src/prompt/createPrompt.js:
 ```
-import { executeAndForwardOutput } from '../../execute/executeAndForwardOutput.js';
-import { extractCode } from '../../execute/extractCode.js';
+import { readAttention } from "../attention/readAttention.js"
+import yaml from 'js-yaml';
+import { getSystemPromptIfNeeded } from './getSystemPromptIfNeeded.js';
+import { resolveTemplateVariables } from './resolveTemplateVariables.js';
+import { extractTemplateVars } from './extractTemplateVars.js';
+import { loadPromptDescriptor } from './loadPromptDescriptor.js';
+import { loadTaskTemplate } from './loadTaskTemplate.js';
+import { loadFormatTemplate } from './loadFormatTemplate.js';
+import promptDescriptorDefaults from './promptDescriptorDefaults.js';
 
-async function executeHandler(req, res) {
-  let code = req.body.change;
+const createPrompt = async (userInput, forceSystemPrompt) => {
+  let promptDescriptor = yaml.load(await loadPromptDescriptor());
+  let promptDescriptorDefaultsData = await promptDescriptorDefaults();
 
-  // Check if code starts with shebang
-  if (!code.startsWith("#!")) {
-    code = extractCode(code);
-  }
-  
-  await executeAndForwardOutput(code, (code, output) => {
-    res.json(output);
-  });
+  promptDescriptor = { ...promptDescriptorDefaultsData, ...promptDescriptor };
+
+  let templateVars = extractTemplateVars(promptDescriptor);
+  templateVars = await resolveTemplateVariables(templateVars);
+
+  const attention = await readAttention(promptDescriptor.attention);
+  const task = await loadTaskTemplate(promptDescriptor.task, templateVars);
+
+  const format = await loadFormatTemplate(promptDescriptor.format, templateVars);
+  const system = await getSystemPromptIfNeeded(forceSystemPrompt);
+  const saveto = promptDescriptor.saveto;
+  return {
+    prompt: `${system}# Working set\n\n${attention.join("\n")}\n\n# Task\n\n${task}\n\n# Output Format\n\n${format}\n\n${userInput ? userInput : ""}`,
+    saveto
+  };
 }
 
-export { executeHandler };
+export { createPrompt };
+
+```
+
+src/prompt/processPrompt.js:
+```
+import { createPrompt } from './createPrompt.js';
+import fs from 'fs/promises';
+
+const processPrompt = async (task, forceSystemPrompt = false, saveto = 'prompt.md', parent_message_id = null) => {
+  const { prompt, saveto: newSaveto } = await createPrompt(task, forceSystemPrompt);
+  await fs.writeFile(newSaveto || saveto, prompt);
+  return { prompt, parent_message_id };
+}
+
+export default processPrompt;
+
+```
+
+src/backend/handlers/generateHandler.js:
+```
+import processPrompt from '../../prompt/processPrompt.js';
+
+export const generateHandler = async (req, res) => {
+  const { notes, systemPrompt } = req.body;
+  const { prompt } = await processPrompt(notes, systemPrompt);
+  res.json({ prompt: prompt });
+};
 
 ```
 
@@ -68,13 +99,11 @@ export { executeHandler };
 
 Fix the following issue!
 
-TypeError: next is not a function
-  at ChildProcess.&lt;anonymous&gt; (file:///Users/ko/projects-new/Junior/src/execute/executeAndForwardOutput.js:27:7)
-  at ChildProcess.emit (node:events:537:28)
-  at maybeClose (node:internal/child_process:1091:16)
-  at Socket.&lt;anonymous&gt; (node:internal/child_process:449:11)
-  at Socket.emit (node:events:537:28)
-  at Pipe.&lt;anonymous&gt; (node:net:747:14)
+TypeError: Cannot read properties of null (reading &#39;map&#39;)
+  at readAttention (file:///Users/ko/projects-new/Junior/src/attention/readAttention.js:7:61)
+  at createPrompt (file:///Users/ko/projects-new/Junior/src/prompt/createPrompt.js:20:27)
+  at async processPrompt (file:///Users/ko/projects-new/Junior/src/prompt/processPrompt.js:5:41)
+  at async generateHandler (file:///Users/ko/projects-new/Junior/src/backend/handlers/generateHandler.js:5:22)os: OSX
 
 
 # Output Format
@@ -82,7 +111,8 @@ TypeError: next is not a function
 Encode and enclose your results as ./change.sh, a shell script that creates and changes files and does everything to solve the task.
 Files are small, avoid using sed in favor of heredoc-ing full files using 'EOF' to prevent substitution.
 
-OS: OSX
+OS: Debian
+
 
 Installed tools: npm, jq
 

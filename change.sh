@@ -1,47 +1,37 @@
 #!/bin/sh
 set -e
-goal="Fix TypeError issue in executeAndForwardOutput"
+goal="Fix TypeError in readAttention method"
 echo "Plan:"
-echo "1. Update the executeAndForwardOutput function to check if next is a function before calling it"
-echo "2. Update executeHandler.js to ensure correct parameters are being passed"
+echo "1. Check if the attentionArray is null or undefined before calling map on it."
+echo "2. Return an empty array if attentionArray is null or undefined."
 
-cat << 'EOF' > src/execute/executeAndForwardOutput.js
-import { writeFile } from 'fs/promises';
-import { spawn } from 'child_process';
-import { makeExecutable } from './makeExecutable.js';
+cat > ./src/attention/readAttention.js << 'EOF'
+import { processFile } from './processFile.js';
+import { processInterfaceSection } from './processInterfaceSection.js';
+import { printFolderStructure } from './printFolderStructure.js';
 
-async function executeAndForwardOutput(code, next) {
+export const readAttention = async (attentionArray = [], attentionRootDir = '.') => {
   try {
-    if (code == null || !code.startsWith('#!')) {
-      throw new Error('Code does not start with a shebang');
+    if (!attentionArray) {
+      return [];
     }
-    await writeFile('./change.sh', code);
-    await makeExecutable('./change.sh');
-    
-    const child = spawn('./change.sh', [], { shell: true });
-    let commandOutput = '';
-
-    child.stdout.on('data', (data) => {
-      console.log(`${data}`);
-      commandOutput += data;
-    });
-
-    child.stderr.on('data', (data) => {
-      console.error(`${data}`);
-      commandOutput += data;
-    });
-
-    child.on('close', (code) => {
-      if (next && typeof next === 'function') {
-        next(code, commandOutput);
+    const processedLines = await Promise.all(attentionArray.map(line => {
+      const trimmedLine = line.trim();
+      if (trimmedLine.endsWith(' iface')) {
+        const filePath = trimmedLine.slice(0, -6).trim();
+        return processInterfaceSection(attentionRootDir, filePath);
+      } else if (trimmedLine.endsWith('/')) {
+        return printFolderStructure(attentionRootDir, trimmedLine.slice(0, -1).trim());
+      } else {
+        return processFile(attentionRootDir, trimmedLine);
       }
-    });
-  } catch (err) {
-    console.log(err);
+    }));
+    return processedLines;
+  } catch (error) {
+    console.warn(error);
+    throw new Error("Error processing attention lines!");
   }
-}
-
-export { executeAndForwardOutput };
+};
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"

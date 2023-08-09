@@ -4,6 +4,9 @@ import { printFolderStructure } from './printFolderStructure.js';
 
 export const readAttention = async (attentionArray = [], attentionRootDir = '.') => {
   try {
+    if (!attentionArray) {
+      return [];
+    }
     const processedLines = await Promise.all(attentionArray.map(line => {
       const trimmedLine = line.trim();
       if (trimmedLine.endsWith(' iface')) {
