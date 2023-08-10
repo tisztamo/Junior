@@ -1,36 +1,36 @@
 #!/bin/sh
 set -e
-goal="Refactor ExecuteButton by factoring changeInput"
+goal="Refactor ExecuteButton by moving handleExecuteChange"
 echo "Plan:"
-echo "1. Create a new file in model directory to handle changeInput"
-echo "2. Update ExecuteButton.jsx to import changeInput from the new file"
+echo "1. Create a new file in the model directory to contain the handleExecuteChange function"
+echo "2. Modify ExecuteButton.jsx to import the handleExecuteChange function from the new file"
 
-# Step 1: Create a new file in model directory to handle changeInput
-cat > src/frontend/model/changeInput.js << 'EOF'
-import { createSignal } from 'solid-js';
+# Step 1: Create a new file for handleExecuteChange in the model directory
+cat > src/frontend/model/handleExecuteChange.js << 'EOF'
+import { executeChange } from '../service/executeChange';
+import { setExecutionResult } from './executionResult';
+import { setChange } from './change';
+import { changeInput } from './changeInput';
 
-const [changeInput, setChangeInput] = createSignal('');
+const handleExecuteChange = async () => {
+  const clipboardAvailable = !!(navigator.clipboard && navigator.clipboard.readText);
+  const change = clipboardAvailable ? await navigator.clipboard.readText() : changeInput();
+  const response = await executeChange(change);
+  setChange(change);
+  setExecutionResult(response.output);
+  console.log(response.output);
+};
 
-export { changeInput, setChangeInput };
+export default handleExecuteChange;
 EOF
 
-# Step 2: Update ExecuteButton.jsx to import changeInput from the new file
+# Step 2: Modify ExecuteButton.jsx to import handleExecuteChange from the new file
 cat > src/frontend/components/ExecuteButton.jsx << 'EOF'
-import { executeChange } from '../service/executeChange';
-import { setExecutionResult } from '../model/executionResult';
-import { setChange } from '../model/change';
-import { changeInput, setChangeInput } from '../model/changeInput';
+import handleExecuteChange from '../model/handleExecuteChange';
+import { setChangeInput } from '../model/changeInput';
 
 const ExecuteButton = () => {
   const clipboardAvailable = !!(navigator.clipboard && navigator.clipboard.readText);
-
-  const handleExecuteChange = async () => {
-    const change = clipboardAvailable ? await navigator.clipboard.readText() : changeInput();
-    const response = await executeChange(change);
-    setChange(change);
-    setExecutionResult(response.output);
-    console.log(response.output);
-  };
 
   const handlePaste = async (e) => {
     const paste = (e.clipboardData || window.clipboardData).getData('text');

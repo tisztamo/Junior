@@ -1,18 +1,8 @@
-import { executeChange } from '../service/executeChange';
-import { setExecutionResult } from '../model/executionResult';
-import { setChange } from '../model/change';
-import { changeInput, setChangeInput } from '../model/changeInput';
+import handleExecuteChange from '../model/handleExecuteChange';
+import { setChangeInput } from '../model/changeInput';
 
 const ExecuteButton = () => {
   const clipboardAvailable = !!(navigator.clipboard && navigator.clipboard.readText);
-
-  const handleExecuteChange = async () => {
-    const change = clipboardAvailable ? await navigator.clipboard.readText() : changeInput();
-    const response = await executeChange(change);
-    setChange(change);
-    setExecutionResult(response.output);
-    console.log(response.output);
-  };
 
   const handlePaste = async (e) => {
     const paste = (e.clipboardData || window.clipboardData).getData('text');
