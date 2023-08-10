@@ -13,7 +13,7 @@ const ExecuteButton = () => {
   return (
     <button class="w-64 px-4 py-4 bg-orange-300 text-white rounded" onClick={handleExecuteChange}>
       {clipboardAvailable ? (
-        'Paste & Execute Change'
+        'Paste & Execute Change [X]'
       ) : (
         <textarea
           rows="1"

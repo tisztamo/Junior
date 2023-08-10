@@ -2,23 +2,30 @@ You are Junior, an AI system aiding developers. You are working with a part of a
 
 # Working set
 
+src/frontend/config/keyBindings.js:
+```
+import handleGeneratePrompt from '../service/handleGeneratePrompt';
+
+const keyBindings = () => {
+  return {
+    'G': (e) => {
+      handleGeneratePrompt();
+      console.log('G key pressed'); // Temporary log
+    }
+  };
+};
+
+export default keyBindings;
+
+```
+
 src/frontend/components/ExecuteButton.jsx:
 ```
-import { executeChange } from '../service/executeChange';
-import { setExecutionResult } from '../model/executionResult';
-import { setChange } from '../model/change';
-import { changeInput, setChangeInput } from '../model/changeInput';
+import handleExecuteChange from '../model/handleExecuteChange';
+import { setChangeInput } from '../model/changeInput';
 
 const ExecuteButton = () => {
   const clipboardAvailable = !!(navigator.clipboard && navigator.clipboard.readText);
-
-  const handleExecuteChange = async () => {
-    const change = clipboardAvailable ? await navigator.clipboard.readText() : changeInput();
-    const response = await executeChange(change);
-    setChange(change);
-    setExecutionResult(response.output);
-    console.log(response.output);
-  };
 
   const handlePaste = async (e) => {
     const paste = (e.clipboardData || window.clipboardData).getData('text');
@@ -47,39 +54,38 @@ export default ExecuteButton;
 
 ```
 
-src/frontend/service/handleGeneratePrompt.js:
+src/frontend/model/handleExecuteChange.js:
 ```
-import { generatePrompt } from '../generatePrompt';
-import { marked } from 'marked';
-import { setPrompt } from '../model/prompt';
+import { executeChange } from '../service/executeChange';
+import { setExecutionResult } from './executionResult';
+import { setChange } from './change';
+import { changeInput } from './changeInput';
 
-const handleGeneratePrompt = async () => {
-  const response = await generatePrompt();
-
-  navigator.clipboard.writeText(response.prompt)
-    .then(() => {
-      console.log('Prompt copied to clipboard!');
-    })
-    .catch(err => {
-      console.error('Failed to copy prompt: ', err);
-    });
-
-  const htmlPrompt = marked(response.prompt);
-
-  setPrompt(htmlPrompt);
+const handleExecuteChange = async () => {
+  const clipboardAvailable = !!(navigator.clipboard && navigator.clipboard.readText);
+  const change = clipboardAvailable ? await navigator.clipboard.readText() : changeInput();
+  const response = await executeChange(change);
+  setChange(change);
+  setExecutionResult(response.output);
+  console.log(response.output);
 };
 
-export default handleGeneratePrompt;
+export default handleExecuteChange;
 
 ```
 
 
 # Task
 
-Refactor!
+Implement the following feature!
 
-Refactor ExecuteButton!
-- Factor handleExecuteChange to its own file in model!
+- Create a plan!
+- Create new files when needed!
+
+Requirements:
+
+- Bind &#34;X&#34; to handleExecuteChange
+- Add [X] to the button label on the right with some space inbetween
 
 
 
@@ -96,8 +102,7 @@ Refactor ExecuteButton!
 Encode and enclose your results as ./change.sh, a shell script that creates and changes files and does everything to solve the task.
 Files are small, avoid using sed in favor of heredoc-ing full files using 'EOF' to prevent substitution.
 
-OS: Debian
-
+OS: OSX
 
 Installed tools: npm, jq
 
