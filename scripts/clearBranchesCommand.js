@@ -1,4 +1,4 @@
-import clearBranches from './clearBranches';
+import clearBranches from '../src/git/clearBranches';
 
 const exceptions = process.argv.slice(2);
 
@@ -13,4 +13,3 @@ async function run() {
 }
 
 run();
-

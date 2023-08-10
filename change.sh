@@ -1,44 +1,33 @@
 #!/bin/sh
 set -e
-goal="Rename delete-branches to clear-branches"
+goal="Move clearBranchesCommand.js, update import, delete deleteBranchesCommand.js"
 echo "Plan:"
-echo "1. Update the function name deleteBranches to clearBranches in src/git/clearBranches.js file."
-echo "2. Update the 'delete-branches' script command in package.json to 'clear-branches'."
+echo "1. Move clearBranchesCommand.js from src/git/ to scripts/, and update the import path for clearBranches.js within the moved file."
+echo "2. Delete deleteBranchesCommand.js from scripts/ as it's no longer needed."
 
-# Update the function name deleteBranches to clearBranches in the renamed clearBranches.js file
-cat > src/git/clearBranches.js << 'EOF'
-import { promisify } from 'util';
-import { exec as execCb } from 'child_process';
+# Moving clearBranchesCommand.js to the scripts directory
+mv ./src/git/clearBranchesCommand.js ./scripts/clearBranchesCommand.js
 
-const exec = promisify(execCb);
+# Updating the import path for clearBranches.js within the moved file
+cat <<EOF > ./scripts/clearBranchesCommand.js
+import clearBranches from '../src/git/clearBranches';
 
-export default async function clearBranches(exceptions = []) {
+const exceptions = process.argv.slice(2);
+
+async function run() {
   try {
-    const { stdout: currentBranch } = await exec('git rev-parse --abbrev-ref HEAD');
-    const { stdout: allBranches } = await exec('git for-each-ref --format="%(refname:short)" refs/heads');
-
-    const branches = allBranches.split('\n').filter(branch => branch !== currentBranch.trim() && !exceptions.includes(branch));
-
-    for (const branch of branches) {
-      await executeCommand(`git branch -d ${branch}`);
-    }
+    await clearBranches(exceptions);
+    console.log('Branches deleted successfully.');
   } catch (err) {
-    console.error(`An error occurred: ${err}`);
+    console.error(\`An error occurred while deleting branches: \${err}\`);
+    process.exit(1);
   }
 }
 
-async function executeCommand(command) {
-  try {
-    console.log(`Running command: ${command}`);
-    const { stdout } = await exec(command);
-    console.log(`stdout: ${stdout}`);
-  } catch (err) {
-    throw err;
-  }
-}
+run();
 EOF
 
-# Update the 'delete-branches' script command in package.json to 'clear-branches'
-jq '.scripts."clear-branches" = .scripts."delete-branches" | del(.scripts."delete-branches")' package.json > package.json.tmp && mv package.json.tmp package.json
+# Deleting deleteBranchesCommand.js from the scripts directory
+rm ./scripts/deleteBranchesCommand.js
 
 echo "\033[32mDone: $goal\033[0m\n"
