@@ -3,7 +3,7 @@ import { exec as execCb } from 'child_process';
 
 const exec = promisify(execCb);
 
-export default async function deleteBranches(exceptions = []) {
+export default async function clearBranches(exceptions = []) {
   try {
     const { stdout: currentBranch } = await exec('git rev-parse --abbrev-ref HEAD');
     const { stdout: allBranches } = await exec('git for-each-ref --format="%(refname:short)" refs/heads');

@@ -20,7 +20,7 @@ package.json:
     "start": "node src/web.js",
     "build:css": "postcss ./src/frontend/styles.css -o ./dist/styles.css",
     "update-logo": "node ./scripts/updateLogo.js",
-    "delete-branches": "node ./scripts/deleteBranchesCommand.js"
+    "delete-branches": "node ./scripts/clearBranchesCommand.js"
   },
   "keywords": [
     "cli",
@@ -65,28 +65,39 @@ package.json:
 
 ```
 
-src/git/deleteBranchesCommand.js:
+src/git/clearBranches.js:
 ```
-import clearBranches from './clearBranches';
+import { promisify } from 'util';
+import { exec as execCb } from 'child_process';
 
-const exceptions = process.argv.slice(2);
+const exec = promisify(execCb);
 
-async function run() {
+export default async function deleteBranches(exceptions = []) {
   try {
-    await clearBranches(exceptions);
-    console.log('Branches deleted successfully.');
+    const { stdout: currentBranch } = await exec('git rev-parse --abbrev-ref HEAD');
+    const { stdout: allBranches } = await exec('git for-each-ref --format="%(refname:short)" refs/heads');
+
+    const branches = allBranches.split('\n').filter(branch => branch !== currentBranch.trim() && !exceptions.includes(branch));
+
+    for (const branch of branches) {
+      await executeCommand(`git branch -d ${branch}`);
+    }
   } catch (err) {
-    console.error(`An error occurred while deleting branches: ${err}`);
-    process.exit(1);
+    console.error(`An error occurred: ${err}`);
   }
 }
 
-run();
-
+async function executeCommand(command) {
+  try {
+    console.log(`Running command: ${command}`);
+    const { stdout } = await exec(command);
+    console.log(`stdout: ${stdout}`);
+  } catch (err) {
+    throw err;
+  }
+}
 
 ```
-
-src/git/deleteBranches.js: err!
 
 
 # Task
@@ -101,7 +112,8 @@ Before executing, write a concise plan! The plan should show:
  - How do you avoid breaking other parts of the code.
  - If you had to choose, your way of thinking.
 
-rename deleteBranchesCommand to clearBranchesCommand
+rename delete-branches to clear-branches
+rename deleteBranches to clearBranches
 
 
 # Output Format

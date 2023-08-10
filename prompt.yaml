@@ -1,8 +1,8 @@
 task: prompt/task/refactor/move_files.md
 attention:
   - package.json
-  - src/git/deleteBranchesCommand.js
-  - src/git/deleteBranches.js
+  - src/git/clearBranches.js
 requirements: |
-  rename deleteBranchesCommand to clearBranchesCommand
+  rename delete-branches to clear-branches
+  rename deleteBranches to clearBranches
 os: OSX

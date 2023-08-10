@@ -14,7 +14,7 @@
     "start": "node src/web.js",
     "build:css": "postcss ./src/frontend/styles.css -o ./dist/styles.css",
     "update-logo": "node ./scripts/updateLogo.js",
-    "delete-branches": "node ./scripts/clearBranchesCommand.js"
+    "clear-branches": "node ./scripts/clearBranchesCommand.js"
   },
   "keywords": [
     "cli",
