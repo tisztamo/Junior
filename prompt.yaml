@@ -1,10 +1,17 @@
-task: prompt/task/refactor/move_files.md
+task: prompt/task/bug/fix.md
 attention:
   - ./
   - ./scripts/
   - src/git/clearBranches.js
   - src/git/clearBranchesCommand.js
 requirements: |
-  Move clearBranchesCommand.js to scripts/
-  Delete scripts/deleteBranchesCommand.js
+  node ./scripts/clearBranchesCommand.js
+
+  node:internal/errors:477
+    ErrorCaptureStackTrace(err);
+    ^
+
+  Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/Users/ko/projects-new/Junior/src/git/clearBranches' imported from /Users/ko/projects-new/Junior/scripts/clearBranchesCommand.js
+    at new NodeError (node:internal/errors:388:5)
+    at finalizeResolution (node:internal/modules/esm/resolve:405:11)
 os: OSX

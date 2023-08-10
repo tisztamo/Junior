@@ -24,7 +24,7 @@ You are Junior, an AI system aiding developers. You are working with a part of a
 ```
 ```
 ./scripts/
-├── deleteBranchesCommand.js
+├── clearBranchesCommand.js
 ├── updateLogo.js
 
 ```
@@ -62,42 +62,22 @@ async function executeCommand(command) {
 
 ```
 
-src/git/clearBranchesCommand.js:
-```
-import clearBranches from './clearBranches';
-
-const exceptions = process.argv.slice(2);
-
-async function run() {
-  try {
-    await clearBranches(exceptions);
-    console.log('Branches deleted successfully.');
-  } catch (err) {
-    console.error(`An error occurred while deleting branches: ${err}`);
-    process.exit(1);
-  }
-}
-
-run();
-
-
-```
+src/git/clearBranchesCommand.js: err!
 
 
 # Task
 
-Move the following files to the specified target dirs!
+Fix the following issue!
 
-Find out the best target dir if it is not specified!
+node ./scripts/clearBranchesCommand.js
 
-You need to follow dependencies to maintain coherence.
+node:internal/errors:477
+  ErrorCaptureStackTrace(err);
+  ^
 
-Before executing, write a concise plan! The plan should show:
- - How do you avoid breaking other parts of the code.
- - If you had to choose, your way of thinking.
-
-Move clearBranchesCommand.js to scripts/
-Delete scripts/deleteBranchesCommand.js
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module &#39;/Users/ko/projects-new/Junior/src/git/clearBranches&#39; imported from /Users/ko/projects-new/Junior/scripts/clearBranchesCommand.js
+  at new NodeError (node:internal/errors:388:5)
+  at finalizeResolution (node:internal/modules/esm/resolve:405:11)
 
 
 # Output Format
