@@ -2,33 +2,34 @@ You are Junior, an AI system aiding developers. You are working with a part of a
 
 # Working set
 
-scripts/updateLogo.js:
+src/attention/readAttention.js:
 ```
-import sharp from 'sharp';
-import { writeFileSync } from 'fs';
+import { processFile } from './processFile.js';
+import { processInterfaceSection } from './processInterfaceSection.js';
+import { printFolderStructure } from './printFolderStructure.js';
 
-const inputSVGPath = 'docs/assets/logo.svg';
-const outputPNGPath = 'docs/assets/logo.png';
-const faviconDocsPath = 'docs/assets/favicon.ico';
-const faviconFrontendPath = 'src/frontend/assets/favicon.ico';
-
-const updateLogo = async () => {
+export const readAttention = async (attentionArray = [], attentionRootDir = '.') => {
   try {
-    const buffer = await sharp(inputSVGPath).png().toBuffer();
-    writeFileSync(outputPNGPath, buffer);
-
-    // Convert logo to favicon sizes
-    const faviconBuffer = await sharp(inputSVGPath).resize(16, 16).ico().toBuffer();
-    
-    // Update favicon in both the docs and frontend directories
-    writeFileSync(faviconDocsPath, faviconBuffer);
-    writeFileSync(faviconFrontendPath, faviconBuffer);
-  } catch (err) {
-    throw err;
+    if (!attentionArray) {
+      return [];
+    }
+    const processedLines = await Promise.all(attentionArray.map(line => {
+      const trimmedLine = line.trim();
+      if (trimmedLine.endsWith(' iface')) {
+        const filePath = trimmedLine.slice(0, -6).trim();
+        return processInterfaceSection(attentionRootDir, filePath);
+      } else if (trimmedLine.endsWith('/')) {
+        return printFolderStructure(attentionRootDir, trimmedLine.slice(0, -1).trim());
+      } else {
+        return processFile(attentionRootDir, trimmedLine);
+      }
+    }));
+    return processedLines;
+  } catch (error) {
+    console.warn(error);
+    throw new Error("Error processing attention lines!");
   }
 };
-
-updateLogo();
 
 ```
 
@@ -37,14 +38,7 @@ updateLogo();
 
 Fix the following issue!
 
-file:///Users/ko/projects-new/Junior/scripts/updateLogo.js:15
-    const faviconBuffer = await sharp(inputSVGPath).resize(16, 16).ico().toBuffer();
-                                                                  ^
-
-TypeError: sharp(...).resize(...).ico is not a function
-    at updateLogo (file:///Users/ko/projects-new/Junior/scripts/updateLogo.js:15:68)
-
-Node.js v18.5.0
+Remove the try-catch, allow errors out!
 
 
 

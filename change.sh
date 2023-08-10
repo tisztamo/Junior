@@ -1,39 +1,29 @@
 #!/bin/sh
 set -e
-goal="Fix sharp resize, ico conversion error, and call updateLogo"
+goal="Remove try-catch block in readAttention.js"
 echo "Plan:"
-echo "1. Replace the incorrect ico conversion code with proper format conversion for favicon."
-echo "2. Export the function 'updateLogo' since the project's requirement is to export a single function from each js file."
-echo "3. Call the 'updateLogo' function."
+echo "1. Modify readAttention.js to remove the try-catch, allowing errors to propagate"
+cat << 'EOF' > src/attention/readAttention.js
+import { processFile } from './processFile.js';
+import { processInterfaceSection } from './processInterfaceSection.js';
+import { printFolderStructure } from './printFolderStructure.js';
 
-cat > scripts/updateLogo.js << 'EOF'
-import sharp from 'sharp';
-import { writeFileSync } from 'fs';
-
-const inputSVGPath = 'docs/assets/logo.svg';
-const outputPNGPath = 'docs/assets/logo.png';
-const faviconDocsPath = 'docs/assets/favicon.ico';
-const faviconFrontendPath = 'src/frontend/assets/favicon.ico';
-
-const updateLogo = async () => {
-  try {
-    const buffer = await sharp(inputSVGPath).png().toBuffer();
-    writeFileSync(outputPNGPath, buffer);
-
-    // Convert logo to favicon sizes
-    const faviconBuffer = await sharp(inputSVGPath).resize({ width: 16, height: 16 }).toFormat('png').toBuffer();
-    
-    // Update favicon in both the docs and frontend directories
-    writeFileSync(faviconDocsPath, faviconBuffer);
-    writeFileSync(faviconFrontendPath, faviconBuffer);
-  } catch (err) {
-    throw err;
+export const readAttention = async (attentionArray = [], attentionRootDir = '.') => {
+  if (!attentionArray) {
+    return [];
   }
+  const processedLines = await Promise.all(attentionArray.map(line => {
+    const trimmedLine = line.trim();
+    if (trimmedLine.endsWith(' iface')) {
+      const filePath = trimmedLine.slice(0, -6).trim();
+      return processInterfaceSection(attentionRootDir, filePath);
+    } else if (trimmedLine.endsWith('/')) {
+      return printFolderStructure(attentionRootDir, trimmedLine.slice(0, -1).trim());
+    } else {
+      return processFile(attentionRootDir, trimmedLine);
+    }
+  }));
+  return processedLines;
 };
-
-updateLogo();
-
-export default updateLogo;
 EOF
-
 echo "\033[32mDone: $goal\033[0m\n"

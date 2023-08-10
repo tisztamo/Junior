@@ -1,13 +1,6 @@
 task: prompt/task/bug/fix.md
 attention:
-  - scripts/updateLogo.js
+  - src/attention/readAttention.js
 requirements: |
-  file:///Users/ko/projects-new/Junior/scripts/updateLogo.js:15
-      const faviconBuffer = await sharp(inputSVGPath).resize(16, 16).ico().toBuffer();
-                                                                    ^
-
-  TypeError: sharp(...).resize(...).ico is not a function
-      at updateLogo (file:///Users/ko/projects-new/Junior/scripts/updateLogo.js:15:68)
-
-  Node.js v18.5.0
+  Remove the try-catch, allow errors out!
 os: OSX
