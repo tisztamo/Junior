@@ -1,12 +1,27 @@
 #!/bin/sh
 set -e
-goal="Fix error in clearBranches.js by filtering empty branches"
+goal="Pass arguments from npm run clear-branches"
 echo "Plan:"
-echo "1. Fix clearBranches.js by adding condition to filter out empty branch names."
-echo "2. Test the changes."
+echo "1. Modify the 'clear-branches' script in package.json to accept arguments"
+echo "2. Modify 'scripts/clearBranchesCommand.js' to pass arguments to the clearBranches function"
+echo "3. Modify 'src/git/clearBranches.js' to accept the arguments and utilize them in the clear branches logic"
 
-# Step 1: Fix clearBranches.js by adding condition to filter out empty branch names.
-cat > ./src/git/clearBranches.js << 'EOF'
+# Step 1: Modify the 'clear-branches' script in package.json to accept arguments
+jq '.scripts["clear-branches"] = "node ./scripts/clearBranchesCommand.js $@"' package.json > package.json.tmp
+mv package.json.tmp package.json
+
+# Step 2: Modify 'scripts/clearBranchesCommand.js' to pass arguments to the clearBranches function
+cat > scripts/clearBranchesCommand.js << 'EOF'
+import clearBranches from '../src/git/clearBranches.js';
+
+const exceptions = process.argv.slice(2);
+clearBranches(exceptions).catch(err => {
+  console.error(`Failed to clear branches: ${err}`);
+});
+EOF
+
+# Step 3: Modify 'src/git/clearBranches.js' to accept the arguments and utilize them in the clear branches logic
+cat > src/git/clearBranches.js << 'EOF'
 import { promisify } from 'util';
 import { exec as execCb } from 'child_process';
 
@@ -37,9 +52,5 @@ async function executeCommand(command) {
   }
 }
 EOF
-
-# Step 2: Test the changes (this is a placeholder; actual tests should be conducted as per project's testing strategy)
-echo "Testing the changes..."
-echo "Please manually run the 'npm run clear-branches' command to verify the fix."
 
 echo "\033[32mDone: $goal\033[0m\n"

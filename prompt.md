@@ -2,32 +2,69 @@ You are Junior, an AI system aiding developers. You are working with a part of a
 
 # Working set
 
+package.json:
 ```
-./
-├── .git/...
-├── .github/...
-├── .gitignore
-├── .vscode/...
-├── README.md
-├── change.sh
-├── docs/...
-├── integrations/...
-├── node_modules/...
-├── package-lock.json
-├── package.json
-├── prompt/...
-├── prompt.md
-├── prompt.yaml
-├── scripts/...
-├── src/...
+{
+  "name": "@aijunior/dev",
+  "version": "0.1.3",
+  "description": "Your AI Contributor which codes itself",
+  "type": "module",
+  "main": "src/main.js",
+  "bin": {
+    "junior": "src/main.js",
+    "junior-web": "src/web.js",
+    "junior-init": "src/init.js"
+  },
+  "scripts": {
+    "cli": "node src/main.js",
+    "start": "node src/web.js",
+    "build:css": "postcss ./src/frontend/styles.css -o ./dist/styles.css",
+    "update-logo": "node ./scripts/updateLogo.js",
+    "clear-branches": "node ./scripts/clearBranchesCommand.js"
+  },
+  "keywords": [
+    "cli",
+    "uppercase"
+  ],
+  "author": "",
+  "license": "GPL",
+  "dependencies": {
+    "@types/js-yaml": "^4.0.5",
+    "autoprefixer": "^10.4.14",
+    "chatgpt": "^5.2.4",
+    "cors": "^2.8.5",
+    "docsify-cli": "^4.4.4",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "highlight.js": "^11.8.0",
+    "js-yaml": "^4.1.0",
+    "markdown-it": "^13.0.1",
+    "marked": "^5.1.0",
+    "postcss": "^8.4.26",
+    "postcss-nested": "^6.0.1",
+    "sharp": "^0.32.4",
+    "simple-git": "^3.19.1",
+    "solid-js": "^1.7.7",
+    "tailwindcss": "^3.3.3",
+    "vite": "^4.3.9",
+    "vite-plugin-solid": "^2.7.0",
+    "ws": "^8.13.0"
+  },
+  "directories": {
+    "doc": "docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tisztamo/Junior.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tisztamo/Junior/issues"
+  },
+  "homepage": "https://github.com/tisztamo/Junior#readme"
+}
 
 ```
-```
-./scripts/
-├── clearBranchesCommand.js
-├── updateLogo.js
 
-```
 src/git/clearBranches.js:
 ```
 import { promisify } from 'util';
@@ -40,7 +77,7 @@ export default async function clearBranches(exceptions = []) {
     const { stdout: currentBranch } = await exec('git rev-parse --abbrev-ref HEAD');
     const { stdout: allBranches } = await exec('git for-each-ref --format="%(refname:short)" refs/heads');
 
-    const branches = allBranches.split('\n').filter(branch => branch !== currentBranch.trim() && !exceptions.includes(branch));
+    const branches = allBranches.split('\n').filter(branch => branch !== currentBranch.trim() && !exceptions.includes(branch) && branch.trim() !== '');
 
     for (const branch of branches) {
       await executeCommand(`git branch -d ${branch}`);
@@ -62,27 +99,35 @@ async function executeCommand(command) {
 
 ```
 
-src/git/clearBranchesCommand.js: err!
+scripts/clearBranchesCommand.js:
+```
+import clearBranches from '../src/git/clearBranches.js';
+
+clearBranches().catch(err => {
+  console.error(`Failed to clear branches: ${err}`);
+});
+
+```
 
 
 # Task
 
-Fix the following issue!
+Implement the following feature!
 
-ko@MacBook-Pro-5 Junior % npm run clear-branches
+- Create a plan!
+- Create new files when needed!
 
-&gt; @aijunior/dev@0.1.3 clear-branches
-&gt; node ./scripts/clearBranchesCommand.js
+Requirements:
 
-Running command: git branch -d clear_branches
-stdout: Deleted branch clear_branches (was fd90bec).
+Pass arguments from npm run clear-branches
 
-Running command: git branch -d keyboard-bindings
-stdout: Deleted branch keyboard-bindings (was 3dc4793).
 
-Running command: git branch -d 
-An error occurred: Error: Command failed: git branch -d 
-fatal: branch name required
+## Project Specifics
+
+- Every js file should *only export a single function*!
+- Use *ES6 imports*!
+- Prefer *async/await* over promises!
+- The frontend uses *Solidjs*, edit .jsx file accordingly
 
 
 # Output Format
