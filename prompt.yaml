@@ -1,9 +1,8 @@
 task: prompt/task/feature/implement.md
 attention:
   - src/frontend/config/keyBindings.js
-  - src/frontend/components/ExecuteButton.jsx
-  - src/frontend/model/handleExecuteChange.js
+  - src/frontend/components/GenerateButton.jsx
 requirements: |
-  - Bind "X" to handleExecuteChange
-  - Add [X] to the button label on the right with some space inbetween
+  - Add [G] to the button label on the right with some space inbetween
+  - Remove unneded console.logs
 os: OSX

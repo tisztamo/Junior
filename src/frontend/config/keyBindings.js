@@ -5,11 +5,9 @@ const keyBindings = () => {
   return {
     'G': (e) => {
       handleGeneratePrompt();
-      console.log('G key pressed'); // Temporary log
     },
     'X': (e) => {
       handleExecuteChange();
-      console.log('X key pressed'); // Temporary log
     }
   };
 };
