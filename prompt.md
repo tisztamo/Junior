@@ -2,12 +2,12 @@ You are Junior, an AI system aiding developers. You are working with a part of a
 
 # Working set
 
-src/frontend/model/handleExecuteChange.js:
+src/frontend/service/handleExecuteChange.js:
 ```
-import { executeChange } from '../service/executeChange';
-import { setExecutionResult } from './executionResult';
-import { setChange } from './change';
-import { changeInput } from './changeInput';
+import { executeChange } from './executeChange';
+import { setExecutionResult } from '../model/executionResult';
+import { setChange } from '../model/change';
+import { changeInput } from '../model/changeInput';
 
 const handleExecuteChange = async () => {
   const clipboardAvailable = !!(navigator.clipboard && navigator.clipboard.readText);
@@ -22,73 +22,37 @@ export default handleExecuteChange;
 
 ```
 
-src/frontend/components/ExecuteButton.jsx:
+src/frontend/service/executeChange.js:
 ```
-import handleExecuteChange from '../model/handleExecuteChange';
-import { setChangeInput } from '../model/changeInput';
+import { getBaseUrl } from '../getBaseUrl';
+import { fetchGitStatus } from './fetchGitStatus';
 
-const ExecuteButton = () => {
-  const clipboardAvailable = !!(navigator.clipboard && navigator.clipboard.readText);
+const executeChange = async (change) => {
+  const baseUrl = getBaseUrl();
+  const response = await fetch(`${baseUrl}/execute`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ change })
+  });
 
-  const handlePaste = async (e) => {
-    const paste = (e.clipboardData || window.clipboardData).getData('text');
-    setChangeInput(paste);
-    handleExecuteChange();
-  };
+  const data = await response.json();
 
-  return (
-    <button class="w-64 px-4 py-4 bg-orange-300 text-white rounded" onClick={handleExecuteChange}>
-      {clipboardAvailable ? (
-        'Paste & Execute Change [X]'
-      ) : (
-        <textarea
-          rows="1"
-          class="w-full px-2 py-2 bg-white text-black resize-none"
-          placeholder="Paste here to execute"
-          value={changeInput()}
-          onPaste={handlePaste}
-        />
-      )}
-    </button>
-  );
+  // Fetch git status after code execution
+  fetchGitStatus();
+
+  return data;
 };
 
-export default ExecuteButton;
-
-```
-
-src/frontend/config/keyBindings.js:
-```
-import handleExecuteChange from '../model/handleExecuteChange';
-import handleGeneratePrompt from '../service/handleGeneratePrompt';
-
-const keyBindings = () => {
-  return {
-    'G': (e) => {
-      handleGeneratePrompt();
-    },
-    'X': (e) => {
-      handleExecuteChange();
-    }
-  };
-};
-
-export default keyBindings;
+export { executeChange };
 
 ```
 
 
 # Task
 
-Move the following files to the specified target dirs!
+Refactor!
 
-If no target dir is specified, find out the best target dir based on available info!
-
-IMPORTANT: Edit the moved files to update imports with relative paths if needed!
-
-You need to follow dependencies to maintain coherence. Update imports!
-
-Move handleExecuteChange to src/frontend/service/
+Move the fetchGitStatus call to the handler!
 
 
 ## Project Specifics

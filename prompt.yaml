@@ -1,7 +1,6 @@
-task: prompt/task/refactor/move_files.md
+task: prompt/task/refactor/custom.md
 attention:
-  - src/frontend/model/handleExecuteChange.js
-  - src/frontend/components/ExecuteButton.jsx
-  - src/frontend/config/keyBindings.js
-requirements: Move handleExecuteChange to src/frontend/service/
+  - src/frontend/service/handleExecuteChange.js
+  - src/frontend/service/executeChange.js
+requirements: Move the fetchGitStatus call to the handler!
 os: OSX

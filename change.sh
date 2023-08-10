@@ -1,20 +1,37 @@
 #!/bin/sh
 set -e
-goal="Move handleExecuteChange to service dir, update imports"
+goal="Move fetchGitStatus call to the handler"
 echo "Plan:"
-echo "1. Move handleExecuteChange.js to src/frontend/service"
-echo "2. Update relative paths in handleExecuteChange.js"
-echo "3. Update import paths in ExecuteButton.jsx and keyBindings.js"
+echo "1. Move the fetchGitStatus call from executeChange.js to handleExecuteChange.js"
+echo "2. Update exports to ensure each file exports a single function"
 
-# Step 1: Move handleExecuteChange.js to src/frontend/service
-mv src/frontend/model/handleExecuteChange.js src/frontend/service/handleExecuteChange.js
+# Step 1: Modify executeChange.js, removing the fetchGitStatus call
+cat > src/frontend/service/executeChange.js << 'EOF'
+import { getBaseUrl } from '../getBaseUrl';
 
-# Step 2: Update relative paths in handleExecuteChange.js
+const executeChange = async (change) => {
+  const baseUrl = getBaseUrl();
+  const response = await fetch(`${baseUrl}/execute`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ change })
+  });
+
+  const data = await response.json();
+
+  return data;
+};
+
+export default executeChange;
+EOF
+
+# Step 2: Modify handleExecuteChange.js, adding the fetchGitStatus call
 cat > src/frontend/service/handleExecuteChange.js << 'EOF'
-import { executeChange } from './executeChange';
+import executeChange from './executeChange';
 import { setExecutionResult } from '../model/executionResult';
 import { setChange } from '../model/change';
 import { changeInput } from '../model/changeInput';
+import { fetchGitStatus } from './fetchGitStatus';
 
 const handleExecuteChange = async () => {
   const clipboardAvailable = !!(navigator.clipboard && navigator.clipboard.readText);
@@ -23,64 +40,12 @@ const handleExecuteChange = async () => {
   setChange(change);
   setExecutionResult(response.output);
   console.log(response.output);
+
+  // Fetch git status after code execution
+  fetchGitStatus();
 };
 
 export default handleExecuteChange;
-EOF
-
-# Step 3: Update import paths in ExecuteButton.jsx and keyBindings.js
-
-# ExecuteButton.jsx
-cat > src/frontend/components/ExecuteButton.jsx << 'EOF'
-import handleExecuteChange from '../service/handleExecuteChange';
-import { setChangeInput } from '../model/changeInput';
-
-const ExecuteButton = () => {
-  const clipboardAvailable = !!(navigator.clipboard && navigator.clipboard.readText);
-
-  const handlePaste = async (e) => {
-    const paste = (e.clipboardData || window.clipboardData).getData('text');
-    setChangeInput(paste);
-    handleExecuteChange();
-  };
-
-  return (
-    <button class="w-64 px-4 py-4 bg-orange-300 text-white rounded" onClick={handleExecuteChange}>
-      {clipboardAvailable ? (
-        'Paste & Execute Change [X]'
-      ) : (
-        <textarea
-          rows="1"
-          class="w-full px-2 py-2 bg-white text-black resize-none"
-          placeholder="Paste here to execute"
-          value={changeInput()}
-          onPaste={handlePaste}
-        />
-      )}
-    </button>
-  );
-};
-
-export default ExecuteButton;
-EOF
-
-# keyBindings.js
-cat > src/frontend/config/keyBindings.js << 'EOF'
-import handleExecuteChange from '../service/handleExecuteChange';
-import handleGeneratePrompt from '../service/handleGeneratePrompt';
-
-const keyBindings = () => {
-  return {
-    'G': (e) => {
-      handleGeneratePrompt();
-    },
-    'X': (e) => {
-      handleExecuteChange();
-    }
-  };
-};
-
-export default keyBindings;
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"
