@@ -2,110 +2,39 @@ You are Junior, an AI system aiding developers. You are working with a part of a
 
 # Working set
 
-package.json:
+src/frontend/config/keyBindings.js:
 ```
-{
-  "name": "@aijunior/dev",
-  "version": "0.1.3",
-  "description": "Your AI Contributor which codes itself",
-  "type": "module",
-  "main": "src/main.js",
-  "bin": {
-    "junior": "src/main.js",
-    "junior-web": "src/web.js",
-    "junior-init": "src/init.js"
-  },
-  "scripts": {
-    "cli": "node src/main.js",
-    "start": "node src/web.js",
-    "build:css": "postcss ./src/frontend/styles.css -o ./dist/styles.css",
-    "update-logo": "node ./scripts/updateLogo.js",
-    "clear-branches": "node ./scripts/clearBranchesCommand.js"
-  },
-  "keywords": [
-    "cli",
-    "uppercase"
-  ],
-  "author": "",
-  "license": "GPL",
-  "dependencies": {
-    "@types/js-yaml": "^4.0.5",
-    "autoprefixer": "^10.4.14",
-    "chatgpt": "^5.2.4",
-    "cors": "^2.8.5",
-    "docsify-cli": "^4.4.4",
-    "ejs": "^3.1.9",
-    "express": "^4.18.2",
-    "highlight.js": "^11.8.0",
-    "js-yaml": "^4.1.0",
-    "markdown-it": "^13.0.1",
-    "marked": "^5.1.0",
-    "postcss": "^8.4.26",
-    "postcss-nested": "^6.0.1",
-    "sharp": "^0.32.4",
-    "simple-git": "^3.19.1",
-    "solid-js": "^1.7.7",
-    "tailwindcss": "^3.3.3",
-    "vite": "^4.3.9",
-    "vite-plugin-solid": "^2.7.0",
-    "ws": "^8.13.0"
-  },
-  "directories": {
-    "doc": "docs"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/tisztamo/Junior.git"
-  },
-  "bugs": {
-    "url": "https://github.com/tisztamo/Junior/issues"
-  },
-  "homepage": "https://github.com/tisztamo/Junior#readme"
-}
+import handleExecuteChange from '../model/handleExecuteChange';
+import handleGeneratePrompt from '../service/handleGeneratePrompt';
 
-```
-
-src/git/clearBranches.js:
-```
-import { promisify } from 'util';
-import { exec as execCb } from 'child_process';
-
-const exec = promisify(execCb);
-
-export default async function clearBranches(exceptions = []) {
-  try {
-    const { stdout: currentBranch } = await exec('git rev-parse --abbrev-ref HEAD');
-    const { stdout: allBranches } = await exec('git for-each-ref --format="%(refname:short)" refs/heads');
-
-    const branches = allBranches.split('\n').filter(branch => branch !== currentBranch.trim() && !exceptions.includes(branch) && branch.trim() !== '');
-
-    for (const branch of branches) {
-      await executeCommand(`git branch -d ${branch}`);
+const keyBindings = () => {
+  return {
+    'G': (e) => {
+      handleGeneratePrompt();
+      console.log('G key pressed'); // Temporary log
+    },
+    'X': (e) => {
+      handleExecuteChange();
+      console.log('X key pressed'); // Temporary log
     }
-  } catch (err) {
-    console.error(`An error occurred: ${err}`);
-  }
-}
+  };
+};
 
-async function executeCommand(command) {
-  try {
-    console.log(`Running command: ${command}`);
-    const { stdout } = await exec(command);
-    console.log(`stdout: ${stdout}`);
-  } catch (err) {
-    throw err;
-  }
-}
+export default keyBindings;
 
 ```
 
-scripts/clearBranchesCommand.js:
+src/frontend/components/GenerateButton.jsx:
 ```
-import clearBranches from '../src/git/clearBranches.js';
+import handleGeneratePrompt from '../service/handleGeneratePrompt';
 
-clearBranches().catch(err => {
-  console.error(`Failed to clear branches: ${err}`);
-});
+const GenerateButton = () => {
+  return (
+    <button className="w-64 px-4 py-4 bg-blue-500 text-white rounded" onClick={handleGeneratePrompt}>Generate & Copy Prompt</button>
+  );
+};
+
+export default GenerateButton;
 
 ```
 
@@ -119,7 +48,9 @@ Implement the following feature!
 
 Requirements:
 
-Pass arguments from npm run clear-branches
+- Add [G] to the button label on the right with some space inbetween
+- Remove unneded console.logs
+
 
 
 ## Project Specifics

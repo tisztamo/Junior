@@ -10,6 +10,7 @@ const ANSI_COLORS = {
 };
 
 const ansiToHtml = (terminalOutputStr) => {
+  if (!terminalOutputStr) return '';
   let result = '<span>' + terminalOutputStr.replace(/\033\[([0-9]+)m/g, (match, p1) => {
     const color = ANSI_COLORS[p1];
     return color ? `</span><span style="color:${color}">` : '</span><span>';

@@ -1,56 +1,40 @@
 #!/bin/sh
 set -e
-goal="Pass arguments from npm run clear-branches"
+goal="Add [G] to button label, remove console.logs"
 echo "Plan:"
-echo "1. Modify the 'clear-branches' script in package.json to accept arguments"
-echo "2. Modify 'scripts/clearBranchesCommand.js' to pass arguments to the clearBranches function"
-echo "3. Modify 'src/git/clearBranches.js' to accept the arguments and utilize them in the clear branches logic"
+echo "1. Modify GenerateButton.jsx to include [G] in the button label"
+echo "2. Remove unnecessary console.log statements from keyBindings.js"
 
-# Step 1: Modify the 'clear-branches' script in package.json to accept arguments
-jq '.scripts["clear-branches"] = "node ./scripts/clearBranchesCommand.js $@"' package.json > package.json.tmp
-mv package.json.tmp package.json
+# Step 1: Modify GenerateButton.jsx
+cat << 'EOF' > src/frontend/components/GenerateButton.jsx
+import handleGeneratePrompt from '../service/handleGeneratePrompt';
 
-# Step 2: Modify 'scripts/clearBranchesCommand.js' to pass arguments to the clearBranches function
-cat > scripts/clearBranchesCommand.js << 'EOF'
-import clearBranches from '../src/git/clearBranches.js';
+const GenerateButton = () => {
+  return (
+    <button className="w-64 px-4 py-4 bg-blue-500 text-white rounded" onClick={handleGeneratePrompt}>Generate & Copy Prompt [G]</button>
+  );
+};
 
-const exceptions = process.argv.slice(2);
-clearBranches(exceptions).catch(err => {
-  console.error(`Failed to clear branches: ${err}`);
-});
+export default GenerateButton;
 EOF
 
-# Step 3: Modify 'src/git/clearBranches.js' to accept the arguments and utilize them in the clear branches logic
-cat > src/git/clearBranches.js << 'EOF'
-import { promisify } from 'util';
-import { exec as execCb } from 'child_process';
+# Step 2: Remove unnecessary console.log statements
+cat << 'EOF' > src/frontend/config/keyBindings.js
+import handleExecuteChange from '../model/handleExecuteChange';
+import handleGeneratePrompt from '../service/handleGeneratePrompt';
 
-const exec = promisify(execCb);
-
-export default async function clearBranches(exceptions = []) {
-  try {
-    const { stdout: currentBranch } = await exec('git rev-parse --abbrev-ref HEAD');
-    const { stdout: allBranches } = await exec('git for-each-ref --format="%(refname:short)" refs/heads');
-
-    const branches = allBranches.split('\n').filter(branch => branch !== currentBranch.trim() && !exceptions.includes(branch) && branch.trim() !== '');
-
-    for (const branch of branches) {
-      await executeCommand(`git branch -d ${branch}`);
+const keyBindings = () => {
+  return {
+    'G': (e) => {
+      handleGeneratePrompt();
+    },
+    'X': (e) => {
+      handleExecuteChange();
     }
-  } catch (err) {
-    console.error(`An error occurred: ${err}`);
-  }
-}
+  };
+};
 
-async function executeCommand(command) {
-  try {
-    console.log(`Running command: ${command}`);
-    const { stdout } = await exec(command);
-    console.log(`stdout: ${stdout}`);
-  } catch (err) {
-    throw err;
-  }
-}
+export default keyBindings;
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"

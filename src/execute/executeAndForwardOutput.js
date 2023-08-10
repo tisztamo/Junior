@@ -4,7 +4,7 @@ import { makeExecutable } from './makeExecutable.js';
 
 async function executeAndForwardOutput(code, next) {
   try {
-    if (!code.startsWith('#!')) {
+    if (code == null || !code.startsWith('#!')) {
       throw new Error('Code does not start with a shebang');
     }
     await writeFile('./change.sh', code);
@@ -24,7 +24,9 @@ async function executeAndForwardOutput(code, next) {
     });
 
     child.on('close', (code) => {
-      next(code, commandOutput);
+      if (next && typeof next === 'function') {
+        next(code, commandOutput);
+      }
     });
   } catch (err) {
     console.log(err);

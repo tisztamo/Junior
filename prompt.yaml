@@ -1,7 +1,8 @@
 task: prompt/task/feature/implement.md
 attention:
-  - package.json
-  - src/git/clearBranches.js
-  - scripts/clearBranchesCommand.js
-requirements: Pass arguments from npm run clear-branches
+  - src/frontend/config/keyBindings.js
+  - src/frontend/components/GenerateButton.jsx
+requirements: |
+  - Add [G] to the button label on the right with some space inbetween
+  - Remove unneded console.logs
 os: OSX

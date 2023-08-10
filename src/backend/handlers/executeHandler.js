@@ -1,8 +1,16 @@
 import { executeAndForwardOutput } from '../../execute/executeAndForwardOutput.js';
+import { extractCode } from '../../execute/extractCode.js';
 
-function executeHandler(req, res) {
-  executeAndForwardOutput(req.body.change, (result, output) => {
-    res.json({ result, output });
+async function executeHandler(req, res) {
+  let code = req.body.change;
+
+  // Check if code starts with shebang
+  if (!code.startsWith("#!")) {
+    code = extractCode(code);
+  }
+  
+  await executeAndForwardOutput(code, (code, output) => {
+    res.json(output);
   });
 }
 

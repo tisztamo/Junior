@@ -1,19 +1,8 @@
-import { createEffect, createSignal } from 'solid-js';
-import { executeChange } from '../service/executeChange';
-import { setExecutionResult } from '../model/executionResult';
-import { setChange } from '../model/change';
+import handleExecuteChange from '../model/handleExecuteChange';
+import { setChangeInput } from '../model/changeInput';
 
 const ExecuteButton = () => {
-  const [inputAvailable, setInputAvailable] = createSignal(true);
-  const [changeInput, setChangeInput] = createSignal('');
-
-  const handleExecuteChange = async () => {
-    const change = inputAvailable() ? await navigator.clipboard.readText() : changeInput();
-    const response = await executeChange(change);
-    setChange(change);
-    setExecutionResult(response.output);
-    console.log(response.output);
-  };
+  const clipboardAvailable = !!(navigator.clipboard && navigator.clipboard.readText);
 
   const handlePaste = async (e) => {
     const paste = (e.clipboardData || window.clipboardData).getData('text');
@@ -21,17 +10,10 @@ const ExecuteButton = () => {
     handleExecuteChange();
   };
 
-  // Check if clipboard reading is available
-  createEffect(() => {
-    if (!navigator.clipboard || !navigator.clipboard.readText) {
-      setInputAvailable(false);
-    }
-  });
-
   return (
     <button class="w-64 px-4 py-4 bg-orange-300 text-white rounded" onClick={handleExecuteChange}>
-      {inputAvailable() ? (
-        'Paste & Execute Change'
+      {clipboardAvailable ? (
+        'Paste & Execute Change [X]'
       ) : (
         <textarea
           rows="1"
