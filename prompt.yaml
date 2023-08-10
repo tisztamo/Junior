@@ -1,11 +1,14 @@
-task: prompt/task/bug/fix.md
+task: prompt/task/refactor/custom.md
 attention:
   - ./
-  - ./prompt/
+  - src/
   - src/init.js
-  - package.json
 requirements: >
-  When junior-init is executed on a newly created repo, prompt files have to be
-  correctly located. They are in the installed version of Junior, and inside
-  there in prompt/defaults/.
+  Create src/command/init/copyDefaults.js
+  and factor
+  the generalized (src, dst) recursive defaults copying
+  out.
+
+  Rewrite the copy implementation to
+  use nodejs fs, not exec.
 os: OSX

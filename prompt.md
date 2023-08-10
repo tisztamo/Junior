@@ -23,16 +23,20 @@ You are Junior, an AI system aiding developers. You are working with a part of a
 
 ```
 ```
-./prompt/
-├── archive/...
-├── defaults/...
-├── format/...
-├── format.md
-├── installedTools.md
-├── os.md
-├── projectSpecifics.md
-├── system.md
-├── task/...
+src/
+├── attention/...
+├── backend/...
+├── config.js
+├── doc/...
+├── execute/...
+├── frontend/...
+├── git/...
+├── init.js
+├── interactiveSession/...
+├── llm/...
+├── main.js
+├── prompt/...
+├── web.js
 
 ```
 src/init.js:
@@ -42,6 +46,10 @@ import { execSync } from 'child_process';
 import { createPromptYaml } from './prompt/createPromptYaml.js';
 import { createGitignore } from './git/createGitignore.js';
 import { createPromptDir } from './prompt/createPromptDir.js';
+import { fileURLToPath } from 'url';
+import path from 'path';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 async function juniorInit() {
   execSync('git init', { stdio: 'inherit' });
@@ -50,8 +58,9 @@ async function juniorInit() {
   await createPromptDir();
   createPromptYaml();
 
-  // Copying all files from prompt/defaults to the new repo
-  execSync('cp -r ./prompt/defaults/* ./prompt/', { stdio: 'inherit' });
+  // Correcting the path to the prompt/defaults folder in the installed version of Junior
+  const defaultsPath = path.join(__dirname, '../prompt/defaults');
+  execSync(`cp -r ${defaultsPath}/* ./prompt/`, { stdio: 'inherit' });
 
   execSync('git add .', { stdio: 'inherit' });
   execSync('git commit -m "Junior init"', { stdio: 'inherit' });
@@ -63,75 +72,13 @@ juniorInit();
 
 ```
 
-package.json:
-```
-{
-  "name": "@aijunior/dev",
-  "version": "0.1.4",
-  "description": "Your AI Contributor which codes itself",
-  "type": "module",
-  "main": "src/main.js",
-  "bin": {
-    "junior": "src/main.js",
-    "junior-web": "src/web.js",
-    "junior-init": "src/init.js"
-  },
-  "scripts": {
-    "cli": "node src/main.js",
-    "start": "node src/web.js",
-    "build:css": "postcss ./src/frontend/styles.css -o ./dist/styles.css",
-    "update-logo": "node ./scripts/updateLogo.js",
-    "clear-branches": "node ./scripts/clearBranchesCommand.js $@"
-  },
-  "keywords": [
-    "cli",
-    "uppercase"
-  ],
-  "author": "",
-  "license": "GPL",
-  "dependencies": {
-    "@types/js-yaml": "^4.0.5",
-    "autoprefixer": "^10.4.14",
-    "chatgpt": "^5.2.4",
-    "cors": "^2.8.5",
-    "docsify-cli": "^4.4.4",
-    "ejs": "^3.1.9",
-    "express": "^4.18.2",
-    "highlight.js": "^11.8.0",
-    "js-yaml": "^4.1.0",
-    "markdown-it": "^13.0.1",
-    "marked": "^5.1.0",
-    "postcss": "^8.4.26",
-    "postcss-nested": "^6.0.1",
-    "sharp": "^0.32.4",
-    "simple-git": "^3.19.1",
-    "solid-js": "^1.7.7",
-    "tailwindcss": "^3.3.3",
-    "vite": "^4.3.9",
-    "vite-plugin-solid": "^2.7.0",
-    "ws": "^8.13.0"
-  },
-  "directories": {
-    "doc": "docs"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/tisztamo/Junior.git"
-  },
-  "bugs": {
-    "url": "https://github.com/tisztamo/Junior/issues"
-  },
-  "homepage": "https://github.com/tisztamo/Junior#readme"
-}
-
-```
-
 
 # Task
 
-Fix the following issue!
+Refactor!
 
-When junior-init is executed on a newly created repo, prompt files have to be correctly located. They are in the installed version of Junior, and inside there in prompt/defaults/.
+Create src/command/init/copyDefaults.js and factor the generalized (src, dst) recursive defaults copying out.
+Rewrite the copy implementation to use nodejs fs, not exec.
 
 
 
