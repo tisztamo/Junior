@@ -8,7 +8,7 @@ export default async function clearBranches(exceptions = []) {
     const { stdout: currentBranch } = await exec('git rev-parse --abbrev-ref HEAD');
     const { stdout: allBranches } = await exec('git for-each-ref --format="%(refname:short)" refs/heads');
 
-    const branches = allBranches.split('\n').filter(branch => branch !== currentBranch.trim() && !exceptions.includes(branch));
+    const branches = allBranches.split('\n').filter(branch => branch !== currentBranch.trim() && !exceptions.includes(branch) && branch.trim() !== '');
 
     for (const branch of branches) {
       await executeCommand(`git branch -d ${branch}`);

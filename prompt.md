@@ -69,15 +69,20 @@ src/git/clearBranchesCommand.js: err!
 
 Fix the following issue!
 
-node ./scripts/clearBranchesCommand.js
+ko@MacBook-Pro-5 Junior % npm run clear-branches
 
-node:internal/errors:477
-  ErrorCaptureStackTrace(err);
-  ^
+&gt; @aijunior/dev@0.1.3 clear-branches
+&gt; node ./scripts/clearBranchesCommand.js
 
-Error [ERR_MODULE_NOT_FOUND]: Cannot find module &#39;/Users/ko/projects-new/Junior/src/git/clearBranches&#39; imported from /Users/ko/projects-new/Junior/scripts/clearBranchesCommand.js
-  at new NodeError (node:internal/errors:388:5)
-  at finalizeResolution (node:internal/modules/esm/resolve:405:11)
+Running command: git branch -d clear_branches
+stdout: Deleted branch clear_branches (was fd90bec).
+
+Running command: git branch -d keyboard-bindings
+stdout: Deleted branch keyboard-bindings (was 3dc4793).
+
+Running command: git branch -d 
+An error occurred: Error: Command failed: git branch -d 
+fatal: branch name required
 
 
 # Output Format
