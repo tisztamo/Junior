@@ -1,6 +1,5 @@
-task: prompt/task/refactor/custom.md
+task: prompt/task/bug/fix.md
 attention:
-  - src/frontend/service/handleExecuteChange.js
-  - src/frontend/service/executeChange.js
-requirements: Move the fetchGitStatus call to the handler!
+  - src/backend/handlers/executeHandler.js
+requirements: Respond with a json with output field instead!
 os: OSX

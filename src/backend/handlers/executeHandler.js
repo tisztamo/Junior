@@ -10,8 +10,9 @@ async function executeHandler(req, res) {
   }
   
   await executeAndForwardOutput(code, (code, output) => {
-    res.json(output);
+    res.json({ output });
   });
 }
 
 export { executeHandler };
+

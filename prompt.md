@@ -2,57 +2,34 @@ You are Junior, an AI system aiding developers. You are working with a part of a
 
 # Working set
 
-src/frontend/service/handleExecuteChange.js:
+src/backend/handlers/executeHandler.js:
 ```
-import { executeChange } from './executeChange';
-import { setExecutionResult } from '../model/executionResult';
-import { setChange } from '../model/change';
-import { changeInput } from '../model/changeInput';
+import { executeAndForwardOutput } from '../../execute/executeAndForwardOutput.js';
+import { extractCode } from '../../execute/extractCode.js';
 
-const handleExecuteChange = async () => {
-  const clipboardAvailable = !!(navigator.clipboard && navigator.clipboard.readText);
-  const change = clipboardAvailable ? await navigator.clipboard.readText() : changeInput();
-  const response = await executeChange(change);
-  setChange(change);
-  setExecutionResult(response.output);
-  console.log(response.output);
-};
+async function executeHandler(req, res) {
+  let code = req.body.change;
 
-export default handleExecuteChange;
-
-```
-
-src/frontend/service/executeChange.js:
-```
-import { getBaseUrl } from '../getBaseUrl';
-import { fetchGitStatus } from './fetchGitStatus';
-
-const executeChange = async (change) => {
-  const baseUrl = getBaseUrl();
-  const response = await fetch(`${baseUrl}/execute`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ change })
+  // Check if code starts with shebang
+  if (!code.startsWith("#!")) {
+    code = extractCode(code);
+  }
+  
+  await executeAndForwardOutput(code, (code, output) => {
+    res.json(output);
   });
+}
 
-  const data = await response.json();
-
-  // Fetch git status after code execution
-  fetchGitStatus();
-
-  return data;
-};
-
-export { executeChange };
+export { executeHandler };
 
 ```
 
 
 # Task
 
-Refactor!
+Fix the following issue!
 
-Move the fetchGitStatus call to the handler!
+Respond with a json with output field instead!
 
 
 ## Project Specifics
