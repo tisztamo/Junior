@@ -7,6 +7,10 @@ export const generateHandler = async (req, res) => {
     res.json({ prompt: prompt });
   } catch (error) {
     console.warn(error);
-    res.json({ error: error.message });
+    if (error.message.startsWith("ENOENT")) {
+      res.status(404).json({ error: error.message });
+    } else {
+      res.status(500).json({ error: error.message });
+    }
   }
 };
