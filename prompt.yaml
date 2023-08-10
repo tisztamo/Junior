@@ -1,12 +1,8 @@
 task: prompt/task/bug/fix.md
 attention:
-  - src/frontend/components/GenerateButton.jsx
-  - src/frontend/tailwind.config.cjs
+  - src/frontend/components/ExecuteButton.jsx
+  - src/frontend/components/RollbackButton.jsx
+  - src/frontend/components/CommitButton.jsx
 requirements: >
-  Create a new foreground color in tailwind named "bg" with the same value as
-  the main background.
-
-  Use this for the GenerateButton label.
-
-  Also change its width to w-full and font size to text-lg.
+  Set width of all buttons to w-full, font size to text-lg, color to text-bg.
 os: OSX

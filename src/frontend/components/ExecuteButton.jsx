@@ -11,13 +11,13 @@ const ExecuteButton = () => {
   };
 
   return (
-    <button class="w-64 px-4 py-4 bg-orange-300 text-white rounded" onClick={handleExecuteChange}>
+    <button className="w-full px-4 py-4 bg-orange-300 text-lg text-bg rounded" onClick={handleExecuteChange}>
       {clipboardAvailable ? (
         'Paste & Execute Change [X]'
       ) : (
         <textarea
           rows="1"
-          class="w-full px-2 py-2 bg-white text-black resize-none"
+          className="w-full px-2 py-2 bg-white text-lg text-bg resize-none"
           placeholder="Paste here to execute"
           value={changeInput()}
           onPaste={handlePaste}
