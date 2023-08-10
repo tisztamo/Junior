@@ -2,23 +2,15 @@ You are Junior, an AI system aiding developers. You are working with a part of a
 
 # Working set
 
-src/attention/processFile.js:
+src/backend/handlers/generateHandler.js:
 ```
-import fs from 'fs'
-import path from 'path'
-import util from 'util'
+import processPrompt from '../../prompt/processPrompt.js';
 
-const readFile = util.promisify(fs.readFile)
-
-export const processFile = async (root, p) => {
-  const fullPath = path.join(root, p)
-  try {
-    const content = await readFile(fullPath, "utf8")
-    return `${p}:\n\`\`\`\n${content}\n\`\`\`\n`
-  } catch (error) {
-    return `${p}: err!\n`
-  }
-}
+export const generateHandler = async (req, res) => {
+  const { notes, systemPrompt } = req.body;
+  const { prompt } = await processPrompt(notes, systemPrompt);
+  res.json({ prompt: prompt });
+};
 
 ```
 
@@ -27,7 +19,7 @@ export const processFile = async (root, p) => {
 
 Fix the following issue!
 
-Remove the try-catch, allow errors out!
+Catch errors and put them in the error field
 
 
 

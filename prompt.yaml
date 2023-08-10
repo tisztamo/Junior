@@ -1,6 +1,6 @@
 task: prompt/task/bug/fix.md
 attention:
-  - src/attention/processFile.js
+  - src/backend/handlers/generateHandler.js
 requirements: |
-  Remove the try-catch, allow errors out!
+  Catch errors and put them in the error field
 os: OSX
