@@ -12,7 +12,7 @@ const updateLogo = async () => {
     writeFileSync(outputPNGPath, buffer);
 
     // Convert logo to favicon sizes
-    const faviconBuffer = await sharp(inputSVGPath).resize(16, 16).ico().toBuffer();
+    const faviconBuffer = await sharp(inputSVGPath).resize({ width: 16, height: 16 }).toFormat('png').toBuffer();
     
     // Update favicon in both the docs and frontend directories
     writeFileSync(faviconDocsPath, faviconBuffer);
@@ -23,3 +23,5 @@ const updateLogo = async () => {
 };
 
 updateLogo();
+
+export default updateLogo;

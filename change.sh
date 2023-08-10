@@ -1,12 +1,12 @@
 #!/bin/sh
 set -e
-goal="Update favicons when logo is updated"
+goal="Fix sharp resize, ico conversion error, and call updateLogo"
 echo "Plan:"
-echo "1. Modify the existing updateLogo.js file to include the logic to update favicons"
-echo "2. Convert the logo to appropriate favicon sizes using sharp package"
-echo "3. Replace favicon in both the 'docs/assets/' and 'src/frontend/assets/' directories"
+echo "1. Replace the incorrect ico conversion code with proper format conversion for favicon."
+echo "2. Export the function 'updateLogo' since the project's requirement is to export a single function from each js file."
+echo "3. Call the 'updateLogo' function."
 
-cat << 'EOF' > scripts/updateLogo.js
+cat > scripts/updateLogo.js << 'EOF'
 import sharp from 'sharp';
 import { writeFileSync } from 'fs';
 
@@ -21,7 +21,7 @@ const updateLogo = async () => {
     writeFileSync(outputPNGPath, buffer);
 
     // Convert logo to favicon sizes
-    const faviconBuffer = await sharp(inputSVGPath).resize(16, 16).ico().toBuffer();
+    const faviconBuffer = await sharp(inputSVGPath).resize({ width: 16, height: 16 }).toFormat('png').toBuffer();
     
     // Update favicon in both the docs and frontend directories
     writeFileSync(faviconDocsPath, faviconBuffer);
@@ -32,6 +32,8 @@ const updateLogo = async () => {
 };
 
 updateLogo();
+
+export default updateLogo;
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"

@@ -1,11 +1,13 @@
-task: prompt/task/feature/implement.md
+task: prompt/task/bug/fix.md
 attention:
-  - docs/assets/
-  - src/frontend/assets/
-  - package.json
   - scripts/updateLogo.js
 requirements: |
-  When the logo was updated, also update the favicons!
-  Use convert if needed but prefer installed packages.
-  Do not install anything!
+  file:///Users/ko/projects-new/Junior/scripts/updateLogo.js:15
+      const faviconBuffer = await sharp(inputSVGPath).resize(16, 16).ico().toBuffer();
+                                                                    ^
+
+  TypeError: sharp(...).resize(...).ico is not a function
+      at updateLogo (file:///Users/ko/projects-new/Junior/scripts/updateLogo.js:15:68)
+
+  Node.js v18.5.0
 os: OSX
