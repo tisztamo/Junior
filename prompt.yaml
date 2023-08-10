@@ -1,4 +1,8 @@
 task: prompt/task/refactor/custom.md
 attention:
   - src/frontend/components/ExecuteButton.jsx
-requirements: Make inputAvailable a boolean const! Name it clipboardAvailable!
+  - src/frontend/model/commitMessage.js
+  - src/frontend/service/handleGeneratePrompt.js
+requirements: |
+  Refactor ExecuteButton!
+  - Factor changeInput to its own file in model!

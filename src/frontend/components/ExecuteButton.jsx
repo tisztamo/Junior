@@ -1,11 +1,10 @@
-import { createSignal } from 'solid-js';
 import { executeChange } from '../service/executeChange';
 import { setExecutionResult } from '../model/executionResult';
 import { setChange } from '../model/change';
+import { changeInput, setChangeInput } from '../model/changeInput';
 
 const ExecuteButton = () => {
   const clipboardAvailable = !!(navigator.clipboard && navigator.clipboard.readText);
-  const [changeInput, setChangeInput] = createSignal('');
 
   const handleExecuteChange = async () => {
     const change = clipboardAvailable ? await navigator.clipboard.readText() : changeInput();

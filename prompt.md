@@ -4,17 +4,17 @@ You are Junior, an AI system aiding developers. You are working with a part of a
 
 src/frontend/components/ExecuteButton.jsx:
 ```
-import { createEffect, createSignal } from 'solid-js';
+import { createSignal } from 'solid-js';
 import { executeChange } from '../service/executeChange';
 import { setExecutionResult } from '../model/executionResult';
 import { setChange } from '../model/change';
 
 const ExecuteButton = () => {
-  const [inputAvailable, setInputAvailable] = createSignal(true);
+  const clipboardAvailable = !!(navigator.clipboard && navigator.clipboard.readText);
   const [changeInput, setChangeInput] = createSignal('');
 
   const handleExecuteChange = async () => {
-    const change = inputAvailable() ? await navigator.clipboard.readText() : changeInput();
+    const change = clipboardAvailable ? await navigator.clipboard.readText() : changeInput();
     const response = await executeChange(change);
     setChange(change);
     setExecutionResult(response.output);
@@ -27,16 +27,9 @@ const ExecuteButton = () => {
     handleExecuteChange();
   };
 
-  // Check if clipboard reading is available
-  createEffect(() => {
-    if (!navigator.clipboard || !navigator.clipboard.readText) {
-      setInputAvailable(false);
-    }
-  });
-
   return (
     <button class="w-64 px-4 py-4 bg-orange-300 text-white rounded" onClick={handleExecuteChange}>
-      {inputAvailable() ? (
+      {clipboardAvailable ? (
         'Paste & Execute Change'
       ) : (
         <textarea
@@ -55,12 +48,50 @@ export default ExecuteButton;
 
 ```
 
+src/frontend/model/commitMessage.js:
+```
+import { createSignal } from 'solid-js';
+
+const [commitMessage, setCommitMessage] = createSignal('');
+
+export { commitMessage, setCommitMessage };
+
+```
+
+src/frontend/service/handleGeneratePrompt.js:
+```
+import { generatePrompt } from '../generatePrompt';
+import { marked } from 'marked';
+import { setPrompt } from '../model/prompt';
+
+const handleGeneratePrompt = async () => {
+  const response = await generatePrompt();
+
+  navigator.clipboard.writeText(response.prompt)
+    .then(() => {
+      console.log('Prompt copied to clipboard!');
+    })
+    .catch(err => {
+      console.error('Failed to copy prompt: ', err);
+    });
+
+  const htmlPrompt = marked(response.prompt);
+
+  setPrompt(htmlPrompt);
+};
+
+export default handleGeneratePrompt;
+
+```
+
 
 # Task
 
 Refactor!
 
-Make inputAvailable a boolean const! Name it clipboardAvailable!
+Refactor ExecuteButton!
+- Factor changeInput to its own file in model!
+
 
 
 ## Project Specifics

@@ -1,19 +1,28 @@
 #!/bin/sh
 set -e
-goal="Refactor code to make inputAvailable a const"
+goal="Refactor ExecuteButton by factoring changeInput"
 echo "Plan:"
-echo "1. Replace the variable inputAvailable with clipboardAvailable as a const boolean."
-echo "2. Update the JSX and function logic accordingly."
+echo "1. Create a new file in model directory to handle changeInput"
+echo "2. Update ExecuteButton.jsx to import changeInput from the new file"
 
-cat > src/frontend/components/ExecuteButton.jsx << 'EOF'
+# Step 1: Create a new file in model directory to handle changeInput
+cat > src/frontend/model/changeInput.js << 'EOF'
 import { createSignal } from 'solid-js';
+
+const [changeInput, setChangeInput] = createSignal('');
+
+export { changeInput, setChangeInput };
+EOF
+
+# Step 2: Update ExecuteButton.jsx to import changeInput from the new file
+cat > src/frontend/components/ExecuteButton.jsx << 'EOF'
 import { executeChange } from '../service/executeChange';
 import { setExecutionResult } from '../model/executionResult';
 import { setChange } from '../model/change';
+import { changeInput, setChangeInput } from '../model/changeInput';
 
 const ExecuteButton = () => {
   const clipboardAvailable = !!(navigator.clipboard && navigator.clipboard.readText);
-  const [changeInput, setChangeInput] = createSignal('');
 
   const handleExecuteChange = async () => {
     const change = clipboardAvailable ? await navigator.clipboard.readText() : changeInput();
