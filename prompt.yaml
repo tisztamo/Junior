@@ -1,6 +1,6 @@
 task: prompt/task/bug/fix.md
 attention:
-  - src/attention/readAttention.js
+  - src/attention/processFile.js
 requirements: |
   Remove the try-catch, allow errors out!
 os: OSX

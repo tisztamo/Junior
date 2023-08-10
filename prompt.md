@@ -2,34 +2,23 @@ You are Junior, an AI system aiding developers. You are working with a part of a
 
 # Working set
 
-src/attention/readAttention.js:
+src/attention/processFile.js:
 ```
-import { processFile } from './processFile.js';
-import { processInterfaceSection } from './processInterfaceSection.js';
-import { printFolderStructure } from './printFolderStructure.js';
+import fs from 'fs'
+import path from 'path'
+import util from 'util'
 
-export const readAttention = async (attentionArray = [], attentionRootDir = '.') => {
+const readFile = util.promisify(fs.readFile)
+
+export const processFile = async (root, p) => {
+  const fullPath = path.join(root, p)
   try {
-    if (!attentionArray) {
-      return [];
-    }
-    const processedLines = await Promise.all(attentionArray.map(line => {
-      const trimmedLine = line.trim();
-      if (trimmedLine.endsWith(' iface')) {
-        const filePath = trimmedLine.slice(0, -6).trim();
-        return processInterfaceSection(attentionRootDir, filePath);
-      } else if (trimmedLine.endsWith('/')) {
-        return printFolderStructure(attentionRootDir, trimmedLine.slice(0, -1).trim());
-      } else {
-        return processFile(attentionRootDir, trimmedLine);
-      }
-    }));
-    return processedLines;
+    const content = await readFile(fullPath, "utf8")
+    return `${p}:\n\`\`\`\n${content}\n\`\`\`\n`
   } catch (error) {
-    console.warn(error);
-    throw new Error("Error processing attention lines!");
+    return `${p}: err!\n`
   }
-};
+}
 
 ```
 

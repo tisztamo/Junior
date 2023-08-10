@@ -1,29 +1,22 @@
 #!/bin/sh
 set -e
-goal="Remove try-catch block in readAttention.js"
+goal="Remove try-catch, allow errors out in processFile"
 echo "Plan:"
-echo "1. Modify readAttention.js to remove the try-catch, allowing errors to propagate"
-cat << 'EOF' > src/attention/readAttention.js
-import { processFile } from './processFile.js';
-import { processInterfaceSection } from './processInterfaceSection.js';
-import { printFolderStructure } from './printFolderStructure.js';
+echo "1. Remove the try-catch block from src/attention/processFile.js"
+echo "2. Simplify the function accordingly"
 
-export const readAttention = async (attentionArray = [], attentionRootDir = '.') => {
-  if (!attentionArray) {
-    return [];
-  }
-  const processedLines = await Promise.all(attentionArray.map(line => {
-    const trimmedLine = line.trim();
-    if (trimmedLine.endsWith(' iface')) {
-      const filePath = trimmedLine.slice(0, -6).trim();
-      return processInterfaceSection(attentionRootDir, filePath);
-    } else if (trimmedLine.endsWith('/')) {
-      return printFolderStructure(attentionRootDir, trimmedLine.slice(0, -1).trim());
-    } else {
-      return processFile(attentionRootDir, trimmedLine);
-    }
-  }));
-  return processedLines;
-};
+cat << 'EOF' > src/attention/processFile.js
+import fs from 'fs'
+import path from 'path'
+import util from 'util'
+
+const readFile = util.promisify(fs.readFile)
+
+export const processFile = async (root, p) => {
+  const fullPath = path.join(root, p)
+  const content = await readFile(fullPath, "utf8")
+  return `${p}:\n\`\`\`\n${content}\n\`\`\`\n`
+}
 EOF
+
 echo "\033[32mDone: $goal\033[0m\n"
