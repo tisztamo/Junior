@@ -1,9 +1,11 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/components/ExecuteButton.jsx
-  - src/frontend/components/RollbackButton.jsx
-  - src/frontend/components/CommitButton.jsx
-  - src/frontend/components/GenerateButton.jsx
+  - docs/assets/logo.svg
+  - package.json
 requirements: |
-  Add font-semibold to every button
+  blue -> rgb(59 130 246)
+  orange -> rgb(253, 186, 116)
+  red -> rgb(185, 28, 28)
+  green -> rgb(21, 128, 61)
+  Then call the update script!
 os: OSX
