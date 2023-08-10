@@ -1,19 +1,41 @@
 #!/bin/sh
 set -e
-goal="Update SVG Colors"
+goal="Add border to TasksList component"
 echo "Plan:"
-echo "1. Update the colors in docs/assets/logo.svg according to requirements."
-echo "2. Call the update script."
+echo "1. Modify the TasksList.jsx to add a border around the component."
+echo "2. Ensure proper styling for the border."
 
-cat > docs/assets/logo.svg << 'EOF'
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-    <rect x="0" y="0" rx="10" ry="10" width="100" height="30" style="fill:rgb(59 130 246);" />
-    <rect x="0" y="33" rx="10" ry="10" width="100" height="30" style="fill:rgb(253, 186, 116);" />
-    <rect x="0" y="66" rx="10" ry="10" width="48" height="34" style="fill:rgb(185, 28, 28);" />
-    <rect x="52" y="66" rx="10" ry="10" width="48" height="34" style="fill:rgb(21, 128, 61);" />
-</svg>
+# Step 1: Modify the TasksList.jsx to add a border around the component.
+cat > src/frontend/components/TasksList.jsx << 'EOF'
+import { onMount, createEffect } from 'solid-js';
+import { fetchTasks } from '../fetchTasks';
+import { handleTaskChange } from '../service/handleTaskChange';
+import { selectedTask, setSelectedTask } from '../model/selectedTask';
+import { promptDescriptor } from '../model/promptDescriptor';
+import { parseYamlAndGetTask } from '../service/parseYamlAndGetTask';
+
+const TasksList = () => {
+  const tasks = fetchTasks();
+
+  createEffect(() => {
+    const descriptor = promptDescriptor();
+    if (descriptor !== '') {
+      const task = parseYamlAndGetTask(descriptor);
+      setSelectedTask(task);
+    }
+  });
+
+  return (
+    <div class="w-full flex justify-start bg-emphasize text-emphasize p-2 rounded border border-gray-300">
+      <label class="text-lg mr-2">Task:</label>
+      <select class="w-full bg-emphasize text-emphasize text-lg" value={selectedTask()} onChange={e => handleTaskChange(e)}>
+        {tasks().map(task => <option value={task}>{task}</option>)}
+      </select>
+    </div>
+  );
+};
+
+export default TasksList;
 EOF
-
-npm run update-logo
 
 echo "\033[32mDone: $goal\033[0m\n"

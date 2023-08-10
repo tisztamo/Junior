@@ -17,7 +17,7 @@ const TasksList = () => {
   });
 
   return (
-    <div class="w-full flex justify-start bg-emphasize text-emphasize p-2 rounded">
+    <div class="w-full flex justify-start bg-emphasize text-emphasize p-2 rounded border border-gray-300">
       <label class="text-lg mr-2">Task:</label>
       <select class="w-full bg-emphasize text-emphasize text-lg" value={selectedTask()} onChange={e => handleTaskChange(e)}>
         {tasks().map(task => <option value={task}>{task}</option>)}

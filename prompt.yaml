@@ -1,11 +1,6 @@
 task: prompt/task/feature/implement.md
 attention:
-  - docs/assets/logo.svg
-  - package.json
+  - src/frontend/components/TasksList.jsx
 requirements: |
-  blue -> rgb(59 130 246)
-  orange -> rgb(253, 186, 116)
-  red -> rgb(185, 28, 28)
-  green -> rgb(21, 128, 61)
-  Then call the update script!
+  Add border
 os: OSX
