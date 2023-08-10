@@ -1,5 +1,11 @@
-task: prompt/task/bug/fix.md
+task: prompt/task/feature/implement.md
 attention:
-  - src/backend/handlers/executeHandler.js
-requirements: Respond with a json with output field instead!
+  - docs/assets/
+  - src/frontend/assets/
+  - package.json
+  - scripts/updateLogo.js
+requirements: |
+  When the logo was updated, also update the favicons!
+  Use convert if needed but prefer installed packages.
+  Do not install anything!
 os: OSX
