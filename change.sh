@@ -1,40 +1,66 @@
 #!/bin/sh
 set -e
-goal="Increase font of task list input and label"
+goal="Modify button and tailwind config"
 echo "Plan:"
-echo "1. Modify the CSS classes for the task list input and its label to increase their font size"
-echo "2. Save the changes to src/frontend/components/TasksList.jsx"
+echo "1. Modify tailwind.config.cjs to add new foreground color."
+echo "2. Update GenerateButton.jsx component's tailwind classes."
 
-cat > src/frontend/components/TasksList.jsx << 'EOF'
-import { onMount, createEffect } from 'solid-js';
-import { fetchTasks } from '../fetchTasks';
-import { handleTaskChange } from '../service/handleTaskChange';
-import { selectedTask, setSelectedTask } from '../model/selectedTask';
-import { promptDescriptor } from '../model/promptDescriptor';
-import { parseYamlAndGetTask } from '../service/parseYamlAndGetTask';
+cat <<EOF > src/frontend/tailwind.config.cjs
+module.exports = {
+  darkMode: 'class',
+  content: [__dirname + '/**/*.html', __dirname + '/**/*.jsx'],
+  theme: {
+    screens: {
+      'xs': '320px',
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px',
+    },
+    extend: {
+      spacing: {
+        '72': '18rem',
+        '84': '21rem',
+        '96': '24rem',
+        '128': '32rem',
+      },
+      fontSize: {
+        'btn': '1.5rem',
+        'lg': '1.125rem',
+      },
+      padding: {
+        'btn': '1.5rem',
+      },
+      maxWidth: {
+        'desktop': '640px',
+      },
+      colors: {
+        text: "var(--text-color)",
+        emphasize: "var(--emphasize-color)",
+        bg: "var(--background-color)",
+      },
+      backgroundColor: {
+        main: "var(--background-color)",
+        emphasize: "var(--background-emphasize-color)",
+      },
+    },
+  },
+  variants: {
+    extend: {},
+  },
+  plugins: [],
+}
+EOF
 
-const TasksList = () => {
-  const tasks = fetchTasks();
+cat <<EOF > src/frontend/components/GenerateButton.jsx
+import handleGeneratePrompt from '../service/handleGeneratePrompt';
 
-  createEffect(() => {
-    const descriptor = promptDescriptor();
-    if (descriptor !== '') {
-      const task = parseYamlAndGetTask(descriptor);
-      setSelectedTask(task);
-    }
-  });
-
+const GenerateButton = () => {
   return (
-    <div class="w-full flex justify-start bg-emphasize text-emphasize p-2 rounded">
-      <label class="text-lg mr-2">Task:</label>
-      <select class="w-full bg-emphasize text-emphasize text-lg" value={selectedTask()} onChange={e => handleTaskChange(e)}>
-        {tasks().map(task => <option value={task}>{task}</option>)}
-      </select>
-    </div>
+    <button className="w-full px-4 py-4 bg-blue-500 text-bg text-lg rounded" onClick={handleGeneratePrompt}>Generate & Copy Prompt [G]</button>
   );
 };
 
-export default TasksList;
+export default GenerateButton;
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"

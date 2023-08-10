@@ -6,94 +6,63 @@ Ask for them in normal conversational format instead.
 
 # Working set
 
-src/frontend/App.jsx:
+src/frontend/components/GenerateButton.jsx:
 ```
-import useKeyBindings from './service/useKeyBindings';
-import keyBindings from './config/keyBindings';
-import NavBar from './components/NavBar';
-import PromptCreation from './components/PromptCreation';
-import ChangeExecution from './components/ChangeExecution';
-import ChangeInspection from './components/ChangeInspection';
-import ChangeFinalization from './components/ChangeFinalization';
+import handleGeneratePrompt from '../service/handleGeneratePrompt';
 
-const App = () => {
-  // Define key bindings
-  const bindings = keyBindings();
-
-  // Use key bindings
-  useKeyBindings(bindings);
-
+const GenerateButton = () => {
   return (
-    <div id="app" class="p-2 sm:p-4 xs:p-4">
-      <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
-        <NavBar />
-        <PromptCreation />
-        <ChangeExecution />
-        <ChangeInspection />
-        <ChangeFinalization />
-      </div>
-    </div>
+    <button className="w-64 px-4 py-4 bg-blue-500 text-white rounded" onClick={handleGeneratePrompt}>Generate & Copy Prompt [G]</button>
   );
 };
 
-export default App;
+export default GenerateButton;
 
 ```
 
-src/frontend/components/PromptCreation.jsx:
+src/frontend/tailwind.config.cjs:
 ```
-import TasksList from './TasksList';
-import PromptDescriptor from './PromptDescriptor';
-import GenerateButton from './GenerateButton';
-import PromptDisplay from './PromptDisplay';
-
-const PromptCreation = () => {
-  return (
-    <>
-      <TasksList />
-      <PromptDescriptor />
-      <GenerateButton />
-      <PromptDisplay />
-    </>
-  );
-};
-
-export default PromptCreation;
-
-```
-
-src/frontend/components/TasksList.jsx:
-```
-import { onMount, createEffect } from 'solid-js';
-import { fetchTasks } from '../fetchTasks';
-import { handleTaskChange } from '../service/handleTaskChange';
-import { selectedTask, setSelectedTask } from '../model/selectedTask';
-import { promptDescriptor } from '../model/promptDescriptor';
-import { parseYamlAndGetTask } from '../service/parseYamlAndGetTask';
-
-const TasksList = () => {
-  const tasks = fetchTasks();
-
-  createEffect(() => {
-    const descriptor = promptDescriptor();
-    if (descriptor !== '') {
-      const task = parseYamlAndGetTask(descriptor);
-      setSelectedTask(task);
-    }
-  });
-
-  return (
-    <div class="w-full flex justify-start bg-emphasize text-emphasize p-2 rounded">
-      <label class="mr-2">Task:</label>
-      <select class="w-full bg-emphasize text-emphasize text-lg" value={selectedTask()} onChange={e => handleTaskChange(e)}>
-        {tasks().map(task => <option value={task}>{task}</option>)}
-      </select>
-    </div>
-  );
-};
-
-export default TasksList;
-
+module.exports = {
+  darkMode: 'class',
+  content: [__dirname + '/**/*.html', __dirname + '/**/*.jsx'],
+  theme: {
+    screens: {
+      'xs': '320px',
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px',
+    },
+    extend: {
+      spacing: {
+        '72': '18rem',
+        '84': '21rem',
+        '96': '24rem',
+        '128': '32rem',
+      },
+      fontSize: {
+        'btn': '1.5rem',
+      },
+      padding: {
+        'btn': '1.5rem',
+      },
+      maxWidth: {
+        'desktop': '640px',
+      },
+      colors: {
+        text: "var(--text-color)",
+        emphasize: "var(--emphasize-color)",
+      },
+      backgroundColor: {
+        main: "var(--background-color)",
+        emphasize: "var(--background-emphasize-color)",
+      },
+    },
+  },
+  variants: {
+    extend: {},
+  },
+  plugins: [],
+}
 
 ```
 
@@ -102,7 +71,9 @@ export default TasksList;
 
 Fix the following issue!
 
-Increase font of the task list input and make its label the same size.
+Create a new foreground color in tailwind named &#34;bg&#34; with the same value as the main background.
+Use this for the GenerateButton label.
+Also change its width to w-full and font size to text-lg.
 
 
 

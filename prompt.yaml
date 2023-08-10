@@ -1,8 +1,12 @@
 task: prompt/task/bug/fix.md
 attention:
-  - src/frontend/App.jsx
-  - src/frontend/components/PromptCreation.jsx
-  - src/frontend/components/TasksList.jsx
-requirements: |
-  Increase font of the task list input and make its label the same size.
+  - src/frontend/components/GenerateButton.jsx
+  - src/frontend/tailwind.config.cjs
+requirements: >
+  Create a new foreground color in tailwind named "bg" with the same value as
+  the main background.
+
+  Use this for the GenerateButton label.
+
+  Also change its width to w-full and font size to text-lg.
 os: OSX

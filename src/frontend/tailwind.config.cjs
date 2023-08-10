@@ -17,6 +17,7 @@ module.exports = {
       },
       fontSize: {
         'btn': '1.5rem',
+        'lg': '1.125rem',
       },
       padding: {
         'btn': '1.5rem',
@@ -27,6 +28,7 @@ module.exports = {
       colors: {
         text: "var(--text-color)",
         emphasize: "var(--emphasize-color)",
+        bg: "var(--background-color)",
       },
       backgroundColor: {
         main: "var(--background-color)",
