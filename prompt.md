@@ -6,74 +6,37 @@ Ask for them in normal conversational format instead.
 
 # Working set
 
+src/frontend/App.jsx:
 ```
-./
-├── .git/...
-├── .github/...
-├── .gitignore
-├── .vscode/...
-├── README.md
-├── change.sh
-├── docs/...
-├── integrations/...
-├── node_modules/...
-├── package-lock.json
-├── package.json
-├── prompt/...
-├── prompt.md
-├── prompt.yaml
-├── scripts/...
-├── src/...
+import useKeyBindings from './service/useKeyBindings';
+import keyBindings from './config/keyBindings';
+import NavBar from './components/NavBar';
+import PromptCreation from './components/PromptCreation';
+import ChangeExecution from './components/ChangeExecution';
+import ChangeInspection from './components/ChangeInspection';
+import ChangeFinalization from './components/ChangeFinalization';
 
-```
-```
-src/
-├── attention/...
-├── backend/...
-├── command/...
-├── config.js
-├── doc/...
-├── execute/...
-├── frontend/...
-├── git/...
-├── init.js
-├── interactiveSession/...
-├── llm/...
-├── main.js
-├── prompt/...
-├── web.js
+const App = () => {
+  // Define key bindings
+  const bindings = keyBindings();
 
-```
-src/init.js:
-```
-#!/usr/bin/env node
-import { execSync } from 'child_process';
-import { createPromptYaml } from './prompt/createPromptYaml.js';
-import { createGitignore } from './git/createGitignore.js';
-import { createPromptDir } from './prompt/createPromptDir.js';
-import copyDefaults from './command/init/copyDefaults.js';
-import path from 'path';
+  // Use key bindings
+  useKeyBindings(bindings);
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+  return (
+    <div id="app" class="p-2">
+      <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
+        <NavBar />
+        <PromptCreation />
+        <ChangeExecution />
+        <ChangeInspection />
+        <ChangeFinalization />
+      </div>
+    </div>
+  );
+};
 
-async function juniorInit() {
-  execSync('git init', { stdio: 'inherit' });
-
-  createGitignore();
-  await createPromptDir();
-  createPromptYaml();
-
-  // Correcting the path to the prompt/defaults folder in the installed version of Junior
-  const defaultsPath = path.join(__dirname, '../prompt/defaults');
-  await copyDefaults(defaultsPath, './prompt/');
-
-  execSync('git add .', { stdio: 'inherit' });
-  execSync('git commit -m "Junior init"', { stdio: 'inherit' });
-
-  console.log('\x1b[32mRepo initialized for Junior development\x1b[0m');
-}
-
-juniorInit();
+export default App;
 
 ```
 
@@ -82,10 +45,7 @@ juniorInit();
 
 Fix the following issue!
 
-file:///Users/ko/projects-new/Junior/src/init.js:9 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-                      ^
-ReferenceError: fileURLToPath is not defined
-    at file:///Users/ko/projects-new/Junior/src/init.js:9:24
+Increase space around the content on mobile.
 
 
 

@@ -1,12 +1,6 @@
 task: prompt/task/bug/fix.md
 attention:
-  - ./
-  - src/
-  - src/init.js
-requirements: >
-  file:///Users/ko/projects-new/Junior/src/init.js:9
-  const __dirname = path.dirname(fileURLToPath(import.meta.url));
-                        ^
-  ReferenceError: fileURLToPath is not defined
-      at file:///Users/ko/projects-new/Junior/src/init.js:9:24
+  - src/frontend/App.jsx
+requirements: |
+  Increase space around the content on mobile.
 os: OSX

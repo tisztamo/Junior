@@ -1,37 +1,39 @@
 #!/bin/sh
 set -e
-goal="Fix ReferenceError in init.js file"
+goal="Increase space around content on mobile"
 echo "Plan:"
-echo "1. Import fileURLToPath from the 'url' module in src/init.js"
-cat > ./src/init.js << 'EOF'
-#!/usr/bin/env node
-import { execSync } from 'child_process';
-import { fileURLToPath } from 'url';
-import { createPromptYaml } from './prompt/createPromptYaml.js';
-import { createGitignore } from './git/createGitignore.js';
-import { createPromptDir } from './prompt/createPromptDir.js';
-import copyDefaults from './command/init/copyDefaults.js';
-import path from 'path';
+echo "1. Edit App.jsx to increase padding for smaller screens"
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+cat > src/frontend/App.jsx << 'EOF'
+import useKeyBindings from './service/useKeyBindings';
+import keyBindings from './config/keyBindings';
+import NavBar from './components/NavBar';
+import PromptCreation from './components/PromptCreation';
+import ChangeExecution from './components/ChangeExecution';
+import ChangeInspection from './components/ChangeInspection';
+import ChangeFinalization from './components/ChangeFinalization';
 
-async function juniorInit() {
-  execSync('git init', { stdio: 'inherit' });
+const App = () => {
+  // Define key bindings
+  const bindings = keyBindings();
 
-  createGitignore();
-  await createPromptDir();
-  createPromptYaml();
+  // Use key bindings
+  useKeyBindings(bindings);
 
-  // Correcting the path to the prompt/defaults folder in the installed version of Junior
-  const defaultsPath = path.join(__dirname, '../prompt/defaults');
-  await copyDefaults(defaultsPath, './prompt/');
+  return (
+    <div id="app" class="p-2 sm:p-4 xs:p-4">
+      <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
+        <NavBar />
+        <PromptCreation />
+        <ChangeExecution />
+        <ChangeInspection />
+        <ChangeFinalization />
+      </div>
+    </div>
+  );
+};
 
-  execSync('git add .', { stdio: 'inherit' });
-  execSync('git commit -m "Junior init"', { stdio: 'inherit' });
-
-  console.log('\x1b[32mRepo initialized for Junior development\x1b[0m');
-}
-
-juniorInit();
+export default App;
 EOF
+
 echo "\033[32mDone: $goal\033[0m\n"
