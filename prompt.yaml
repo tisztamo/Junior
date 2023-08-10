@@ -1,8 +1,7 @@
-task: prompt/task/feature/implement.md
+task: prompt/task/refactor/move_files.md
 attention:
+  - src/frontend/model/handleExecuteChange.js
+  - src/frontend/components/ExecuteButton.jsx
   - src/frontend/config/keyBindings.js
-  - src/frontend/components/GenerateButton.jsx
-requirements: |
-  - Add [G] to the button label on the right with some space inbetween
-  - Remove unneded console.logs
+requirements: Move handleExecuteChange to src/frontend/service/
 os: OSX

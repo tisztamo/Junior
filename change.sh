@@ -1,26 +1,72 @@
 #!/bin/sh
 set -e
-goal="Add [G] to button label, remove console.logs"
+goal="Move handleExecuteChange to service dir, update imports"
 echo "Plan:"
-echo "1. Modify GenerateButton.jsx to include [G] in the button label"
-echo "2. Remove unnecessary console.log statements from keyBindings.js"
+echo "1. Move handleExecuteChange.js to src/frontend/service"
+echo "2. Update relative paths in handleExecuteChange.js"
+echo "3. Update import paths in ExecuteButton.jsx and keyBindings.js"
 
-# Step 1: Modify GenerateButton.jsx
-cat << 'EOF' > src/frontend/components/GenerateButton.jsx
-import handleGeneratePrompt from '../service/handleGeneratePrompt';
+# Step 1: Move handleExecuteChange.js to src/frontend/service
+mv src/frontend/model/handleExecuteChange.js src/frontend/service/handleExecuteChange.js
 
-const GenerateButton = () => {
+# Step 2: Update relative paths in handleExecuteChange.js
+cat > src/frontend/service/handleExecuteChange.js << 'EOF'
+import { executeChange } from './executeChange';
+import { setExecutionResult } from '../model/executionResult';
+import { setChange } from '../model/change';
+import { changeInput } from '../model/changeInput';
+
+const handleExecuteChange = async () => {
+  const clipboardAvailable = !!(navigator.clipboard && navigator.clipboard.readText);
+  const change = clipboardAvailable ? await navigator.clipboard.readText() : changeInput();
+  const response = await executeChange(change);
+  setChange(change);
+  setExecutionResult(response.output);
+  console.log(response.output);
+};
+
+export default handleExecuteChange;
+EOF
+
+# Step 3: Update import paths in ExecuteButton.jsx and keyBindings.js
+
+# ExecuteButton.jsx
+cat > src/frontend/components/ExecuteButton.jsx << 'EOF'
+import handleExecuteChange from '../service/handleExecuteChange';
+import { setChangeInput } from '../model/changeInput';
+
+const ExecuteButton = () => {
+  const clipboardAvailable = !!(navigator.clipboard && navigator.clipboard.readText);
+
+  const handlePaste = async (e) => {
+    const paste = (e.clipboardData || window.clipboardData).getData('text');
+    setChangeInput(paste);
+    handleExecuteChange();
+  };
+
   return (
-    <button className="w-64 px-4 py-4 bg-blue-500 text-white rounded" onClick={handleGeneratePrompt}>Generate & Copy Prompt [G]</button>
+    <button class="w-64 px-4 py-4 bg-orange-300 text-white rounded" onClick={handleExecuteChange}>
+      {clipboardAvailable ? (
+        'Paste & Execute Change [X]'
+      ) : (
+        <textarea
+          rows="1"
+          class="w-full px-2 py-2 bg-white text-black resize-none"
+          placeholder="Paste here to execute"
+          value={changeInput()}
+          onPaste={handlePaste}
+        />
+      )}
+    </button>
   );
 };
 
-export default GenerateButton;
+export default ExecuteButton;
 EOF
 
-# Step 2: Remove unnecessary console.log statements
-cat << 'EOF' > src/frontend/config/keyBindings.js
-import handleExecuteChange from '../model/handleExecuteChange';
+# keyBindings.js
+cat > src/frontend/config/keyBindings.js << 'EOF'
+import handleExecuteChange from '../service/handleExecuteChange';
 import handleGeneratePrompt from '../service/handleGeneratePrompt';
 
 const keyBindings = () => {

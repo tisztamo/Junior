@@ -1,7 +1,7 @@
-import { executeChange } from '../service/executeChange';
-import { setExecutionResult } from './executionResult';
-import { setChange } from './change';
-import { changeInput } from './changeInput';
+import { executeChange } from './executeChange';
+import { setExecutionResult } from '../model/executionResult';
+import { setChange } from '../model/change';
+import { changeInput } from '../model/changeInput';
 
 const handleExecuteChange = async () => {
   const clipboardAvailable = !!(navigator.clipboard && navigator.clipboard.readText);

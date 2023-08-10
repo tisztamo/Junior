@@ -1,11 +1,11 @@
 Move the following files to the specified target dirs!
 
-Find out the best target dir if it is not specified!
+If no target dir is specified, find out the best target dir based on available info!
 
-You need to follow dependencies to maintain coherence.
+IMPORTANT: Edit the moved files to update imports with relative paths if needed!
 
-Before executing, write a concise plan! The plan should show:
- - How do you avoid breaking other parts of the code.
- - If you had to choose, your way of thinking.
+You need to follow dependencies to maintain coherence. Update imports!
 
 <%= requirements %>
+
+<%= projectSpecifics %>

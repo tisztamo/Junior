@@ -1,4 +1,4 @@
-import handleExecuteChange from '../model/handleExecuteChange';
+import handleExecuteChange from '../service/handleExecuteChange';
 import handleGeneratePrompt from '../service/handleGeneratePrompt';
 
 const keyBindings = () => {
