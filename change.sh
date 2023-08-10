@@ -1,9 +1,8 @@
 #!/bin/sh
 set -e
-goal="Catch errors and put in error field"
+goal="Add console.warn to log the error"
 echo "Plan:"
-echo "1. Edit generateHandler.js to catch and handle errors"
-echo "2. Update the function to return the error in the response if an exception occurs"
+echo "1. Modify generateHandler.js to include a console.warn statement for error logging."
 
 cat > src/backend/handlers/generateHandler.js << 'EOF'
 import processPrompt from '../../prompt/processPrompt.js';
@@ -14,6 +13,7 @@ export const generateHandler = async (req, res) => {
     const { prompt } = await processPrompt(notes, systemPrompt);
     res.json({ prompt: prompt });
   } catch (error) {
+    console.warn(error);
     res.json({ error: error.message });
   }
 };

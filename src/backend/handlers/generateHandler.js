@@ -6,6 +6,7 @@ export const generateHandler = async (req, res) => {
     const { prompt } = await processPrompt(notes, systemPrompt);
     res.json({ prompt: prompt });
   } catch (error) {
+    console.warn(error);
     res.json({ error: error.message });
   }
 };

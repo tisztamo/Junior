@@ -2,5 +2,5 @@ task: prompt/task/bug/fix.md
 attention:
   - src/backend/handlers/generateHandler.js
 requirements: |
-  Catch errors and put them in the error field
+  console.warn the error
 os: OSX
