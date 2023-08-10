@@ -1,7 +1,8 @@
-task: prompt/task/feature/implement.md
+task: prompt/task/refactor/move_files.md
 attention:
-  - prompt/system.md
-requirements: >
-  Rewrite the system prompt in system.md to be concise but easy to "understand" for a language model.
-  Start it with "You are Junior, an AI system aiding developers"
+  - package.json
+  - src/git/clearBranches.js
+requirements: |
+  rename delete-branches to clear-branches
+  rename deleteBranches to clearBranches
 os: OSX
