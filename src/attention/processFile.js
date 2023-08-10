@@ -10,6 +10,7 @@ export const processFile = async (root, p) => {
     const content = await readFile(fullPath, "utf8")
     return `${p}:\n\`\`\`\n${content}\n\`\`\`\n`
   } catch (error) {
-    return `${p}: err!\n`
+    console.warn(error);
+    throw new Error("Error processing file " + fullPath + " : " + error.message);
   }
 }

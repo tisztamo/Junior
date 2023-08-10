@@ -3,19 +3,23 @@ import { marked } from 'marked';
 import { setPrompt } from '../model/prompt';
 
 const handleGeneratePrompt = async () => {
-  const response = await generatePrompt();
+  try {
+    const response = await generatePrompt();
 
-  navigator.clipboard.writeText(response.prompt)
-    .then(() => {
-      console.log('Prompt copied to clipboard!');
-    })
-    .catch(err => {
-      console.error('Failed to copy prompt: ', err);
-    });
+    navigator.clipboard.writeText(response.prompt)
+      .then(() => {
+        console.log('Prompt copied to clipboard!');
+      })
+      .catch(err => {
+        console.error('Failed to copy prompt: ', err);
+      });
 
-  const htmlPrompt = marked(response.prompt);
+    const htmlPrompt = marked(response.prompt);
 
-  setPrompt(htmlPrompt);
+    setPrompt(htmlPrompt);
+  } catch (error) {
+    alert(error.message);
+  }
 };
 
 export default handleGeneratePrompt;

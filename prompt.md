@@ -2,33 +2,71 @@ You are Junior, an AI system aiding developers. You are working with a part of a
 
 # Working set
 
-scripts/updateLogo.js:
+src/backend/handlers/generateHandler.js:
 ```
-import sharp from 'sharp';
-import { writeFileSync } from 'fs';
+import processPrompt from '../../prompt/processPrompt.js';
 
-const inputSVGPath = 'docs/assets/logo.svg';
-const outputPNGPath = 'docs/assets/logo.png';
-const faviconDocsPath = 'docs/assets/favicon.ico';
-const faviconFrontendPath = 'src/frontend/assets/favicon.ico';
-
-const updateLogo = async () => {
+export const generateHandler = async (req, res) => {
   try {
-    const buffer = await sharp(inputSVGPath).png().toBuffer();
-    writeFileSync(outputPNGPath, buffer);
-
-    // Convert logo to favicon sizes
-    const faviconBuffer = await sharp(inputSVGPath).resize(16, 16).ico().toBuffer();
-    
-    // Update favicon in both the docs and frontend directories
-    writeFileSync(faviconDocsPath, faviconBuffer);
-    writeFileSync(faviconFrontendPath, faviconBuffer);
-  } catch (err) {
-    throw err;
+    const { notes, systemPrompt } = req.body;
+    const { prompt } = await processPrompt(notes, systemPrompt);
+    res.json({ prompt: prompt });
+  } catch (error) {
+    console.warn(error);
+    if (error.message.startsWith("ENOENT")) {
+      res.status(404).json({ error: error.message });
+    } else {
+      res.status(500).json({ error: error.message });
+    }
   }
 };
 
-updateLogo();
+```
+
+src/attention/printFolderStructure.js:
+```
+import fs from 'fs';
+import path from 'path';
+import util from 'util';
+
+const readdir = util.promisify(fs.readdir);
+const stat = util.promisify(fs.stat);
+
+export const printFolderStructure = async (rootDir, dir) => {
+  let structure = dir + '/\n';
+  try {
+    const entries = await readdir(path.join(rootDir, dir));
+    for (let i = 0; i < entries.length; i++) {
+      const entry = entries[i];
+      const entryStat = await stat(path.join(rootDir, dir, entry));
+      if (entryStat.isDirectory()) {
+        structure += '├── ' + entry + '/...\n';
+      } else {
+        structure += '├── ' + entry + '\n';
+      }
+    }
+    return `\`\`\`\n${structure}\n\`\`\``;
+  } catch (error) {
+    console.warn(error);
+    throw new Error("Error processing directory structure!");
+  }
+};
+
+```
+
+src/attention/processFile.js:
+```
+import fs from 'fs'
+import path from 'path'
+import util from 'util'
+
+const readFile = util.promisify(fs.readFile)
+
+export const processFile = async (root, p) => {
+  const fullPath = path.join(root, p)
+  const content = await readFile(fullPath, "utf8")
+  return `${p}:\n\`\`\`\n${content}\n\`\`\`\n`
+}
 
 ```
 
@@ -37,14 +75,7 @@ updateLogo();
 
 Fix the following issue!
 
-file:///Users/ko/projects-new/Junior/scripts/updateLogo.js:15
-    const faviconBuffer = await sharp(inputSVGPath).resize(16, 16).ico().toBuffer();
-                                                                  ^
-
-TypeError: sharp(...).resize(...).ico is not a function
-    at updateLogo (file:///Users/ko/projects-new/Junior/scripts/updateLogo.js:15:68)
-
-Node.js v18.5.0
+When a file or directory reading error occurs, instead of the current 404/500 logic always respond with 500 with an error message containing the errorneous path
 
 
 

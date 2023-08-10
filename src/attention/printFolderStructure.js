@@ -21,6 +21,6 @@ export const printFolderStructure = async (rootDir, dir) => {
     return `\`\`\`\n${structure}\n\`\`\``;
   } catch (error) {
     console.warn(error);
-    throw new Error("Error processing directory structure!");
+    throw new Error("Error processing directory " + path.join(rootDir, dir) + " : " + error.message);
   }
 };
