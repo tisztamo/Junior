@@ -1,5 +1,4 @@
-task: prompt/task/refactor/move_files.md
+task: prompt/task/refactor/custom.md
 attention:
-  - src/frontend/useKeyBindings.js
-  - src/frontend/App.jsx
-requirements: Move useKeyBindings to src/frontend/service/
+  - src/frontend/components/ExecuteButton.jsx
+requirements: Make inputAvailable a boolean const! Name it clipboardAvailable!

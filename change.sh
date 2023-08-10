@@ -1,44 +1,52 @@
 #!/bin/sh
 set -e
-goal="Move useKeyBindings to src/frontend/service/"
+goal="Refactor code to make inputAvailable a const"
 echo "Plan:"
-echo "1. Move the useKeyBindings.js file to the src/frontend/service/ directory."
-echo "2. Update the import path of useKeyBindings in the App.jsx file to reflect the new location."
+echo "1. Replace the variable inputAvailable with clipboardAvailable as a const boolean."
+echo "2. Update the JSX and function logic accordingly."
 
-# Move the file useKeyBindings.js to the target directory
-mv src/frontend/useKeyBindings.js src/frontend/service/useKeyBindings.js
+cat > src/frontend/components/ExecuteButton.jsx << 'EOF'
+import { createSignal } from 'solid-js';
+import { executeChange } from '../service/executeChange';
+import { setExecutionResult } from '../model/executionResult';
+import { setChange } from '../model/change';
 
-# Heredoc-ing the App.jsx with the updated import path
-cat << 'EOF' > src/frontend/App.jsx
-import useKeyBindings from './service/useKeyBindings';
-import keyBindings from './config/keyBindings';
-import NavBar from './components/NavBar';
-import PromptCreation from './components/PromptCreation';
-import ChangeExecution from './components/ChangeExecution';
-import ChangeInspection from './components/ChangeInspection';
-import ChangeFinalization from './components/ChangeFinalization';
+const ExecuteButton = () => {
+  const clipboardAvailable = !!(navigator.clipboard && navigator.clipboard.readText);
+  const [changeInput, setChangeInput] = createSignal('');
 
-const App = () => {
-  // Define key bindings
-  const bindings = keyBindings();
+  const handleExecuteChange = async () => {
+    const change = clipboardAvailable ? await navigator.clipboard.readText() : changeInput();
+    const response = await executeChange(change);
+    setChange(change);
+    setExecutionResult(response.output);
+    console.log(response.output);
+  };
 
-  // Use key bindings
-  useKeyBindings(bindings);
+  const handlePaste = async (e) => {
+    const paste = (e.clipboardData || window.clipboardData).getData('text');
+    setChangeInput(paste);
+    handleExecuteChange();
+  };
 
   return (
-    <div id="app" class="p-2">
-      <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
-        <NavBar />
-        <PromptCreation />
-        <ChangeExecution />
-        <ChangeInspection />
-        <ChangeFinalization />
-      </div>
-    </div>
+    <button class="w-64 px-4 py-4 bg-orange-300 text-white rounded" onClick={handleExecuteChange}>
+      {clipboardAvailable ? (
+        'Paste & Execute Change'
+      ) : (
+        <textarea
+          rows="1"
+          class="w-full px-2 py-2 bg-white text-black resize-none"
+          placeholder="Paste here to execute"
+          value={changeInput()}
+          onPaste={handlePaste}
+        />
+      )}
+    </button>
   );
 };
 
-export default App;
+export default ExecuteButton;
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"

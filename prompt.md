@@ -2,79 +2,74 @@ You are Junior, an AI system aiding developers. You are working with a part of a
 
 # Working set
 
-src/frontend/useKeyBindings.js:
+src/frontend/components/ExecuteButton.jsx:
 ```
-const useKeyBindings = (bindings) => {
-  const handler = (e) => {
-    // Ignore bindings if target is input or textarea
-    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
-      return;
-    }
-    const action = bindings[e.key.toUpperCase()];
-    if (action) {
-      action(e);
-    }
+import { createEffect, createSignal } from 'solid-js';
+import { executeChange } from '../service/executeChange';
+import { setExecutionResult } from '../model/executionResult';
+import { setChange } from '../model/change';
+
+const ExecuteButton = () => {
+  const [inputAvailable, setInputAvailable] = createSignal(true);
+  const [changeInput, setChangeInput] = createSignal('');
+
+  const handleExecuteChange = async () => {
+    const change = inputAvailable() ? await navigator.clipboard.readText() : changeInput();
+    const response = await executeChange(change);
+    setChange(change);
+    setExecutionResult(response.output);
+    console.log(response.output);
   };
 
-  window.addEventListener('keydown', handler);
-
-  return () => {
-    window.removeEventListener('keydown', handler);
+  const handlePaste = async (e) => {
+    const paste = (e.clipboardData || window.clipboardData).getData('text');
+    setChangeInput(paste);
+    handleExecuteChange();
   };
-};
 
-export default useKeyBindings;
-
-```
-
-src/frontend/App.jsx:
-```
-import useKeyBindings from './useKeyBindings';
-import keyBindings from './config/keyBindings';
-import NavBar from './components/NavBar';
-import PromptCreation from './components/PromptCreation';
-import ChangeExecution from './components/ChangeExecution';
-import ChangeInspection from './components/ChangeInspection';
-import ChangeFinalization from './components/ChangeFinalization';
-
-const App = () => {
-  // Define key bindings
-  const bindings = keyBindings();
-
-  // Use key bindings
-  useKeyBindings(bindings);
+  // Check if clipboard reading is available
+  createEffect(() => {
+    if (!navigator.clipboard || !navigator.clipboard.readText) {
+      setInputAvailable(false);
+    }
+  });
 
   return (
-    <div id="app" class="p-2">
-      <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
-        <NavBar />
-        <PromptCreation />
-        <ChangeExecution />
-        <ChangeInspection />
-        <ChangeFinalization />
-      </div>
-    </div>
+    <button class="w-64 px-4 py-4 bg-orange-300 text-white rounded" onClick={handleExecuteChange}>
+      {inputAvailable() ? (
+        'Paste & Execute Change'
+      ) : (
+        <textarea
+          rows="1"
+          class="w-full px-2 py-2 bg-white text-black resize-none"
+          placeholder="Paste here to execute"
+          value={changeInput()}
+          onPaste={handlePaste}
+        />
+      )}
+    </button>
   );
 };
 
-export default App;
+export default ExecuteButton;
 
 ```
 
 
 # Task
 
-Move the following files to the specified target dirs!
+Refactor!
 
-Find out the best target dir if it is not specified!
+Make inputAvailable a boolean const! Name it clipboardAvailable!
 
-You need to follow dependencies to maintain coherence.
 
-Before executing, write a concise plan! The plan should show:
- - How do you avoid breaking other parts of the code.
- - If you had to choose, your way of thinking.
+## Project Specifics
 
-Move useKeyBindings to src/frontend/service/
+- Every js file should *only export a single function*!
+- Use *ES6 imports*!
+- Prefer *async/await* over promises!
+- The frontend uses *Solidjs*, edit .jsx file accordingly
+
 
 # Output Format
 
