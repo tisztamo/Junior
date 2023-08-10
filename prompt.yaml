@@ -1,10 +1,11 @@
-task: prompt/task/bug/fix.md
+task: prompt/task/feature/implement.md
 attention:
-  - src/backend/handlers/generateHandler.js
-  - src/attention/printFolderStructure.js
-  - src/attention/processFile.js
+  - src/prompt/createProjectSpecifics.js
+  - src/init.js
+  - ./
+  - ./prompt/
 requirements: >
-  When a file or directory reading error occurs, instead of the current 404/500
-  logic always respond with 500 with an error message containing the errorneous
-  path
+  We need defaults to fill the prompt/ dir of initialized repos. Create
+  prompt/defaults/ and recursively copy every file from it to the newly
+  created repo on init. Eliminate createProjectSpecifics.
 os: OSX

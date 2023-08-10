@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 import { execSync } from 'child_process';
-import { join } from 'path';
 import { createPromptYaml } from './prompt/createPromptYaml.js';
-import { createProjectSpecifics } from './prompt/createProjectSpecifics.js';
 import { createGitignore } from './git/createGitignore.js';
 import { createPromptDir } from './prompt/createPromptDir.js';
 
@@ -12,7 +10,9 @@ async function juniorInit() {
   createGitignore();
   await createPromptDir();
   createPromptYaml();
-  createProjectSpecifics();
+
+  // Copying all files from prompt/defaults to the new repo
+  execSync('cp -r ./prompt/defaults/* ./prompt/', { stdio: 'inherit' });
 
   execSync('git add .', { stdio: 'inherit' });
   execSync('git commit -m "Junior init"', { stdio: 'inherit' });

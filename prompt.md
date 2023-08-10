@@ -2,80 +2,90 @@ You are Junior, an AI system aiding developers. You are working with a part of a
 
 # Working set
 
-src/backend/handlers/generateHandler.js:
+src/prompt/createProjectSpecifics.js:
 ```
-import processPrompt from '../../prompt/processPrompt.js';
+import { writeFileSync } from 'fs';
 
-export const generateHandler = async (req, res) => {
-  try {
-    const { notes, systemPrompt } = req.body;
-    const { prompt } = await processPrompt(notes, systemPrompt);
-    res.json({ prompt: prompt });
-  } catch (error) {
-    console.warn(error);
-    if (error.message.startsWith("ENOENT")) {
-      res.status(404).json({ error: error.message });
-    } else {
-      res.status(500).json({ error: error.message });
-    }
-  }
-};
+export function createProjectSpecifics() {
+  const markdownContent = `## Project Specifics\n`;
 
-```
-
-src/attention/printFolderStructure.js:
-```
-import fs from 'fs';
-import path from 'path';
-import util from 'util';
-
-const readdir = util.promisify(fs.readdir);
-const stat = util.promisify(fs.stat);
-
-export const printFolderStructure = async (rootDir, dir) => {
-  let structure = dir + '/\n';
-  try {
-    const entries = await readdir(path.join(rootDir, dir));
-    for (let i = 0; i < entries.length; i++) {
-      const entry = entries[i];
-      const entryStat = await stat(path.join(rootDir, dir, entry));
-      if (entryStat.isDirectory()) {
-        structure += '├── ' + entry + '/...\n';
-      } else {
-        structure += '├── ' + entry + '\n';
-      }
-    }
-    return `\`\`\`\n${structure}\n\`\`\``;
-  } catch (error) {
-    console.warn(error);
-    throw new Error("Error processing directory structure!");
-  }
-};
-
-```
-
-src/attention/processFile.js:
-```
-import fs from 'fs'
-import path from 'path'
-import util from 'util'
-
-const readFile = util.promisify(fs.readFile)
-
-export const processFile = async (root, p) => {
-  const fullPath = path.join(root, p)
-  const content = await readFile(fullPath, "utf8")
-  return `${p}:\n\`\`\`\n${content}\n\`\`\`\n`
+  writeFileSync('./prompt/projectSpecifics.md', markdownContent);
 }
 
 ```
 
+src/init.js:
+```
+#!/usr/bin/env node
+import { execSync } from 'child_process';
+import { join } from 'path';
+import { createPromptYaml } from './prompt/createPromptYaml.js';
+import { createProjectSpecifics } from './prompt/createProjectSpecifics.js';
+import { createGitignore } from './git/createGitignore.js';
+import { createPromptDir } from './prompt/createPromptDir.js';
+
+async function juniorInit() {
+  execSync('git init', { stdio: 'inherit' });
+
+  createGitignore();
+  await createPromptDir();
+  createPromptYaml();
+  createProjectSpecifics();
+
+  execSync('git add .', { stdio: 'inherit' });
+  execSync('git commit -m "Junior init"', { stdio: 'inherit' });
+
+  console.log('\x1b[32mRepo initialized for Junior development\x1b[0m');
+}
+
+juniorInit();
+
+```
+
+```
+./
+├── .git/...
+├── .github/...
+├── .gitignore
+├── .vscode/...
+├── README.md
+├── change.sh
+├── docs/...
+├── integrations/...
+├── node_modules/...
+├── package-lock.json
+├── package.json
+├── prompt/...
+├── prompt.md
+├── prompt.yaml
+├── scripts/...
+├── src/...
+
+```
+```
+./prompt/
+├── archive/...
+├── defaults/...
+├── format/...
+├── format.md
+├── installedTools.md
+├── os.md
+├── projectSpecifics.md
+├── system.md
+├── task/...
+
+```
 
 # Task
 
-Fix the following issue!
+Implement the following feature!
 
-When a file or directory reading error occurs, instead of the current 404/500 logic always respond with 500 with an error message containing the errorneous path
+- Create a plan!
+- Create new files when needed!
+
+Requirements:
+
+We need defaults to fill the prompt/ dir of initialized repos. Create prompt/defaults/ and recursively copy every file from it to the newly created repo on init. Eliminate createProjectSpecifics.
 
 
 
