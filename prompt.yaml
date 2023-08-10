@@ -1,18 +1,10 @@
 task: prompt/task/bug/fix.md
 attention:
   - src/backend/handlers/generateHandler.js
-  - src/frontend/components/GenerateButton.jsx
-  - src/frontend/service/handleGeneratePrompt.js
-  - src/frontend/generatePrompt.js
+  - src/attention/printFolderStructure.js
+  - src/attention/processFile.js
 requirements: >
-  In generateHandler, if error message starts with ENOENT, Respond with http
-  status code 404.
-
-  If error is different, respond with 500.
-
-  On the frontend, in generatePrompt, throw if response code shows any error.
-  Include the message from the error field.
-
-  In handleGeneratePrompt catch errors from generatePrompt and alert the error
-  message.
+  When a file or directory reading error occurs, instead of the current 404/500
+  logic always respond with 500 with an error message containing the errorneous
+  path
 os: OSX

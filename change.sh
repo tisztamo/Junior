@@ -1,13 +1,12 @@
 #!/bin/sh
 set -e
-goal="Fix error handling in generateHandler and frontend"
+goal="Respond with 500 status on file or directory reading error"
 echo "Plan:"
-echo "1. Modify generateHandler.js to handle ENOENT with a 404 status code and other errors with a 500 status code."
-echo "2. Modify generatePrompt.js to throw an error if the response code shows any error."
-echo "3. Modify handleGeneratePrompt.js to catch errors from generatePrompt and alert the error message."
+echo "1. Modify generateHandler.js to respond with 500 error containing the erroneous path for any exception."
+echo "2. Change printFolderStructure.js and processFile.js to include erroneous path in the error message."
 
 # Step 1: Modify generateHandler.js
-cat > src/backend/handlers/generateHandler.js << 'EOF'
+cat << 'EOF' > src/backend/handlers/generateHandler.js
 import processPrompt from '../../prompt/processPrompt.js';
 
 export const generateHandler = async (req, res) => {
@@ -17,66 +16,59 @@ export const generateHandler = async (req, res) => {
     res.json({ prompt: prompt });
   } catch (error) {
     console.warn(error);
-    if (error.message.startsWith("ENOENT")) {
-      res.status(404).json({ error: error.message });
-    } else {
-      res.status(500).json({ error: error.message });
-    }
+    res.status(500).json({ error: error.message });
   }
 };
 EOF
 
-# Step 2: Modify generatePrompt.js
-cat > src/frontend/generatePrompt.js << 'EOF'
-import { getBaseUrl } from './getBaseUrl';
+# Step 2: Change printFolderStructure.js
+cat << 'EOF' > src/attention/printFolderStructure.js
+import fs from 'fs';
+import path from 'path';
+import util from 'util';
 
-const generatePrompt = async (notes) => {
-  const baseUrl = getBaseUrl();
-  const response = await fetch(`${baseUrl}/generate`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ notes, systemPrompt: true })
-  });
+const readdir = util.promisify(fs.readdir);
+const stat = util.promisify(fs.stat);
 
-  const data = await response.json();
-
-  if (response.status >= 400) {
-    throw new Error(data.error);
-  }
-
-  return data;
-};
-
-export { generatePrompt };
-EOF
-
-# Step 3: Modify handleGeneratePrompt.js
-cat > src/frontend/service/handleGeneratePrompt.js << 'EOF'
-import { generatePrompt } from '../generatePrompt';
-import { marked } from 'marked';
-import { setPrompt } from '../model/prompt';
-
-const handleGeneratePrompt = async () => {
+export const printFolderStructure = async (rootDir, dir) => {
+  let structure = dir + '/\n';
   try {
-    const response = await generatePrompt();
-
-    navigator.clipboard.writeText(response.prompt)
-      .then(() => {
-        console.log('Prompt copied to clipboard!');
-      })
-      .catch(err => {
-        console.error('Failed to copy prompt: ', err);
-      });
-
-    const htmlPrompt = marked(response.prompt);
-
-    setPrompt(htmlPrompt);
+    const entries = await readdir(path.join(rootDir, dir));
+    for (let i = 0; i < entries.length; i++) {
+      const entry = entries[i];
+      const entryStat = await stat(path.join(rootDir, dir, entry));
+      if (entryStat.isDirectory()) {
+        structure += '├── ' + entry + '/...\n';
+      } else {
+        structure += '├── ' + entry + '\n';
+      }
+    }
+    return `\`\`\`\n${structure}\n\`\`\``;
   } catch (error) {
-    alert(error.message);
+    console.warn(error);
+    throw new Error("Error processing directory " + path.join(rootDir, dir) + " : " + error.message);
   }
 };
+EOF
 
-export default handleGeneratePrompt;
+# Step 3: Change processFile.js
+cat << 'EOF' > src/attention/processFile.js
+import fs from 'fs'
+import path from 'path'
+import util from 'util'
+
+const readFile = util.promisify(fs.readFile)
+
+export const processFile = async (root, p) => {
+  const fullPath = path.join(root, p)
+  try {
+    const content = await readFile(fullPath, "utf8")
+    return `${p}:\n\`\`\`\n${content}\n\`\`\`\n`
+  } catch (error) {
+    console.warn(error);
+    throw new Error("Error processing file " + fullPath + " : " + error.message);
+  }
+}
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"
