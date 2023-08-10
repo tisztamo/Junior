@@ -2,46 +2,6 @@ You are Junior, an AI system aiding developers. You are working with a part of a
 
 # Working set
 
-src/prompt/createProjectSpecifics.js:
-```
-import { writeFileSync } from 'fs';
-
-export function createProjectSpecifics() {
-  const markdownContent = `## Project Specifics\n`;
-
-  writeFileSync('./prompt/projectSpecifics.md', markdownContent);
-}
-
-```
-
-src/init.js:
-```
-#!/usr/bin/env node
-import { execSync } from 'child_process';
-import { join } from 'path';
-import { createPromptYaml } from './prompt/createPromptYaml.js';
-import { createProjectSpecifics } from './prompt/createProjectSpecifics.js';
-import { createGitignore } from './git/createGitignore.js';
-import { createPromptDir } from './prompt/createPromptDir.js';
-
-async function juniorInit() {
-  execSync('git init', { stdio: 'inherit' });
-
-  createGitignore();
-  await createPromptDir();
-  createPromptYaml();
-  createProjectSpecifics();
-
-  execSync('git add .', { stdio: 'inherit' });
-  execSync('git commit -m "Junior init"', { stdio: 'inherit' });
-
-  console.log('\x1b[32mRepo initialized for Junior development\x1b[0m');
-}
-
-juniorInit();
-
-```
-
 ```
 ./
 ├── .git/...
@@ -75,17 +35,103 @@ juniorInit();
 ├── task/...
 
 ```
+src/init.js:
+```
+#!/usr/bin/env node
+import { execSync } from 'child_process';
+import { createPromptYaml } from './prompt/createPromptYaml.js';
+import { createGitignore } from './git/createGitignore.js';
+import { createPromptDir } from './prompt/createPromptDir.js';
+
+async function juniorInit() {
+  execSync('git init', { stdio: 'inherit' });
+
+  createGitignore();
+  await createPromptDir();
+  createPromptYaml();
+
+  // Copying all files from prompt/defaults to the new repo
+  execSync('cp -r ./prompt/defaults/* ./prompt/', { stdio: 'inherit' });
+
+  execSync('git add .', { stdio: 'inherit' });
+  execSync('git commit -m "Junior init"', { stdio: 'inherit' });
+
+  console.log('\x1b[32mRepo initialized for Junior development\x1b[0m');
+}
+
+juniorInit();
+
+```
+
+package.json:
+```
+{
+  "name": "@aijunior/dev",
+  "version": "0.1.4",
+  "description": "Your AI Contributor which codes itself",
+  "type": "module",
+  "main": "src/main.js",
+  "bin": {
+    "junior": "src/main.js",
+    "junior-web": "src/web.js",
+    "junior-init": "src/init.js"
+  },
+  "scripts": {
+    "cli": "node src/main.js",
+    "start": "node src/web.js",
+    "build:css": "postcss ./src/frontend/styles.css -o ./dist/styles.css",
+    "update-logo": "node ./scripts/updateLogo.js",
+    "clear-branches": "node ./scripts/clearBranchesCommand.js $@"
+  },
+  "keywords": [
+    "cli",
+    "uppercase"
+  ],
+  "author": "",
+  "license": "GPL",
+  "dependencies": {
+    "@types/js-yaml": "^4.0.5",
+    "autoprefixer": "^10.4.14",
+    "chatgpt": "^5.2.4",
+    "cors": "^2.8.5",
+    "docsify-cli": "^4.4.4",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "highlight.js": "^11.8.0",
+    "js-yaml": "^4.1.0",
+    "markdown-it": "^13.0.1",
+    "marked": "^5.1.0",
+    "postcss": "^8.4.26",
+    "postcss-nested": "^6.0.1",
+    "sharp": "^0.32.4",
+    "simple-git": "^3.19.1",
+    "solid-js": "^1.7.7",
+    "tailwindcss": "^3.3.3",
+    "vite": "^4.3.9",
+    "vite-plugin-solid": "^2.7.0",
+    "ws": "^8.13.0"
+  },
+  "directories": {
+    "doc": "docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tisztamo/Junior.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tisztamo/Junior/issues"
+  },
+  "homepage": "https://github.com/tisztamo/Junior#readme"
+}
+
+```
+
 
 # Task
 
-Implement the following feature!
+Fix the following issue!
 
-- Create a plan!
-- Create new files when needed!
-
-Requirements:
-
-We need defaults to fill the prompt/ dir of initialized repos. Create prompt/defaults/ and recursively copy every file from it to the newly created repo on init. Eliminate createProjectSpecifics.
+When junior-init is executed on a newly created repo, prompt files have to be correctly located. They are in the installed version of Junior, and inside there in prompt/defaults/.
 
 
 

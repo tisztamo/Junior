@@ -1,11 +1,11 @@
-task: prompt/task/feature/implement.md
+task: prompt/task/bug/fix.md
 attention:
-  - src/prompt/createProjectSpecifics.js
-  - src/init.js
   - ./
   - ./prompt/
+  - src/init.js
+  - package.json
 requirements: >
-  We need defaults to fill the prompt/ dir of initialized repos. Create
-  prompt/defaults/ and recursively copy every file from it to the newly
-  created repo on init. Eliminate createProjectSpecifics.
+  When junior-init is executed on a newly created repo, prompt files have to be
+  correctly located. They are in the installed version of Junior, and inside
+  there in prompt/defaults/.
 os: OSX

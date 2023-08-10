@@ -1,22 +1,20 @@
 #!/bin/sh
 set -e
-goal="Create prompt/defaults dir, copy files on init"
+goal="Fix junior-init to correctly locate prompt files"
 echo "Plan:"
-echo "1. Create prompt/defaults directory."
-echo "2. Modify src/init.js to recursively copy files from prompt/defaults to newly created repo."
-echo "3. Remove createProjectSpecifics from src/prompt/createProjectSpecifics.js and src/init.js."
-echo "4. Add necessary files to the prompt/defaults directory."
+echo "1. Change the path in execSync to include the correct location of prompt/defaults in the installed version of Junior."
+echo "2. Update the src/init.js file with the new changes."
 
-# Step 1: Create prompt/defaults directory.
-mkdir -p ./prompt/defaults
-
-# Step 2: Modify src/init.js to recursively copy files from prompt/defaults.
-cat << 'EOF' > ./src/init.js
+cat > ./src/init.js << 'EOF'
 #!/usr/bin/env node
 import { execSync } from 'child_process';
 import { createPromptYaml } from './prompt/createPromptYaml.js';
 import { createGitignore } from './git/createGitignore.js';
 import { createPromptDir } from './prompt/createPromptDir.js';
+import { fileURLToPath } from 'url';
+import path from 'path';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 async function juniorInit() {
   execSync('git init', { stdio: 'inherit' });
@@ -25,8 +23,9 @@ async function juniorInit() {
   await createPromptDir();
   createPromptYaml();
 
-  // Copying all files from prompt/defaults to the new repo
-  execSync('cp -r ./prompt/defaults/* ./prompt/', { stdio: 'inherit' });
+  // Correcting the path to the prompt/defaults folder in the installed version of Junior
+  const defaultsPath = path.join(__dirname, '../prompt/defaults');
+  execSync(`cp -r ${defaultsPath}/* ./prompt/`, { stdio: 'inherit' });
 
   execSync('git add .', { stdio: 'inherit' });
   execSync('git commit -m "Junior init"', { stdio: 'inherit' });
@@ -36,11 +35,5 @@ async function juniorInit() {
 
 juniorInit();
 EOF
-
-# Step 3: Remove createProjectSpecifics.js file as it's no longer required.
-rm ./src/prompt/createProjectSpecifics.js
-
-# Step 4: Add necessary files to the prompt/defaults directory if needed.
-# This step would typically involve copying the required files or creating them as needed in the prompt/defaults directory.
 
 echo "\033[32mDone: $goal\033[0m\n"

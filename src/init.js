@@ -3,6 +3,10 @@ import { execSync } from 'child_process';
 import { createPromptYaml } from './prompt/createPromptYaml.js';
 import { createGitignore } from './git/createGitignore.js';
 import { createPromptDir } from './prompt/createPromptDir.js';
+import { fileURLToPath } from 'url';
+import path from 'path';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 async function juniorInit() {
   execSync('git init', { stdio: 'inherit' });
@@ -11,8 +15,9 @@ async function juniorInit() {
   await createPromptDir();
   createPromptYaml();
 
-  // Copying all files from prompt/defaults to the new repo
-  execSync('cp -r ./prompt/defaults/* ./prompt/', { stdio: 'inherit' });
+  // Correcting the path to the prompt/defaults folder in the installed version of Junior
+  const defaultsPath = path.join(__dirname, '../prompt/defaults');
+  execSync(`cp -r ${defaultsPath}/* ./prompt/`, { stdio: 'inherit' });
 
   execSync('git add .', { stdio: 'inherit' });
   execSync('git commit -m "Junior init"', { stdio: 'inherit' });
