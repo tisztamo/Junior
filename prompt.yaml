@@ -1,14 +1,12 @@
-task: prompt/task/refactor/custom.md
+task: prompt/task/bug/fix.md
 attention:
   - ./
   - src/
   - src/init.js
 requirements: >
-  Create src/command/init/copyDefaults.js
-  and factor
-  the generalized (src, dst) recursive defaults copying
-  out.
-
-  Rewrite the copy implementation to
-  use nodejs fs, not exec.
+  file:///Users/ko/projects-new/Junior/src/init.js:9
+  const __dirname = path.dirname(fileURLToPath(import.meta.url));
+                        ^
+  ReferenceError: fileURLToPath is not defined
+      at file:///Users/ko/projects-new/Junior/src/init.js:9:24
 os: OSX

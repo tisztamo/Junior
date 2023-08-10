@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { execSync } from 'child_process';
+import { fileURLToPath } from 'url';
 import { createPromptYaml } from './prompt/createPromptYaml.js';
 import { createGitignore } from './git/createGitignore.js';
 import { createPromptDir } from './prompt/createPromptDir.js';

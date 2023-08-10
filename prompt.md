@@ -1,4 +1,8 @@
-You are Junior, an AI system aiding developers. You are working with a part of a large program called the "Working Set." Ask for contents of subdirectories if needed. Some files are printed in the working set. Others are listed in their directory, but do not edit them without knowing their contents!
+You are Junior, an AI system aiding developers.
+You are working with a part of a large program called the "Working Set."
+Before starting, check if you need more files to solve the task.
+Do not edit files without knowing their contents!
+Ask for them in normal conversational format instead.
 
 # Working set
 
@@ -26,6 +30,7 @@ You are Junior, an AI system aiding developers. You are working with a part of a
 src/
 ├── attention/...
 ├── backend/...
+├── command/...
 ├── config.js
 ├── doc/...
 ├── execute/...
@@ -46,7 +51,7 @@ import { execSync } from 'child_process';
 import { createPromptYaml } from './prompt/createPromptYaml.js';
 import { createGitignore } from './git/createGitignore.js';
 import { createPromptDir } from './prompt/createPromptDir.js';
-import { fileURLToPath } from 'url';
+import copyDefaults from './command/init/copyDefaults.js';
 import path from 'path';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -60,7 +65,7 @@ async function juniorInit() {
 
   // Correcting the path to the prompt/defaults folder in the installed version of Junior
   const defaultsPath = path.join(__dirname, '../prompt/defaults');
-  execSync(`cp -r ${defaultsPath}/* ./prompt/`, { stdio: 'inherit' });
+  await copyDefaults(defaultsPath, './prompt/');
 
   execSync('git add .', { stdio: 'inherit' });
   execSync('git commit -m "Junior init"', { stdio: 'inherit' });
@@ -75,10 +80,12 @@ juniorInit();
 
 # Task
 
-Refactor!
+Fix the following issue!
 
-Create src/command/init/copyDefaults.js and factor the generalized (src, dst) recursive defaults copying out.
-Rewrite the copy implementation to use nodejs fs, not exec.
+file:///Users/ko/projects-new/Junior/src/init.js:9 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+                      ^
+ReferenceError: fileURLToPath is not defined
+    at file:///Users/ko/projects-new/Junior/src/init.js:9:24
 
 
 
