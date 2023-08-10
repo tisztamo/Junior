@@ -1,8 +1,9 @@
-task: prompt/task/bug/fix.md
+task: prompt/task/feature/implement.md
 attention:
   - src/frontend/components/ExecuteButton.jsx
   - src/frontend/components/RollbackButton.jsx
   - src/frontend/components/CommitButton.jsx
-requirements: >
-  Set width of all buttons to w-full, font size to text-lg, color to text-bg.
+  - src/frontend/components/GenerateButton.jsx
+requirements: |
+  Add font-semibold to every button
 os: OSX

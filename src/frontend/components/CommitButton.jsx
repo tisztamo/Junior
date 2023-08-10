@@ -18,7 +18,7 @@ const CommitButton = () => {
   };
 
   return (
-    <button className="w-full px-4 py-4 bg-green-700 text-lg text-bg rounded" onClick={handleCommit}>Commit</button>
+    <button className="w-full px-4 py-4 bg-green-700 text-lg text-bg font-semibold rounded" onClick={handleCommit}>Commit</button>
   );
 };
 

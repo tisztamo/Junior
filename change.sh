@@ -1,12 +1,12 @@
 #!/bin/sh
 set -e
-goal="Fix button styling"
+goal="Add font-semibold to buttons"
 echo "Plan:"
-echo "1. Update the ExecuteButton.jsx for styling changes"
-echo "2. Update the RollbackButton.jsx for styling changes"
-echo "3. Update the CommitButton.jsx for styling changes"
+echo "1. Update ExecuteButton.jsx"
+echo "2. Update RollbackButton.jsx"
+echo "3. Update CommitButton.jsx"
+echo "4. Update GenerateButton.jsx"
 
-# Step 1: Update ExecuteButton.jsx
 cat > src/frontend/components/ExecuteButton.jsx << 'EOF'
 import handleExecuteChange from '../service/handleExecuteChange';
 import { setChangeInput } from '../model/changeInput';
@@ -21,13 +21,13 @@ const ExecuteButton = () => {
   };
 
   return (
-    <button className="w-full px-4 py-4 bg-orange-300 text-lg text-bg rounded" onClick={handleExecuteChange}>
+    <button className="w-full px-4 py-4 bg-orange-300 text-lg text-bg font-semibold rounded" onClick={handleExecuteChange}>
       {clipboardAvailable ? (
         'Paste & Execute Change [X]'
       ) : (
         <textarea
           rows="1"
-          className="w-full px-2 py-2 bg-white text-lg text-bg resize-none"
+          className="w-full px-2 py-2 bg-white text-lg text-bg font-semibold resize-none"
           placeholder="Paste here to execute"
           value={changeInput()}
           onPaste={handlePaste}
@@ -40,7 +40,6 @@ const ExecuteButton = () => {
 export default ExecuteButton;
 EOF
 
-# Step 2: Update RollbackButton.jsx
 cat > src/frontend/components/RollbackButton.jsx << 'EOF'
 import { createSignal } from "solid-js";
 import { resetGit } from '../service/resetGit';
@@ -70,7 +69,7 @@ const RollbackButton = () => {
 
   return (
     <>
-      <button className="w-full px-4 py-4 bg-red-700 text-lg text-bg rounded" onClick={handleRollbackClick}>Roll Back</button>
+      <button className="w-full px-4 py-4 bg-red-700 text-lg text-bg font-semibold rounded" onClick={handleRollbackClick}>Roll Back</button>
       <RollbackConfirmationDialog visible={showConfirmation()} onConfirm={handleConfirm} onCancel={() => setShowConfirmation(false)} />
     </>
   );
@@ -79,7 +78,6 @@ const RollbackButton = () => {
 export default RollbackButton;
 EOF
 
-# Step 3: Update CommitButton.jsx
 cat > src/frontend/components/CommitButton.jsx << 'EOF'
 import { postCommit } from '../service/postCommit';
 import { commitMessage, setCommitMessage } from '../model/commitMessage';
@@ -101,11 +99,23 @@ const CommitButton = () => {
   };
 
   return (
-    <button className="w-full px-4 py-4 bg-green-700 text-lg text-bg rounded" onClick={handleCommit}>Commit</button>
+    <button className="w-full px-4 py-4 bg-green-700 text-lg text-bg font-semibold rounded" onClick={handleCommit}>Commit</button>
   );
 };
 
 export default CommitButton;
+EOF
+
+cat > src/frontend/components/GenerateButton.jsx << 'EOF'
+import handleGeneratePrompt from '../service/handleGeneratePrompt';
+
+const GenerateButton = () => {
+  return (
+    <button className="w-full px-4 py-4 bg-blue-500 text-bg text-lg font-semibold rounded" onClick={handleGeneratePrompt}>Generate & Copy Prompt [G]</button>
+  );
+};
+
+export default GenerateButton;
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"

@@ -21,13 +21,13 @@ const ExecuteButton = () => {
   };
 
   return (
-    <button class="w-64 px-4 py-4 bg-orange-300 text-white rounded" onClick={handleExecuteChange}>
+    <button className="w-full px-4 py-4 bg-orange-300 text-lg text-bg rounded" onClick={handleExecuteChange}>
       {clipboardAvailable ? (
         'Paste & Execute Change [X]'
       ) : (
         <textarea
           rows="1"
-          class="w-full px-2 py-2 bg-white text-black resize-none"
+          className="w-full px-2 py-2 bg-white text-lg text-bg resize-none"
           placeholder="Paste here to execute"
           value={changeInput()}
           onPaste={handlePaste}
@@ -52,7 +52,6 @@ const RollbackButton = () => {
 
   const handleReset = async () => {
     const response = await resetGit();
-
     console.log(response.message);
   };
 
@@ -72,7 +71,7 @@ const RollbackButton = () => {
 
   return (
     <>
-      <button className="w-full px-4 py-4 bg-red-700 text-white rounded" onClick={handleRollbackClick}>Roll Back</button>
+      <button className="w-full px-4 py-4 bg-red-700 text-lg text-bg rounded" onClick={handleRollbackClick}>Roll Back</button>
       <RollbackConfirmationDialog visible={showConfirmation()} onConfirm={handleConfirm} onCancel={() => setShowConfirmation(false)} />
     </>
   );
@@ -104,7 +103,7 @@ const CommitButton = () => {
   };
 
   return (
-    <button className="w-full px-4 py-4 bg-green-700 text-white rounded" onClick={handleCommit}>Commit</button>
+    <button className="w-full px-4 py-4 bg-green-700 text-lg text-bg rounded" onClick={handleCommit}>Commit</button>
   );
 };
 
@@ -112,12 +111,31 @@ export default CommitButton;
 
 ```
 
+src/frontend/components/GenerateButton.jsx:
+```
+import handleGeneratePrompt from '../service/handleGeneratePrompt';
+
+const GenerateButton = () => {
+  return (
+    <button className="w-full px-4 py-4 bg-blue-500 text-bg text-lg rounded" onClick={handleGeneratePrompt}>Generate & Copy Prompt [G]</button>
+  );
+};
+
+export default GenerateButton;
+
+```
+
 
 # Task
 
-Fix the following issue!
+Implement the following feature!
 
-Set width of all buttons to w-full, font size to text-lg, color to text-bg.
+- Create a plan!
+- Create new files when needed!
+
+Requirements:
+
+Add font-semibold to every button
 
 
 

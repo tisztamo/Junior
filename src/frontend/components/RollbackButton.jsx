@@ -26,7 +26,7 @@ const RollbackButton = () => {
 
   return (
     <>
-      <button className="w-full px-4 py-4 bg-red-700 text-lg text-bg rounded" onClick={handleRollbackClick}>Roll Back</button>
+      <button className="w-full px-4 py-4 bg-red-700 text-lg text-bg font-semibold rounded" onClick={handleRollbackClick}>Roll Back</button>
       <RollbackConfirmationDialog visible={showConfirmation()} onConfirm={handleConfirm} onCancel={() => setShowConfirmation(false)} />
     </>
   );
