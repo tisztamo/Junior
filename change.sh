@@ -1,8 +1,10 @@
 #!/bin/sh
 set -e
-goal="Increase font of task list input"
+goal="Increase font of task list input and label"
 echo "Plan:"
-echo "1. Modify the TasksList component to increase the font size of the select input."
+echo "1. Modify the CSS classes for the task list input and its label to increase their font size"
+echo "2. Save the changes to src/frontend/components/TasksList.jsx"
+
 cat > src/frontend/components/TasksList.jsx << 'EOF'
 import { onMount, createEffect } from 'solid-js';
 import { fetchTasks } from '../fetchTasks';
@@ -24,7 +26,7 @@ const TasksList = () => {
 
   return (
     <div class="w-full flex justify-start bg-emphasize text-emphasize p-2 rounded">
-      <label class="mr-2">Task:</label>
+      <label class="text-lg mr-2">Task:</label>
       <select class="w-full bg-emphasize text-emphasize text-lg" value={selectedTask()} onChange={e => handleTaskChange(e)}>
         {tasks().map(task => <option value={task}>{task}</option>)}
       </select>
@@ -33,6 +35,6 @@ const TasksList = () => {
 };
 
 export default TasksList;
-
 EOF
+
 echo "\033[32mDone: $goal\033[0m\n"

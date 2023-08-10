@@ -85,7 +85,7 @@ const TasksList = () => {
   return (
     <div class="w-full flex justify-start bg-emphasize text-emphasize p-2 rounded">
       <label class="mr-2">Task:</label>
-      <select class="w-full bg-emphasize text-emphasize" value={selectedTask()} onChange={e => handleTaskChange(e)}>
+      <select class="w-full bg-emphasize text-emphasize text-lg" value={selectedTask()} onChange={e => handleTaskChange(e)}>
         {tasks().map(task => <option value={task}>{task}</option>)}
       </select>
     </div>
@@ -94,6 +94,7 @@ const TasksList = () => {
 
 export default TasksList;
 
+
 ```
 
 
@@ -101,7 +102,7 @@ export default TasksList;
 
 Fix the following issue!
 
-Increase font of the task list input.
+Increase font of the task list input and make its label the same size.
 
 
 
