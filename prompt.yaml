@@ -1,6 +1,8 @@
 task: prompt/task/bug/fix.md
 attention:
   - src/frontend/App.jsx
+  - src/frontend/components/PromptCreation.jsx
+  - src/frontend/components/TasksList.jsx
 requirements: |
-  Increase space around the content on mobile.
+  Increase font of the task list input.
 os: OSX
