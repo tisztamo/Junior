@@ -1,8 +1,7 @@
 import { commitMessage, setCommitMessage } from '../model/commitMessage';
 import monitorChange from '../model/monitorChange';
 
-const CommitMessageInput = (props) => {
-  // Start monitoring when mounting
+const CommitMessageInput = () => {
   monitorChange();
 
   const handleChange = (e) => {
@@ -10,7 +9,7 @@ const CommitMessageInput = (props) => {
   };
 
   return (
-    <input type="text" className="w-full px-4 py-2 border rounded bg-emphasize text-emphasize" placeholder="Commit message..." value={commitMessage()} onInput={handleChange} />
+    <input type="text" className="w-full px-4 py-2 border rounded bg-emphasize text-emphasize border-border" placeholder="Commit message..." value={commitMessage()} onInput={handleChange} />
   );
 };
 

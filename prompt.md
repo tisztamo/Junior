@@ -6,103 +6,25 @@ Ask for them in normal conversational format instead.
 
 # Working set
 
-src/frontend/components/TasksList.jsx:
+src/frontend/components/CommitMessageInput.jsx:
 ```
-import { onMount, createEffect } from 'solid-js';
-import { fetchTasks } from '../fetchTasks';
-import { handleTaskChange } from '../service/handleTaskChange';
-import { selectedTask, setSelectedTask } from '../model/selectedTask';
-import { promptDescriptor } from '../model/promptDescriptor';
-import { parseYamlAndGetTask } from '../service/parseYamlAndGetTask';
+import { commitMessage, setCommitMessage } from '../model/commitMessage';
+import monitorChange from '../model/monitorChange';
 
-const TasksList = () => {
-  const tasks = fetchTasks();
+const CommitMessageInput = (props) => {
+  // Start monitoring when mounting
+  monitorChange();
 
-  createEffect(() => {
-    const descriptor = promptDescriptor();
-    if (descriptor !== '') {
-      const task = parseYamlAndGetTask(descriptor);
-      setSelectedTask(task);
-    }
-  });
+  const handleChange = (e) => {
+    setCommitMessage(e.target.value);
+  };
 
   return (
-    <div class="w-full flex justify-start bg-emphasize text-emphasize p-2 rounded border border-gray-300">
-      <label class="text-lg mr-2">Task:</label>
-      <select class="w-full bg-emphasize text-emphasize text-lg" value={selectedTask()} onChange={e => handleTaskChange(e)}>
-        {tasks().map(task => <option value={task}>{task}</option>)}
-      </select>
-    </div>
+    <input type="text" className="w-full px-4 py-2 border rounded bg-emphasize text-emphasize" placeholder="Commit message..." value={commitMessage()} onInput={handleChange} />
   );
 };
 
-export default TasksList;
-
-```
-
-src/frontend/tailwind.config.cjs:
-```
-module.exports = {
-  darkMode: 'class',
-  content: [__dirname + '/**/*.html', __dirname + '/**/*.jsx'],
-  theme: {
-    screens: {
-      'xs': '320px',
-      'sm': '640px',
-      'md': '768px',
-      'lg': '1024px',
-    },
-    extend: {
-      spacing: {
-        '72': '18rem',
-        '84': '21rem',
-        '96': '24rem',
-        '128': '32rem',
-      },
-      fontSize: {
-        'btn': '1.5rem',
-        'lg': '1.125rem',
-      },
-      padding: {
-        'btn': '1.5rem',
-      },
-      maxWidth: {
-        'desktop': '640px',
-      },
-      colors: {
-        text: "var(--text-color)",
-        emphasize: "var(--emphasize-color)",
-        bg: "var(--background-color)",
-      },
-      backgroundColor: {
-        main: "var(--background-color)",
-        emphasize: "var(--background-emphasize-color)",
-      },
-    },
-  },
-  variants: {
-    extend: {},
-  },
-  plugins: [],
-}
-
-```
-
-src/frontend/styles/colors.css:
-```
-:root {
-  --text-color: #1a202c;
-  --background-color: #f7fafc;
-  --emphasize-color: #16181f;
-  --background-emphasize-color: #f2f4f6;
-}
-
-.dark {
-  --text-color: #f7fafc;
-  --background-color: #1a202c;
-  --emphasize-color: #f2f4f6;
-  --background-emphasize-color: #141618;
-}
+export default CommitMessageInput;
 
 ```
 
@@ -116,8 +38,7 @@ Implement the following feature!
 
 Requirements:
 
-Introduce a new color for borders and use it!
-The current bg-gray-300 is good for the light them but we need another one with less contrast for the dark.
+Add &#34;border-border&#34; class. Remove comment and props.
 
 
 

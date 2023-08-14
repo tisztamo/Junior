@@ -1,10 +1,7 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/components/TasksList.jsx
-  - src/frontend/tailwind.config.cjs
-  - src/frontend/styles/colors.css
-requirements: |
-  Introduce a new color for borders and use it!
-  Follow the scheme of single css variable per color with value changing per theme.
-  The current bg-gray-300 is good for the light them but we need another one with less contrast for the dark.
+  - src/frontend/components/CommitMessageInput.jsx
+requirements: >
+  Add "border-border" class.
+  Remove comment and props.
 os: OSX
