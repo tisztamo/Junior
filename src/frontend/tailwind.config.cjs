@@ -29,6 +29,7 @@ module.exports = {
         text: "var(--text-color)",
         emphasize: "var(--emphasize-color)",
         bg: "var(--background-color)",
+        border: "var(--border-color)",
       },
       backgroundColor: {
         main: "var(--background-color)",
