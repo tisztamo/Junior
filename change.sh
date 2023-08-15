@@ -1,29 +1,55 @@
 #!/bin/sh
 set -e
-goal="Implement Working Set task changes"
+goal="Implement frontend modifications"
 echo "Plan:"
-echo "1. Edit CommitMessageInput.jsx to modify classes and remove unwanted code."
-echo "2. Verify all changes match the requirements."
+echo "1. Modify src/frontend/App.jsx based on requirements"
+echo "2. Modify src/frontend/index.html to update the 'app' div"
 
-# Step 1: Edit CommitMessageInput.jsx
-cat << 'EOF' > src/frontend/components/CommitMessageInput.jsx
-import { commitMessage, setCommitMessage } from '../model/commitMessage';
-import monitorChange from '../model/monitorChange';
+# Modify src/frontend/App.jsx
+cat > src/frontend/App.jsx << 'EOF'
+import useKeyBindings from './service/useKeyBindings';
+import keyBindings from './config/keyBindings';
+import NavBar from './components/NavBar';
+import PromptCreation from './components/PromptCreation';
+import ChangeExecution from './components/ChangeExecution';
+import ChangeInspection from './components/ChangeInspection';
+import ChangeFinalization from './components/ChangeFinalization';
 
-const CommitMessageInput = () => {
-  monitorChange();
-
-  const handleChange = (e) => {
-    setCommitMessage(e.target.value);
-  };
+const App = () => {
+  const bindings = keyBindings();
+  useKeyBindings(bindings);
 
   return (
-    <input type="text" className="w-full px-4 py-2 border rounded bg-emphasize text-emphasize border-border" placeholder="Commit message..." value={commitMessage()} onInput={handleChange} />
+    <div class="p-2 sm:p-4 xs:p-4">
+      <div class="bg-main max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
+        <NavBar />
+        <PromptCreation />
+        <ChangeExecution />
+        <ChangeInspection />
+        <ChangeFinalization />
+      </div>
+    </div>
   );
 };
 
-export default CommitMessageInput;
+export default App;
 EOF
 
-# Completion message
+# Modify src/frontend/index.html
+cat > src/frontend/index.html << 'EOF'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
+  <title>Junior</title>
+</head>
+<body>
+  <div id="app" class="bg-emphasize"></div>
+  <script type="module" src="/index.jsx"></script>
+</body>
+</html>
+EOF
+
 echo "\033[32mDone: $goal\033[0m\n"

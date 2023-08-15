@@ -1,7 +1,11 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/components/CommitMessageInput.jsx
-requirements: >
-  Add "border-border" class.
-  Remove comment and props.
+  - src/frontend/App.jsx
+  - src/frontend/index.html
+requirements: |
+  Add bg-emphasize class to the "app" div in index.html
+  Add bg-main to the inner div in App.jsx.
+  Remove the id attribute from outer (id="app") in App.jsx, as the real app div is in the html.
+  Move the p-2 class from the outer to the inner div.
+  Remove unnecessary comments.
 os: OSX

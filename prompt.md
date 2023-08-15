@@ -6,25 +6,55 @@ Ask for them in normal conversational format instead.
 
 # Working set
 
-src/frontend/components/CommitMessageInput.jsx:
+src/frontend/App.jsx:
 ```
-import { commitMessage, setCommitMessage } from '../model/commitMessage';
-import monitorChange from '../model/monitorChange';
+import useKeyBindings from './service/useKeyBindings';
+import keyBindings from './config/keyBindings';
+import NavBar from './components/NavBar';
+import PromptCreation from './components/PromptCreation';
+import ChangeExecution from './components/ChangeExecution';
+import ChangeInspection from './components/ChangeInspection';
+import ChangeFinalization from './components/ChangeFinalization';
 
-const CommitMessageInput = (props) => {
-  // Start monitoring when mounting
-  monitorChange();
+const App = () => {
+  // Define key bindings
+  const bindings = keyBindings();
 
-  const handleChange = (e) => {
-    setCommitMessage(e.target.value);
-  };
+  // Use key bindings
+  useKeyBindings(bindings);
 
   return (
-    <input type="text" className="w-full px-4 py-2 border rounded bg-emphasize text-emphasize" placeholder="Commit message..." value={commitMessage()} onInput={handleChange} />
+    <div id="app" class="p-2 sm:p-4 xs:p-4">
+      <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
+        <NavBar />
+        <PromptCreation />
+        <ChangeExecution />
+        <ChangeInspection />
+        <ChangeFinalization />
+      </div>
+    </div>
   );
 };
 
-export default CommitMessageInput;
+export default App;
+
+```
+
+src/frontend/index.html:
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
+  <title>Junior</title>
+</head>
+<body>
+  <div id="app"></div>
+  <script type="module" src="/index.jsx"></script>
+</body>
+</html>
 
 ```
 
@@ -38,7 +68,11 @@ Implement the following feature!
 
 Requirements:
 
-Add &#34;border-border&#34; class. Remove comment and props.
+Add bg-emphasize class to the &#34;app&#34; div in index.html
+Add bg-main to the inner div in App.jsx.
+Remove the id attribute from outer (id=&#34;app&#34;) in App.jsx, as the real app div is in the html.
+Move the p-2 class from the outer to the inner div.
+Remove unnecessary comments.
 
 
 
