@@ -11,8 +11,8 @@ const App = () => {
   useKeyBindings(bindings);
 
   return (
-    <div class="p-2 sm:p-4 xs:p-4">
-      <div class="bg-main max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
+    <div>
+      <div class="bg-main max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 px-2 sm:px-4 xs:px-4">
         <NavBar />
         <PromptCreation />
         <ChangeExecution />

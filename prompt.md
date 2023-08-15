@@ -17,15 +17,12 @@ import ChangeInspection from './components/ChangeInspection';
 import ChangeFinalization from './components/ChangeFinalization';
 
 const App = () => {
-  // Define key bindings
   const bindings = keyBindings();
-
-  // Use key bindings
   useKeyBindings(bindings);
 
   return (
-    <div id="app" class="p-2 sm:p-4 xs:p-4">
-      <div class="max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
+    <div class="px-2 sm:px-4 xs:px-4">
+      <div class="bg-main max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:px-0">
         <NavBar />
         <PromptCreation />
         <ChangeExecution />
@@ -51,7 +48,7 @@ src/frontend/index.html:
   <title>Junior</title>
 </head>
 <body>
-  <div id="app"></div>
+  <div id="app" class="bg-emphasize"></div>
   <script type="module" src="/index.jsx"></script>
 </body>
 </html>
@@ -68,11 +65,8 @@ Implement the following feature!
 
 Requirements:
 
-Add bg-emphasize class to the &#34;app&#34; div in index.html
-Add bg-main to the inner div in App.jsx.
-Remove the id attribute from outer (id=&#34;app&#34;) in App.jsx, as the real app div is in the html.
-Move the p-2 class from the outer to the inner div.
-Remove unnecessary comments.
+There is a margin around the content which should be removed.
+A horizontal padding should be added instead.
 
 
 

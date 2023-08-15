@@ -1,11 +1,11 @@
 #!/bin/sh
 set -e
-goal="Implement frontend modifications"
+goal="Update margin and add padding"
 echo "Plan:"
-echo "1. Modify src/frontend/App.jsx based on requirements"
-echo "2. Modify src/frontend/index.html to update the 'app' div"
+echo "1. Remove any margin around the content in App.jsx."
+echo "2. Add horizontal padding to the inner content of App.jsx."
 
-# Modify src/frontend/App.jsx
+# Implementing the plan
 cat > src/frontend/App.jsx << 'EOF'
 import useKeyBindings from './service/useKeyBindings';
 import keyBindings from './config/keyBindings';
@@ -20,8 +20,8 @@ const App = () => {
   useKeyBindings(bindings);
 
   return (
-    <div class="p-2 sm:p-4 xs:p-4">
-      <div class="bg-main max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:p-0">
+    <div>
+      <div class="bg-main max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 px-2 sm:px-4 xs:px-4">
         <NavBar />
         <PromptCreation />
         <ChangeExecution />
@@ -33,23 +33,6 @@ const App = () => {
 };
 
 export default App;
-EOF
-
-# Modify src/frontend/index.html
-cat > src/frontend/index.html << 'EOF'
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
-  <title>Junior</title>
-</head>
-<body>
-  <div id="app" class="bg-emphasize"></div>
-  <script type="module" src="/index.jsx"></script>
-</body>
-</html>
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"
