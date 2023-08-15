@@ -1,8 +1,7 @@
 task: prompt/task/feature/implement.md
 attention:
   - src/frontend/App.jsx
-  - src/frontend/index.html
 requirements: |
-  There is a margin around the content which should be removed.
-  A horizontal padding should be added instead.
+  We need a padding at the bottom.
+  Additionally, always make the content full-height.
 os: OSX
