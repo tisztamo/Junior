@@ -1,8 +1,6 @@
 task: prompt/task/bug/fix.md
 attention:
-  - src/frontend/startVite.js
+  - src/frontend/App.jsx
 requirements: |
-  Print an orange warning to the console when hostArgPresent is true:
-  This is a development server, absolutely unsecure, it should only be exposed in a local network or vpn
-  (Reword if needed for easy understanding)
+  Add bottom padding.
 os: OSX

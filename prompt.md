@@ -6,29 +6,32 @@ Ask for them in normal conversational format instead.
 
 # Working set
 
-src/frontend/startVite.js:
+src/frontend/App.jsx:
 ```
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { createServer } from 'vite';
-import process from 'process';
+import useKeyBindings from './service/useKeyBindings';
+import keyBindings from './config/keyBindings';
+import NavBar from './components/NavBar';
+import PromptCreation from './components/PromptCreation';
+import ChangeExecution from './components/ChangeExecution';
+import ChangeInspection from './components/ChangeInspection';
+import ChangeFinalization from './components/ChangeFinalization';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const projectRoot = path.resolve(__dirname, '../..');
+const App = () => {
+  const bindings = keyBindings();
+  useKeyBindings(bindings);
 
-export async function startVite() {
-  const hostArgPresent = process.argv.includes('--host');
+  return (
+    <div class="bg-main min-h-screen max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 px-2 sm:px-4 xs:px-4">
+      <NavBar />
+      <PromptCreation />
+      <ChangeExecution />
+      <ChangeInspection />
+      <ChangeFinalization />
+    </div>
+  );
+};
 
-  const server = await createServer({
-    root: projectRoot + '/src/frontend',
-    server: {
-      open: true,
-      ...(hostArgPresent ? { host: true } : {})
-    },
-  });
-  await server.listen();
-  server.printUrls();
-}
+export default App;
 
 ```
 
@@ -37,9 +40,7 @@ export async function startVite() {
 
 Fix the following issue!
 
-Print an orange warning to the console when hostArgPresent is true:
-This is a development server, absolutely unsecure, it should only be exposed in a local network or vpn
-(Reword if needed for easy understanding)
+Add bottom padding.
 
 
 
