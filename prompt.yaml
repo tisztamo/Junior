@@ -1,8 +1,7 @@
 task: prompt/task/feature/implement.md
 attention:
   - src/frontend/App.jsx
-  - src/frontend/index.html
 requirements: |
-  There is a margin around the content which should be removed.
-  A horizontal padding should be added instead.
+  No need for the outer div, remove it.
+  Add min-h-screen to the other one.
 os: OSX

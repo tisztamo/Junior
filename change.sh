@@ -1,11 +1,10 @@
 #!/bin/sh
 set -e
-goal="Update margin and add padding"
+goal="Update App.jsx layout"
 echo "Plan:"
-echo "1. Remove any margin around the content in App.jsx."
-echo "2. Add horizontal padding to the inner content of App.jsx."
+echo "1. Remove the outer div from App.jsx"
+echo "2. Add min-h-screen to the remaining div in App.jsx"
 
-# Implementing the plan
 cat > src/frontend/App.jsx << 'EOF'
 import useKeyBindings from './service/useKeyBindings';
 import keyBindings from './config/keyBindings';
@@ -20,14 +19,12 @@ const App = () => {
   useKeyBindings(bindings);
 
   return (
-    <div>
-      <div class="bg-main max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 px-2 sm:px-4 xs:px-4">
-        <NavBar />
-        <PromptCreation />
-        <ChangeExecution />
-        <ChangeInspection />
-        <ChangeFinalization />
-      </div>
+    <div class="bg-main min-h-screen max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 px-2 sm:px-4 xs:px-4">
+      <NavBar />
+      <PromptCreation />
+      <ChangeExecution />
+      <ChangeInspection />
+      <ChangeFinalization />
     </div>
   );
 };

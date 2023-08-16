@@ -21,8 +21,8 @@ const App = () => {
   useKeyBindings(bindings);
 
   return (
-    <div class="px-2 sm:px-4 xs:px-4">
-      <div class="bg-main max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 sm:px-0">
+    <div>
+      <div class="bg-main max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 px-2 sm:px-4 xs:px-4">
         <NavBar />
         <PromptCreation />
         <ChangeExecution />
@@ -37,24 +37,6 @@ export default App;
 
 ```
 
-src/frontend/index.html:
-```
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
-  <title>Junior</title>
-</head>
-<body>
-  <div id="app" class="bg-emphasize"></div>
-  <script type="module" src="/index.jsx"></script>
-</body>
-</html>
-
-```
-
 
 # Task
 
@@ -65,8 +47,8 @@ Implement the following feature!
 
 Requirements:
 
-There is a margin around the content which should be removed.
-A horizontal padding should be added instead.
+No need for the outer div, remove it.
+Add min-h-screen to the other one.
 
 
 
