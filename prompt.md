@@ -6,38 +6,29 @@ Ask for them in normal conversational format instead.
 
 # Working set
 
-src/frontend/components/ExecuteButton.jsx:
+src/frontend/startVite.js:
 ```
-import handleExecuteChange from '../service/handleExecuteChange';
-import { setChangeInput, changeInput } from '../model/changeInput';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { createServer } from 'vite';
+import process from 'process';
 
-const ExecuteButton = () => {
-  const clipboardAvailable = !!(navigator.clipboard && navigator.clipboard.readText);
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const projectRoot = path.resolve(__dirname, '../..');
 
-  const handlePaste = async (e) => {
-    const paste = (e.clipboardData || window.clipboardData).getData('text');
-    setChangeInput(paste);
-    handleExecuteChange();
-  };
+export async function startVite() {
+  const hostArgPresent = process.argv.includes('--host');
 
-  return (
-    <button className="w-full px-4 py-4 bg-orange-300 text-lg text-bg font-semibold rounded" onClick={handleExecuteChange}>
-      {clipboardAvailable ? (
-        'Paste & Execute Change [X]'
-      ) : (
-        <textarea
-          rows="1"
-          className="w-full px-2 py-2 bg-white text-lg text-bg font-semibold resize-none"
-          placeholder="Paste here to execute"
-          value={changeInput()}
-          onPaste={handlePaste}
-        />
-      )}
-    </button>
-  );
-};
-
-export default ExecuteButton;
+  const server = await createServer({
+    root: projectRoot + '/src/frontend',
+    server: {
+      open: true,
+      ...(hostArgPresent ? { host: true } : {})
+    },
+  });
+  await server.listen();
+  server.printUrls();
+}
 
 ```
 
@@ -46,7 +37,9 @@ export default ExecuteButton;
 
 Fix the following issue!
 
-The input inside the button seems to be off vertically: the orange space is larger below it than above. Make the bottom padding of the button a bit smaller.
+Print an orange warning to the console when hostArgPresent is true:
+This is a development server, absolutely unsecure, it should only be exposed in a local network or vpn
+(Reword if needed for easy understanding)
 
 
 

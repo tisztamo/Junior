@@ -9,6 +9,10 @@ const projectRoot = path.resolve(__dirname, '../..');
 export async function startVite() {
   const hostArgPresent = process.argv.includes('--host');
 
+  if (hostArgPresent) {
+    console.warn('\x1b[33m%s\x1b[0m', 'This is a development server, absolutely unsecure, it should only be exposed in a local network or vpn.');
+  }
+
   const server = await createServer({
     root: projectRoot + '/src/frontend',
     server: {

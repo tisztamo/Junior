@@ -1,6 +1,8 @@
 task: prompt/task/bug/fix.md
 attention:
-  - src/frontend/components/ExecuteButton.jsx
+  - src/frontend/startVite.js
 requirements: |
-  The input inside the button seems to be off vertically: the orange space is larger below it than above. Make the bottom padding of the button a bit smaller.
+  Print an orange warning to the console when hostArgPresent is true:
+  This is a development server, absolutely unsecure, it should only be exposed in a local network or vpn
+  (Reword if needed for easy understanding)
 os: OSX
