@@ -1,7 +1,6 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/getBaseUrl.js
-requirements: |
-  The default baseurl should be not on localhost but on the same protocol and host as the frontend.
-  Port should remain 10101
+  - src/frontend/startVite.js
+requirements: >
+  Set the "host" boolean config based on the presence of the --host cli argument.
 os: OSX

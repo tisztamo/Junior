@@ -6,15 +6,25 @@ Ask for them in normal conversational format instead.
 
 # Working set
 
-src/frontend/getBaseUrl.js:
+src/frontend/startVite.js:
 ```
-export const getBaseUrl = () => {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const baseUrl = urlParams.get('baseUrl');
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { createServer } from 'vite';
 
-    return baseUrl || 'http://localhost:10101';
-};
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const projectRoot = path.resolve(__dirname, '../..');
+
+export async function startVite() {
+  const server = await createServer({
+    root: projectRoot + '/src/frontend',
+    server: {
+      open: true,
+    },
+  });
+  await server.listen();
+  server.printUrls();
+}
 
 ```
 
@@ -28,8 +38,7 @@ Implement the following feature!
 
 Requirements:
 
-The default baseurl should be not on localhost but on the same protocol and host as the frontend.
-Port should remain 10101
+Set the &#34;host&#34; boolean config based on the presence of the --host cli argument.
 
 
 
