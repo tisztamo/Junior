@@ -1,6 +1,11 @@
 Change Date is a week, aka 168 hours.
-After that every release becomes GPLv3
---------------------------------------
+After that every release becomes GPLv3.
+
+Before that it can be used in non-production environments for free.
+
+Coding for money? That's production.
+
+---------------------------------------
 
 Business Source License 1.1
 
