@@ -6,34 +6,15 @@ Ask for them in normal conversational format instead.
 
 # Working set
 
-src/frontend/App.jsx:
+src/frontend/getBaseUrl.js:
 ```
-import useKeyBindings from './service/useKeyBindings';
-import keyBindings from './config/keyBindings';
-import NavBar from './components/NavBar';
-import PromptCreation from './components/PromptCreation';
-import ChangeExecution from './components/ChangeExecution';
-import ChangeInspection from './components/ChangeInspection';
-import ChangeFinalization from './components/ChangeFinalization';
+export const getBaseUrl = () => {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const baseUrl = urlParams.get('baseUrl');
 
-const App = () => {
-  const bindings = keyBindings();
-  useKeyBindings(bindings);
-
-  return (
-    <div>
-      <div class="bg-main max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 px-2 sm:px-4 xs:px-4">
-        <NavBar />
-        <PromptCreation />
-        <ChangeExecution />
-        <ChangeInspection />
-        <ChangeFinalization />
-      </div>
-    </div>
-  );
+    return baseUrl || 'http://localhost:10101';
 };
-
-export default App;
 
 ```
 
@@ -47,8 +28,8 @@ Implement the following feature!
 
 Requirements:
 
-No need for the outer div, remove it.
-Add min-h-screen to the other one.
+The default baseurl should be not on localhost but on the same protocol and host as the frontend.
+Port should remain 10101
 
 
 

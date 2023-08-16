@@ -1,35 +1,21 @@
 #!/bin/sh
 set -e
-goal="Update App.jsx layout"
+goal="Update default baseUrl"
 echo "Plan:"
-echo "1. Remove the outer div from App.jsx"
-echo "2. Add min-h-screen to the remaining div in App.jsx"
+echo "1. Update getBaseUrl.js to use the current protocol and host for the default baseUrl."
+echo "2. The port should remain as 10101."
 
-cat > src/frontend/App.jsx << 'EOF'
-import useKeyBindings from './service/useKeyBindings';
-import keyBindings from './config/keyBindings';
-import NavBar from './components/NavBar';
-import PromptCreation from './components/PromptCreation';
-import ChangeExecution from './components/ChangeExecution';
-import ChangeInspection from './components/ChangeInspection';
-import ChangeFinalization from './components/ChangeFinalization';
+# Step 1: Update getBaseUrl.js
+cat << 'EOF' > src/frontend/getBaseUrl.js
+export const getBaseUrl = () => {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const baseUrl = urlParams.get('baseUrl');
 
-const App = () => {
-  const bindings = keyBindings();
-  useKeyBindings(bindings);
-
-  return (
-    <div class="bg-main min-h-screen max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 px-2 sm:px-4 xs:px-4">
-      <NavBar />
-      <PromptCreation />
-      <ChangeExecution />
-      <ChangeInspection />
-      <ChangeFinalization />
-    </div>
-  );
+    // Use the current protocol and host for the default baseUrl
+    const defaultBaseUrl = `${window.location.protocol}//${window.location.hostname}:10101`;
+    return baseUrl || defaultBaseUrl;
 };
-
-export default App;
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"

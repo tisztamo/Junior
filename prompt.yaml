@@ -1,7 +1,7 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/App.jsx
+  - src/frontend/getBaseUrl.js
 requirements: |
-  No need for the outer div, remove it.
-  Add min-h-screen to the other one.
+  The default baseurl should be not on localhost but on the same protocol and host as the frontend.
+  Port should remain 10101
 os: OSX

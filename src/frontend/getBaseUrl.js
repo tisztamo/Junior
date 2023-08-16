@@ -3,5 +3,7 @@ export const getBaseUrl = () => {
     const urlParams = new URLSearchParams(queryString);
     const baseUrl = urlParams.get('baseUrl');
 
-    return baseUrl || 'http://localhost:10101';
+    // Use the current protocol and host for the default baseUrl
+    const defaultBaseUrl = `${window.location.protocol}//${window.location.hostname}:10101`;
+    return baseUrl || defaultBaseUrl;
 };
