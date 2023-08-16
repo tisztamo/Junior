@@ -2,6 +2,5 @@ task: prompt/task/bug/fix.md
 attention:
   - src/frontend/components/ExecuteButton.jsx
 requirements: |
-  Uncaught ReferenceError: changeInput is not defined
-    at Object.fn (ExecuteButton.jsx:27:34)
+  The input inside the button seems to be off vertically: the orange space is larger below it than above. Make the bottom padding of the button a bit smaller.
 os: OSX

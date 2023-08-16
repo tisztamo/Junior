@@ -9,7 +9,7 @@ Ask for them in normal conversational format instead.
 src/frontend/components/ExecuteButton.jsx:
 ```
 import handleExecuteChange from '../service/handleExecuteChange';
-import { setChangeInput } from '../model/changeInput';
+import { setChangeInput, changeInput } from '../model/changeInput';
 
 const ExecuteButton = () => {
   const clipboardAvailable = !!(navigator.clipboard && navigator.clipboard.readText);
@@ -46,8 +46,7 @@ export default ExecuteButton;
 
 Fix the following issue!
 
-Uncaught ReferenceError: changeInput is not defined
-  at Object.fn (ExecuteButton.jsx:27:34)
+The input inside the button seems to be off vertically: the orange space is larger below it than above. Make the bottom padding of the button a bit smaller.
 
 
 

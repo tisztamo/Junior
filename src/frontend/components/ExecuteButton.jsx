@@ -11,7 +11,7 @@ const ExecuteButton = () => {
   };
 
   return (
-    <button className="w-full px-4 py-4 bg-orange-300 text-lg text-bg font-semibold rounded" onClick={handleExecuteChange}>
+    <button className="w-full px-4 py-4 pb-3 bg-orange-300 text-lg text-bg font-semibold rounded" onClick={handleExecuteChange}>
       {clipboardAvailable ? (
         'Paste & Execute Change [X]'
       ) : (
