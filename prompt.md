@@ -6,39 +6,48 @@ Ask for them in normal conversational format instead.
 
 # Working set
 
-src/frontend/startVite.js:
+src/frontend/components/ExecuteButton.jsx:
 ```
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { createServer } from 'vite';
+import handleExecuteChange from '../service/handleExecuteChange';
+import { setChangeInput } from '../model/changeInput';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const projectRoot = path.resolve(__dirname, '../..');
+const ExecuteButton = () => {
+  const clipboardAvailable = !!(navigator.clipboard && navigator.clipboard.readText);
 
-export async function startVite() {
-  const server = await createServer({
-    root: projectRoot + '/src/frontend',
-    server: {
-      open: true,
-    },
-  });
-  await server.listen();
-  server.printUrls();
-}
+  const handlePaste = async (e) => {
+    const paste = (e.clipboardData || window.clipboardData).getData('text');
+    setChangeInput(paste);
+    handleExecuteChange();
+  };
+
+  return (
+    <button className="w-full px-4 py-4 bg-orange-300 text-lg text-bg font-semibold rounded" onClick={handleExecuteChange}>
+      {clipboardAvailable ? (
+        'Paste & Execute Change [X]'
+      ) : (
+        <textarea
+          rows="1"
+          className="w-full px-2 py-2 bg-white text-lg text-bg font-semibold resize-none"
+          placeholder="Paste here to execute"
+          value={changeInput()}
+          onPaste={handlePaste}
+        />
+      )}
+    </button>
+  );
+};
+
+export default ExecuteButton;
 
 ```
 
 
 # Task
 
-Implement the following feature!
+Fix the following issue!
 
-- Create a plan!
-- Create new files when needed!
-
-Requirements:
-
-Set the &#34;host&#34; boolean config based on the presence of the --host cli argument.
+Uncaught ReferenceError: changeInput is not defined
+  at Object.fn (ExecuteButton.jsx:27:34)
 
 
 

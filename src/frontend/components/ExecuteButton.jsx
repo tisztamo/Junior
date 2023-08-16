@@ -1,5 +1,5 @@
 import handleExecuteChange from '../service/handleExecuteChange';
-import { setChangeInput } from '../model/changeInput';
+import { setChangeInput, changeInput } from '../model/changeInput';
 
 const ExecuteButton = () => {
   const clipboardAvailable = !!(navigator.clipboard && navigator.clipboard.readText);

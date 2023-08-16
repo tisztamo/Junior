@@ -1,6 +1,7 @@
-task: prompt/task/feature/implement.md
+task: prompt/task/bug/fix.md
 attention:
-  - src/frontend/startVite.js
-requirements: >
-  Set the "host" boolean config based on the presence of the --host cli argument.
+  - src/frontend/components/ExecuteButton.jsx
+requirements: |
+  Uncaught ReferenceError: changeInput is not defined
+    at Object.fn (ExecuteButton.jsx:27:34)
 os: OSX
