@@ -6,38 +6,31 @@ Ask for them in normal conversational format instead.
 
 # Working set
 
-src/backend/handlers/updateDescriptorHandler.js:
+src/frontend/components/PromptDisplay.jsx:
 ```
-import yaml from 'js-yaml';
-import { loadPromptDescriptor } from "../../prompt/loadPromptDescriptor.js";
-import { savePromptDescriptor } from "../../prompt/savePromptDescriptor.js";
+import { createSignal, onMount, createEffect } from "solid-js";
+import { prompt } from '../model/prompt';
 
-const updateDescriptorHandler = async (req, res) => {
-  const { requirements, attention } = req.body;
-  
-  try {
-    const fileContent = await loadPromptDescriptor();
-    const document = yaml.load(fileContent);
+const PromptDisplay = () => {
+  let div;
+  let summary;
 
-    if (requirements) {
-      document.requirements = requirements;
+  createEffect(() => {
+    if (div) {
+      div.innerHTML = prompt();
+      summary.innerHTML = `prompt length: ${prompt().length} chars`;
     }
-    
-    if (attention) {
-      document.attention = attention;
-    }
-    
-    const newYamlStr = yaml.dump(document);
-    await savePromptDescriptor(newYamlStr);
-    
-    res.status(200).json({ message: "Descriptor updated successfully" });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Internal server error" });
-  }
+  });
+
+  return (
+    <details class="w-full max-w-screen overflow-x-auto whitespace-normal markdown" style={{ display: prompt().length > 0 ? 'block' : 'none' }}>
+      <summary ref={summary}></summary>
+      <div ref={div}></div>
+    </details>
+  );
 };
 
-export default updateDescriptorHandler;
+export default PromptDisplay;
 
 ```
 
@@ -46,7 +39,7 @@ export default updateDescriptorHandler;
 
 Fix the following issue!
 
-When empty string is coming in one of the fields, do the update. Only skip update for missing keys.
+Add margin-top to the div.
 
 
 
@@ -55,7 +48,7 @@ When empty string is coming in one of the fields, do the update. Only skip updat
 - Every js file should *only export a single function*!
 - Use *ES6 imports*!
 - Prefer *async/await* over promises!
-- The frontend uses *Solidjs*, edit .jsx file accordingly
+- The frontend uses *Solidjs* and Tailwind, edit .jsx file accordingly!
 
 
 # Output Format

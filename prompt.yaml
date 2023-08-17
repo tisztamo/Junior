@@ -1,7 +1,6 @@
 task: prompt/task/bug/fix.md
 attention:
-  - src/backend/handlers/updateDescriptorHandler.js
+  - src/frontend/components/PromptDisplay.jsx
 requirements: >
-  When empty string is coming in one of the fields, do the update. Only skip
-  update for missing keys.
+  Add margin-top to the div.
 os: OSX

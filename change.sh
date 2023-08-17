@@ -1,40 +1,33 @@
 #!/bin/sh
 set -e
-goal="Fix empty string update issue"
+goal="Add margin-top to the div"
 echo "Plan:"
-echo "1. Modify updateDescriptorHandler.js to update fields even when they have empty strings."
+echo "1. Update PromptDisplay.jsx to add margin-top to the div."
 
-cat > src/backend/handlers/updateDescriptorHandler.js << 'EOF'
-import yaml from 'js-yaml';
-import { loadPromptDescriptor } from "../../prompt/loadPromptDescriptor.js";
-import { savePromptDescriptor } from "../../prompt/savePromptDescriptor.js";
+cat > src/frontend/components/PromptDisplay.jsx << 'EOF'
+import { createSignal, onMount, createEffect } from "solid-js";
+import { prompt } from '../model/prompt';
 
-const updateDescriptorHandler = async (req, res) => {
-  const { requirements, attention } = req.body;
-  
-  try {
-    const fileContent = await loadPromptDescriptor();
-    const document = yaml.load(fileContent);
+const PromptDisplay = () => {
+  let div;
+  let summary;
 
-    if (requirements !== undefined) {
-      document.requirements = requirements;
+  createEffect(() => {
+    if (div) {
+      div.innerHTML = prompt();
+      summary.innerHTML = `prompt length: ${prompt().length} chars`;
     }
-    
-    if (attention !== undefined) {
-      document.attention = attention;
-    }
-    
-    const newYamlStr = yaml.dump(document);
-    await savePromptDescriptor(newYamlStr);
-    
-    res.status(200).json({ message: "Descriptor updated successfully" });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Internal server error" });
-  }
+  });
+
+  return (
+    <details class="w-full max-w-screen overflow-x-auto whitespace-normal markdown" style={{ display: prompt().length > 0 ? 'block' : 'none' }}>
+      <summary ref={summary}></summary>
+      <div ref={div} class="mt-4"></div>
+    </details>
+  );
 };
 
-export default updateDescriptorHandler;
+export default PromptDisplay;
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"
