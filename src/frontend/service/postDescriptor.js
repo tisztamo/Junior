@@ -1,14 +1,14 @@
 import { getBaseUrl } from '../getBaseUrl';
 
-const postRequirements = async (requirements) => {
+const postDescriptor = async (descriptor) => {
   const baseUrl = getBaseUrl();
-  const response = await fetch(`${baseUrl}/requirements`, {
+  const response = await fetch(`${baseUrl}/descriptor`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ requirements }),
+    body: JSON.stringify(descriptor),
   });
 
   return await response.json();
 };
 
-export default postRequirements;
+export default postDescriptor;

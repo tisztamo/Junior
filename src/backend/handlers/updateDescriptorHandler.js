@@ -2,22 +2,29 @@ import yaml from 'js-yaml';
 import { loadPromptDescriptor } from "../../prompt/loadPromptDescriptor.js";
 import { savePromptDescriptor } from "../../prompt/savePromptDescriptor.js";
 
-const updateRequirementsHandler = async (req, res) => {
-  const requirements = req.body.requirements;
+const updateDescriptorHandler = async (req, res) => {
+  const { requirements, attention } = req.body;
   
   try {
     const fileContent = await loadPromptDescriptor();
     const document = yaml.load(fileContent);
-    document.requirements = requirements;
+
+    if (requirements) {
+      document.requirements = requirements;
+    }
+    
+    if (attention) {
+      document.attention = attention;
+    }
     
     const newYamlStr = yaml.dump(document);
     await savePromptDescriptor(newYamlStr);
     
-    res.status(200).json({ message: "Requirements updated successfully" });
+    res.status(200).json({ message: "Descriptor updated successfully" });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
 
-export default updateRequirementsHandler;
+export default updateDescriptorHandler;

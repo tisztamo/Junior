@@ -1,8 +1,15 @@
-task: prompt/task/bug/fix.md
+task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/components/CommitButton.jsx
   - src/frontend/service/postCommit.js
-requirements: |
-  Set requirements to empty string after commit.
-  Create postRequirements service for this. requirements is argument (post to /requirements, json key is requirements).
+  - src/backend/routes/setupPromptRoutes.js
+  - src/frontend/components/CommitButton.jsx
+  - src/backend/handlers/updateRequirementsHandler.js
+  - src/frontend/service/postRequirements.js
+requirements: >
+  Also clear the attention section of the prompt descriptor after commit.
+
+  Rename the requirements route to descriptor (rename the file too) and make it
+  accepting both sections. Only update the section that is provided in the request!
+
+  Also rename postRequirements!
 os: OSX

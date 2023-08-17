@@ -1,5 +1,5 @@
 import { postCommit } from '../service/postCommit';
-import postRequirements from '../service/postRequirements';
+import postDescriptor from '../service/postDescriptor';
 import { commitMessage } from '../model/commitMessage';
 import { fetchGitStatus } from '../service/fetchGitStatus';
 import clearState from '../service/clearState';
@@ -9,7 +9,7 @@ const CommitButton = () => {
     const response = await postCommit(commitMessage());
     console.log(response.message);
     
-    await postRequirements('');
+    await postDescriptor({ requirements: '', attention: '' });
     
     const status = await fetchGitStatus();
     console.log(status);
