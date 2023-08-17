@@ -1,6 +1,7 @@
 import { createSignal } from "solid-js";
 import { resetGit } from '../service/resetGit';
 import RollbackConfirmationDialog from './RollbackConfirmationDialog';
+import clearState from '../service/clearState';
 
 const RollbackButton = () => {
   const [showConfirmation, setShowConfirmation] = createSignal(false);
@@ -8,6 +9,7 @@ const RollbackButton = () => {
   const handleReset = async () => {
     const response = await resetGit();
     console.log(response.message);
+    clearState();
   };
 
   const handleConfirm = () => {

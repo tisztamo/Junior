@@ -1,9 +1,7 @@
 import { postCommit } from '../service/postCommit';
-import { commitMessage, setCommitMessage } from '../model/commitMessage';
+import { commitMessage } from '../model/commitMessage';
 import { fetchGitStatus } from '../service/fetchGitStatus';
-import { setExecutionResult } from '../model/executionResult';
-import { setPrompt } from '../model/prompt';
-import { setChange } from '../model/change';
+import clearState from '../service/clearState';
 
 const CommitButton = () => {
   const handleCommit = async () => {
@@ -11,10 +9,7 @@ const CommitButton = () => {
     console.log(response.message);
     const status = await fetchGitStatus();
     console.log(status);
-    setChange(''); // Clearing the change after commit
-    setExecutionResult('');
-    setCommitMessage('');
-    setPrompt('');
+    clearState();
   };
 
   return (

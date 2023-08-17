@@ -6,32 +6,73 @@ Ask for them in normal conversational format instead.
 
 # Working set
 
-src/frontend/App.jsx:
+src/frontend/components/RollbackButton.jsx:
 ```
-import useKeyBindings from './service/useKeyBindings';
-import keyBindings from './config/keyBindings';
-import NavBar from './components/NavBar';
-import PromptCreation from './components/PromptCreation';
-import ChangeExecution from './components/ChangeExecution';
-import ChangeInspection from './components/ChangeInspection';
-import ChangeFinalization from './components/ChangeFinalization';
+import { createSignal } from "solid-js";
+import { resetGit } from '../service/resetGit';
+import RollbackConfirmationDialog from './RollbackConfirmationDialog';
 
-const App = () => {
-  const bindings = keyBindings();
-  useKeyBindings(bindings);
+const RollbackButton = () => {
+  const [showConfirmation, setShowConfirmation] = createSignal(false);
+
+  const handleReset = async () => {
+    const response = await resetGit();
+    console.log(response.message);
+  };
+
+  const handleConfirm = () => {
+    setShowConfirmation(false);
+    handleReset();
+  };
+
+  const handleRollbackClick = () => {
+    const disableConfirmation = localStorage.getItem('Junior.disableRollbackConfirmation') === 'true';
+    if (disableConfirmation) {
+      handleReset();
+    } else {
+      setShowConfirmation(true);
+    }
+  };
 
   return (
-    <div class="bg-main min-h-screen max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 px-2 sm:px-4 xs:px-4">
-      <NavBar />
-      <PromptCreation />
-      <ChangeExecution />
-      <ChangeInspection />
-      <ChangeFinalization />
-    </div>
+    <>
+      <button className="w-full px-4 py-4 bg-red-700 text-lg text-bg font-semibold rounded" onClick={handleRollbackClick}>Roll Back</button>
+      <RollbackConfirmationDialog visible={showConfirmation()} onConfirm={handleConfirm} onCancel={() => setShowConfirmation(false)} />
+    </>
   );
 };
 
-export default App;
+export default RollbackButton;
+
+```
+
+src/frontend/components/CommitButton.jsx:
+```
+import { postCommit } from '../service/postCommit';
+import { commitMessage, setCommitMessage } from '../model/commitMessage';
+import { fetchGitStatus } from '../service/fetchGitStatus';
+import { setExecutionResult } from '../model/executionResult';
+import { setPrompt } from '../model/prompt';
+import { setChange } from '../model/change';
+
+const CommitButton = () => {
+  const handleCommit = async () => {
+    const response = await postCommit(commitMessage());
+    console.log(response.message);
+    const status = await fetchGitStatus();
+    console.log(status);
+    setChange(''); // Clearing the change after commit
+    setExecutionResult('');
+    setCommitMessage('');
+    setPrompt('');
+  };
+
+  return (
+    <button className="w-full px-4 py-4 bg-green-700 text-lg text-bg font-semibold rounded" onClick={handleCommit}>Commit</button>
+  );
+};
+
+export default CommitButton;
 
 ```
 
@@ -40,7 +81,8 @@ export default App;
 
 Fix the following issue!
 
-Add bottom padding.
+Factor out the state-clearing statements from handleCommit to service/clearState.js!
+Also call the new function from after rollback.
 
 
 
