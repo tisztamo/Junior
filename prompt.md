@@ -1,87 +1,61 @@
-You are Junior, an AI system aiding developers.
-You are working with a part of a large program called the "Working Set."
-Before starting, check if you need more files to solve the task.
-Do not edit files without knowing their contents!
-Ask for them in normal conversational format instead.
-
 # Working set
 
-src/backend/setupRoutes.js:
+src/frontend/service/fetchGitStatus.js:
 ```
-import { generateHandler } from './handlers/generateHandler.js';
-import { servePromptDescriptor } from './handlers/servePromptDescriptor.js';
-import { updateTaskHandler } from './handlers/updateTaskHandler.js';
-import { listTasks } from './handlers/listTasks.js';
-import { executeHandler } from './handlers/executeHandler.js';
-import resetGitHandler from './handlers/resetGitHandler.js';
-import gitStatusHandler from './handlers/gitStatusHandler.js';
-import commitGitHandler from './handlers/commitGitHandler.js';
+import { getBaseUrl } from '../getBaseUrl';
+import { setGitStatus } from '../model/gitStatus';
 
-export function setupRoutes(app) {
-  app.get('/descriptor', servePromptDescriptor);
-  app.get('/tasks', (req, res) => res.json({ tasks: listTasks() }));
-  app.get('/status', gitStatusHandler);
+const fetchGitStatus = async () => {
+  const baseUrl = getBaseUrl();
+  const response = await fetch(`${baseUrl}/status`);
 
-  app.post('/generate', generateHandler);
-  app.post('/updatetask', updateTaskHandler);
-  app.post('/execute', executeHandler);
-  app.post('/reset', resetGitHandler);
-  app.post('/commit', commitGitHandler);
-}
+  const data = await response.json();
+
+  setGitStatus(data);
+};
+
+export { fetchGitStatus };
 
 ```
 
-src/backend/handlers/gitStatusHandler.js:
+src/frontend/service/resetGit.js:
 ```
-import gitStatus from '../../git/gitStatus.js';
+import { getBaseUrl } from '../getBaseUrl';
 
-export default async function gitStatusHandler(req, res) {
-  try {
-    const status = await gitStatus();
-    res.status(200).send({ message: status });
-  } catch (error) {
-    let errorMessage = 'Error in getting Git status';
-    if (error.stderr && error.stderr.includes('Not a git repository')) {
-      errorMessage = 'Not a git repo. Run \'npx junior-init\' to initialize!';
-    }
-    res.status(500).send({ message: errorMessage, error });
-  }
-}
+const resetGit = async () => {
+  const baseUrl = getBaseUrl();
+  const response = await fetch(`${baseUrl}/reset`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+  });
 
-```
+  const data = await response.json();
 
-src/backend/handlers/commitGitHandler.js:
-```
-import commitGit from '../../git/commitGit.js';
+  return data;
+};
 
-export default async function commitGitHandler(req, res) {
-  try {
-    const message = req.body.message;
-    if (!message) {
-      res.status(400).send({ message: 'Commit message is required' });
-      return;
-    }
-    await commitGit(message);
-    res.status(200).send({ message: `Successfully committed with message: ${message}` });
-  } catch (error) {
-    res.status(500).send({ message: 'Error in committing changes', error });
-  }
-}
+export { resetGit };
 
 ```
 
-src/backend/handlers/resetGitHandler.js:
+src/frontend/service/postCommit.js:
 ```
-import resetGit from '../../git/resetGit.js';
+import { getBaseUrl } from '../getBaseUrl';
 
-export default async function resetGitHandler(req, res) {
-  try {
-    await resetGit();
-    res.status(200).send({ message: 'Git successfully reset' });
-  } catch (error) {
-    res.status(500).send({ message: 'Error in resetting Git', error });
-  }
-}
+const postCommit = async (message) => {
+  const baseUrl = getBaseUrl();
+  const response = await fetch(`${baseUrl}/commit`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message }),
+  });
+
+  const data = await response.json();
+
+  return data;
+};
+
+export { postCommit };
 
 ```
 
@@ -90,9 +64,7 @@ export default async function resetGitHandler(req, res) {
 
 Refactor!
 
-Move git-related routes under /git/
-Also move the handler files to handlers/git/
-Do not forget to update relative imports!
+Git-related routes were moved under /git/
 
 
 

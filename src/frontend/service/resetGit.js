@@ -2,7 +2,7 @@ import { getBaseUrl } from '../getBaseUrl';
 
 const resetGit = async () => {
   const baseUrl = getBaseUrl();
-  const response = await fetch(`${baseUrl}/reset`, {
+  const response = await fetch(`${baseUrl}/git/reset`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
   });
@@ -12,4 +12,4 @@ const resetGit = async () => {
   return data;
 };
 
-export { resetGit };
+export default resetGit;

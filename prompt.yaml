@@ -1,11 +1,8 @@
 task: prompt/task/refactor/custom.md
 attention:
-  - src/backend/setupRoutes.js
-  - src/backend/handlers/gitStatusHandler.js
-  - src/backend/handlers/commitGitHandler.js
-  - src/backend/handlers/resetGitHandler.js
+  - src/frontend/service/fetchGitStatus.js
+  - src/frontend/service/resetGit.js
+  - src/frontend/service/postCommit.js
 requirements: |
-  Move git-related routes under /git/
-  Also move the handler files to handlers/git/
-  Do not forget to update relative imports!
+  Git-related routes were moved under /git/
 os: OSX

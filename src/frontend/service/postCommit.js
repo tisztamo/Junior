@@ -2,7 +2,7 @@ import { getBaseUrl } from '../getBaseUrl';
 
 const postCommit = async (message) => {
   const baseUrl = getBaseUrl();
-  const response = await fetch(`${baseUrl}/commit`, {
+  const response = await fetch(`${baseUrl}/git/commit`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ message }),
@@ -13,4 +13,4 @@ const postCommit = async (message) => {
   return data;
 };
 
-export { postCommit };
+export default postCommit;
