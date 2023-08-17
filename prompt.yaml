@@ -1,6 +1,6 @@
 task: prompt/task/bug/fix.md
 attention:
-  - src/frontend/service/postCommit.js
+  - src/frontend/service/resetGit.js
 requirements: |
   Export it as named!
 os: OSX

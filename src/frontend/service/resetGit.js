@@ -12,4 +12,4 @@ const resetGit = async () => {
   return data;
 };
 
-export default resetGit;
+export { resetGit };

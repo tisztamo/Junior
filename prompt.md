@@ -1,15 +1,14 @@
 # Working set
 
-src/frontend/service/postCommit.js:
+src/frontend/service/resetGit.js:
 ```
 import { getBaseUrl } from '../getBaseUrl';
 
-const postCommit = async (message) => {
+const resetGit = async () => {
   const baseUrl = getBaseUrl();
-  const response = await fetch(`${baseUrl}/git/commit`, {
+  const response = await fetch(`${baseUrl}/git/reset`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message }),
   });
 
   const data = await response.json();
@@ -17,7 +16,7 @@ const postCommit = async (message) => {
   return data;
 };
 
-export default postCommit;
+export default resetGit;
 
 ```
 

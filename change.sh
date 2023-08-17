@@ -1,18 +1,18 @@
 #!/bin/sh
 set -e
-goal="Fix export as named"
+goal="Fix export issue in resetGit.js"
 echo "Plan:"
-echo "1. Change default export to named export in postCommit.js"
+echo "1. Modify resetGit.js to use named export"
+echo "2. Save the updated content"
 
-cat > src/frontend/service/postCommit.js << 'EOF'
+cat > src/frontend/service/resetGit.js << 'EOF'
 import { getBaseUrl } from '../getBaseUrl';
 
-const postCommit = async (message) => {
+const resetGit = async () => {
   const baseUrl = getBaseUrl();
-  const response = await fetch(`${baseUrl}/git/commit`, {
+  const response = await fetch(`${baseUrl}/git/reset`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message }),
   });
 
   const data = await response.json();
@@ -20,7 +20,7 @@ const postCommit = async (message) => {
   return data;
 };
 
-export { postCommit };
+export { resetGit };
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"
