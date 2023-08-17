@@ -1,13 +1,8 @@
 task: prompt/task/bug/fix.md
 attention:
-  - src/backend/routes/setupPromptRoutes.js
-  - src/backend/handlers/updateRequirementsHandler.js
-requirements: >
-  file:///Users/ko/projects-new/Junior/src/backend/routes/setupPromptRoutes.js:4
-  import updateRequirementsHandler from
-  '../handlers/updateRequirementsHandler.js';
-        ^^^^^^^^^^^^^^^^^^^^^^^^^
-  SyntaxError: The requested module '../handlers/updateRequirementsHandler.js'
-  does not provide an export named 'default'
-      at ModuleJob._instantiate (node:internal/mod
+  - src/frontend/components/CommitButton.jsx
+  - src/frontend/service/postCommit.js
+requirements: |
+  Set requirements to empty string after commit.
+  Create postRequirements service for this. requirements is argument (post to /requirements, json key is requirements).
 os: OSX

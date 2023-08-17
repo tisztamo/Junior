@@ -1,46 +1,54 @@
+You are Junior, an AI system aiding developers.
+You are working with a part of a large program called the "Working Set."
+Before starting, check if you need more files to solve the task.
+Do not edit files without knowing their contents!
+Ask for them in normal conversational format instead.
+
 # Working set
 
-src/backend/routes/setupPromptRoutes.js:
+src/frontend/components/CommitButton.jsx:
 ```
-import { generateHandler } from '../handlers/generateHandler.js';
-import { servePromptDescriptor } from '../handlers/servePromptDescriptor.js';
-import { listTasks } from '../handlers/listTasks.js';
-import updateRequirementsHandler from '../handlers/updateRequirementsHandler.js';
-import { updateTaskHandler } from '../handlers/updateTaskHandler.js';
+import { postCommit } from '../service/postCommit';
+import { commitMessage } from '../model/commitMessage';
+import { fetchGitStatus } from '../service/fetchGitStatus';
+import clearState from '../service/clearState';
 
-export function setupPromptRoutes(app) {
-  app.get('/descriptor', servePromptDescriptor);
-  app.get('/tasks', (req, res) => res.json({ tasks: listTasks() }));
-  app.post('/generate', generateHandler);
-  app.post('/requirements', updateRequirementsHandler);
-  app.post('/updatetask', updateTaskHandler);
-}
+const CommitButton = () => {
+  const handleCommit = async () => {
+    const response = await postCommit(commitMessage());
+    console.log(response.message);
+    const status = await fetchGitStatus();
+    console.log(status);
+    clearState();
+  };
 
-```
-
-src/backend/handlers/updateRequirementsHandler.js:
-```
-import yaml from 'js-yaml';
-import { loadPromptDescriptor } from "../../prompt/loadPromptDescriptor.js";
-import { savePromptDescriptor } from "../../prompt/savePromptDescriptor.js";
-
-export const updateRequirementsHandler = async (req, res) => {
-  const requirements = req.body.requirements;
-  
-  try {
-    const fileContent = await loadPromptDescriptor();
-    const document = yaml.load(fileContent);
-    document.requirements = requirements;
-    
-    const newYamlStr = yaml.dump(document);
-    await savePromptDescriptor(newYamlStr);
-    
-    res.status(200).json({ message: "Requirements updated successfully" });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Internal server error" });
-  }
+  return (
+    <button className="w-full px-4 py-4 bg-green-700 text-lg text-bg font-semibold rounded" onClick={handleCommit}>Commit</button>
+  );
 };
+
+export default CommitButton;
+
+```
+
+src/frontend/service/postCommit.js:
+```
+import { getBaseUrl } from '../getBaseUrl';
+
+const postCommit = async (message) => {
+  const baseUrl = getBaseUrl();
+  const response = await fetch(`${baseUrl}/git/commit`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message }),
+  });
+
+  const data = await response.json();
+
+  return data;
+};
+
+export { postCommit };
 
 ```
 
@@ -49,10 +57,8 @@ export const updateRequirementsHandler = async (req, res) => {
 
 Fix the following issue!
 
-file:///Users/ko/projects-new/Junior/src/backend/routes/setupPromptRoutes.js:4 import updateRequirementsHandler from &#39;../handlers/updateRequirementsHandler.js&#39;;
-      ^^^^^^^^^^^^^^^^^^^^^^^^^
-SyntaxError: The requested module &#39;../handlers/updateRequirementsHandler.js&#39; does not provide an export named &#39;default&#39;
-    at ModuleJob._instantiate (node:internal/mod
+Set requirements to empty string after commit.
+Create postRequirements service for this. requirements is argument (post to /requirements, json key is requirements).
 
 
 
