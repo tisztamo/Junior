@@ -1,8 +1,9 @@
-task: prompt/task/refactor/custom.md
+task: prompt/task/bug/fix.md
 attention:
   - src/frontend/service/fetchGitStatus.js
-  - src/frontend/service/resetGit.js
-  - src/frontend/service/postCommit.js
-requirements: |
-  Git-related routes were moved under /git/
+requirements: >
+  Uncaught SyntaxError: The requested module '/service/fetchGitStatus.js' does
+  not provide an export named 'fetchGitStatus' (at handleExecuteChange.js:5:10)
+
+  Export it as named!
 os: OSX

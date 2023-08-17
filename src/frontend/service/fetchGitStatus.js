@@ -10,4 +10,4 @@ const fetchGitStatus = async () => {
   setGitStatus(data);
 };
 
-export default fetchGitStatus;
+export { fetchGitStatus };

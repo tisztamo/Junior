@@ -7,64 +7,24 @@ import { setGitStatus } from '../model/gitStatus';
 
 const fetchGitStatus = async () => {
   const baseUrl = getBaseUrl();
-  const response = await fetch(`${baseUrl}/status`);
+  const response = await fetch(`${baseUrl}/git/status`);
 
   const data = await response.json();
 
   setGitStatus(data);
 };
 
-export { fetchGitStatus };
-
-```
-
-src/frontend/service/resetGit.js:
-```
-import { getBaseUrl } from '../getBaseUrl';
-
-const resetGit = async () => {
-  const baseUrl = getBaseUrl();
-  const response = await fetch(`${baseUrl}/reset`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-  });
-
-  const data = await response.json();
-
-  return data;
-};
-
-export { resetGit };
-
-```
-
-src/frontend/service/postCommit.js:
-```
-import { getBaseUrl } from '../getBaseUrl';
-
-const postCommit = async (message) => {
-  const baseUrl = getBaseUrl();
-  const response = await fetch(`${baseUrl}/commit`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message }),
-  });
-
-  const data = await response.json();
-
-  return data;
-};
-
-export { postCommit };
+export default fetchGitStatus;
 
 ```
 
 
 # Task
 
-Refactor!
+Fix the following issue!
 
-Git-related routes were moved under /git/
+Uncaught SyntaxError: The requested module &#39;/service/fetchGitStatus.js&#39; does not provide an export named &#39;fetchGitStatus&#39; (at handleExecuteChange.js:5:10)
+Export it as named!
 
 
 
