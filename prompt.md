@@ -6,83 +6,93 @@ Ask for them in normal conversational format instead.
 
 # Working set
 
-src/frontend/components/RollbackButton.jsx:
+src/backend/setupRoutes.js:
 ```
-import { createSignal } from "solid-js";
-import { resetGit } from '../service/resetGit';
-import RollbackConfirmationDialog from './RollbackConfirmationDialog';
+import { generateHandler } from './handlers/generateHandler.js';
+import { servePromptDescriptor } from './handlers/servePromptDescriptor.js';
+import { updateTaskHandler } from './handlers/updateTaskHandler.js';
+import { listTasks } from './handlers/listTasks.js';
+import { executeHandler } from './handlers/executeHandler.js';
+import resetGitHandler from './handlers/resetGitHandler.js';
+import gitStatusHandler from './handlers/gitStatusHandler.js';
+import commitGitHandler from './handlers/commitGitHandler.js';
 
-const RollbackButton = () => {
-  const [showConfirmation, setShowConfirmation] = createSignal(false);
+export function setupRoutes(app) {
+  app.get('/descriptor', servePromptDescriptor);
+  app.get('/tasks', (req, res) => res.json({ tasks: listTasks() }));
+  app.get('/status', gitStatusHandler);
 
-  const handleReset = async () => {
-    const response = await resetGit();
-    console.log(response.message);
-  };
+  app.post('/generate', generateHandler);
+  app.post('/updatetask', updateTaskHandler);
+  app.post('/execute', executeHandler);
+  app.post('/reset', resetGitHandler);
+  app.post('/commit', commitGitHandler);
+}
 
-  const handleConfirm = () => {
-    setShowConfirmation(false);
-    handleReset();
-  };
+```
 
-  const handleRollbackClick = () => {
-    const disableConfirmation = localStorage.getItem('Junior.disableRollbackConfirmation') === 'true';
-    if (disableConfirmation) {
-      handleReset();
-    } else {
-      setShowConfirmation(true);
+src/backend/handlers/gitStatusHandler.js:
+```
+import gitStatus from '../../git/gitStatus.js';
+
+export default async function gitStatusHandler(req, res) {
+  try {
+    const status = await gitStatus();
+    res.status(200).send({ message: status });
+  } catch (error) {
+    let errorMessage = 'Error in getting Git status';
+    if (error.stderr && error.stderr.includes('Not a git repository')) {
+      errorMessage = 'Not a git repo. Run \'npx junior-init\' to initialize!';
     }
-  };
-
-  return (
-    <>
-      <button className="w-full px-4 py-4 bg-red-700 text-lg text-bg font-semibold rounded" onClick={handleRollbackClick}>Roll Back</button>
-      <RollbackConfirmationDialog visible={showConfirmation()} onConfirm={handleConfirm} onCancel={() => setShowConfirmation(false)} />
-    </>
-  );
-};
-
-export default RollbackButton;
+    res.status(500).send({ message: errorMessage, error });
+  }
+}
 
 ```
 
-src/frontend/components/CommitButton.jsx:
+src/backend/handlers/commitGitHandler.js:
 ```
-import { postCommit } from '../service/postCommit';
-import { commitMessage, setCommitMessage } from '../model/commitMessage';
-import { fetchGitStatus } from '../service/fetchGitStatus';
-import { setExecutionResult } from '../model/executionResult';
-import { setPrompt } from '../model/prompt';
-import { setChange } from '../model/change';
+import commitGit from '../../git/commitGit.js';
 
-const CommitButton = () => {
-  const handleCommit = async () => {
-    const response = await postCommit(commitMessage());
-    console.log(response.message);
-    const status = await fetchGitStatus();
-    console.log(status);
-    setChange(''); // Clearing the change after commit
-    setExecutionResult('');
-    setCommitMessage('');
-    setPrompt('');
-  };
+export default async function commitGitHandler(req, res) {
+  try {
+    const message = req.body.message;
+    if (!message) {
+      res.status(400).send({ message: 'Commit message is required' });
+      return;
+    }
+    await commitGit(message);
+    res.status(200).send({ message: `Successfully committed with message: ${message}` });
+  } catch (error) {
+    res.status(500).send({ message: 'Error in committing changes', error });
+  }
+}
 
-  return (
-    <button className="w-full px-4 py-4 bg-green-700 text-lg text-bg font-semibold rounded" onClick={handleCommit}>Commit</button>
-  );
-};
+```
 
-export default CommitButton;
+src/backend/handlers/resetGitHandler.js:
+```
+import resetGit from '../../git/resetGit.js';
+
+export default async function resetGitHandler(req, res) {
+  try {
+    await resetGit();
+    res.status(200).send({ message: 'Git successfully reset' });
+  } catch (error) {
+    res.status(500).send({ message: 'Error in resetting Git', error });
+  }
+}
 
 ```
 
 
 # Task
 
-Fix the following issue!
+Refactor!
 
-Factor out the state-clearing statements from handleCommit to service/clearState.js!
-Also call the new function from after rollback.
+Move git-related routes under /git/
+Also move the handler files to handlers/git/
+Do not forget to update relative imports!
 
 
 

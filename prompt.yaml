@@ -1,8 +1,11 @@
-task: prompt/task/bug/fix.md
+task: prompt/task/refactor/custom.md
 attention:
-  - src/frontend/components/RollbackButton.jsx
-  - src/frontend/components/CommitButton.jsx
+  - src/backend/setupRoutes.js
+  - src/backend/handlers/gitStatusHandler.js
+  - src/backend/handlers/commitGitHandler.js
+  - src/backend/handlers/resetGitHandler.js
 requirements: |
-  Factor out the state-clearing statements from handleCommit to service/clearState.js!
-  Also call the new function from after rollback.
+  Move git-related routes under /git/
+  Also move the handler files to handlers/git/
+  Do not forget to update relative imports!
 os: OSX

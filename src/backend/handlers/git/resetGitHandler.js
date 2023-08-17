@@ -1,4 +1,4 @@
-import resetGit from '../../git/resetGit.js';
+import resetGit from '../../../git/resetGit.js';
 
 export default async function resetGitHandler(req, res) {
   try {
