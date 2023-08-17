@@ -2,7 +2,7 @@ task: prompt/task/refactor/custom.md
 attention:
   - src/backend/setupRoutes.js
 requirements: |
-  Route the new endpoint on "/requirements"
-  Remove comments.
-  Move updatetask to the end
+  Factor out git related routes to routes/setupGitRoutes.js (create dir)
+  generate, tasks, updatetask, descriptor and requirements to routes/setupPromptRoutes.js
+  leave execute where it is.
 os: OSX

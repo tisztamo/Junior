@@ -10,28 +10,24 @@ src/backend/setupRoutes.js:
 ```
 import { generateHandler } from './handlers/generateHandler.js';
 import { servePromptDescriptor } from './handlers/servePromptDescriptor.js';
-import { updateTaskHandler } from './handlers/updateTaskHandler.js';
 import { listTasks } from './handlers/listTasks.js';
 import { executeHandler } from './handlers/executeHandler.js';
 import gitStatusHandler from './handlers/git/gitStatusHandler.js';
 import commitGitHandler from './handlers/git/commitGitHandler.js';
 import resetGitHandler from './handlers/git/resetGitHandler.js';
 import updateRequirementsHandler from './handlers/updateRequirementsHandler.js';
+import { updateTaskHandler } from './handlers/updateTaskHandler.js';
 
 export function setupRoutes(app) {
   app.get('/descriptor', servePromptDescriptor);
   app.get('/tasks', (req, res) => res.json({ tasks: listTasks() }));
   app.post('/generate', generateHandler);
-  app.post('/updatetask', updateTaskHandler);
   app.post('/execute', executeHandler);
-
-  // Git routes grouped
   app.get('/git/status', gitStatusHandler);
   app.post('/git/reset', resetGitHandler);
   app.post('/git/commit', commitGitHandler);
-
-  // New endpoint for updating requirements
-  app.post('/requirements/update', updateRequirementsHandler);
+  app.post('/requirements', updateRequirementsHandler);
+  app.post('/updatetask', updateTaskHandler);
 }
 
 ```
@@ -41,9 +37,9 @@ export function setupRoutes(app) {
 
 Refactor!
 
-Route the new endpoint on &#34;/requirements&#34;
-Remove comments.
-Move updatetask to the end
+Factor out git related routes to routes/setupGitRoutes.js (create dir)
+generate, tasks, updatetask, descriptor and requirements to routes/setupPromptRoutes.js
+leave execute where it is.
 
 
 
