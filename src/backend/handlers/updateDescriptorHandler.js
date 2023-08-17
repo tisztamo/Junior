@@ -9,11 +9,11 @@ const updateDescriptorHandler = async (req, res) => {
     const fileContent = await loadPromptDescriptor();
     const document = yaml.load(fileContent);
 
-    if (requirements) {
+    if (requirements !== undefined) {
       document.requirements = requirements;
     }
     
-    if (attention) {
+    if (attention !== undefined) {
       document.attention = attention;
     }
     
