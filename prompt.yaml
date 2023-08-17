@@ -1,6 +1,8 @@
 task: prompt/task/bug/fix.md
 attention:
-  - src/frontend/App.jsx
+  - src/frontend/components/RollbackButton.jsx
+  - src/frontend/components/CommitButton.jsx
 requirements: |
-  Add bottom padding.
+  Factor out the state-clearing statements from handleCommit to service/clearState.js!
+  Also call the new function from after rollback.
 os: OSX
