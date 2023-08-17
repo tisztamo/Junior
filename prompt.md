@@ -1,45 +1,58 @@
-You are Junior, an AI system aiding developers.
-You are working with a part of a large program called the "Working Set."
-Before starting, check if you need more files to solve the task.
-Do not edit files without knowing their contents!
-Ask for them in normal conversational format instead.
-
 # Working set
 
-src/backend/setupRoutes.js:
+src/backend/routes/setupPromptRoutes.js:
 ```
-import { generateHandler } from './handlers/generateHandler.js';
-import { servePromptDescriptor } from './handlers/servePromptDescriptor.js';
-import { listTasks } from './handlers/listTasks.js';
-import { executeHandler } from './handlers/executeHandler.js';
-import gitStatusHandler from './handlers/git/gitStatusHandler.js';
-import commitGitHandler from './handlers/git/commitGitHandler.js';
-import resetGitHandler from './handlers/git/resetGitHandler.js';
-import updateRequirementsHandler from './handlers/updateRequirementsHandler.js';
-import { updateTaskHandler } from './handlers/updateTaskHandler.js';
+import { generateHandler } from '../handlers/generateHandler.js';
+import { servePromptDescriptor } from '../handlers/servePromptDescriptor.js';
+import { listTasks } from '../handlers/listTasks.js';
+import updateRequirementsHandler from '../handlers/updateRequirementsHandler.js';
+import { updateTaskHandler } from '../handlers/updateTaskHandler.js';
 
-export function setupRoutes(app) {
+export function setupPromptRoutes(app) {
   app.get('/descriptor', servePromptDescriptor);
   app.get('/tasks', (req, res) => res.json({ tasks: listTasks() }));
   app.post('/generate', generateHandler);
-  app.post('/execute', executeHandler);
-  app.get('/git/status', gitStatusHandler);
-  app.post('/git/reset', resetGitHandler);
-  app.post('/git/commit', commitGitHandler);
   app.post('/requirements', updateRequirementsHandler);
   app.post('/updatetask', updateTaskHandler);
 }
 
 ```
 
+src/backend/handlers/updateRequirementsHandler.js:
+```
+import yaml from 'js-yaml';
+import { loadPromptDescriptor } from "../../prompt/loadPromptDescriptor.js";
+import { savePromptDescriptor } from "../../prompt/savePromptDescriptor.js";
+
+export const updateRequirementsHandler = async (req, res) => {
+  const requirements = req.body.requirements;
+  
+  try {
+    const fileContent = await loadPromptDescriptor();
+    const document = yaml.load(fileContent);
+    document.requirements = requirements;
+    
+    const newYamlStr = yaml.dump(document);
+    await savePromptDescriptor(newYamlStr);
+    
+    res.status(200).json({ message: "Requirements updated successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+```
+
 
 # Task
 
-Refactor!
+Fix the following issue!
 
-Factor out git related routes to routes/setupGitRoutes.js (create dir)
-generate, tasks, updatetask, descriptor and requirements to routes/setupPromptRoutes.js
-leave execute where it is.
+file:///Users/ko/projects-new/Junior/src/backend/routes/setupPromptRoutes.js:4 import updateRequirementsHandler from &#39;../handlers/updateRequirementsHandler.js&#39;;
+      ^^^^^^^^^^^^^^^^^^^^^^^^^
+SyntaxError: The requested module &#39;../handlers/updateRequirementsHandler.js&#39; does not provide an export named &#39;default&#39;
+    at ModuleJob._instantiate (node:internal/mod
 
 
 

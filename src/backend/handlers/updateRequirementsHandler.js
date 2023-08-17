@@ -2,7 +2,7 @@ import yaml from 'js-yaml';
 import { loadPromptDescriptor } from "../../prompt/loadPromptDescriptor.js";
 import { savePromptDescriptor } from "../../prompt/savePromptDescriptor.js";
 
-export const updateRequirementsHandler = async (req, res) => {
+const updateRequirementsHandler = async (req, res) => {
   const requirements = req.body.requirements;
   
   try {
@@ -19,3 +19,5 @@ export const updateRequirementsHandler = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export default updateRequirementsHandler;
