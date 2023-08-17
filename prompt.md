@@ -1,31 +1,75 @@
+You are Junior, an AI system aiding developers.
+You are working with a part of a large program called the "Working Set."
+Before starting, check if you need more files to solve the task.
+Do not edit files without knowing their contents!
+Ask for them in normal conversational format instead.
+
 # Working set
 
-src/frontend/service/resetGit.js:
+src/backend/setupRoutes.js:
 ```
-import { getBaseUrl } from '../getBaseUrl';
+import { generateHandler } from './handlers/generateHandler.js';
+import { servePromptDescriptor } from './handlers/servePromptDescriptor.js';
+import { updateTaskHandler } from './handlers/updateTaskHandler.js';
+import { listTasks } from './handlers/listTasks.js';
+import { executeHandler } from './handlers/executeHandler.js';
+import gitStatusHandler from './handlers/git/gitStatusHandler.js';
+import commitGitHandler from './handlers/git/commitGitHandler.js';
+import resetGitHandler from './handlers/git/resetGitHandler.js';
 
-const resetGit = async () => {
-  const baseUrl = getBaseUrl();
-  const response = await fetch(`${baseUrl}/git/reset`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-  });
+export function setupRoutes(app) {
+  app.get('/descriptor', servePromptDescriptor);
+  app.get('/tasks', (req, res) => res.json({ tasks: listTasks() }));
+  app.get('/git/status', gitStatusHandler);
+  app.post('/generate', generateHandler);
+  app.post('/updatetask', updateTaskHandler);
+  app.post('/execute', executeHandler);
+  app.post('/git/reset', resetGitHandler);
+  app.post('/git/commit', commitGitHandler);
+}
 
-  const data = await response.json();
+```
 
-  return data;
+src/backend/handlers/updateTaskHandler.js:
+```
+import path from 'path';
+import yaml from 'js-yaml';
+import { loadPromptDescriptor } from "../../prompt/loadPromptDescriptor.js";
+import { savePromptDescriptor } from "../../prompt/savePromptDescriptor.js";
+
+export const updateTaskHandler = async (req, res) => {
+  const task = req.body.task;
+  
+  try {
+    const fileContent = await loadPromptDescriptor();
+
+    const document = yaml.load(fileContent);
+    document.task = path.join("prompt", "task", task);
+    
+    const newYamlStr = yaml.dump(document);
+    await savePromptDescriptor(newYamlStr);
+    
+    res.status(200).json({ message: "Task updated successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };
-
-export default resetGit;
 
 ```
 
 
 # Task
 
-Fix the following issue!
+Implement the following feature!
 
-Export it as named!
+- Create a plan!
+- Create new files when needed!
+
+Requirements:
+
+Crete a new endpoint for updating the requirements section of the prompt descriptor.
+Also group git routes together for readability.
 
 
 

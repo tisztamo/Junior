@@ -6,14 +6,20 @@ import { executeHandler } from './handlers/executeHandler.js';
 import gitStatusHandler from './handlers/git/gitStatusHandler.js';
 import commitGitHandler from './handlers/git/commitGitHandler.js';
 import resetGitHandler from './handlers/git/resetGitHandler.js';
+import updateRequirementsHandler from './handlers/updateRequirementsHandler.js';
 
 export function setupRoutes(app) {
   app.get('/descriptor', servePromptDescriptor);
   app.get('/tasks', (req, res) => res.json({ tasks: listTasks() }));
-  app.get('/git/status', gitStatusHandler);
   app.post('/generate', generateHandler);
   app.post('/updatetask', updateTaskHandler);
   app.post('/execute', executeHandler);
+
+  // Git routes grouped
+  app.get('/git/status', gitStatusHandler);
   app.post('/git/reset', resetGitHandler);
   app.post('/git/commit', commitGitHandler);
+
+  // New endpoint for updating requirements
+  app.post('/requirements/update', updateRequirementsHandler);
 }
