@@ -1,20 +1,23 @@
 # Working set
 
-src/frontend/service/fetchGitStatus.js:
+src/frontend/service/postCommit.js:
 ```
 import { getBaseUrl } from '../getBaseUrl';
-import { setGitStatus } from '../model/gitStatus';
 
-const fetchGitStatus = async () => {
+const postCommit = async (message) => {
   const baseUrl = getBaseUrl();
-  const response = await fetch(`${baseUrl}/git/status`);
+  const response = await fetch(`${baseUrl}/git/commit`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message }),
+  });
 
   const data = await response.json();
 
-  setGitStatus(data);
+  return data;
 };
 
-export default fetchGitStatus;
+export default postCommit;
 
 ```
 
@@ -23,7 +26,6 @@ export default fetchGitStatus;
 
 Fix the following issue!
 
-Uncaught SyntaxError: The requested module &#39;/service/fetchGitStatus.js&#39; does not provide an export named &#39;fetchGitStatus&#39; (at handleExecuteChange.js:5:10)
 Export it as named!
 
 

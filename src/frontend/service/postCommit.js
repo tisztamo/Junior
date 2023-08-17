@@ -13,4 +13,4 @@ const postCommit = async (message) => {
   return data;
 };
 
-export default postCommit;
+export { postCommit };

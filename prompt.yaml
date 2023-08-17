@@ -1,9 +1,6 @@
 task: prompt/task/bug/fix.md
 attention:
-  - src/frontend/service/fetchGitStatus.js
-requirements: >
-  Uncaught SyntaxError: The requested module '/service/fetchGitStatus.js' does
-  not provide an export named 'fetchGitStatus' (at handleExecuteChange.js:5:10)
-
+  - src/frontend/service/postCommit.js
+requirements: |
   Export it as named!
 os: OSX

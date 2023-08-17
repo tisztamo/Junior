@@ -1,24 +1,26 @@
 #!/bin/sh
 set -e
-goal="Fix module export issue"
+goal="Fix export as named"
 echo "Plan:"
-echo "1. Update the fetchGitStatus.js to use named export."
+echo "1. Change default export to named export in postCommit.js"
 
-# Change fetchGitStatus.js to use named export
-cat > src/frontend/service/fetchGitStatus.js << 'EOF'
+cat > src/frontend/service/postCommit.js << 'EOF'
 import { getBaseUrl } from '../getBaseUrl';
-import { setGitStatus } from '../model/gitStatus';
 
-const fetchGitStatus = async () => {
+const postCommit = async (message) => {
   const baseUrl = getBaseUrl();
-  const response = await fetch(`${baseUrl}/git/status`);
+  const response = await fetch(`${baseUrl}/git/commit`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message }),
+  });
 
   const data = await response.json();
 
-  setGitStatus(data);
+  return data;
 };
 
-export { fetchGitStatus };
+export { postCommit };
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"
