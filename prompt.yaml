@@ -1,8 +1,8 @@
-task: prompt/task/feature/implement.md
+task: prompt/task/refactor/custom.md
 attention:
   - src/backend/setupRoutes.js
-  - src/backend/handlers/updateTaskHandler.js
 requirements: |
-  Crete a new endpoint for updating the requirements section of the prompt descriptor.
-  Also group git routes together for readability.
+  Route the new endpoint on "/requirements"
+  Remove comments.
+  Move updatetask to the end
 os: OSX

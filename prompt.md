@@ -16,60 +16,34 @@ import { executeHandler } from './handlers/executeHandler.js';
 import gitStatusHandler from './handlers/git/gitStatusHandler.js';
 import commitGitHandler from './handlers/git/commitGitHandler.js';
 import resetGitHandler from './handlers/git/resetGitHandler.js';
+import updateRequirementsHandler from './handlers/updateRequirementsHandler.js';
 
 export function setupRoutes(app) {
   app.get('/descriptor', servePromptDescriptor);
   app.get('/tasks', (req, res) => res.json({ tasks: listTasks() }));
-  app.get('/git/status', gitStatusHandler);
   app.post('/generate', generateHandler);
   app.post('/updatetask', updateTaskHandler);
   app.post('/execute', executeHandler);
+
+  // Git routes grouped
+  app.get('/git/status', gitStatusHandler);
   app.post('/git/reset', resetGitHandler);
   app.post('/git/commit', commitGitHandler);
+
+  // New endpoint for updating requirements
+  app.post('/requirements/update', updateRequirementsHandler);
 }
-
-```
-
-src/backend/handlers/updateTaskHandler.js:
-```
-import path from 'path';
-import yaml from 'js-yaml';
-import { loadPromptDescriptor } from "../../prompt/loadPromptDescriptor.js";
-import { savePromptDescriptor } from "../../prompt/savePromptDescriptor.js";
-
-export const updateTaskHandler = async (req, res) => {
-  const task = req.body.task;
-  
-  try {
-    const fileContent = await loadPromptDescriptor();
-
-    const document = yaml.load(fileContent);
-    document.task = path.join("prompt", "task", task);
-    
-    const newYamlStr = yaml.dump(document);
-    await savePromptDescriptor(newYamlStr);
-    
-    res.status(200).json({ message: "Task updated successfully" });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-};
 
 ```
 
 
 # Task
 
-Implement the following feature!
+Refactor!
 
-- Create a plan!
-- Create new files when needed!
-
-Requirements:
-
-Crete a new endpoint for updating the requirements section of the prompt descriptor.
-Also group git routes together for readability.
+Route the new endpoint on &#34;/requirements&#34;
+Remove comments.
+Move updatetask to the end
 
 
 
