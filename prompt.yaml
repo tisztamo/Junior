@@ -1,8 +1,7 @@
 task: prompt/task/bug/fix.md
 attention:
-  - src/frontend/components/RollbackButton.jsx
-  - src/frontend/components/CommitButton.jsx
-requirements: |
-  Factor out the state-clearing statements from handleCommit to service/clearState.js!
-  Also call the new function from after rollback.
+  - src/backend/handlers/updateDescriptorHandler.js
+requirements: >
+  When empty string is coming in one of the fields, do the update. Only skip
+  update for missing keys.
 os: OSX

@@ -1,4 +1,4 @@
-import commitGit from '../../git/commitGit.js';
+import commitGit from '../../../git/commitGit.js';
 
 export default async function commitGitHandler(req, res) {
   try {

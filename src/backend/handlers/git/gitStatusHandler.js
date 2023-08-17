@@ -1,4 +1,4 @@
-import gitStatus from '../../git/gitStatus.js';
+import gitStatus from '../../../git/gitStatus.js';
 
 export default async function gitStatusHandler(req, res) {
   try {

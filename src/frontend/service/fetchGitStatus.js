@@ -3,7 +3,7 @@ import { setGitStatus } from '../model/gitStatus';
 
 const fetchGitStatus = async () => {
   const baseUrl = getBaseUrl();
-  const response = await fetch(`${baseUrl}/status`);
+  const response = await fetch(`${baseUrl}/git/status`);
 
   const data = await response.json();
 

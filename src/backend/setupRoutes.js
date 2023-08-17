@@ -1,20 +1,9 @@
-import { generateHandler } from './handlers/generateHandler.js';
-import { servePromptDescriptor } from './handlers/servePromptDescriptor.js';
-import { updateTaskHandler } from './handlers/updateTaskHandler.js';
-import { listTasks } from './handlers/listTasks.js';
+import { setupGitRoutes } from './routes/setupGitRoutes.js';
+import { setupPromptRoutes } from './routes/setupPromptRoutes.js';
 import { executeHandler } from './handlers/executeHandler.js';
-import resetGitHandler from './handlers/resetGitHandler.js';
-import gitStatusHandler from './handlers/gitStatusHandler.js';
-import commitGitHandler from './handlers/commitGitHandler.js';
 
 export function setupRoutes(app) {
-  app.get('/descriptor', servePromptDescriptor);
-  app.get('/tasks', (req, res) => res.json({ tasks: listTasks() }));
-  app.get('/status', gitStatusHandler);
-
-  app.post('/generate', generateHandler);
-  app.post('/updatetask', updateTaskHandler);
+  setupPromptRoutes(app);
+  setupGitRoutes(app);
   app.post('/execute', executeHandler);
-  app.post('/reset', resetGitHandler);
-  app.post('/commit', commitGitHandler);
 }

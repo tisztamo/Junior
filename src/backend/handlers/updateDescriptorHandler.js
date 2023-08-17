@@ -1,10 +1,3 @@
-#!/bin/sh
-set -e
-goal="Fix empty string update issue"
-echo "Plan:"
-echo "1. Modify updateDescriptorHandler.js to update fields even when they have empty strings."
-
-cat > src/backend/handlers/updateDescriptorHandler.js << 'EOF'
 import yaml from 'js-yaml';
 import { loadPromptDescriptor } from "../../prompt/loadPromptDescriptor.js";
 import { savePromptDescriptor } from "../../prompt/savePromptDescriptor.js";
@@ -35,6 +28,3 @@ const updateDescriptorHandler = async (req, res) => {
 };
 
 export default updateDescriptorHandler;
-EOF
-
-echo "\033[32mDone: $goal\033[0m\n"

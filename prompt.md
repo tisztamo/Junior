@@ -6,73 +6,38 @@ Ask for them in normal conversational format instead.
 
 # Working set
 
-src/frontend/components/RollbackButton.jsx:
+src/backend/handlers/updateDescriptorHandler.js:
 ```
-import { createSignal } from "solid-js";
-import { resetGit } from '../service/resetGit';
-import RollbackConfirmationDialog from './RollbackConfirmationDialog';
+import yaml from 'js-yaml';
+import { loadPromptDescriptor } from "../../prompt/loadPromptDescriptor.js";
+import { savePromptDescriptor } from "../../prompt/savePromptDescriptor.js";
 
-const RollbackButton = () => {
-  const [showConfirmation, setShowConfirmation] = createSignal(false);
+const updateDescriptorHandler = async (req, res) => {
+  const { requirements, attention } = req.body;
+  
+  try {
+    const fileContent = await loadPromptDescriptor();
+    const document = yaml.load(fileContent);
 
-  const handleReset = async () => {
-    const response = await resetGit();
-    console.log(response.message);
-  };
-
-  const handleConfirm = () => {
-    setShowConfirmation(false);
-    handleReset();
-  };
-
-  const handleRollbackClick = () => {
-    const disableConfirmation = localStorage.getItem('Junior.disableRollbackConfirmation') === 'true';
-    if (disableConfirmation) {
-      handleReset();
-    } else {
-      setShowConfirmation(true);
+    if (requirements) {
+      document.requirements = requirements;
     }
-  };
-
-  return (
-    <>
-      <button className="w-full px-4 py-4 bg-red-700 text-lg text-bg font-semibold rounded" onClick={handleRollbackClick}>Roll Back</button>
-      <RollbackConfirmationDialog visible={showConfirmation()} onConfirm={handleConfirm} onCancel={() => setShowConfirmation(false)} />
-    </>
-  );
+    
+    if (attention) {
+      document.attention = attention;
+    }
+    
+    const newYamlStr = yaml.dump(document);
+    await savePromptDescriptor(newYamlStr);
+    
+    res.status(200).json({ message: "Descriptor updated successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };
 
-export default RollbackButton;
-
-```
-
-src/frontend/components/CommitButton.jsx:
-```
-import { postCommit } from '../service/postCommit';
-import { commitMessage, setCommitMessage } from '../model/commitMessage';
-import { fetchGitStatus } from '../service/fetchGitStatus';
-import { setExecutionResult } from '../model/executionResult';
-import { setPrompt } from '../model/prompt';
-import { setChange } from '../model/change';
-
-const CommitButton = () => {
-  const handleCommit = async () => {
-    const response = await postCommit(commitMessage());
-    console.log(response.message);
-    const status = await fetchGitStatus();
-    console.log(status);
-    setChange(''); // Clearing the change after commit
-    setExecutionResult('');
-    setCommitMessage('');
-    setPrompt('');
-  };
-
-  return (
-    <button className="w-full px-4 py-4 bg-green-700 text-lg text-bg font-semibold rounded" onClick={handleCommit}>Commit</button>
-  );
-};
-
-export default CommitButton;
+export default updateDescriptorHandler;
 
 ```
 
@@ -81,8 +46,7 @@ export default CommitButton;
 
 Fix the following issue!
 
-Factor out the state-clearing statements from handleCommit to service/clearState.js!
-Also call the new function from after rollback.
+When empty string is coming in one of the fields, do the update. Only skip update for missing keys.
 
 
 
