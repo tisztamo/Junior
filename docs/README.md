@@ -8,7 +8,7 @@ Warn: This README is AI generated, just like all the source files of this projec
 
 Junior is an **AI-first IDE** designed to utilize the capabilities of language models. Much like how Linus Torvalds oversees Linux Kernel development, Junior provides a space for developers to collaborate directly with AI throughout the development process.
 
-Embracing a design philosophy of simplicity and configurability, Junior aims to join the ranks of influential tools such as git and LISP in terms of its contribution to software development.
+Embracing a design philosophy of being simple, configurable and auditable, Junior aims to join the ranks of influential tools such as git and LISP in terms of its contribution to software development.
 
 With a structured task descriptor and by spotlighting relevant parts of your project, you can delegate tasks such as code implementation, documentation, testing, and more, to Junior.
 

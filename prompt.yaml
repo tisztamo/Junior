@@ -2,9 +2,7 @@ task: prompt/task/doc/improve.md
 attention:
   - docs/README.md
 requirements: >
-  Make Getting Started and Contributing and Support a bit less hyping.
-
-  Change the note at the end to say we test with that model only, but you can
-  try out similarly capable models and report your success. It will not work
-  with 3.5 (reword if needed)
+  Reword "design philosophy of simplicity and configurability"
+  to 
+  "design philosophy of being simple, configurable and auditable"
 os: OSX
