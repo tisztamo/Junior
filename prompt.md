@@ -6,14 +6,13 @@ Ask for them in normal conversational format instead.
 
 # Working set
 
-README.md:
+docs/README.md:
 ```
-[![Docs: Junior Documentation](https://img.shields.io/badge/docs-Junior-blue)](https://tisztamo.github.io/Junior/#/)
 Warn: This README is AI generated, just like all the source files of this project.
 
 # Junior - Your AI contributor which codes itself.
 
-[![Video: Junior codes itself](docs/assets/video_cover.jpg)](https://www.youtube.com/watch?v=W_iwry8uT7E)
+[![Video: Junior codes itself](/assets/video_cover.jpg)](https://www.youtube.com/watch?v=W_iwry8uT7E)
 
 *"Video: Junior codes itself"*
 ## Description
@@ -26,49 +25,7 @@ By providing specific task details in a prompt descriptor and highlighting the r
 
 ## Getting Started
 
-### Installation
-
-To install, clone the repository and run `npm install` in the root directory. Additionally, you can install the "Junior" vscode extension from the vscode extension marketplace.
-
-### Usage
-
-#### Web Interface
-
-Run the application with `npm start` to start a local server, where you can generate a prompt and automatically copy it to paste into ChatGPT. The web interface is designed for use with ChatGPT Pro and doesn't require an API key. For more information about the web interface, please refer to [docs/web.md](docs/web.md).
-
-#### Command-line interface (CLI)
-
-To start the CLI, use `npm run cli`. This mode uses the ChatGPT API, and you'll need an API key stored in the `OPENAI_API_KEY` environment variable.
-
-### The Prompt Descriptor
-
-A prompt descriptor is a YAML file (`prompt.yaml`) outlining the details necessary for generating a task prompt for the AI model.
-
-Here's an example of a prompt descriptor:
-
-```yaml
-task: prompt/task/feature/implement.md
-attention:
-  - src/interactiveSession/startInteractiveSession.js
-  - src/prompt/createPrompt.js
-  - src/attention/readAttention.js
-  - prompt.yaml
-requirements: >
-  Write a README.md for this _exploratory_ project!
-format: prompt/format/new_file_version.md
-```
-
-Each element in the descriptor serves a specific purpose:
-- `task`: Describes the task type and scope. For example, `feature/implement`, `bug/fix`, or `refactor/`. You can check out the [prompt/task/feature/implement.md](prompt/task/feature/implement.md) file as an example.
-- `attention`: Lists the files and directories most relevant to the task.
-- `requirements`: Describes the actual task in a human-readable format.
-- `format`: Determines how the output will be formatted.
-
-### Attention Mechanism
-
-The attention mechanism guides the AI model by providing it with a working set. It helps overcome the limited working memory of large language models.
-
-The working set is a subset of the entire project that's currently in focus. It includes both files and directories. For files, the content is directly provided to the AI. For directories, a brief list of files and subdirectories within them is presented.
+For more details on getting started, please refer to [usage.md](usage.md).
 
 ## Contributing and Support
 
@@ -91,7 +48,6 @@ Implement the following feature!
 Requirements:
 
 Update video link to https://youtu.be/NL4uFJSvfW0
-Re-download docs/assets/video_cover.jpg from the new video.
 Instead of the sentence &#34;Junior is an exploratory project...&#34; write about Junior being an AI-first IDE designed from the ground up to leverage language models.
 
 

@@ -2,12 +2,12 @@ Warn: This README is AI generated, just like all the source files of this projec
 
 # Junior - Your AI contributor which codes itself.
 
-[![Video: Junior codes itself](/assets/video_cover.jpg)](https://www.youtube.com/watch?v=W_iwry8uT7E)
+[![Video: Junior codes itself](/assets/video_cover.jpg)](https://youtu.be/NL4uFJSvfW0)
 
 *"Video: Junior codes itself"*
 ## Description
 
-Junior is an exploratory project aimed at revolutionizing the way programmers interact with the development process. Just like how Linus Torvalds oversees the Linux Kernel development without coding himself, this project allows developers to communicate with the AI and supervise the development process.
+Junior is an AI-first IDE designed from the ground up to leverage language models. This project allows developers to communicate with the AI and supervise the development process.
 
 Isn't that already possible with ChatGPT? No, LLMs have very limited "working memory", so it is not possible to directly work with them on large codebases.
 
