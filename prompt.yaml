@@ -1,23 +1,10 @@
 task: prompt/task/doc/improve.md
 attention:
   - docs/README.md
-  - README.md
 requirements: >
-  Edit only the one in docs/!
+  Make Getting Started and Contributing and Support a bit less hyping.
 
-  Make "AI-first IDE" very visible.
-
-  Remove "Description", but not the content under it.
-
-  There is some info about Linus in the other readme, mention it!
-
-  Write a sentence about Junior being built for craftmanship:
-
-  Junior is configurable, hackable, simple and auditable.
-
-  It also has a vision: To becoming something like git is now or something LISP
-  was back then.
-
-  Mention joyfully that git is also created by Linus, or what paul Graham wrote
-  about LISP being important in their succees by allowing rapid development.
+  Change the note at the end to say we test with that model only, but you can
+  try out similarly capable models and report your success. It will not work
+  with 3.5 (reword if needed)
 os: OSX
