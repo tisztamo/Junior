@@ -23,4 +23,32 @@ To install, clone the repository and run `npm install` in the root directory. Ad
 
 #### Web Interface
 
-Run the application with `npm start` to start a local server, where you can generate a prompt and automatically copy it to paste into ChatGPT. The web interface is designed for use with ChatGPT Pro and doesn't
+Run the application with `npm start` to start a local server, where you can generate a prompt and automatically copy it to paste into ChatGPT. The web interface is designed for use with ChatGPT Pro and doesn't require an API key. For more information about the web interface, please refer to [docs/web.md](docs/web.md).
+
+#### Command-line interface (CLI)
+
+To start the CLI, use `npm run cli`. This mode uses the ChatGPT API, and you'll need an API key stored in the `OPENAI_API_KEY` environment variable.
+
+### The Prompt Descriptor
+
+A prompt descriptor is a YAML file (`prompt.yaml`) outlining the details necessary for generating a task prompt for the AI model.
+
+Each element in the descriptor serves a specific purpose:
+- `task`: Describes the task type and scope. For example, `feature/implement`, `bug/fix`, or `refactor/`. You can check out the [prompt/task/feature/implement.md](prompt/task/feature/implement.md) file as an example.
+- `attention`: Lists the files and directories most relevant to the task.
+- `requirements`: Describes the actual task in a human-readable format.
+- `format`: Determines how the output will be formatted.
+
+### Attention Mechanism
+
+The attention mechanism guides the AI model by providing it with a working set. It helps overcome the limited working memory of large language models.
+
+The working set is a subset of the entire project that's currently in focus. It includes both files and directories. For files, the content is directly provided to the AI. For directories, a brief list of files and subdirectories within them is presented.
+
+## Contributing and Support
+
+Contributions are welcome! Remember, we eat our own dog food in this project. Junior is designed to write itself. Your main role will be to oversee the work, provide detailed prompts, and review the outcomes.
+
+For support, please create an issue in the GitHub repository.
+
+**Note:** For meaningful results, it's recommended to use the GPT-4 model or a more recent version.
