@@ -1,6 +1,7 @@
-task: prompt/task/bug/fix.md
+task: prompt/task/feature/implement.md
 attention:
   - src/frontend/components/NavBar.jsx
+  - README.md
 requirements: |
   Factor out the subtitle to a separate component
   and make the text random:

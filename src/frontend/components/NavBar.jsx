@@ -1,5 +1,5 @@
-import { createSignal } from 'solid-js';
 import ThemeSwitcher from './ThemeSwitcher';
+import SubTitle from './SubTitle';
 
 const NavBar = () => {
   const title = 'Junior';
@@ -11,7 +11,7 @@ const NavBar = () => {
       </div>
       <div class="flex flex-col items-center justify-center">
         <a href="https://github.com/tisztamo/Junior" class="text-center text-3xl mt-6 no-underline">{title}</a>
-        <a href="https://github.com/tisztamo/Junior" class="text-center text-xl no-underline cursor-pointer">Your AI contributor</a>
+        <SubTitle />
       </div>
     </div>
   );
