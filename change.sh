@@ -1,37 +1,42 @@
 #!/bin/sh
 set -e
-goal="Update Junior project README details"
+goal="Improve documentation in docs/README.md"
 echo "Plan:"
-echo "1. Update the video link in README.md."
-echo "2. Modify the description of Junior in README.md."
+echo "1. Backup docs/README.md for safety."
+echo "2. Edit docs/README.md with improved content."
+echo "3. Save changes."
 
-cat << 'EOF' > docs/README.md
+# Backup the file
+cp docs/README.md docs/README.md.backup
+
+# Editing the file
+cat > docs/README.md << 'EOF'
 Warn: This README is AI generated, just like all the source files of this project.
 
-# Junior - Your AI contributor which codes itself.
+# Junior - Your AI-first IDE 
 
 [![Video: Junior codes itself](/assets/video_cover.jpg)](https://youtu.be/NL4uFJSvfW0)
 
 *"Video: Junior codes itself"*
-## Description
 
-Junior is an AI-first IDE designed from the ground up to leverage language models. This project allows developers to communicate with the AI and supervise the development process.
+Junior is an innovative **AI-first IDE** built to harness the full power of language models. With a setup reminiscent of how Linus Torvalds oversees the Linux Kernel development without writing the code himself, Junior offers a space for developers to communicate directly with AI and actively supervise the entire development process.
 
-Isn't that already possible with ChatGPT? No, LLMs have very limited "working memory", so it is not possible to directly work with them on large codebases.
+Guided by the spirit of craftsmanship, Junior is not only configurable and hackable but also simple and auditable. Our vision is to propel Junior into the same league as iconic tools such as git - another masterpiece by Linus, and the legendary LISP, a language revered by Paul Graham for its significance in enabling rapid development.
 
-By providing specific task details in a prompt descriptor and highlighting the relevant parts of your project, you can delegate code implementation, documentation, testing, and more to your AI Junior.
+By offering specific task details through a prompt descriptor and spotlighting pertinent parts of your project, you can entrust tasks like code implementation, documentation, testing, and more, all to your AI Junior.
 
 ## Getting Started
 
-For more details on getting started, please refer to [usage.md](usage.md).
+For more insights on getting started, kindly refer to [usage.md](usage.md).
 
 ## Contributing and Support
 
-Contributions are welcome! Remember, we eat our own dog food in this project. Junior is designed to write itself. Your main role will be to oversee the work, provide detailed prompts, and review the outcomes.
+Your contributions are invaluable! Bear in mind, we practice what we preach here. Junior is engineered to be self-reliant. As a contributor, your primary task will be to monitor the proceedings, provide comprehensive prompts, and rigorously review the outcomes.
 
-For support, please create an issue in the GitHub repository.
+For assistance, feel free to raise an issue in our GitHub repository.
 
-**Note:** For meaningful results, it's recommended to use the GPT-4 model or a more recent version.
+**Note:** To experience the best results, it's advised to utilize the GPT-4 model or its latest successors.
+
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"

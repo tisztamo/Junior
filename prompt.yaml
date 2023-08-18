@@ -1,10 +1,23 @@
-task: prompt/task/feature/implement.md
+task: prompt/task/doc/improve.md
 attention:
   - docs/README.md
+  - README.md
 requirements: >
-  Update video link to https://youtu.be/NL4uFJSvfW0
+  Edit only the one in docs/!
 
-  Instead of the sentence "Junior is an exploratory project..." write about
-  Junior being an AI-first IDE designed from the ground up to leverage language
-  models.
+  Make "AI-first IDE" very visible.
+
+  Remove "Description", but not the content under it.
+
+  There is some info about Linus in the other readme, mention it!
+
+  Write a sentence about Junior being built for craftmanship:
+
+  Junior is configurable, hackable, simple and auditable.
+
+  It also has a vision: To becoming something like git is now or something LISP
+  was back then.
+
+  Mention joyfully that git is also created by Linus, or what paul Graham wrote
+  about LISP being important in their succees by allowing rapid development.
 os: OSX
