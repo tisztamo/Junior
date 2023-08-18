@@ -1,13 +1,12 @@
 #!/bin/sh
 set -e
-goal="Update video link and description"
+goal="Update video link and project description"
 echo "Plan:"
-echo "1. Update the README.md with the new video link."
-echo "2. Replace the video description sentence."
-echo "3. Re-download the video cover image."
+echo "1. Modify README.md to update video link."
+echo "2. Modify README.md to update the project description."
 
-# 1. Update the README.md with the new video link.
-cat > README.md << 'EOF'
+# Update video link and project description in README.md
+cat << 'EOF' > README.md
 [![Docs: Junior Documentation](https://img.shields.io/badge/docs-Junior-blue)](https://tisztamo.github.io/Junior/#/)
 Warn: This README is AI generated, just like all the source files of this project.
 
@@ -33,41 +32,4 @@ To install, clone the repository and run `npm install` in the root directory. Ad
 
 #### Web Interface
 
-Run the application with `npm start` to start a local server, where you can generate a prompt and automatically copy it to paste into ChatGPT. The web interface is designed for use with ChatGPT Pro and doesn't require an API key. For more information about the web interface, please refer to [docs/web.md](docs/web.md).
-
-#### Command-line interface (CLI)
-
-To start the CLI, use `npm run cli`. This mode uses the ChatGPT API, and you'll need an API key stored in the `OPENAI_API_KEY` environment variable.
-
-### The Prompt Descriptor
-
-A prompt descriptor is a YAML file (`prompt.yaml`) outlining the details necessary for generating a task prompt for the AI model.
-
-Each element in the descriptor serves a specific purpose:
-- `task`: Describes the task type and scope. For example, `feature/implement`, `bug/fix`, or `refactor/`. You can check out the [prompt/task/feature/implement.md](prompt/task/feature/implement.md) file as an example.
-- `attention`: Lists the files and directories most relevant to the task.
-- `requirements`: Describes the actual task in a human-readable format.
-- `format`: Determines how the output will be formatted.
-
-### Attention Mechanism
-
-The attention mechanism guides the AI model by providing it with a working set. It helps overcome the limited working memory of large language models.
-
-The working set is a subset of the entire project that's currently in focus. It includes both files and directories. For files, the content is directly provided to the AI. For directories, a brief list of files and subdirectories within them is presented.
-
-## Contributing and Support
-
-Contributions are welcome! Remember, we eat our own dog food in this project. Junior is designed to write itself. Your main role will be to oversee the work, provide detailed prompts, and review the outcomes.
-
-For support, please create an issue in the GitHub repository.
-
-**Note:** For meaningful results, it's recommended to use the GPT-4 model or a more recent version.
-EOF
-
-# 2. Replace the video description sentence.
-# This step is already completed in step 1 by replacing the content of the README.md using heredoc.
-
-# 3. Re-download the video cover image.
-curl -o docs/assets/video_cover.jpg 'https://i.ytimg.com/vi/NL4uFJSvfW0/maxresdefault.jpg'
-
-echo "\033[32mDone: $goal\033[0m\n"
+Run the application with `npm start` to start a local server, where you can generate a prompt and automatically copy it to paste into ChatGPT. The web interface is designed for use with ChatGPT Pro and doesn't

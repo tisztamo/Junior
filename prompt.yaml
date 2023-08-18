@@ -3,6 +3,5 @@ attention:
   - README.md
 requirements: |
   Update video link to https://youtu.be/NL4uFJSvfW0
-  Re-download docs/assets/video_cover.jpg from the new video.
   Instead of the sentence "Junior is an exploratory project..." write about Junior being an AI-first IDE designed from the ground up to leverage language models.
 os: OSX
