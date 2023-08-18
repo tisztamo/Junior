@@ -3,14 +3,13 @@ Warn: This README is AI generated, just like all the source files of this projec
 
 # Junior - Your AI contributor which codes itself.
 
-[![Video: Junior codes itself](docs/assets/video_cover.jpg)](https://www.youtube.com/watch?v=W_iwry8uT7E)
+[![Video: Junior codes itself](docs/assets/video_cover.jpg)](https://youtu.be/NL4uFJSvfW0)
 
 *"Video: Junior codes itself"*
+
 ## Description
 
-Junior is an exploratory project aimed at revolutionizing the way programmers interact with the development process. Just like how Linus Torvalds oversees the Linux Kernel development without coding himself, this project allows developers to communicate with the AI and supervise the development process.
-
-Isn't that already possible with ChatGPT? No, LLMs have very limited "working memory", so it is not possible to directly work with them on large codebases.
+Junior is an AI-first IDE designed from the ground up to leverage language models. Just like how Linus Torvalds oversees the Linux Kernel development without coding himself, this project allows developers to communicate with the AI and supervise the development process.
 
 By providing specific task details in a prompt descriptor and highlighting the relevant parts of your project, you can delegate code implementation, documentation, testing, and more to your AI Junior.
 
@@ -33,20 +32,6 @@ To start the CLI, use `npm run cli`. This mode uses the ChatGPT API, and you'll 
 ### The Prompt Descriptor
 
 A prompt descriptor is a YAML file (`prompt.yaml`) outlining the details necessary for generating a task prompt for the AI model.
-
-Here's an example of a prompt descriptor:
-
-```yaml
-task: prompt/task/feature/implement.md
-attention:
-  - src/interactiveSession/startInteractiveSession.js
-  - src/prompt/createPrompt.js
-  - src/attention/readAttention.js
-  - prompt.yaml
-requirements: >
-  Write a README.md for this _exploratory_ project!
-format: prompt/format/new_file_version.md
-```
 
 Each element in the descriptor serves a specific purpose:
 - `task`: Describes the task type and scope. For example, `feature/implement`, `bug/fix`, or `refactor/`. You can check out the [prompt/task/feature/implement.md](prompt/task/feature/implement.md) file as an example.

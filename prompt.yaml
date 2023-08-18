@@ -1,12 +1,8 @@
 task: prompt/task/feature/implement.md
 attention:
-  - src/frontend/components/NavBar.jsx
   - README.md
 requirements: |
-  Factor out the subtitle to a separate component
-  and make the text random:
-    - The current one
-    - "Handkraft code with AI"
-    - Generate 3 more
-  Also remove the unused createSignal
+  Update video link to https://youtu.be/NL4uFJSvfW0
+  Re-download docs/assets/video_cover.jpg from the new video.
+  Instead of the sentence "Junior is an exploratory project..." write about Junior being an AI-first IDE designed from the ground up to leverage language models.
 os: OSX

@@ -6,31 +6,6 @@ Ask for them in normal conversational format instead.
 
 # Working set
 
-src/frontend/components/NavBar.jsx:
-```
-import { createSignal } from 'solid-js';
-import ThemeSwitcher from './ThemeSwitcher';
-
-const NavBar = () => {
-  const title = 'Junior';
-
-  return (
-    <div class="relative w-full">
-      <div class="absolute top-0 right-0 m-4">
-        <ThemeSwitcher />
-      </div>
-      <div class="flex flex-col items-center justify-center">
-        <a href="https://github.com/tisztamo/Junior" class="text-center text-3xl mt-6 no-underline">{title}</a>
-        <a href="https://github.com/tisztamo/Junior" class="text-center text-xl no-underline cursor-pointer">Your AI contributor</a>
-      </div>
-    </div>
-  );
-};
-
-export default NavBar;
-
-```
-
 README.md:
 ```
 [![Docs: Junior Documentation](https://img.shields.io/badge/docs-Junior-blue)](https://tisztamo.github.io/Junior/#/)
@@ -115,12 +90,9 @@ Implement the following feature!
 
 Requirements:
 
-Factor out the subtitle to a separate component
-and make the text random:
-  - The current one
-  - &#34;Handkraft code with AI&#34;
-  - Generate 3 more
-Also remove the unused createSignal
+Update video link to https://youtu.be/NL4uFJSvfW0
+Re-download docs/assets/video_cover.jpg from the new video.
+Instead of the sentence &#34;Junior is an exploratory project...&#34; write about Junior being an AI-first IDE designed from the ground up to leverage language models.
 
 
 
