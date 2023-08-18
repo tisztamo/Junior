@@ -1,6 +1,11 @@
 task: prompt/task/bug/fix.md
 attention:
-  - src/frontend/components/PromptDisplay.jsx
-requirements: >
-  Add margin-top to the div.
+  - src/frontend/components/NavBar.jsx
+requirements: |
+  Factor out the subtitle to a separate component
+  and make the text random:
+    - The current one
+    - "Handkraft code with AI"
+    - Generate 3 more
+  Also remove the unused createSignal
 os: OSX
