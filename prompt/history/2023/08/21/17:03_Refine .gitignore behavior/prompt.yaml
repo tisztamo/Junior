@@ -1,0 +1,6 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/init.js
+  - src/git/createGitignore.js
+requirements: |
+  Only gitignore prompt files and change.sh in the root folder, not in subdirs
