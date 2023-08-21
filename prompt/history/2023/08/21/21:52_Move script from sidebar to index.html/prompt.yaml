@@ -1,0 +1,6 @@
+task: prompt/task/feature/implement.md
+attention:
+  - docs/_sidebar.md
+  - docs/index.html
+requirements: Move the script tag from the sidebar to index.html.
+  Do not move blockquotes, only the script is problematic in md.
