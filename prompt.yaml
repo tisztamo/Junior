@@ -1,6 +1,0 @@
-task: prompt/task/feature/implement.md
-attention:
-  - src/frontend/App.jsx
-  - src/frontend/service/useKeyBindings.js
-requirements: Unregister the key event listener when the app is unmounted
-os: OSX

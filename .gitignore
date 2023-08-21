@@ -1,6 +1,6 @@
-secret.sh
-node_modules/
-tmp/
-prompt.yaml
-prompt.md
-change.sh
+/secret.sh
+/node_modules/
+/tmp/
+/prompt.yaml
+/prompt.md
+/change.sh
