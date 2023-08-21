@@ -1,6 +1,13 @@
 import { writeFile, mkdir, readFile } from 'fs/promises';
+import AuditTrailConfig from './AuditTrailConfig.js';
 
 async function saveAuditTrail(code) {
+    const { enabled } = AuditTrailConfig();
+
+    if (!enabled) {
+        return;
+    }
+
     const goalMatch = code.match(/goal="([^"]+)"/);
     if (!goalMatch) {
         throw new Error('Goal not specified in the code');
