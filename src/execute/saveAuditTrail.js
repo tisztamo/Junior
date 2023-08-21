@@ -30,7 +30,7 @@ async function saveAuditTrail(code) {
         writeFile(`${auditTrailDir}change.sh`, code),
     ]);
 
-    console.log(`Audit trail saved to ${auditTrailDir}`);
+    console.log(`Audit trail saved to ${auditTrailDir}. Use --noaudit to disable the audit trail.`);
 }
 
 export { saveAuditTrail };
