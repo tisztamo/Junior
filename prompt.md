@@ -6,43 +6,129 @@ Ask for them in normal conversational format instead.
 
 # Working set
 
-docs/README.md:
+src/prompt/createPrompt.js:
 ```
-Warn: This README is AI generated, just like all the source files of this project.
+import { readAttention } from "../attention/readAttention.js"
+import yaml from 'js-yaml';
+import { getSystemPromptIfNeeded } from './getSystemPromptIfNeeded.js';
+import { resolveTemplateVariables } from './resolveTemplateVariables.js';
+import { extractTemplateVars } from './extractTemplateVars.js';
+import { loadPromptDescriptor } from './loadPromptDescriptor.js';
+import { loadTaskTemplate } from './loadTaskTemplate.js';
+import { loadFormatTemplate } from './loadFormatTemplate.js';
+import promptDescriptorDefaults from './promptDescriptorDefaults.js';
 
-# Junior - Your AI-first IDE 
+const createPrompt = async (userInput, forceSystemPrompt) => {
+  let promptDescriptor = yaml.load(await loadPromptDescriptor());
+  let promptDescriptorDefaultsData = await promptDescriptorDefaults();
 
-[![Video: Junior codes itself](/assets/video_cover.jpg)](https://youtu.be/NL4uFJSvfW0)
+  promptDescriptor = { ...promptDescriptorDefaultsData, ...promptDescriptor };
 
-*"Video: Junior codes itself"*
+  let templateVars = extractTemplateVars(promptDescriptor);
+  templateVars = await resolveTemplateVariables(templateVars);
 
-Junior is an **AI-first IDE** designed to utilize the capabilities of language models. Much like how Linus Torvalds oversees Linux Kernel development, Junior provides a space for developers to collaborate directly with AI throughout the development process.
+  const attention = await readAttention(promptDescriptor.attention);
+  const task = await loadTaskTemplate(promptDescriptor.task, templateVars);
 
-Embracing a design philosophy of simplicity and configurability, Junior aims to join the ranks of influential tools such as git and LISP in terms of its contribution to software development.
+  const format = await loadFormatTemplate(promptDescriptor.format, templateVars);
+  const system = await getSystemPromptIfNeeded(forceSystemPrompt);
+  const saveto = promptDescriptor.saveto;
+  return {
+    prompt: `${system}# Working set\n\n${attention.join("\n")}\n\n# Task\n\n${task}\n\n# Output Format\n\n${format}\n\n${userInput ? userInput : ""}`,
+    saveto
+  };
+}
 
-With a structured task descriptor and by spotlighting relevant parts of your project, you can delegate tasks such as code implementation, documentation, testing, and more, to Junior.
+export { createPrompt };
 
-## Getting Started
+```
 
-For guidance on using Junior, please refer to [usage.md](usage.md).
+src/prompt/resolveTemplateVariables.js:
+```
+import fs from 'fs';
+import util from 'util';
+import path from 'path';
+const readFile = util.promisify(fs.readFile);
 
-## Contributing and Support
+async function resolveTemplateVariables(vars) {
+  for (const key in vars) {
+    if (typeof vars[key] === 'string' && fs.existsSync(vars[key]) && fs.lstatSync(vars[key]).isFile()) {
+      vars[key] = await readFile(path.resolve(vars[key]), 'utf-8');
+    }
+  }
+  return vars;
+}
 
-Your contributions make a difference! At Junior, we value the collaboration of the community. Your role as a contributor is to monitor the development, provide detailed prompts, and thoroughly review the generated outcomes.
+export { resolveTemplateVariables };
 
-For questions or assistance, please raise an issue in our GitHub repository.
+```
 
-**Note:** We've tested Junior primarily with the GPT-4 model. However, you're welcome to experiment with similarly capable models and share your findings. It's not compatible with GPT-3.5.
+src/prompt/extractTemplateVars.js:
+```
+// Extracts template variables from the prompt descriptor.
+function extractTemplateVars(promptDescriptor) {
+  return Object.keys(promptDescriptor)
+    .filter(key => ['task', 'format', 'attention', 'saveto'].indexOf(key) < 0)
+    .reduce((obj, key) => {
+      obj[key] = promptDescriptor[key];
+      return obj;
+    }, {});
+}
 
+export { extractTemplateVars };
+
+```
+
+src/prompt/loadTaskTemplate.js:
+```
+import { loadPromptFile } from './loadPromptFile.js';
+
+const loadTaskTemplate = async (taskTemplatePath, templateVars) => {
+  return await loadPromptFile(taskTemplatePath, templateVars);
+};
+
+export { loadTaskTemplate };
+
+```
+
+src/prompt/loadPromptFile.js:
+```
+import fs from 'fs';
+import path from 'path';
+import ejs from 'ejs';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const loadPromptFile = async (filePath, templateVars) => {
+  try {
+    // Try to read the file relative to the current directory
+    return await ejs.renderFile(filePath, templateVars, {async: true});
+  } catch (err) {
+    // If the file doesn't exist, try reading it from the project root directory
+    const rootPath = path.resolve(__dirname, '../../', filePath);
+    return await ejs.renderFile(rootPath, templateVars, {async: true});
+  }
+};
+
+export { loadPromptFile };
 
 ```
 
 
 # Task
 
-Improve the documentation!
+Fix the following issue!
 
-Reword &#34;design philosophy of simplicity and configurability&#34; to  &#34;design philosophy of being simple, configurable and auditable&#34;
+Extra html encoding appears on injected variables int the generated prompt.
+
+
+## Project Specifics
+
+- Every js file should *only export a single function*!
+- Use *ES6 imports*!
+- Prefer *async/await* over promises!
+- The frontend uses *Solidjs* and Tailwind, edit .jsx file accordingly!
 
 
 # Output Format

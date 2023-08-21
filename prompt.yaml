@@ -1,8 +1,9 @@
-task: prompt/task/doc/improve.md
+task: prompt/task/bug/fix.md
 attention:
-  - docs/README.md
-requirements: >
-  Reword "design philosophy of simplicity and configurability"
-  to 
-  "design philosophy of being simple, configurable and auditable"
+  - src/prompt/createPrompt.js
+  - src/prompt/resolveTemplateVariables.js
+  - src/prompt/extractTemplateVars.js
+  - src/prompt/loadTaskTemplate.js
+  - src/prompt/loadPromptFile.js
+requirements: Extra html encoding appears on injected variables int the generated prompt.
 os: OSX

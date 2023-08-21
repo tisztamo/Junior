@@ -1,36 +1,44 @@
 #!/bin/sh
 set -e
-goal="Improve documentation"
+goal="Fix html encoding in generated prompt"
 echo "Plan:"
-echo "1. Modify design philosophy in README.md"
+echo "1. Set up a consistent EJS configuration object"
+echo "2. Adjust the loadPromptFile function to use this configuration"
 
-cat > docs/README.md << 'EOF'
-Warn: This README is AI generated, just like all the source files of this project.
+# Step 1: Set up a consistent EJS configuration object
 
-# Junior - Your AI-first IDE 
+cat <<EOF > src/prompt/ejsConfig.js
+const ejsConfig = {
+    async: true,
+    escape: str => str
+};
 
-[![Video: Junior codes itself](/assets/video_cover.jpg)](https://youtu.be/NL4uFJSvfW0)
+export default ejsConfig;
+EOF
 
-*"Video: Junior codes itself"*
+# Step 2: Adjust the loadPromptFile function to use this configuration
 
-Junior is an **AI-first IDE** designed to utilize the capabilities of language models. Much like how Linus Torvalds oversees Linux Kernel development, Junior provides a space for developers to collaborate directly with AI throughout the development process.
+cat <<EOF > src/prompt/loadPromptFile.js
+import fs from 'fs';
+import path from 'path';
+import ejs from 'ejs';
+import { fileURLToPath } from 'url';
+import ejsConfig from './ejsConfig.js';
 
-Embracing a design philosophy of being simple, configurable and auditable, Junior aims to join the ranks of influential tools such as git and LISP in terms of its contribution to software development.
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-With a structured task descriptor and by spotlighting relevant parts of your project, you can delegate tasks such as code implementation, documentation, testing, and more, to Junior.
+const loadPromptFile = async (filePath, templateVars) => {
+  try {
+    // Try to read the file relative to the current directory
+    return await ejs.renderFile(filePath, templateVars, ejsConfig);
+  } catch (err) {
+    // If the file doesn't exist, try reading it from the project root directory
+    const rootPath = path.resolve(__dirname, '../../', filePath);
+    return await ejs.renderFile(rootPath, templateVars, ejsConfig);
+  }
+};
 
-## Getting Started
-
-For guidance on using Junior, please refer to [usage.md](usage.md).
-
-## Contributing and Support
-
-Your contributions make a difference! At Junior, we value the collaboration of the community. Your role as a contributor is to monitor the development, provide detailed prompts, and thoroughly review the generated outcomes.
-
-For questions or assistance, please raise an issue in our GitHub repository.
-
-**Note:** We've tested Junior primarily with the GPT-4 model. However, you're welcome to experiment with similarly capable models and share your findings. It's not compatible with GPT-3.5.
-
+export { loadPromptFile };
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"
