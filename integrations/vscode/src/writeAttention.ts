@@ -4,9 +4,8 @@ import { getRootWorkspace } from './getRootWorkspace';
 import { getPromptFilePath } from './getPromptFilePath';
 import { getCurrentOpenDocuments } from './getCurrentOpenDocuments';
 import { readPromptFile } from './readPromptFile';
-import { writePromptFile } from './writePromptFile';
 import { filterAttentionExcludes } from './filterAttentionExcludes';
-import { updateEditorContents } from './updateEditorContents';
+import { writePromptFile } from './writePromptFile';
 import { PromptFile } from './types';
 
 export const writeAttention = async () => {
@@ -20,18 +19,10 @@ export const writeAttention = async () => {
     try {
         if (promptFilePath) {
             const currentWindows = getCurrentOpenDocuments(rootFolder);
-            
             const attentionSection = filterAttentionExcludes(currentWindows, excludeList, rootFolder);
-            
             const promptFile: PromptFile = await readPromptFile(promptFilePath);
             promptFile.attention = attentionSection;
-            
-            const newContents = yaml.dump(promptFile);
-            await updateEditorContents(promptFilePath, newContents);
-            
             writePromptFile(promptFilePath, promptFile);
-            
-            vscode.window.showInformationMessage('Prompt file updated successfully!');
         } else {
             vscode.window.showErrorMessage('No prompt.yaml file found in the project root!');
         }

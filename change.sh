@@ -1,38 +1,20 @@
 #!/bin/sh
 set -e
-goal="Integrate editor contents for prompt.yaml"
+goal="Consolidate file writing logic"
 echo "Plan:"
-echo "1. Refactor readPromptFile.ts to prioritize the editor content if prompt.yaml is open in the editor."
-echo "2. If the file is not open, it will read from the file as it used to."
-echo "3. Update the writeAttention.ts to use the new readPromptFile method."
+echo "1. Modify writeAttention.ts to only call writePromptFile."
+echo "2. Modify writePromptFile.ts to handle both file writing and editor content updating."
 
-# Step 1: Refactor readPromptFile.ts
-cat > integrations/vscode/src/readPromptFile.ts <<EOF
-import * as fs from 'fs';
-import * as vscode from 'vscode';
-import * as yaml from 'js-yaml';
-import { PromptFile } from './types';
-
-export const readPromptFile = async (filePath: string): Promise<PromptFile> => {
-    const openedDocument = vscode.workspace.textDocuments.find(doc => doc.fileName === filePath);
-    if (openedDocument) {
-        return yaml.load(openedDocument.getText()) as PromptFile;
-    }
-    return yaml.load(fs.readFileSync(filePath, 'utf8')) as PromptFile;
-};
-EOF
-
-# Step 2: Update the writeAttention.ts file to use the new async readPromptFile method.
-cat > integrations/vscode/src/writeAttention.ts <<EOF
+# Step 1: Modify writeAttention.ts to only call writePromptFile.
+cat > integrations/vscode/src/writeAttention.ts << 'EOF'
 import * as vscode from 'vscode';
 import * as yaml from 'js-yaml';
 import { getRootWorkspace } from './getRootWorkspace';
 import { getPromptFilePath } from './getPromptFilePath';
 import { getCurrentOpenDocuments } from './getCurrentOpenDocuments';
 import { readPromptFile } from './readPromptFile';
-import { writePromptFile } from './writePromptFile';
 import { filterAttentionExcludes } from './filterAttentionExcludes';
-import { updateEditorContents } from './updateEditorContents';
+import { writePromptFile } from './writePromptFile';
 import { PromptFile } from './types';
 
 export const writeAttention = async () => {
@@ -46,18 +28,10 @@ export const writeAttention = async () => {
     try {
         if (promptFilePath) {
             const currentWindows = getCurrentOpenDocuments(rootFolder);
-            
             const attentionSection = filterAttentionExcludes(currentWindows, excludeList, rootFolder);
-            
             const promptFile: PromptFile = await readPromptFile(promptFilePath);
             promptFile.attention = attentionSection;
-            
-            const newContents = yaml.dump(promptFile);
-            await updateEditorContents(promptFilePath, newContents);
-            
             writePromptFile(promptFilePath, promptFile);
-            
-            vscode.window.showInformationMessage('Prompt file updated successfully!');
         } else {
             vscode.window.showErrorMessage('No prompt.yaml file found in the project root!');
         }
@@ -66,5 +40,27 @@ export const writeAttention = async () => {
     }
 };
 EOF
+
+# Step 2: Modify writePromptFile.ts to handle both file writing and editor content updating.
+cat > integrations/vscode/src/writePromptFile.ts << 'EOF'
+import * as fs from 'fs';
+import * as vscode from 'vscode';
+import * as yaml from 'js-yaml';
+
+export const writePromptFile = (filePath: string, data: any) => {
+    const openedDocument = vscode.workspace.textDocuments.find(doc => doc.fileName === filePath);
+    if (openedDocument) {
+        const edit = new vscode.WorkspaceEdit();
+        const range = new vscode.Range(new vscode.Position(0, 0), new vscode.Position(openedDocument.lineCount, 0));
+        edit.replace(openedDocument.uri, range, yaml.dump(data));
+        vscode.workspace.applyEdit(edit);
+    } else {
+        fs.writeFileSync(filePath, yaml.dump(data), 'utf8');
+    }
+};
+EOF
+
+# We don't have the content of updateEditorContents.ts, but we know it should be deleted.
+rm integrations/vscode/src/updateEditorContents.ts
 
 echo "\033[32mDone: $goal\033[0m\n"

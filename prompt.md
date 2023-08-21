@@ -6,27 +6,6 @@ Ask for them in normal conversational format instead.
 
 # Working set
 
-integrations/vscode/src/readPromptFile.ts:
-```
-import * as fs from 'fs';
-import * as yaml from 'js-yaml';
-import { PromptFile } from './types';
-
-export const readPromptFile = (filePath: string): PromptFile => {
-    return yaml.load(fs.readFileSync(filePath, 'utf8')) as PromptFile;
-};
-
-```
-
-integrations/vscode/src/types.ts:
-```
-export interface PromptFile {
-    attention?: string[];
-    [key: string]: any;  // Allow additional properties
-}
-
-```
-
 integrations/vscode/src/writeAttention.ts:
 ```
 import * as vscode from 'vscode';
@@ -54,7 +33,7 @@ export const writeAttention = async () => {
             
             const attentionSection = filterAttentionExcludes(currentWindows, excludeList, rootFolder);
             
-            const promptFile: PromptFile = readPromptFile(promptFilePath);
+            const promptFile: PromptFile = await readPromptFile(promptFilePath);
             promptFile.attention = attentionSection;
             
             const newContents = yaml.dump(promptFile);
@@ -73,17 +52,52 @@ export const writeAttention = async () => {
 
 ```
 
+integrations/vscode/src/writePromptFile.ts:
+```
+import * as fs from 'fs';
+import * as yaml from 'js-yaml';
+
+export const writePromptFile = (filePath: string, data: any) => {
+    fs.writeFileSync(filePath, yaml.dump(data), 'utf8');
+};
+
+```
+
+integrations/vscode/src/readPromptFile.ts:
+```
+import * as fs from 'fs';
+import * as vscode from 'vscode';
+import * as yaml from 'js-yaml';
+import { PromptFile } from './types';
+
+export const readPromptFile = async (filePath: string): Promise<PromptFile> => {
+    const openedDocument = vscode.workspace.textDocuments.find(doc => doc.fileName === filePath);
+    if (openedDocument) {
+        return yaml.load(openedDocument.getText()) as PromptFile;
+    }
+    return yaml.load(fs.readFileSync(filePath, 'utf8')) as PromptFile;
+};
+
+```
+
+integrations/vscode/src/types.ts:
+```
+export interface PromptFile {
+    attention?: string[];
+    [key: string]: any;  // Allow additional properties
+}
+
+```
+
 
 # Task
 
-Implement the following feature!
+Fix the following issue!
 
-- Create a plan!
-- Create new files when needed!
-
-Requirements:
-
-When prompt.yaml is opened in the vscode editor, use the editor contents instead of the underlying file!
+If the prompt.yaml is opened in the editor, vscode shows it as changed after saving.
+We need to fix this: As we write the contents both to the file and the editor buffer,
+vscode should show it as unchanged.
+Also remove the information message.
 
 
 

@@ -1,6 +1,12 @@
-task: prompt/task/feature/implement.md
-attention: []
-requirements: >
-  When prompt.yaml is opened in the vscode editor, use the editor contents
-  instead of the underlying file! xxx
+task: prompt/task/bug/fix.md
+attention:
+  - integrations/vscode/src/writeAttention.ts
+  - integrations/vscode/src/writePromptFile.ts
+  - integrations/vscode/src/readPromptFile.ts
+  - integrations/vscode/src/types.ts
+requirements: |
+  If the prompt.yaml is opened in the editor, vscode shows it as changed after saving.
+  We need to fix this: As we write the contents both to the file and the editor buffer,
+  vscode should show it as unchanged.
+  Also remove the information message.
 os: OSX
