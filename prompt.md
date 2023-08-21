@@ -6,50 +6,71 @@ Ask for them in normal conversational format instead.
 
 # Working set
 
-src/execute/saveAuditTrail.js:
+src/frontend/App.jsx:
 ```
-import { writeFile, mkdir } from 'fs/promises';
+import useKeyBindings from './service/useKeyBindings';
+import keyBindings from './config/keyBindings';
+import NavBar from './components/NavBar';
+import PromptCreation from './components/PromptCreation';
+import ChangeExecution from './components/ChangeExecution';
+import ChangeInspection from './components/ChangeInspection';
+import ChangeFinalization from './components/ChangeFinalization';
 
-async function saveAuditTrail(code) {
-    const goalMatch = code.match(/goal="([^"]+)"/);
-    if (!goalMatch) {
-        throw new Error('Goal not specified in the code');
+const App = () => {
+  const bindings = keyBindings();
+  useKeyBindings(bindings);
+
+  return (
+    <div class="bg-main min-h-screen max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 px-2 sm:px-4 xs:px-4 pb-8">
+      <NavBar />
+      <PromptCreation />
+      <ChangeExecution />
+      <ChangeInspection />
+      <ChangeFinalization />
+    </div>
+  );
+};
+
+export default App;
+
+```
+
+src/frontend/service/useKeyBindings.js:
+```
+const useKeyBindings = (bindings) => {
+  const handler = (e) => {
+    // Ignore bindings if target is input or textarea
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+      return;
     }
-    const goal = goalMatch[1];
+    const action = bindings[e.key.toUpperCase()];
+    if (action) {
+      action(e);
+    }
+  };
 
-    const date = new Date();
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const time = String(date.getHours()).padStart(2, '0') + ':' + String(date.getMinutes()).padStart(2, '0');
+  window.addEventListener('keydown', handler);
 
-    const auditTrailDir = `./prompt/history/${year}/${month}/${day}/${time}_${goal}/`;
-    await mkdir(auditTrailDir, { recursive: true });
+  return () => {
+    window.removeEventListener('keydown', handler);
+  };
+};
 
-    // Copy files to the new directory
-    await Promise.all([
-        writeFile(`${auditTrailDir}prompt.yaml`, await fs.promises.readFile('./prompt.yaml', 'utf-8')),
-        writeFile(`${auditTrailDir}prompt.md`, await fs.promises.readFile('./prompt.md', 'utf-8')),
-        writeFile(`${auditTrailDir}change.sh`, code),
-    ]);
-
-    console.log(`Audit trail saved to ${auditTrailDir}`);
-}
-
-export { saveAuditTrail };
+export default useKeyBindings;
 
 ```
 
 
 # Task
 
-Fix the following issue!
+Implement the following feature!
 
-ReferenceError: fs is not defined
-  at saveAuditTrail (file:///Users/ko/projects-new/Junior/src/execute/saveAuditTrail.js:21:56)
-  at async executeAndForwardOutput (file:///Users/ko/projects-new/Junior/src/execute/executeAndForwardOutput.js:12:9)
-  at async executeHandler (file:///Users/ko/projects-new/Junior/src/backend/handlers/executeHandler.js:12:3)
+- Create a plan!
+- Create new files when needed!
 
+Requirements:
+
+Unregister the key event listener when the app is unmounted
 
 
 ## Project Specifics

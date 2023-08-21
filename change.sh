@@ -1,40 +1,46 @@
 #!/bin/sh
 set -e
-goal="Fix fs not defined issue"
+goal="Unregister key event listener on unmount"
 echo "Plan:"
-echo "1. Update the imports to include fs/promises as needed"
-echo "2. Replace direct fs.promises.readFile with imported readFile function"
+echo "1. Modify the App.jsx to utilize SolidJS lifecycle methods."
+echo "2. Adjust the useKeyBindings hook to return the unregister function."
+echo "3. Use the returned function in App.jsx to unregister the key event listener on component unmount."
 
-cat > ./src/execute/saveAuditTrail.js << 'EOF'
-import { writeFile, mkdir, readFile } from 'fs/promises';
+# 1. Modify the App.jsx to utilize SolidJS lifecycle methods.
+cat > src/frontend/App.jsx << 'EOF'
+import { onCleanup } from 'solid-js';
+import useKeyBindings from './service/useKeyBindings';
+import keyBindings from './config/keyBindings';
+import NavBar from './components/NavBar';
+import PromptCreation from './components/PromptCreation';
+import ChangeExecution from './components/ChangeExecution';
+import ChangeInspection from './components/ChangeInspection';
+import ChangeFinalization from './components/ChangeFinalization';
 
-async function saveAuditTrail(code) {
-    const goalMatch = code.match(/goal="([^"]+)"/);
-    if (!goalMatch) {
-        throw new Error('Goal not specified in the code');
-    }
-    const goal = goalMatch[1];
+const App = () => {
+  const bindings = keyBindings();
+  const unregister = useKeyBindings(bindings);
 
-    const date = new Date();
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const time = String(date.getHours()).padStart(2, '0') + ':' + String(date.getMinutes()).padStart(2, '0');
+  onCleanup(unregister); 
 
-    const auditTrailDir = `./prompt/history/${year}/${month}/${day}/${time}_${goal}/`;
-    await mkdir(auditTrailDir, { recursive: true });
+  return (
+    <div class="bg-main min-h-screen max-w-desktop lg:max-w-desktop md:max-w-full sm:max-w-full xs:max-w-full mx-auto flex flex-col items-center space-y-8 px-2 sm:px-4 xs:px-4 pb-8">
+      <NavBar />
+      <PromptCreation />
+      <ChangeExecution />
+      <ChangeInspection />
+      <ChangeFinalization />
+    </div>
+  );
+};
 
-    // Copy files to the new directory
-    await Promise.all([
-        writeFile(`${auditTrailDir}prompt.yaml`, await readFile('./prompt.yaml', 'utf-8')),
-        writeFile(`${auditTrailDir}prompt.md`, await readFile('./prompt.md', 'utf-8')),
-        writeFile(`${auditTrailDir}change.sh`, code),
-    ]);
-
-    console.log(`Audit trail saved to ${auditTrailDir}`);
-}
-
-export { saveAuditTrail };
+export default App;
 EOF
+
+# 2. Adjust the useKeyBindings hook to return the unregister function.
+# (No changes needed as the current useKeyBindings.js already returns the unregister function)
+
+# 3. Use the returned function in App.jsx to unregister the key event listener on component unmount.
+# (Already handled in the modifications to App.jsx)
 
 echo "\033[32mDone: $goal\033[0m\n"
