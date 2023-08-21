@@ -6,121 +6,85 @@ Ask for them in normal conversational format instead.
 
 # Working set
 
-src/prompt/createPrompt.js:
+integrations/vscode/src/writePromptFile.ts:
 ```
-import { readAttention } from "../attention/readAttention.js"
-import yaml from 'js-yaml';
-import { getSystemPromptIfNeeded } from './getSystemPromptIfNeeded.js';
-import { resolveTemplateVariables } from './resolveTemplateVariables.js';
-import { extractTemplateVars } from './extractTemplateVars.js';
-import { loadPromptDescriptor } from './loadPromptDescriptor.js';
-import { loadTaskTemplate } from './loadTaskTemplate.js';
-import { loadFormatTemplate } from './loadFormatTemplate.js';
-import promptDescriptorDefaults from './promptDescriptorDefaults.js';
+import * as vscode from 'vscode';
+import * as yaml from 'js-yaml';
 
-const createPrompt = async (userInput, forceSystemPrompt) => {
-  let promptDescriptor = yaml.load(await loadPromptDescriptor());
-  let promptDescriptorDefaultsData = await promptDescriptorDefaults();
-
-  promptDescriptor = { ...promptDescriptorDefaultsData, ...promptDescriptor };
-
-  let templateVars = extractTemplateVars(promptDescriptor);
-  templateVars = await resolveTemplateVariables(templateVars);
-
-  const attention = await readAttention(promptDescriptor.attention);
-  const task = await loadTaskTemplate(promptDescriptor.task, templateVars);
-
-  const format = await loadFormatTemplate(promptDescriptor.format, templateVars);
-  const system = await getSystemPromptIfNeeded(forceSystemPrompt);
-  const saveto = promptDescriptor.saveto;
-  return {
-    prompt: `${system}# Working set\n\n${attention.join("\n")}\n\n# Task\n\n${task}\n\n# Output Format\n\n${format}\n\n${userInput ? userInput : ""}`,
-    saveto
-  };
-}
-
-export { createPrompt };
-
-```
-
-src/prompt/resolveTemplateVariables.js:
-```
-import fs from 'fs';
-import util from 'util';
-import path from 'path';
-const readFile = util.promisify(fs.readFile);
-
-async function resolveTemplateVariables(vars) {
-  for (const key in vars) {
-    if (typeof vars[key] === 'string' && fs.existsSync(vars[key]) && fs.lstatSync(vars[key]).isFile()) {
-      vars[key] = await readFile(path.resolve(vars[key]), 'utf-8');
+export const writePromptFile = async (filePath: string, data: any) => {
+    let openedDocument = vscode.workspace.textDocuments.find(doc => doc.fileName === filePath);
+    if (!openedDocument) {
+        openedDocument = await vscode.workspace.openTextDocument(filePath);
     }
-  }
-  return vars;
-}
-
-export { resolveTemplateVariables };
-
-```
-
-src/prompt/extractTemplateVars.js:
-```
-// Extracts template variables from the prompt descriptor.
-function extractTemplateVars(promptDescriptor) {
-  return Object.keys(promptDescriptor)
-    .filter(key => ['task', 'format', 'attention', 'saveto'].indexOf(key) < 0)
-    .reduce((obj, key) => {
-      obj[key] = promptDescriptor[key];
-      return obj;
-    }, {});
-}
-
-export { extractTemplateVars };
-
-```
-
-src/prompt/loadTaskTemplate.js:
-```
-import { loadPromptFile } from './loadPromptFile.js';
-
-const loadTaskTemplate = async (taskTemplatePath, templateVars) => {
-  return await loadPromptFile(taskTemplatePath, templateVars);
+    
+    const edit = new vscode.WorkspaceEdit();
+    const range = new vscode.Range(new vscode.Position(0, 0), new vscode.Position(openedDocument.lineCount, 0));
+    edit.replace(openedDocument.uri, range, yaml.dump(data));
+    await vscode.workspace.applyEdit(edit);
+    
+    // Save the document unconditionally.
+    openedDocument.save();
 };
 
-export { loadTaskTemplate };
-
 ```
 
-src/prompt/loadPromptFile.js:
+integrations/vscode/src/writeAttention.ts:
 ```
-import fs from 'fs';
-import path from 'path';
-import ejs from 'ejs';
-import { fileURLToPath } from 'url';
+import * as vscode from 'vscode';
+import * as yaml from 'js-yaml';
+import { getRootWorkspace } from './getRootWorkspace';
+import { getPromptFilePath } from './getPromptFilePath';
+import { getCurrentOpenDocuments } from './getCurrentOpenDocuments';
+import { readPromptFile } from './readPromptFile';
+import { filterAttentionExcludes } from './filterAttentionExcludes';
+import { writePromptFile } from './writePromptFile';
+import { PromptFile } from './types';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+export const writeAttention = async () => {
+    const rootFolder = getRootWorkspace();
+    if (!rootFolder) {
+        return;
+    }
 
-const loadPromptFile = async (filePath, templateVars) => {
-  try {
-    // Try to read the file relative to the current directory
-    return await ejs.renderFile(filePath, templateVars, {async: true});
-  } catch (err) {
-    // If the file doesn't exist, try reading it from the project root directory
-    const rootPath = path.resolve(__dirname, '../../', filePath);
-    return await ejs.renderFile(rootPath, templateVars, {async: true});
-  }
+    const promptFilePath = getPromptFilePath(rootFolder);
+    const excludeList = vscode.workspace.getConfiguration('junior').get('attentionExcludeList', []);
+    try {
+        if (promptFilePath) {
+            const currentWindows = getCurrentOpenDocuments(rootFolder);
+            const attentionSection = filterAttentionExcludes(currentWindows, excludeList, rootFolder);
+            const promptFile: PromptFile = await readPromptFile(promptFilePath);
+            promptFile.attention = attentionSection;
+            writePromptFile(promptFilePath, promptFile);
+        } else {
+            vscode.window.showErrorMessage('No prompt.yaml file found in the project root!');
+        }
+    } catch (error) {
+        vscode.window.showErrorMessage('Error updating the prompt.yaml file!');
+    }
 };
 
-export { loadPromptFile };
+```
+
+integrations/vscode/src/types.ts:
+```
+export interface PromptFile {
+    attention?: string[];
+    [key: string]: any;  // Allow additional properties
+}
 
 ```
 
 
 # Task
 
-Fix the following issue!
+Implement the following feature!
 
-Extra html encoding appears on injected variables int the generated prompt.
+- Create a plan!
+- Create new files when needed!
+
+Requirements:
+
+Also make prompt.yaml the active document after saving
 
 
 ## Project Specifics

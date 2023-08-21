@@ -1,9 +1,7 @@
-task: prompt/task/bug/fix.md
+task: prompt/task/feature/implement.md
 attention:
-  - src/prompt/createPrompt.js
-  - src/prompt/resolveTemplateVariables.js
-  - src/prompt/extractTemplateVars.js
-  - src/prompt/loadTaskTemplate.js
-  - src/prompt/loadPromptFile.js
-requirements: Extra html encoding appears on injected variables int the generated prompt.
+  - integrations/vscode/src/writePromptFile.ts
+  - integrations/vscode/src/writeAttention.ts
+  - integrations/vscode/src/types.ts
+requirements: Also make prompt.yaml the active document after saving
 os: OSX
