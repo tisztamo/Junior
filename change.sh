@@ -1,62 +1,98 @@
 #!/bin/sh
 set -e
-goal="Preserve directory entries in attention"
+goal="Implement Audit Trail"
 echo "Plan:"
-echo "1. Modify the 'writeAttention' function to preserve directory entries in the attention section."
-echo "2. Extract the logic of preserving directory entries into a new helper function named 'updateAttention' in a file named 'updateAttention.ts'."
+echo "1. Gitignore 'prompt.yaml', 'prompt.md', and 'change.sh'."
+echo "2. Extract audit trail logic into 'saveAuditTrail.js'."
+echo "3. Modify 'executeAndForwardOutput.js' to use the new 'saveAuditTrail' function."
+echo "4. Before executing change, create a directory for audit trail based on the current date and goal."
+echo "5. Copy the gitignored files to the new directory."
 
-# Step 1: Extract the logic of preserving directory entries into a new helper function named 'updateAttention'.
-cat << 'EOF' > integrations/vscode/src/updateAttention.ts
-import { PromptFile } from './types';
-
-export const updateAttention = (currentAttention: string[] | undefined, newAttention: string[]): string[] => {
-    // If there's no current attention section, just return the new attention.
-    if (!currentAttention) {
-        return newAttention;
-    }
-
-    // Filter out directories from the current attention.
-    const currentDirectories = currentAttention.filter(item => item.endsWith('/'));
-
-    // Add the current directories to the new attention list.
-    return [...new Set([...currentDirectories, ...newAttention])];
-};
+# Step 1: Update .gitignore
+cat <<EOF > .gitignore
+secret.sh
+node_modules/
+tmp/
+prompt.yaml
+prompt.md
+change.sh
 EOF
 
-# Step 2: Modify the 'writeAttention' function to use the new helper function 'updateAttention'.
-cat << 'EOF' > integrations/vscode/src/writeAttention.ts
-import * as vscode from 'vscode';
-import { getRootWorkspace } from './getRootWorkspace';
-import { getPromptFilePath } from './getPromptFilePath';
-import { getCurrentOpenDocuments } from './getCurrentOpenDocuments';
-import { readPromptFile } from './readPromptFile';
-import { filterAttentionExcludes } from './filterAttentionExcludes';
-import { writePromptFile } from './writePromptFile';
-import { updateAttention } from './updateAttention';
-import { PromptFile } from './types';
+# Step 2: Extract audit trail logic into saveAuditTrail.js
+cat <<EOF > src/execute/saveAuditTrail.js
+import { writeFile, mkdir } from 'fs/promises';
 
-export const writeAttention = async () => {
-    const rootFolder = getRootWorkspace();
-    if (!rootFolder) {
-        return;
+async function saveAuditTrail(code) {
+    const goalMatch = code.match(/goal="([^"]+)"/);
+    if (!goalMatch) {
+        throw new Error('Goal not specified in the code');
     }
+    const goal = goalMatch[1];
 
-    const promptFilePath = getPromptFilePath(rootFolder);
-    const excludeList = vscode.workspace.getConfiguration('junior').get('attentionExcludeList', []);
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const time = String(date.getHours()).padStart(2, '0') + ':' + String(date.getMinutes()).padStart(2, '0');
+
+    const auditTrailDir = \`./prompt/history/\${year}/\${month}/\${day}/\${time}_\${goal}/\`;
+    await mkdir(auditTrailDir, { recursive: true });
+
+    // Copy files to the new directory
+    await Promise.all([
+        writeFile(\`\${auditTrailDir}prompt.yaml\`, await fs.promises.readFile('./prompt.yaml', 'utf-8')),
+        writeFile(\`\${auditTrailDir}prompt.md\`, await fs.promises.readFile('./prompt.md', 'utf-8')),
+        writeFile(\`\${auditTrailDir}change.sh\`, code),
+    ]);
+
+    console.log(\`Audit trail saved to \${auditTrailDir}\`);
+}
+
+export { saveAuditTrail };
+EOF
+
+# Step 3: Modify executeAndForwardOutput.js to use saveAuditTrail
+cat <<EOF > src/execute/executeAndForwardOutput.js
+import { writeFile } from 'fs/promises';
+import { spawn } from 'child_process';
+import { makeExecutable } from './makeExecutable.js';
+import { saveAuditTrail } from './saveAuditTrail.js';
+
+async function executeAndForwardOutput(code, next) {
     try {
-        if (promptFilePath) {
-            const currentWindows = getCurrentOpenDocuments(rootFolder);
-            const attentionSection = filterAttentionExcludes(currentWindows, excludeList, rootFolder);
-            const promptFile: PromptFile = await readPromptFile(promptFilePath);
-            promptFile.attention = updateAttention(promptFile.attention, attentionSection);
-            writePromptFile(promptFilePath, promptFile);
-        } else {
-            vscode.window.showErrorMessage('No prompt.yaml file found in the project root!');
+        if (code == null || !code.startsWith('#!')) {
+            throw new Error('Code does not start with a shebang');
         }
-    } catch (error) {
-        vscode.window.showErrorMessage('Error updating the prompt.yaml file!');
+        
+        await saveAuditTrail(code);
+
+        await writeFile('./change.sh', code);
+        await makeExecutable('./change.sh');
+        
+        const child = spawn('./change.sh', [], { shell: true });
+        let commandOutput = '';
+
+        child.stdout.on('data', (data) => {
+            console.log(\`\${data}\`);
+            commandOutput += data;
+        });
+
+        child.stderr.on('data', (data) => {
+            console.error(\`\${data}\`);
+            commandOutput += data;
+        });
+
+        child.on('close', (code) => {
+            if (next && typeof next === 'function') {
+                next(code, commandOutput);
+            }
+        });
+    } catch (err) {
+        console.log(err);
     }
-};
+}
+
+export { executeAndForwardOutput };
 EOF
 
 echo "\033[32mDone: $goal\033[0m\n"

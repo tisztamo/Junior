@@ -6,74 +6,87 @@ Ask for them in normal conversational format instead.
 
 # Working set
 
-integrations/vscode/src/writePromptFile.ts:
 ```
-import * as vscode from 'vscode';
-import * as yaml from 'js-yaml';
+./
+├── .git/...
+├── .github/...
+├── .gitignore
+├── .vscode/...
+├── LICENSE.txt
+├── README.md
+├── change.sh
+├── docs/...
+├── integrations/...
+├── node_modules/...
+├── package-lock.json
+├── package.json
+├── prompt/...
+├── prompt.md
+├── prompt.yaml
+├── scripts/...
+├── src/...
 
-export const writePromptFile = async (filePath: string, data: any) => {
-    let openedDocument = vscode.workspace.textDocuments.find(doc => doc.fileName === filePath);
-    if (!openedDocument) {
-        openedDocument = await vscode.workspace.openTextDocument(filePath);
+```
+```
+prompt/
+├── archive/...
+├── defaults/...
+├── format/...
+├── format.md
+├── installedTools.md
+├── os.md
+├── projectSpecifics.md
+├── system.md
+├── task/...
+
+```
+.gitignore:
+```
+secret.sh
+node_modules/
+tmp/
+
+
+```
+
+src/execute/executeAndForwardOutput.js:
+```
+import { writeFile } from 'fs/promises';
+import { spawn } from 'child_process';
+import { makeExecutable } from './makeExecutable.js';
+
+async function executeAndForwardOutput(code, next) {
+  try {
+    if (code == null || !code.startsWith('#!')) {
+      throw new Error('Code does not start with a shebang');
     }
+    await writeFile('./change.sh', code);
+    await makeExecutable('./change.sh');
     
-    const edit = new vscode.WorkspaceEdit();
-    const range = new vscode.Range(new vscode.Position(0, 0), new vscode.Position(openedDocument.lineCount, 0));
-    edit.replace(openedDocument.uri, range, yaml.dump(data));
-    await vscode.workspace.applyEdit(edit);
-    
-    // Save the document unconditionally.
-    openedDocument.save();
-    
-    // Make the prompt.yaml the active document.
-    vscode.window.showTextDocument(openedDocument);
-};
+    const child = spawn('./change.sh', [], { shell: true });
+    let commandOutput = '';
 
-```
+    child.stdout.on('data', (data) => {
+      console.log(`${data}`);
+      commandOutput += data;
+    });
 
-integrations/vscode/src/writeAttention.ts:
-```
-import * as vscode from 'vscode';
-import * as yaml from 'js-yaml';
-import { getRootWorkspace } from './getRootWorkspace';
-import { getPromptFilePath } from './getPromptFilePath';
-import { getCurrentOpenDocuments } from './getCurrentOpenDocuments';
-import { readPromptFile } from './readPromptFile';
-import { filterAttentionExcludes } from './filterAttentionExcludes';
-import { writePromptFile } from './writePromptFile';
-import { PromptFile } from './types';
+    child.stderr.on('data', (data) => {
+      console.error(`${data}`);
+      commandOutput += data;
+    });
 
-export const writeAttention = async () => {
-    const rootFolder = getRootWorkspace();
-    if (!rootFolder) {
-        return;
-    }
-
-    const promptFilePath = getPromptFilePath(rootFolder);
-    const excludeList = vscode.workspace.getConfiguration('junior').get('attentionExcludeList', []);
-    try {
-        if (promptFilePath) {
-            const currentWindows = getCurrentOpenDocuments(rootFolder);
-            const attentionSection = filterAttentionExcludes(currentWindows, excludeList, rootFolder);
-            const promptFile: PromptFile = await readPromptFile(promptFilePath);
-            promptFile.attention = attentionSection;
-            writePromptFile(promptFilePath, promptFile);
-        } else {
-            vscode.window.showErrorMessage('No prompt.yaml file found in the project root!');
-        }
-    } catch (error) {
-        vscode.window.showErrorMessage('Error updating the prompt.yaml file!');
-    }
-};
-
-```
-
-integrations/vscode/src/types.ts:
-```
-export interface PromptFile {
-    attention?: string[];
-    [key: string]: any;  // Allow additional properties
+    child.on('close', (code) => {
+      if (next && typeof next === 'function') {
+        next(code, commandOutput);
+      }
+    });
+  } catch (err) {
+    console.log(err);
+  }
 }
+
+export { executeAndForwardOutput };
 
 ```
 
@@ -87,8 +100,11 @@ Implement the following feature!
 
 Requirements:
 
-Directories are entries in the attention that end with /
-When overwriting the attention, preserve the directory entries in it.
+gitignore prompt.yaml, prompt.md and change.sh Note that they are already added to git.
+Before executing the change:
+  - Create a new dir prompt/history/[year]/[month]/[day]/[time]_[goal]/
+  - Use the current date and the goal variable set in the change script by a line goal="[goal]"
+  - Copy the newly gitignored files to the new dir and log "Audit trail saved to [dir path]"
 
 
 
