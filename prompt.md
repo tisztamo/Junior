@@ -24,6 +24,9 @@ export const writePromptFile = async (filePath: string, data: any) => {
     
     // Save the document unconditionally.
     openedDocument.save();
+    
+    // Make the prompt.yaml the active document.
+    vscode.window.showTextDocument(openedDocument);
 };
 
 ```
@@ -84,7 +87,9 @@ Implement the following feature!
 
 Requirements:
 
-Also make prompt.yaml the active document after saving
+Directories are entries in the attention that end with /
+When overwriting the attention, preserve the directory entries in it.
+
 
 
 ## Project Specifics

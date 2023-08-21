@@ -1,31 +1,61 @@
 #!/bin/sh
 set -e
-goal="Activate prompt.yaml after saving"
+goal="Preserve directory entries in attention"
 echo "Plan:"
-echo "1. Modify the writePromptFile.ts to activate the prompt.yaml after saving."
-echo "2. No need to create new files, just amend the existing one."
+echo "1. Modify the 'writeAttention' function to preserve directory entries in the attention section."
+echo "2. Extract the logic of preserving directory entries into a new helper function named 'updateAttention' in a file named 'updateAttention.ts'."
 
-# Modify the writePromptFile.ts
-cat > integrations/vscode/src/writePromptFile.ts << 'EOF'
-import * as vscode from 'vscode';
-import * as yaml from 'js-yaml';
+# Step 1: Extract the logic of preserving directory entries into a new helper function named 'updateAttention'.
+cat << 'EOF' > integrations/vscode/src/updateAttention.ts
+import { PromptFile } from './types';
 
-export const writePromptFile = async (filePath: string, data: any) => {
-    let openedDocument = vscode.workspace.textDocuments.find(doc => doc.fileName === filePath);
-    if (!openedDocument) {
-        openedDocument = await vscode.workspace.openTextDocument(filePath);
+export const updateAttention = (currentAttention: string[] | undefined, newAttention: string[]): string[] => {
+    // If there's no current attention section, just return the new attention.
+    if (!currentAttention) {
+        return newAttention;
     }
-    
-    const edit = new vscode.WorkspaceEdit();
-    const range = new vscode.Range(new vscode.Position(0, 0), new vscode.Position(openedDocument.lineCount, 0));
-    edit.replace(openedDocument.uri, range, yaml.dump(data));
-    await vscode.workspace.applyEdit(edit);
-    
-    // Save the document unconditionally.
-    openedDocument.save();
-    
-    // Make the prompt.yaml the active document.
-    vscode.window.showTextDocument(openedDocument);
+
+    // Filter out directories from the current attention.
+    const currentDirectories = currentAttention.filter(item => item.endsWith('/'));
+
+    // Add the current directories to the new attention list.
+    return [...new Set([...currentDirectories, ...newAttention])];
+};
+EOF
+
+# Step 2: Modify the 'writeAttention' function to use the new helper function 'updateAttention'.
+cat << 'EOF' > integrations/vscode/src/writeAttention.ts
+import * as vscode from 'vscode';
+import { getRootWorkspace } from './getRootWorkspace';
+import { getPromptFilePath } from './getPromptFilePath';
+import { getCurrentOpenDocuments } from './getCurrentOpenDocuments';
+import { readPromptFile } from './readPromptFile';
+import { filterAttentionExcludes } from './filterAttentionExcludes';
+import { writePromptFile } from './writePromptFile';
+import { updateAttention } from './updateAttention';
+import { PromptFile } from './types';
+
+export const writeAttention = async () => {
+    const rootFolder = getRootWorkspace();
+    if (!rootFolder) {
+        return;
+    }
+
+    const promptFilePath = getPromptFilePath(rootFolder);
+    const excludeList = vscode.workspace.getConfiguration('junior').get('attentionExcludeList', []);
+    try {
+        if (promptFilePath) {
+            const currentWindows = getCurrentOpenDocuments(rootFolder);
+            const attentionSection = filterAttentionExcludes(currentWindows, excludeList, rootFolder);
+            const promptFile: PromptFile = await readPromptFile(promptFilePath);
+            promptFile.attention = updateAttention(promptFile.attention, attentionSection);
+            writePromptFile(promptFilePath, promptFile);
+        } else {
+            vscode.window.showErrorMessage('No prompt.yaml file found in the project root!');
+        }
+    } catch (error) {
+        vscode.window.showErrorMessage('Error updating the prompt.yaml file!');
+    }
 };
 EOF
 

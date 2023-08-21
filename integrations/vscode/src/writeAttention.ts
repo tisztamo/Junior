@@ -1,11 +1,11 @@
 import * as vscode from 'vscode';
-import * as yaml from 'js-yaml';
 import { getRootWorkspace } from './getRootWorkspace';
 import { getPromptFilePath } from './getPromptFilePath';
 import { getCurrentOpenDocuments } from './getCurrentOpenDocuments';
 import { readPromptFile } from './readPromptFile';
 import { filterAttentionExcludes } from './filterAttentionExcludes';
 import { writePromptFile } from './writePromptFile';
+import { updateAttention } from './updateAttention';
 import { PromptFile } from './types';
 
 export const writeAttention = async () => {
@@ -21,7 +21,7 @@ export const writeAttention = async () => {
             const currentWindows = getCurrentOpenDocuments(rootFolder);
             const attentionSection = filterAttentionExcludes(currentWindows, excludeList, rootFolder);
             const promptFile: PromptFile = await readPromptFile(promptFilePath);
-            promptFile.attention = attentionSection;
+            promptFile.attention = updateAttention(promptFile.attention, attentionSection);
             writePromptFile(promptFilePath, promptFile);
         } else {
             vscode.window.showErrorMessage('No prompt.yaml file found in the project root!');
