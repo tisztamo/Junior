@@ -1,39 +1,23 @@
 #!/bin/sh
 set -e
-goal="Fix TypeScript error for promptFile"
+goal="Refactor and fix prompt.yaml update"
 echo "Plan:"
-echo "1. Create types.ts to define the PromptFile interface"
-echo "2. Update readPromptFile.ts to specify return type"
-echo "3. Update writeAttention.ts to use the new interface"
+echo "1. Import the 'yaml' module in writeAttention.ts to fix the error."
+echo "2. Move the content of updateAttentionSection directly into writeAttention."
+echo "3. Delete updateAttentionSection.ts."
 
-# Step 1: Create types.ts
-cat << 'EOF' > integrations/vscode/src/types.ts
-export interface PromptFile {
-    attention?: string[];
-    [key: string]: any;  // Allow additional properties
-}
-EOF
-
-# Step 2: Update readPromptFile.ts
-cat << 'EOF' > integrations/vscode/src/readPromptFile.ts
-import * as fs from 'fs';
-import * as yaml from 'js-yaml';
-import { PromptFile } from './types';
-
-export const readPromptFile = (filePath: string): PromptFile => {
-    return yaml.load(fs.readFileSync(filePath, 'utf8')) as PromptFile;
-};
-EOF
-
-# Step 3: Update writeAttention.ts
-cat << 'EOF' > integrations/vscode/src/writeAttention.ts
+# Step 1: Import the 'yaml' module in writeAttention.ts to fix the error.
+# Step 2: Move the content of updateAttentionSection directly into writeAttention.
+cat > integrations/vscode/src/writeAttention.ts <<EOF
 import * as vscode from 'vscode';
+import * as yaml from 'js-yaml';
 import { getRootWorkspace } from './getRootWorkspace';
 import { getPromptFilePath } from './getPromptFilePath';
 import { getCurrentOpenDocuments } from './getCurrentOpenDocuments';
 import { readPromptFile } from './readPromptFile';
 import { writePromptFile } from './writePromptFile';
-import { updateAttentionSection } from './updateAttentionSection';
+import { filterAttentionExcludes } from './filterAttentionExcludes';
+import { updateEditorContents } from './updateEditorContents';
 import { PromptFile } from './types';
 
 export const writeAttention = async () => {
@@ -47,10 +31,17 @@ export const writeAttention = async () => {
     try {
         if (promptFilePath) {
             const currentWindows = getCurrentOpenDocuments(rootFolder);
-            const attentionSection = updateAttentionSection(currentWindows, excludeList, rootFolder);
+            
+            const attentionSection = filterAttentionExcludes(currentWindows, excludeList, rootFolder);
+            
             const promptFile: PromptFile = readPromptFile(promptFilePath);
             promptFile.attention = attentionSection;
+            
+            const newContents = yaml.dump(promptFile);
+            await updateEditorContents(promptFilePath, newContents);
+            
             writePromptFile(promptFilePath, promptFile);
+            
             vscode.window.showInformationMessage('Prompt file updated successfully!');
         } else {
             vscode.window.showErrorMessage('No prompt.yaml file found in the project root!');
@@ -60,5 +51,8 @@ export const writeAttention = async () => {
     }
 };
 EOF
+
+# Step 3: Delete updateAttentionSection.ts.
+rm integrations/vscode/src/updateAttentionSection.ts
 
 echo "\033[32mDone: $goal\033[0m\n"

@@ -9,27 +9,29 @@ Ask for them in normal conversational format instead.
 integrations/vscode/src/writeAttention.ts:
 ```
 import * as vscode from 'vscode';
-import * as fs from 'fs';
-import * as path from 'path';
-import * as yaml from 'js-yaml';
-import { filterAttentionExcludes } from './filterAttentionExcludes';
+import { getRootWorkspace } from './getRootWorkspace';
+import { getPromptFilePath } from './getPromptFilePath';
+import { getCurrentOpenDocuments } from './getCurrentOpenDocuments';
+import { readPromptFile } from './readPromptFile';
+import { writePromptFile } from './writePromptFile';
+import { updateAttentionSection } from './updateAttentionSection';
+import { PromptFile } from './types';
 
 export const writeAttention = async () => {
-    const workspaceFolders = vscode.workspace.workspaceFolders;
-    if (workspaceFolders === undefined) {
+    const rootFolder = getRootWorkspace();
+    if (!rootFolder) {
         return;
     }
-    
-    const rootFolder = workspaceFolders[0].uri.fsPath;
-    const promptFilePath = path.join(rootFolder, 'prompt.yaml');
+
+    const promptFilePath = getPromptFilePath(rootFolder);
     const excludeList = vscode.workspace.getConfiguration('junior').get('attentionExcludeList', []);
     try {
-        if (fs.existsSync(promptFilePath)) {
-            const currentWindows = vscode.workspace.textDocuments.map(doc => path.relative(rootFolder, doc.fileName));
-            const filteredWindows = filterAttentionExcludes(currentWindows, excludeList, rootFolder);
-            const promptFile: any = yaml.load(fs.readFileSync(promptFilePath, 'utf8'));
-            promptFile.attention = filteredWindows;
-            fs.writeFileSync(promptFilePath, yaml.dump(promptFile), 'utf8');
+        if (promptFilePath) {
+            const currentWindows = getCurrentOpenDocuments(rootFolder);
+            const attentionSection = updateAttentionSection(currentWindows, excludeList, rootFolder);
+            const promptFile: PromptFile = readPromptFile(promptFilePath);
+            promptFile.attention = attentionSection;
+            writePromptFile(promptFilePath, promptFile);
             vscode.window.showInformationMessage('Prompt file updated successfully!');
         } else {
             vscode.window.showErrorMessage('No prompt.yaml file found in the project root!');
@@ -41,21 +43,68 @@ export const writeAttention = async () => {
 
 ```
 
+integrations/vscode/src/types.ts:
+```
+export interface PromptFile {
+    attention?: string[];
+    [key: string]: any;  // Allow additional properties
+}
+
+```
+
+integrations/vscode/src/updateAttentionSection.ts:
+```
+import { filterAttentionExcludes } from './filterAttentionExcludes';
+
+export const updateAttentionSection = (currentWindows: string[], excludeList: string[], rootFolder: string) => {
+    return filterAttentionExcludes(currentWindows, excludeList, rootFolder);
+};
+
+```
+
+integrations/vscode/src/readPromptFile.ts:
+```
+import * as fs from 'fs';
+import * as yaml from 'js-yaml';
+import { PromptFile } from './types';
+
+export const readPromptFile = (filePath: string): PromptFile => {
+    return yaml.load(fs.readFileSync(filePath, 'utf8')) as PromptFile;
+};
+
+```
+
+integrations/vscode/src/writePromptFile.ts:
+```
+import * as fs from 'fs';
+import * as yaml from 'js-yaml';
+
+export const writePromptFile = (filePath: string, data: any) => {
+    fs.writeFileSync(filePath, yaml.dump(data), 'utf8');
+};
+
+```
+
 
 # Task
 
-## Refactor by split
+Implement the following feature!
 
-A file is too big. We need to split it into parts.
-Identify the possible parts and refactor the code in separate files!
+- Create a plan!
+- Create new files when needed!
 
-getRootWorkspace(): Returns the root of the current VSCode workspace.
-getPromptFilePath(rootFolder: string): Takes the root folder and returns the path to the prompt.yaml file.
-getCurrentOpenDocuments(rootFolder: string): Returns a list of currently open text documents relative to the root workspace.
-readPromptFile(filePath: string): Reads and parses the prompt.yaml file, returning its content.
-writePromptFile(filePath: string, data: any): Writes the updated data back to the prompt.yaml file.
-updateAttentionSection(currentWindows: string[], excludeList: string[], rootFolder: string): Takes in the list of open documents, the exclusion list, and the root folder, then filters and returns the updated "attention" list.
+Requirements:
 
+When prompt.yaml is opened in vscode, it should be updated in the editor before writing the underlying file.
+
+
+
+## Project Specifics
+
+- Every js file should *only export a single function*!
+- Use *ES6 imports*!
+- Prefer *async/await* over promises!
+- The frontend uses *Solidjs* and Tailwind, edit .jsx file accordingly!
 
 
 # Output Format
