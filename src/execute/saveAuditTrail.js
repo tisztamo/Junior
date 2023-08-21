@@ -1,4 +1,4 @@
-import { writeFile, mkdir } from 'fs/promises';
+import { writeFile, mkdir, readFile } from 'fs/promises';
 
 async function saveAuditTrail(code) {
     const goalMatch = code.match(/goal="([^"]+)"/);
@@ -18,8 +18,8 @@ async function saveAuditTrail(code) {
 
     // Copy files to the new directory
     await Promise.all([
-        writeFile(`${auditTrailDir}prompt.yaml`, await fs.promises.readFile('./prompt.yaml', 'utf-8')),
-        writeFile(`${auditTrailDir}prompt.md`, await fs.promises.readFile('./prompt.md', 'utf-8')),
+        writeFile(`${auditTrailDir}prompt.yaml`, await readFile('./prompt.yaml', 'utf-8')),
+        writeFile(`${auditTrailDir}prompt.md`, await readFile('./prompt.md', 'utf-8')),
         writeFile(`${auditTrailDir}change.sh`, code),
     ]);
 

@@ -1,15 +1,9 @@
-task: prompt/task/feature/implement.md
+task: prompt/task/bug/fix.md
 attention:
-  - ./
-  - prompt/
-  - .gitignore
-  - src/execute/executeAndForwardOutput.js
-requirements: >
-  gitignore prompt.yaml, prompt.md and change.sh Note that they are already
-  added to git.
-
-  Before executing the change:
-    - Create a new dir prompt/history/[year]/[month]/[day]/[time]_[goal]/
-    - Use the current date and the goal variable set in the change script by a line goal="[goal]"
-    - Copy the newly gitignored files to the new dir and log "Audit trail saved to [dir path]"
+  - src/execute/saveAuditTrail.js
+requirements: |
+  ReferenceError: fs is not defined
+    at saveAuditTrail (file:///Users/ko/projects-new/Junior/src/execute/saveAuditTrail.js:21:56)
+    at async executeAndForwardOutput (file:///Users/ko/projects-new/Junior/src/execute/executeAndForwardOutput.js:12:9)
+    at async executeHandler (file:///Users/ko/projects-new/Junior/src/backend/handlers/executeHandler.js:12:3)
 os: OSX
