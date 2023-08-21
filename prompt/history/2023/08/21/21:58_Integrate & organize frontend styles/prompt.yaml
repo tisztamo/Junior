@@ -1,0 +1,8 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./
+  - docs/
+  - docs/index.html
+requirements: |
+  Add margin to iframes. 
+  Factor out the css to a file in assets.
