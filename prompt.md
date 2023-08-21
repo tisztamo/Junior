@@ -6,129 +6,56 @@ Ask for them in normal conversational format instead.
 
 # Working set
 
-src/prompt/createPrompt.js:
+integrations/vscode/src/writeAttention.ts:
 ```
-import { readAttention } from "../attention/readAttention.js"
-import yaml from 'js-yaml';
-import { getSystemPromptIfNeeded } from './getSystemPromptIfNeeded.js';
-import { resolveTemplateVariables } from './resolveTemplateVariables.js';
-import { extractTemplateVars } from './extractTemplateVars.js';
-import { loadPromptDescriptor } from './loadPromptDescriptor.js';
-import { loadTaskTemplate } from './loadTaskTemplate.js';
-import { loadFormatTemplate } from './loadFormatTemplate.js';
-import promptDescriptorDefaults from './promptDescriptorDefaults.js';
+import * as vscode from 'vscode';
+import * as fs from 'fs';
+import * as path from 'path';
+import * as yaml from 'js-yaml';
+import { filterAttentionExcludes } from './filterAttentionExcludes';
 
-const createPrompt = async (userInput, forceSystemPrompt) => {
-  let promptDescriptor = yaml.load(await loadPromptDescriptor());
-  let promptDescriptorDefaultsData = await promptDescriptorDefaults();
-
-  promptDescriptor = { ...promptDescriptorDefaultsData, ...promptDescriptor };
-
-  let templateVars = extractTemplateVars(promptDescriptor);
-  templateVars = await resolveTemplateVariables(templateVars);
-
-  const attention = await readAttention(promptDescriptor.attention);
-  const task = await loadTaskTemplate(promptDescriptor.task, templateVars);
-
-  const format = await loadFormatTemplate(promptDescriptor.format, templateVars);
-  const system = await getSystemPromptIfNeeded(forceSystemPrompt);
-  const saveto = promptDescriptor.saveto;
-  return {
-    prompt: `${system}# Working set\n\n${attention.join("\n")}\n\n# Task\n\n${task}\n\n# Output Format\n\n${format}\n\n${userInput ? userInput : ""}`,
-    saveto
-  };
-}
-
-export { createPrompt };
-
-```
-
-src/prompt/resolveTemplateVariables.js:
-```
-import fs from 'fs';
-import util from 'util';
-import path from 'path';
-const readFile = util.promisify(fs.readFile);
-
-async function resolveTemplateVariables(vars) {
-  for (const key in vars) {
-    if (typeof vars[key] === 'string' && fs.existsSync(vars[key]) && fs.lstatSync(vars[key]).isFile()) {
-      vars[key] = await readFile(path.resolve(vars[key]), 'utf-8');
+export const writeAttention = async () => {
+    const workspaceFolders = vscode.workspace.workspaceFolders;
+    if (workspaceFolders === undefined) {
+        return;
     }
-  }
-  return vars;
-}
-
-export { resolveTemplateVariables };
-
-```
-
-src/prompt/extractTemplateVars.js:
-```
-// Extracts template variables from the prompt descriptor.
-function extractTemplateVars(promptDescriptor) {
-  return Object.keys(promptDescriptor)
-    .filter(key => ['task', 'format', 'attention', 'saveto'].indexOf(key) < 0)
-    .reduce((obj, key) => {
-      obj[key] = promptDescriptor[key];
-      return obj;
-    }, {});
-}
-
-export { extractTemplateVars };
-
-```
-
-src/prompt/loadTaskTemplate.js:
-```
-import { loadPromptFile } from './loadPromptFile.js';
-
-const loadTaskTemplate = async (taskTemplatePath, templateVars) => {
-  return await loadPromptFile(taskTemplatePath, templateVars);
+    
+    const rootFolder = workspaceFolders[0].uri.fsPath;
+    const promptFilePath = path.join(rootFolder, 'prompt.yaml');
+    const excludeList = vscode.workspace.getConfiguration('junior').get('attentionExcludeList', []);
+    try {
+        if (fs.existsSync(promptFilePath)) {
+            const currentWindows = vscode.workspace.textDocuments.map(doc => path.relative(rootFolder, doc.fileName));
+            const filteredWindows = filterAttentionExcludes(currentWindows, excludeList, rootFolder);
+            const promptFile: any = yaml.load(fs.readFileSync(promptFilePath, 'utf8'));
+            promptFile.attention = filteredWindows;
+            fs.writeFileSync(promptFilePath, yaml.dump(promptFile), 'utf8');
+            vscode.window.showInformationMessage('Prompt file updated successfully!');
+        } else {
+            vscode.window.showErrorMessage('No prompt.yaml file found in the project root!');
+        }
+    } catch (error) {
+        vscode.window.showErrorMessage('Error updating the prompt.yaml file!');
+    }
 };
-
-export { loadTaskTemplate };
-
-```
-
-src/prompt/loadPromptFile.js:
-```
-import fs from 'fs';
-import path from 'path';
-import ejs from 'ejs';
-import { fileURLToPath } from 'url';
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-const loadPromptFile = async (filePath, templateVars) => {
-  try {
-    // Try to read the file relative to the current directory
-    return await ejs.renderFile(filePath, templateVars, {async: true});
-  } catch (err) {
-    // If the file doesn't exist, try reading it from the project root directory
-    const rootPath = path.resolve(__dirname, '../../', filePath);
-    return await ejs.renderFile(rootPath, templateVars, {async: true});
-  }
-};
-
-export { loadPromptFile };
 
 ```
 
 
 # Task
 
-Fix the following issue!
+## Refactor by split
 
-Extra html encoding appears on injected variables int the generated prompt.
+A file is too big. We need to split it into parts.
+Identify the possible parts and refactor the code in separate files!
 
+getRootWorkspace(): Returns the root of the current VSCode workspace.
+getPromptFilePath(rootFolder: string): Takes the root folder and returns the path to the prompt.yaml file.
+getCurrentOpenDocuments(rootFolder: string): Returns a list of currently open text documents relative to the root workspace.
+readPromptFile(filePath: string): Reads and parses the prompt.yaml file, returning its content.
+writePromptFile(filePath: string, data: any): Writes the updated data back to the prompt.yaml file.
+updateAttentionSection(currentWindows: string[], excludeList: string[], rootFolder: string): Takes in the list of open documents, the exclusion list, and the root folder, then filters and returns the updated "attention" list.
 
-## Project Specifics
-
-- Every js file should *only export a single function*!
-- Use *ES6 imports*!
-- Prefer *async/await* over promises!
-- The frontend uses *Solidjs* and Tailwind, edit .jsx file accordingly!
 
 
 # Output Format

@@ -1,9 +1,22 @@
-task: prompt/task/bug/fix.md
+task: prompt/task/refactor/split.md
 attention:
-  - src/prompt/createPrompt.js
-  - src/prompt/resolveTemplateVariables.js
-  - src/prompt/extractTemplateVars.js
-  - src/prompt/loadTaskTemplate.js
-  - src/prompt/loadPromptFile.js
-requirements: Extra html encoding appears on injected variables int the generated prompt.
+  - integrations/vscode/src/writeAttention.ts
+requirements: >
+  getRootWorkspace(): Returns the root of the current VSCode workspace.
+
+  getPromptFilePath(rootFolder: string): Takes the root folder and returns the
+  path to the prompt.yaml file.
+
+  getCurrentOpenDocuments(rootFolder: string): Returns a list of currently open
+  text documents relative to the root workspace.
+
+  readPromptFile(filePath: string): Reads and parses the prompt.yaml file,
+  returning its content.
+
+  writePromptFile(filePath: string, data: any): Writes the updated data back to
+  the prompt.yaml file.
+
+  updateAttentionSection(currentWindows: string[], excludeList: string[],
+  rootFolder: string): Takes in the list of open documents, the exclusion list,
+  and the root folder, then filters and returns the updated "attention" list.
 os: OSX
