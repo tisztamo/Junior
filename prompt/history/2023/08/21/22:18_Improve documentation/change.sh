@@ -1,3 +1,11 @@
+#!/bin/sh
+set -e
+
+goal="Improve documentation"
+echo "Plan:"
+echo "1. Update the 'Usability & fixes' section in the roadmap to mark 'Fix every major bug' as completed."
+
+cat > docs/roadmap.md << 'EOF'
 # Roadmap
 ## Usability & fixes
 - ✅ Done: Implement the four buttons
@@ -16,3 +24,6 @@
 
 ## Prompt herds
 - Scan and transform (refactor) the codebase gradually
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

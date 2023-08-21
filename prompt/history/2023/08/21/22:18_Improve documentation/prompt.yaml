@@ -1,0 +1,4 @@
+task: prompt/task/doc/improve.md
+attention:
+  - docs/roadmap.md
+requirements: Every known major bug is fixed now, check the mark in the roadmap.
