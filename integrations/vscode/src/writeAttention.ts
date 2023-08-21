@@ -23,7 +23,7 @@ export const writeAttention = async () => {
             
             const attentionSection = filterAttentionExcludes(currentWindows, excludeList, rootFolder);
             
-            const promptFile: PromptFile = readPromptFile(promptFilePath);
+            const promptFile: PromptFile = await readPromptFile(promptFilePath);
             promptFile.attention = attentionSection;
             
             const newContents = yaml.dump(promptFile);

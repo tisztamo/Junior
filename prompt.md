@@ -6,39 +6,14 @@ Ask for them in normal conversational format instead.
 
 # Working set
 
-integrations/vscode/src/writeAttention.ts:
+integrations/vscode/src/readPromptFile.ts:
 ```
-import * as vscode from 'vscode';
-import { getRootWorkspace } from './getRootWorkspace';
-import { getPromptFilePath } from './getPromptFilePath';
-import { getCurrentOpenDocuments } from './getCurrentOpenDocuments';
-import { readPromptFile } from './readPromptFile';
-import { writePromptFile } from './writePromptFile';
-import { updateAttentionSection } from './updateAttentionSection';
+import * as fs from 'fs';
+import * as yaml from 'js-yaml';
 import { PromptFile } from './types';
 
-export const writeAttention = async () => {
-    const rootFolder = getRootWorkspace();
-    if (!rootFolder) {
-        return;
-    }
-
-    const promptFilePath = getPromptFilePath(rootFolder);
-    const excludeList = vscode.workspace.getConfiguration('junior').get('attentionExcludeList', []);
-    try {
-        if (promptFilePath) {
-            const currentWindows = getCurrentOpenDocuments(rootFolder);
-            const attentionSection = updateAttentionSection(currentWindows, excludeList, rootFolder);
-            const promptFile: PromptFile = readPromptFile(promptFilePath);
-            promptFile.attention = attentionSection;
-            writePromptFile(promptFilePath, promptFile);
-            vscode.window.showInformationMessage('Prompt file updated successfully!');
-        } else {
-            vscode.window.showErrorMessage('No prompt.yaml file found in the project root!');
-        }
-    } catch (error) {
-        vscode.window.showErrorMessage('Error updating the prompt.yaml file!');
-    }
+export const readPromptFile = (filePath: string): PromptFile => {
+    return yaml.load(fs.readFileSync(filePath, 'utf8')) as PromptFile;
 };
 
 ```
@@ -52,35 +27,48 @@ export interface PromptFile {
 
 ```
 
-integrations/vscode/src/updateAttentionSection.ts:
+integrations/vscode/src/writeAttention.ts:
 ```
-import { filterAttentionExcludes } from './filterAttentionExcludes';
-
-export const updateAttentionSection = (currentWindows: string[], excludeList: string[], rootFolder: string) => {
-    return filterAttentionExcludes(currentWindows, excludeList, rootFolder);
-};
-
-```
-
-integrations/vscode/src/readPromptFile.ts:
-```
-import * as fs from 'fs';
+import * as vscode from 'vscode';
 import * as yaml from 'js-yaml';
+import { getRootWorkspace } from './getRootWorkspace';
+import { getPromptFilePath } from './getPromptFilePath';
+import { getCurrentOpenDocuments } from './getCurrentOpenDocuments';
+import { readPromptFile } from './readPromptFile';
+import { writePromptFile } from './writePromptFile';
+import { filterAttentionExcludes } from './filterAttentionExcludes';
+import { updateEditorContents } from './updateEditorContents';
 import { PromptFile } from './types';
 
-export const readPromptFile = (filePath: string): PromptFile => {
-    return yaml.load(fs.readFileSync(filePath, 'utf8')) as PromptFile;
-};
+export const writeAttention = async () => {
+    const rootFolder = getRootWorkspace();
+    if (!rootFolder) {
+        return;
+    }
 
-```
-
-integrations/vscode/src/writePromptFile.ts:
-```
-import * as fs from 'fs';
-import * as yaml from 'js-yaml';
-
-export const writePromptFile = (filePath: string, data: any) => {
-    fs.writeFileSync(filePath, yaml.dump(data), 'utf8');
+    const promptFilePath = getPromptFilePath(rootFolder);
+    const excludeList = vscode.workspace.getConfiguration('junior').get('attentionExcludeList', []);
+    try {
+        if (promptFilePath) {
+            const currentWindows = getCurrentOpenDocuments(rootFolder);
+            
+            const attentionSection = filterAttentionExcludes(currentWindows, excludeList, rootFolder);
+            
+            const promptFile: PromptFile = readPromptFile(promptFilePath);
+            promptFile.attention = attentionSection;
+            
+            const newContents = yaml.dump(promptFile);
+            await updateEditorContents(promptFilePath, newContents);
+            
+            writePromptFile(promptFilePath, promptFile);
+            
+            vscode.window.showInformationMessage('Prompt file updated successfully!');
+        } else {
+            vscode.window.showErrorMessage('No prompt.yaml file found in the project root!');
+        }
+    } catch (error) {
+        vscode.window.showErrorMessage('Error updating the prompt.yaml file!');
+    }
 };
 
 ```
@@ -95,7 +83,7 @@ Implement the following feature!
 
 Requirements:
 
-When prompt.yaml is opened in vscode, it should be updated in the editor before writing the underlying file.
+When prompt.yaml is opened in the vscode editor, use the editor contents instead of the underlying file!
 
 
 

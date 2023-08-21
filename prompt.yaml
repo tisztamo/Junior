@@ -1,9 +1,6 @@
 task: prompt/task/feature/implement.md
-attention:
-  - integrations/vscode/src/writeAttention.ts
-  - integrations/vscode/src/writePromptFile.ts
-  - integrations/vscode/src/readPromptFile.ts
+attention: []
 requirements: >
-  When prompt.yaml is opened in vscode, it should be updated in the editor
-  before writing the underlying file.
+  When prompt.yaml is opened in the vscode editor, use the editor contents
+  instead of the underlying file! xxx
 os: OSX

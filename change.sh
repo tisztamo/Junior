@@ -1,13 +1,28 @@
 #!/bin/sh
 set -e
-goal="Refactor and fix prompt.yaml update"
+goal="Integrate editor contents for prompt.yaml"
 echo "Plan:"
-echo "1. Import the 'yaml' module in writeAttention.ts to fix the error."
-echo "2. Move the content of updateAttentionSection directly into writeAttention."
-echo "3. Delete updateAttentionSection.ts."
+echo "1. Refactor readPromptFile.ts to prioritize the editor content if prompt.yaml is open in the editor."
+echo "2. If the file is not open, it will read from the file as it used to."
+echo "3. Update the writeAttention.ts to use the new readPromptFile method."
 
-# Step 1: Import the 'yaml' module in writeAttention.ts to fix the error.
-# Step 2: Move the content of updateAttentionSection directly into writeAttention.
+# Step 1: Refactor readPromptFile.ts
+cat > integrations/vscode/src/readPromptFile.ts <<EOF
+import * as fs from 'fs';
+import * as vscode from 'vscode';
+import * as yaml from 'js-yaml';
+import { PromptFile } from './types';
+
+export const readPromptFile = async (filePath: string): Promise<PromptFile> => {
+    const openedDocument = vscode.workspace.textDocuments.find(doc => doc.fileName === filePath);
+    if (openedDocument) {
+        return yaml.load(openedDocument.getText()) as PromptFile;
+    }
+    return yaml.load(fs.readFileSync(filePath, 'utf8')) as PromptFile;
+};
+EOF
+
+# Step 2: Update the writeAttention.ts file to use the new async readPromptFile method.
 cat > integrations/vscode/src/writeAttention.ts <<EOF
 import * as vscode from 'vscode';
 import * as yaml from 'js-yaml';
@@ -34,7 +49,7 @@ export const writeAttention = async () => {
             
             const attentionSection = filterAttentionExcludes(currentWindows, excludeList, rootFolder);
             
-            const promptFile: PromptFile = readPromptFile(promptFilePath);
+            const promptFile: PromptFile = await readPromptFile(promptFilePath);
             promptFile.attention = attentionSection;
             
             const newContents = yaml.dump(promptFile);
@@ -51,8 +66,5 @@ export const writeAttention = async () => {
     }
 };
 EOF
-
-# Step 3: Delete updateAttentionSection.ts.
-rm integrations/vscode/src/updateAttentionSection.ts
 
 echo "\033[32mDone: $goal\033[0m\n"
