@@ -1,9 +1,0 @@
-task: prompt/task/feature/implement.md
-attention:
-  - integrations/vscode/src/writePromptFile.ts
-  - integrations/vscode/src/writeAttention.ts
-  - integrations/vscode/src/types.ts
-requirements: |
-  Directories are entries in the attention that end with /
-  When overwriting the attention, preserve the directory entries in it.
-os: OSX

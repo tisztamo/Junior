@@ -1,0 +1,7 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/execute/saveAuditTrail.js
+requirements: |
+  Do not make the audit trail if --noaudit cli argument is present.
+  Create AuditTrailConfig.js with same-name fn that returns { enabled: [boolean] }
+os: OSX
