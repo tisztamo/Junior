@@ -6,6 +6,28 @@ Ask for them in normal conversational format instead.
 
 # Working set
 
+integrations/vscode/src/writePromptFile.ts:
+```
+import * as vscode from 'vscode';
+import * as yaml from 'js-yaml';
+
+export const writePromptFile = async (filePath: string, data: any) => {
+    let openedDocument = vscode.workspace.textDocuments.find(doc => doc.fileName === filePath);
+    if (!openedDocument) {
+        openedDocument = await vscode.workspace.openTextDocument(filePath);
+    }
+    
+    const edit = new vscode.WorkspaceEdit();
+    const range = new vscode.Range(new vscode.Position(0, 0), new vscode.Position(openedDocument.lineCount, 0));
+    edit.replace(openedDocument.uri, range, yaml.dump(data));
+    await vscode.workspace.applyEdit(edit);
+    
+    // Save the document unconditionally.
+    openedDocument.save();
+};
+
+```
+
 integrations/vscode/src/writeAttention.ts:
 ```
 import * as vscode from 'vscode';
@@ -14,9 +36,8 @@ import { getRootWorkspace } from './getRootWorkspace';
 import { getPromptFilePath } from './getPromptFilePath';
 import { getCurrentOpenDocuments } from './getCurrentOpenDocuments';
 import { readPromptFile } from './readPromptFile';
-import { writePromptFile } from './writePromptFile';
 import { filterAttentionExcludes } from './filterAttentionExcludes';
-import { updateEditorContents } from './updateEditorContents';
+import { writePromptFile } from './writePromptFile';
 import { PromptFile } from './types';
 
 export const writeAttention = async () => {
@@ -30,52 +51,16 @@ export const writeAttention = async () => {
     try {
         if (promptFilePath) {
             const currentWindows = getCurrentOpenDocuments(rootFolder);
-            
             const attentionSection = filterAttentionExcludes(currentWindows, excludeList, rootFolder);
-            
             const promptFile: PromptFile = await readPromptFile(promptFilePath);
             promptFile.attention = attentionSection;
-            
-            const newContents = yaml.dump(promptFile);
-            await updateEditorContents(promptFilePath, newContents);
-            
             writePromptFile(promptFilePath, promptFile);
-            
-            vscode.window.showInformationMessage('Prompt file updated successfully!');
         } else {
             vscode.window.showErrorMessage('No prompt.yaml file found in the project root!');
         }
     } catch (error) {
         vscode.window.showErrorMessage('Error updating the prompt.yaml file!');
     }
-};
-
-```
-
-integrations/vscode/src/writePromptFile.ts:
-```
-import * as fs from 'fs';
-import * as yaml from 'js-yaml';
-
-export const writePromptFile = (filePath: string, data: any) => {
-    fs.writeFileSync(filePath, yaml.dump(data), 'utf8');
-};
-
-```
-
-integrations/vscode/src/readPromptFile.ts:
-```
-import * as fs from 'fs';
-import * as vscode from 'vscode';
-import * as yaml from 'js-yaml';
-import { PromptFile } from './types';
-
-export const readPromptFile = async (filePath: string): Promise<PromptFile> => {
-    const openedDocument = vscode.workspace.textDocuments.find(doc => doc.fileName === filePath);
-    if (openedDocument) {
-        return yaml.load(openedDocument.getText()) as PromptFile;
-    }
-    return yaml.load(fs.readFileSync(filePath, 'utf8')) as PromptFile;
 };
 
 ```
@@ -92,13 +77,14 @@ export interface PromptFile {
 
 # Task
 
-Fix the following issue!
+Implement the following feature!
 
-If the prompt.yaml is opened in the editor, vscode shows it as changed after saving.
-We need to fix this: As we write the contents both to the file and the editor buffer,
-vscode should show it as unchanged.
-Also remove the information message.
+- Create a plan!
+- Create new files when needed!
 
+Requirements:
+
+Also make prompt.yaml the active document after saving
 
 
 ## Project Specifics

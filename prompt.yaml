@@ -1,7 +1,7 @@
-task: prompt/task/bug/fix.md
+task: prompt/task/feature/implement.md
 attention:
-  - integrations/vscode/src/writeAttention.ts
   - integrations/vscode/src/writePromptFile.ts
+  - integrations/vscode/src/writeAttention.ts
   - integrations/vscode/src/types.ts
-requirements: sdfsdf
+requirements: Also make prompt.yaml the active document after saving
 os: OSX

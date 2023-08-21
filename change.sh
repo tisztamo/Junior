@@ -1,10 +1,11 @@
 #!/bin/sh
 set -e
-goal="Update and save using VSCode API"
+goal="Activate prompt.yaml after saving"
 echo "Plan:"
-echo "1. Revise writePromptFile.ts to save the document unconditionally."
+echo "1. Modify the writePromptFile.ts to activate the prompt.yaml after saving."
+echo "2. No need to create new files, just amend the existing one."
 
-# Step 1: Modify writePromptFile.ts to save the document unconditionally.
+# Modify the writePromptFile.ts
 cat > integrations/vscode/src/writePromptFile.ts << 'EOF'
 import * as vscode from 'vscode';
 import * as yaml from 'js-yaml';
@@ -22,6 +23,9 @@ export const writePromptFile = async (filePath: string, data: any) => {
     
     // Save the document unconditionally.
     openedDocument.save();
+    
+    // Make the prompt.yaml the active document.
+    vscode.window.showTextDocument(openedDocument);
 };
 EOF
 

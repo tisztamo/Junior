@@ -14,4 +14,7 @@ export const writePromptFile = async (filePath: string, data: any) => {
     
     // Save the document unconditionally.
     openedDocument.save();
+    
+    // Make the prompt.yaml the active document.
+    vscode.window.showTextDocument(openedDocument);
 };
