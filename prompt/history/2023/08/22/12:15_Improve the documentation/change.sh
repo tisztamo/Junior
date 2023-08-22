@@ -1,3 +1,21 @@
+#!/bin/sh
+set -e
+goal="Improve the documentation"
+echo "Plan:"
+echo "1. Remove backup files from docs"
+echo "2. Remove src/doc/ directory"
+echo "3. Update README.md content"
+echo "4. Confirm changes"
+
+# 1. Remove backup files from docs
+rm docs/README.md.backup
+rm docs/_sidebar_backup.md
+
+# 2. Remove src/doc/ directory
+rm -rf src/doc/
+
+# 3. Update README.md content
+cat > docs/README.md <<'EOF'
 Warn: This README is AI generated, just like all the source files of this project.
 
 # Junior - Your AI-first IDE 
@@ -21,3 +39,7 @@ Your contributions make a difference! At Junior, we value the collaboration of t
 For questions or assistance, please raise an issue in our GitHub repository.
 
 **Note:** We've tested Junior primarily with the GPT-4 model. However, you're welcome to experiment with similarly capable models and share your findings. It's not compatible with GPT-3.5.
+EOF
+
+# 4. Confirm changes
+echo "\033[32mDone: $goal\033[0m\n"

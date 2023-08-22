@@ -1,0 +1,12 @@
+task: prompt/task/doc/improve.md
+attention:
+  - docs/
+  - src/
+  - docs/index.html
+  - docs/_sidebar.md
+  - docs/README.md
+requirements: |
+  remove files: docs/*backup*
+  remove dir: src/doc/
+  In readme, instead of writing about lisp and git,
+  write that Junior targets craftmans, aka professional programmers who like to tweak their tools. (Reword this)
