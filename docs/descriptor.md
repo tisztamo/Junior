@@ -43,9 +43,9 @@ os: Ubuntu
 
 ## Attributes referencing .md files
 
-When a yaml attribute refers to an existing file, its content will be used. For example, the line `task: prompt/task/feature/implement.md` in the example yaml refers to an existing markdown file and its content is injected into the task.
+When a yaml attribute refers to an existing file, its content will be used. For example, the line `task: prompt/task/feature/implement.md` in the example yaml refers to an existing markdown file and its content is injected into the task section of the prompt.
 
-Here's the content of prompt/task/feature/implement.md as a supplement to the example:
+## Template Files
 
 ```
 Implement the following feature!
@@ -59,8 +59,6 @@ Requirements:
 
 <%= projectSpecifics %>
 ```
-
-## Template Files
 
 Prompt parts are markdown template files, and [ejs](https://ejs.co/) runs on them. Attributes from the yaml file are available in the template, e.g., `<%= requirements %>` injects the requirements.
 
