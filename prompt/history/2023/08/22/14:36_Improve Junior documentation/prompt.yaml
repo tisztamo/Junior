@@ -1,0 +1,11 @@
+task: prompt/task/doc/improve.md
+attention:
+  - docs/README.md
+requirements: |
+  Find a simpler word instead of penchant
+  Remove "In a bold move"
+  Reorder:
+    - Junior is 
+    - With Junior
+    - At its core...
+    - Junior has been..

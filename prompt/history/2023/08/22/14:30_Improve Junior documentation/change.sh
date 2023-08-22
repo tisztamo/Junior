@@ -1,3 +1,10 @@
+#!/bin/sh
+set -e
+goal="Improve Junior documentation"
+echo "Plan:"
+echo "1. Update the README.md file by splitting the section under the video into 4-5 paragraphs, with target group improvements and the note about Junior's inception."
+
+cat > docs/README.md << 'EOF'
 Warn: This README is AI generated, just like all the source files of this project.
 
 # Junior - Your AI-first IDE 
@@ -26,3 +33,6 @@ For questions or assistance, please raise an issue in our GitHub repository.
 
 **Note:** We've tested Junior primarily with the GPT-4 model. However, you're welcome to experiment with similarly capable models and share your findings. It's not compatible with GPT-3.5.
 
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

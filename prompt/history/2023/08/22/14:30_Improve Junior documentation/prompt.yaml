@@ -1,0 +1,9 @@
+task: prompt/task/doc/improve.md
+attention:
+  - docs/README.md
+requirements: >
+  Set target group better: "...targeting professional programmers who enjoy..."
+
+  Add a note that Junior is written without manual coding since the very
+  beginnings, well before the four buttons were all implemented. ( Reword this
+  note to be brave but not what Hungarians call pöffeszkedő )
