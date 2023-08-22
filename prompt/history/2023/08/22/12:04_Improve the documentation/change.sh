@@ -1,3 +1,12 @@
+#!/bin/sh
+set -e
+goal="Improve the documentation"
+echo "Plan:"
+echo "1. Remove the twitter script and blockquote from index.html"
+echo "2. Remove the twitter blockquote from _sidebar.md"
+
+# 1. Remove the twitter script and blockquote from index.html
+cat > docs/index.html << 'EOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,3 +26,15 @@
   <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
 </body>
 </html>
+EOF
+
+# 2. Remove the twitter blockquote from _sidebar.md
+cat > docs/_sidebar.md << 'EOF'
+* [Junior Docs](./README.md)
+* [Usage](./usage.md)
+* [Web](./web.md)
+* [Prompt Descriptor](./descriptor.md)
+* [Roadmap](./roadmap.md)
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

@@ -1,0 +1,6 @@
+task: prompt/task/doc/improve.md
+attention:
+  - docs/index.html
+  - docs/_sidebar.md
+requirements: |
+  Remove the twitter script and the blockquote
