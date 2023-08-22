@@ -1,6 +1,6 @@
 # Prompt Descriptor
 
-The prompt descriptor is a YAML file (prompt.yaml) that outlines the details necessary for generating a task prompt for the AI model. It is used to specify the task, attention, requirements, and other attributes.
+The prompt descriptor is a YAML file (prompt.yaml) that **outlines the details** necessary for generating a task prompt for the AI model. It is used to specify the task, attention, requirements, and other attributes.
 
 ## Example
 
@@ -17,10 +17,10 @@ requirements: >
 
 ## Attributes
 
-- task: Describes the task type and scope.
+- task: Describes the task type and scope. [See the list of current tasks](https://github.com/tisztamo/Junior/tree/main/prompt/task)
 - attention: Lists the files and directories most relevant to the task.
 - requirements: Describes the actual task in a human-readable format.
-- format: (Optional and half-working) Determines how the output will be formatted. It should be avoided for now.
+- format: (Optional and half-working) If Junior has issues understanding the script, referring to `prompt/format/new_file_version.md` may help.
 - os: (Default: "Debian") Specifies the operating system.
 - installedTools: By default, this includes "npm, jq." Allows the user to mention his tools, e.g. when drawing. The user can create prompt/installedTools.md to overwrite.
 
