@@ -1,3 +1,12 @@
+#!/bin/sh
+set -e
+goal="Improve documentation as described"
+echo "Plan:"
+echo "1. Replace 'penchant' with 'preference'"
+echo "2. Remove the phrase 'In a bold move'"
+echo "3. Reorder sections as instructed"
+
+cat > docs/README.md << 'EOF'
 Warn: This README is AI generated, just like all the source files of this project.
 
 # Junior - Your AI-first IDE 
@@ -25,3 +34,6 @@ Your contributions make a difference! At Junior, we value the collaboration of t
 For questions or assistance, please raise an issue in our GitHub repository.
 
 **Note:** We've tested Junior primarily with the GPT-4 model. However, you're welcome to experiment with similarly capable models and share your findings. It's not compatible with GPT-3.5.
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
