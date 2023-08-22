@@ -24,7 +24,22 @@ requirements: >
 - os: (Default: "Debian") Specifies the operating system.
 - installedTools: By default, this includes "npm, jq." Allows the user to mention his tools, e.g. when drawing. The user can create prompt/installedTools.md to overwrite.
 
-Additionally, users can overwrite attributes in prompt.yaml or create prompt/attributeName.md with the content for any attribute, including those not listed here.
+### Overwriting Attributes
+
+Users can overwrite attributes in prompt.yaml or create prompt/attributeName.md with the content for any attribute. If both are present, the value in prompt.yaml has preference.
+
+For example, to set a default operating system in a separate file:
+
+```markdown
+# prompt/os.md
+Debian
+```
+
+And then to overwrite it in the prompt.yaml:
+
+```yaml
+os: Ubuntu
+```
 
 ## Attributes referencing .md files
 
@@ -49,3 +64,19 @@ Requirements:
 
 Prompt parts are markdown template files, and [ejs](https://ejs.co/) runs on them. Attributes from the yaml file are available in the template, e.g., `<%= requirements %>` injects the requirements.
 
+## Custom Attributes
+
+The user can also define custom attributes not listed above. These can be stored in a markdown file and can be injected into prompt template files using the ejs syntax.
+
+For example, to set a new custom attribute called "documentationRequirements":
+
+```markdown
+# prompt/documentationRequirements.md
+Ensure that all functions are documented.
+```
+
+And then it can be injected into the prompt template:
+
+```
+<%= documentationRequirements %>
+```
