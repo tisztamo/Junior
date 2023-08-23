@@ -1,0 +1,7 @@
+task: prompt/task/bug/fix.md
+attention:
+  - src/frontend/components/RequirementsEditor.jsx
+requirements: >-
+  js-yaml.js?v=0d19a602:2650 Uncaught Error: Function yaml.safeDump is removed
+  in js-yaml 4. Use yaml.dump instead, which is now safe by default.
+os: OSX

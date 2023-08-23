@@ -1,3 +1,11 @@
+#!/bin/sh
+set -e
+goal="Fix js-yaml version 4 issues"
+echo "Plan:"
+echo "1. Update `jsyaml.load` to `jsyaml.dump` in RequirementsEditor.jsx"
+echo "2. Update `jsyaml.safeDump` to `jsyaml.dump` in RequirementsEditor.jsx"
+
+cat > src/frontend/components/RequirementsEditor.jsx << 'EOF'
 import { createEffect } from 'solid-js';
 import postDescriptor from '../service/postDescriptor';
 import { promptDescriptor, setPromptDescriptor } from '../model/promptDescriptor'; 
@@ -41,3 +49,6 @@ const RequirementsEditor = () => {
 
 export default RequirementsEditor;
 
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
