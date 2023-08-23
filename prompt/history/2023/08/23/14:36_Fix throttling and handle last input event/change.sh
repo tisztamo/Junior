@@ -1,3 +1,12 @@
+#!/bin/sh
+set -e
+goal="Fix throttling and handle last input event"
+echo "Plan:"
+echo "1. Modify RequirementsEditor.jsx to remove the call to setRequirements from handleRequirementsChange"
+echo "2. Add throttling to handleRequirementsChange to limit POST requests to once per second"
+echo "3. Handle the scenario for the last throttled input event"
+
+cat > src/frontend/components/RequirementsEditor.jsx << 'EOF'
 import { createEffect } from 'solid-js';
 import postDescriptor from '../service/postDescriptor';
 import { promptDescriptor } from '../model/promptDescriptor';
@@ -46,3 +55,6 @@ const RequirementsEditor = () => {
 };
 
 export default RequirementsEditor;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

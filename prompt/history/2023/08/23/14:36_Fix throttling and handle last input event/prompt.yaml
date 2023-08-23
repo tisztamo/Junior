@@ -1,0 +1,8 @@
+task: prompt/task/bug/fix.md
+attention:
+  - src/frontend/components/RequirementsEditor.jsx
+  - src/backend/handlers/updateDescriptorHandler.js
+requirements: |
+  Remove the call to setRequirements from handleRequirementsChange
+  Add throttling handleRequirementsChange: Do not post more than once per second
+os: OSX
