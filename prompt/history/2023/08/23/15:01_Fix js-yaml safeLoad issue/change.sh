@@ -1,3 +1,10 @@
+#!/bin/sh
+set -e
+goal="Fix js-yaml safeLoad issue"
+echo "Plan:"
+echo "1. Modify RequirementsEditor.jsx to use yaml.load instead of yaml.safeLoad"
+
+cat > src/frontend/components/RequirementsEditor.jsx << 'EOF'
 import { createEffect } from 'solid-js';
 import postDescriptor from '../service/postDescriptor';
 import { promptDescriptor, setPromptDescriptor } from '../model/promptDescriptor'; 
@@ -40,3 +47,6 @@ const RequirementsEditor = () => {
 };
 
 export default RequirementsEditor;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
