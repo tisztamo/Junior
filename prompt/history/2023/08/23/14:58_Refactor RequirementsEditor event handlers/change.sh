@@ -1,3 +1,13 @@
+#!/bin/sh
+set -e
+goal="Refactor RequirementsEditor event handlers"
+echo "Plan:"
+echo "1. Refactor handleRequirementsChange to bind to change events and simplify it"
+echo "2. Create a new handler for input events"
+echo "3. Update RequirementsEditor.jsx to incorporate these changes"
+
+# Refactor RequirementsEditor.jsx
+cat << 'EOF' > src/frontend/components/RequirementsEditor.jsx
 import { createEffect } from 'solid-js';
 import postDescriptor from '../service/postDescriptor';
 import { promptDescriptor, setPromptDescriptor } from '../model/promptDescriptor'; // Added setPromptDescriptor
@@ -40,3 +50,6 @@ const RequirementsEditor = () => {
 };
 
 export default RequirementsEditor;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
