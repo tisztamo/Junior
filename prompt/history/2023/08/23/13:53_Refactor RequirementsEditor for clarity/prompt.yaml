@@ -1,0 +1,10 @@
+task: prompt/task/bug/fix.md
+attention:
+  - src/frontend/components/TasksList.jsx
+  - src/frontend/components/RequirementsEditor.jsx
+  - src/frontend/model/selectedTask.js
+requirements: >-
+  Requirements are not populated when the descriptor changes. Fix reactivity by
+  introducing a signal in the model!
+  Check the task list for example!
+os: OSX
