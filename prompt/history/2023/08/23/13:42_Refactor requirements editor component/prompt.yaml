@@ -1,0 +1,12 @@
+task: prompt/task/refactor/custom.md
+attention:
+  - src/frontend/service/postDescriptor.js
+  - src/frontend/components/TasksList.jsx
+  - src/frontend/components/RequirementsEditor.jsx
+  - src/frontend/model/promptDescriptor.js
+requirements: |
+  Eliminate the signal from the requirements editor component
+  and fill it from the promptDescriptor signals requirements section,
+  similarly to how TasksList works.
+  Also remove the label and use "Enter your requirements..." placeholder instead
+os: OSX

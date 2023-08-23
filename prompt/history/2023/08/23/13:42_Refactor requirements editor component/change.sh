@@ -1,3 +1,11 @@
+#!/bin/sh
+set -e
+goal="Refactor requirements editor component"
+echo "Plan:"
+echo "1. Modify RequirementsEditor.jsx to utilize promptDescriptor and remove signal"
+echo "2. Adjust placeholder and remove label"
+
+cat > src/frontend/components/RequirementsEditor.jsx << 'EOF'
 import { createEffect } from 'solid-js';
 import postDescriptor from '../service/postDescriptor';
 import { promptDescriptor } from '../model/promptDescriptor';
@@ -27,3 +35,6 @@ const RequirementsEditor = () => {
 };
 
 export default RequirementsEditor;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
