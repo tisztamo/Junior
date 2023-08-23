@@ -1,0 +1,17 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/PromptCreation.jsx
+  - src/frontend/components/PromptDescriptor.jsx
+  - src/frontend/service/postDescriptor.js
+  - src/frontend/components/TasksList.jsx
+  - src/frontend/service/handleTaskChange.js
+requirements: >
+  Allow editing the requirements section of the prompt descriptor
+
+  by a new component (and a textarea inside it)
+
+  Put the new component right after the task list
+
+  When the requirements text changes, call postDescriptor with {requirements}
+  (handleTaskChange is example)
+os: OSX
