@@ -1,0 +1,5 @@
+task: prompt/task/bug/fix.md
+attention:
+  - src/frontend/components/AutoGrowingTextarea.jsx
+requirements: Fails to grow on input bind onInput to resize
+os: OSX

@@ -1,9 +1,13 @@
 import { generatePrompt } from '../generatePrompt';
 import { marked } from 'marked';
 import { setPrompt } from '../model/prompt';
+import postDescriptor from '../service/postDescriptor';
+import { requirements } from '../model/requirements';
 
 const handleGeneratePrompt = async () => {
   try {
+    await postDescriptor({ requirements: requirements() });
+
     const response = await generatePrompt();
 
     navigator.clipboard.writeText(response.prompt)
@@ -15,7 +19,6 @@ const handleGeneratePrompt = async () => {
       });
 
     const htmlPrompt = marked(response.prompt);
-
     setPrompt(htmlPrompt);
   } catch (error) {
     alert(error.message);

@@ -1,0 +1,10 @@
+task: prompt/task/bug/fix.md
+attention:
+  - src/frontend/components/RequirementsEditor.jsx
+  - src/frontend/model/requirements.js
+requirements: >-
+  RequirementsEditor.jsx?t=1692794184521:41 Uncaught (in promise)
+  ReferenceError: setRequirements is not defined
+  
+  import it from requirements
+os: OSX

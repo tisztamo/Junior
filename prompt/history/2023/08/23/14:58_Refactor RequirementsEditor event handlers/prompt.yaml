@@ -1,0 +1,17 @@
+task: prompt/task/bug/fix.md
+attention:
+  - src/frontend/components/RequirementsEditor.jsx
+  - src/frontend/model/requirements.js
+  - src/frontend/model/promptDescriptor.js
+requirements: >-
+  handleRequirementsChange should be binded to change events
+
+  and cleared: only the postDescriptor call is needed. Also remove the variables
+  not needed anymore.
+
+  For input events, create a new handler which
+    - reads the prompt descriptor
+    - parses as yaml
+    - updates the requirements section
+    - writes back to the descriptor as string
+os: OSX

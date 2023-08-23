@@ -1,0 +1,8 @@
+task: prompt/task/bug/fix.md
+attention:
+  - src/frontend/components/TasksList.jsx
+  - src/frontend/components/RequirementsEditor.jsx
+  - src/frontend/model/selectedTask.js
+requirements: |
+  promptDescriptor() is a string, call getYamlEntry on it in the requirements editor similarly to the task list.
+os: OSX

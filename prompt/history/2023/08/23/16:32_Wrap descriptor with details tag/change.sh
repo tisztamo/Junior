@@ -1,3 +1,12 @@
+#!/bin/sh
+set -e
+goal="Wrap descriptor with details tag"
+echo "Plan:"
+echo "1. Update the PromptDescriptor.jsx to wrap the descriptor in a details tag."
+echo "2. Correct the import path for promptDescriptorConfig.js."
+echo "3. Use the descriptorFileName from promptDescriptorConfig.js as the header for the details tag."
+
+cat <<EOF > ./src/frontend/components/PromptDescriptor.jsx
 import { onMount, onCleanup } from 'solid-js';
 import { fetchDescriptor } from '../service/fetchDescriptor';
 import { fetchGitStatus } from '../service/fetchGitStatus';
@@ -38,3 +47,6 @@ const PromptDescriptor = () => {
 };
 
 export default PromptDescriptor;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

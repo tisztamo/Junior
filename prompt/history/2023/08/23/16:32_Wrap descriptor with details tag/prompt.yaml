@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/PromptDescriptor.jsx
+  - src/prompt/promptDescriptorConfig.js
+  - src/frontend/components/PromptDisplay.jsx
+requirements: >
+  Wrap the prompt descriptor in a html details tag. Its header is the descriptor
+  filename with mono font. Otherwise style it like the one in PromptDisplay
+os: OSX
