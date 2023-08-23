@@ -1,0 +1,9 @@
+task: prompt/task/refactor/move_files.md
+attention:
+  - src/frontend/components/TasksList.jsx
+  - src/frontend/service/parseYamlAndGetTask.js
+requirements: >
+  rename parseYamlAndGetTask.js to getYamlEntry.js
+  Add an argument for the entry
+  Also move the prefix removal to the task list component
+os: OSX
