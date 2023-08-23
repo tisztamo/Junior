@@ -1,0 +1,8 @@
+task: prompt/task/bug/fix.md
+attention:
+  - src/frontend/components/RequirementsEditor.jsx
+  - src/frontend/components/TasksList.jsx
+requirements: |
+  Make the req editor 5 row
+  Make the space between task list and req editor smaller
+os: OSX
