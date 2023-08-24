@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/RequirementsEditor.jsx
+  - src/frontend/components/AutoGrowingTextarea.jsx
+requirements: |
+  If the --beta cli arg is not present:
+    - Disable editing of the req editor
+    - Change the placeholder to a text saying "This is disabled for now. Call with 'npx junior-web -- --beta' to enable."
+os: OSX
