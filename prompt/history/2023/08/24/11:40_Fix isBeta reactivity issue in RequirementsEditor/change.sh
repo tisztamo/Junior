@@ -1,3 +1,12 @@
+#!/bin/sh
+set -e
+goal="Fix isBeta reactivity issue in RequirementsEditor"
+echo "Plan:"
+echo "1. Modify RequirementsEditor.jsx to make isBeta reactive using Solid's signal."
+echo "2. Refactor and simplify the code for better readability."
+
+# Modify RequirementsEditor.jsx
+cat > src/frontend/components/RequirementsEditor.jsx << 'EOF'
 import { createSignal, createEffect } from 'solid-js';
 import postDescriptor from '../service/postDescriptor';
 import { promptDescriptor, setPromptDescriptor } from '../model/promptDescriptor'; 
@@ -47,3 +56,6 @@ const RequirementsEditor = () => {
 };
 
 export default RequirementsEditor;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
