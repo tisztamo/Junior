@@ -1,0 +1,8 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/RequirementsEditor.jsx
+  - src/frontend/service/postDescriptor.js
+requirements: |
+  Add a new event handler: on change call postDecriptor with { requirements }
+  Leave the onInput handler as is.
+os: OSX

@@ -1,3 +1,11 @@
+#!/bin/sh
+set -e
+goal="Add event handler for postDescriptor call"
+echo "Plan:"
+echo "1. Modify the RequirementsEditor.jsx to include the new event handler."
+echo "2. The event handler will call postDescriptor with the requirements on change."
+
+cat << 'EOF' > src/frontend/components/RequirementsEditor.jsx
 import { createSignal, createEffect } from 'solid-js';
 import postDescriptor from '../service/postDescriptor';
 import { promptDescriptor, setPromptDescriptor } from '../model/promptDescriptor'; 
@@ -53,3 +61,6 @@ const RequirementsEditor = () => {
 };
 
 export default RequirementsEditor;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
