@@ -1,0 +1,7 @@
+task: prompt/task/doc/improve.md
+attention:
+  - docs/roadmap.md
+requirements: >-
+  Make the lines with versions and dates monospace. Mark the file browser item
+  with a unicode char as under construction
+os: OSX

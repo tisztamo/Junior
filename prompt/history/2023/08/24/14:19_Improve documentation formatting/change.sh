@@ -1,3 +1,10 @@
+#!/bin/sh
+set -e
+goal="Improve documentation formatting"
+echo "Plan:"
+echo "1. Modify docs/roadmap.md with the requested changes"
+
+cat << 'EOF' > docs/roadmap.md
 # Roadmap
 
 ## Usability & fixes
@@ -26,3 +33,6 @@
 ## Prompt herds
 `v0.6 (Expected: Q2 2024)`
 - Scan and transform (refactor) the codebase gradually
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
