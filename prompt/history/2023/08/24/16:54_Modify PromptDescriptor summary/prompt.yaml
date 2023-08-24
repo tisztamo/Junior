@@ -1,0 +1,7 @@
+task: prompt/task/bug/fix.md
+attention:
+  - src/frontend/components/PromptDescriptor.jsx
+requirements: |-
+  Add "(Edit the attention manually)" with 
+   small non-mono font after the filename in the summary (beware that the summary is set to mono)
+os: OSX
