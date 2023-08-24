@@ -1,0 +1,13 @@
+task: prompt/task/bug/fix.md
+attention:
+  - src/frontend/components/RequirementsEditor.jsx
+  - src/frontend/components/AutoGrowingTextarea.jsx
+requirements: |-
+  In the AutoGrowingTextarea:
+    - Remove onMount and onCleanup, no need for the code in them.
+    - Add an effect which calls the valueSignal prop (its an optional function)
+    - Pass the value of valueSignal to the textarea value attribute. If no valueSignal, pass props.value
+  In the req editor:
+    Pass valueSignal instead of value. Don't call it, pass the function
+  Also remove comments
+os: OSX

@@ -1,3 +1,44 @@
+#!/bin/sh
+set -e
+goal="Refactor components while maintaining reactivity"
+echo "Plan:"
+echo "1. Modify the AutoGrowingTextarea component to keep reactivity."
+echo "2. Adjust the RequirementsEditor component accordingly."
+
+cat << 'EOF' > src/frontend/components/AutoGrowingTextarea.jsx
+import { createEffect } from 'solid-js';
+
+const AutoGrowingTextarea = (props) => {
+  let textRef;
+  
+  const resize = () => {
+    textRef.style.height = 'auto';
+    textRef.style.height = textRef.scrollHeight + 'px';
+  }
+
+  createEffect(() => {
+    if (props.valueSignal) {
+      props.valueSignal();
+    }
+    resize();
+  });
+
+  return (
+    <textarea
+      {...props}
+      ref={textRef}
+      onInput={resize}
+      rows="1"
+      style="overflow:hidden"
+      value={props.valueSignal ? props.valueSignal() : props.value}
+    />
+  );
+};
+
+export default AutoGrowingTextarea;
+EOF
+
+cat << 'EOF' > src/frontend/components/RequirementsEditor.jsx
 import { createSignal, createEffect } from 'solid-js';
 import postDescriptor from '../service/postDescriptor';
 import { promptDescriptor, setPromptDescriptor } from '../model/promptDescriptor'; 
@@ -54,3 +95,6 @@ const RequirementsEditor = () => {
 };
 
 export default RequirementsEditor;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
