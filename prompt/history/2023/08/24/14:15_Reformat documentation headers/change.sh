@@ -1,3 +1,10 @@
+#!/bin/sh
+set -e
+goal="Reformat documentation headers"
+echo "Plan:"
+echo "1. Reformat docs/roadmap.md with version numbers on separate lines."
+
+cat > docs/roadmap.md << 'EOF'
 # Roadmap
 
 ## Usability & fixes
@@ -26,3 +33,6 @@ v0.5 (Expected: Q1 2024)
 ## Prompt herds
 v0.6 (Expected: Q2 2024)
 - Scan and transform (refactor) the codebase gradually
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

@@ -1,0 +1,14 @@
+task: prompt/task/doc/improve.md
+attention:
+  - docs/roadmap.md
+requirements: |
+  Incorporate version numbers:
+    "Usability & fixes" is 0.2, released aug 2023
+    "Programming on mobile" will be 0.3, q4 2023
+      Add a new subitem as the second one: "Allow secure hosting" 
+    Add a new item "Plugin system" 0.4 q4 2023
+      Allow writing any of the current components as a plugin
+    "Auto-attention" 0.5 q1 2024
+      Remove "(embedded)"
+    "Prompt herds" 0.6 q2 2024
+os: OSX
