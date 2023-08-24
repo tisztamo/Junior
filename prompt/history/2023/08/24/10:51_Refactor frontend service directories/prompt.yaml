@@ -1,0 +1,12 @@
+task: prompt/task/refactor/move_files.md
+attention:
+  - src/frontend/components/RequirementsEditor.jsx
+  - src/frontend/service/cliArgsService.js
+requirements: >
+  Create service/config/ and move cliArgsService.js to it,
+
+  renaming it to cliArgs. It shpuld expose a same-name fn which returns the cli
+  args as it got from the serve.
+
+  Make isBetaEnabled a separate service in this new dir.
+os: OSX
