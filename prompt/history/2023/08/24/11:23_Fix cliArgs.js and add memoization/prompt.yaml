@@ -1,0 +1,8 @@
+task: prompt/task/bug/fix.md
+attention:
+  - src/frontend/service/config/cliArgs.js
+requirements: |
+  delete src/frontend/service/cliArgsService.js
+  Make cliargs to handle errors by console.error and returning []
+  Also make it memoized using a local variable
+os: OSX

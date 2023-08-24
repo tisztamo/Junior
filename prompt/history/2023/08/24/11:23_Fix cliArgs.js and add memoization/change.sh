@@ -1,3 +1,16 @@
+#!/bin/sh
+set -e
+
+goal="Fix cliArgs.js and add memoization"
+echo "Plan:"
+echo "1. Delete src/frontend/service/cliArgsService.js"
+echo "2. Update src/frontend/service/config/cliArgs.js to handle errors and add memoization"
+
+# Step 1: Delete src/frontend/service/cliArgsService.js
+rm -f src/frontend/service/cliArgsService.js
+
+# Step 2: Update src/frontend/service/config/cliArgs.js
+cat > src/frontend/service/config/cliArgs.js << 'EOF'
 import { getBaseUrl } from '../../getBaseUrl';
 
 let memoizedCliArgs = null;
@@ -29,3 +42,6 @@ const cliArgs = async () => {
 };
 
 export default cliArgs;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
