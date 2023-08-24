@@ -1,3 +1,10 @@
+#!/bin/sh
+set -e
+goal="Fix handleInput call in handleChange"
+echo "Plan:"
+echo "1. Modify RequirementsEditor.jsx to call handleInput at the beginning of handleChange"
+
+cat > src/frontend/components/RequirementsEditor.jsx << 'EOF'
 import { createSignal, createEffect } from 'solid-js';
 import postDescriptor from '../service/postDescriptor';
 import { promptDescriptor, setPromptDescriptor } from '../model/promptDescriptor'; 
@@ -54,3 +61,6 @@ const RequirementsEditor = () => {
 };
 
 export default RequirementsEditor;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

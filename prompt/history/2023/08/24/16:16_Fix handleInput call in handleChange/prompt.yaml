@@ -1,0 +1,5 @@
+task: prompt/task/bug/fix.md
+attention:
+  - src/frontend/components/RequirementsEditor.jsx
+requirements: Call handleInput at the beginning of handleChange
+os: OSX
