@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/backend/
+  - src/backend/setupRoutes.js
+  - src/backend/handlers/executeHandler.js
+requirements: |
+  Create "/config" endpoint, returning cliArgs field,
+  which is an array filled with cli args
+os: OSX
