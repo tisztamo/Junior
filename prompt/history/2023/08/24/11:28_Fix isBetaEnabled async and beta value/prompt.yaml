@@ -1,0 +1,7 @@
+task: prompt/task/bug/fix.md
+attention:
+  - src/frontend/components/RequirementsEditor.jsx
+requirements: |
+  isBetaEnabled is async, must be awaited
+  When not in beta, the value should be empty.
+os: OSX
