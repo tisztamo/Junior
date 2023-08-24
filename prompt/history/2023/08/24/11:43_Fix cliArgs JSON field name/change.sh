@@ -1,3 +1,10 @@
+#!/bin/sh
+set -e
+goal="Fix cliArgs JSON field name"
+echo "Plan:"
+echo "1. Modify the field name in the cliArgs.js file from 'cliargs' to 'cliArgs'."
+
+cat > src/frontend/service/config/cliArgs.js << 'EOF'
 import { getBaseUrl } from '../../getBaseUrl';
 
 let memoizedCliArgs = null;
@@ -29,3 +36,6 @@ const cliArgs = async () => {
 };
 
 export default cliArgs;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
