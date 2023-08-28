@@ -1,0 +1,6 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/service/clearState.js
+  - src/frontend/model/gitStatus.js
+requirements: clearState should also clear the git status
+os: OSX
