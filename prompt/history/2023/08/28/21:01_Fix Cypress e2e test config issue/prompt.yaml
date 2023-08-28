@@ -1,0 +1,15 @@
+task: prompt/task/bug/fix.md
+attention:
+  - ./
+  - src/frontend/
+  - src/frontend/vite.config.js
+  - cypress.config.js
+  - cypress/integration/showcase_test.js
+requirements: |
+  When I run npm test,
+  I have to choose testing type. I select e2e.
+  Then I see "Create your first spec"
+  The spec pattern: cypress/e2e/**/*.cy.{js,jsx,ts,tsx}
+
+  Do you need other files to solve the task?
+os: OSX
