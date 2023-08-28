@@ -1,0 +1,18 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./
+  - src/frontend/App.jsx
+  - src/frontend/vite.config.js
+requirements: |
+  We want to implement the following test:
+    - Create file new_file.test
+    - Append "You should not see this. Appended for Test at " + the filename of the test to package.json
+    - Open the Junior frontend
+    - Check if the new and modified filenames are in the DOM
+    - Click the "Roll Back" button
+    - Test if the new file got removed
+    - Test if the appended text was removed from package.json
+    - Test that the modified filenames are not in the DOM
+  Do not implement it yet, only install the best test runner for this,
+  and create a showcase test which opens the frontend and checks if it starts.
+os: OSX

@@ -14,7 +14,8 @@
     "start": "node src/web.js",
     "build:css": "postcss ./src/frontend/styles.css -o ./dist/styles.css",
     "update-logo": "node ./scripts/updateLogo.js",
-    "clear-branches": "node ./scripts/clearBranchesCommand.js $@"
+    "clear-branches": "node ./scripts/clearBranchesCommand.js $@",
+    "test": "cypress open"
   },
   "keywords": [
     "cli",
@@ -54,5 +55,8 @@
   "bugs": {
     "url": "https://github.com/tisztamo/Junior/issues"
   },
-  "homepage": "https://github.com/tisztamo/Junior#readme"
+  "homepage": "https://github.com/tisztamo/Junior#readme",
+  "devDependencies": {
+    "cypress": "^12.17.4"
+  }
 }
