@@ -1,0 +1,18 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/git/resetGit.js
+requirements: >-
+  The current git reset method tries to retain the prompt files.
+
+  But we recently gitignored them so no need to handle them anymore.
+
+
+  resetGit should do the following:
+
+  - Delete every new files and dirs that are not gitignored
+
+  - Undo every modifications since the last commit
+
+  - And nothing else. Maybe the stash creation and dropping is also not needed
+  anymore:
+os: OSX
