@@ -1,0 +1,8 @@
+task: prompt/task/doc/improve.md
+attention:
+  - docs/README.md
+  - README.md
+requirements: |
+  1. Overwrite the contribution section in the root readme with the other
+  2. Remove the cli section
+os: OSX

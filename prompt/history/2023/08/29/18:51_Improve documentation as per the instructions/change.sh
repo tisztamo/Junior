@@ -1,3 +1,12 @@
+#!/bin/sh
+set -e
+goal="Improve documentation as per the instructions"
+echo "Plan:"
+echo "1. Overwrite the contribution section in the root readme with the other."
+echo "2. Remove the cli section from the root readme."
+
+# Step 1: Overwrite the contribution section
+cat > README.md << 'EOF'
 [![Docs: Junior Documentation](https://img.shields.io/badge/docs-Junior-blue)](https://tisztamo.github.io/Junior/#/)
 
 # Junior - Your AI contributor which codes itself.
@@ -47,3 +56,6 @@ Your contributions make a difference! At Junior, we value the collaboration of t
 For support, please create an issue in the GitHub repository.
 
 **Note:** For meaningful results, it's recommended to use the GPT-4 model or a more recent version.
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
