@@ -1,0 +1,11 @@
+task: prompt/task/doc/improve.md
+attention:
+  - docs/assets/
+  - docs/index.html
+  - docs/docsifyConfig.js
+  - docs/assets/styles.css
+  - docs/cover.md
+requirements: >
+  1. Rename cover.md to _coverpage.md 2. Set the logo as the background in the
+  cover by adding "![](assets/logo.svg)" to the end of the cover page
+os: OSX

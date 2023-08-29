@@ -2,3 +2,4 @@
 
 Welcome to **Junior**, your AI-first IDE.
 
+![](assets/logo.svg)
