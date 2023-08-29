@@ -1,0 +1,8 @@
+task: prompt/task/doc/improve.md
+attention:
+  - docs/open_jobs.md
+  - docs/_sidebar.md
+requirements: >
+  1. The advisor is a "helyi nagyágyú" (translate and quote this), but including
+  his name was a bad mistake, remove! 2. link the jobs from the sidebar!
+os: OSX

@@ -3,3 +3,4 @@
 * [Web](./web.md)
 * [Prompt Descriptor](./descriptor.md)
 * [Roadmap](./roadmap.md)
+* [Open Jobs](./open_jobs.md)
