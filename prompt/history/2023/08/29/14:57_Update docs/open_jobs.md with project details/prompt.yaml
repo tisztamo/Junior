@@ -1,0 +1,18 @@
+task: prompt/task/doc/improve.md
+attention:
+  - docs/README.md
+requirements: |
+  Create docs/open_jobs.md and fill it based on the following:
+
+  I want to create a startup based on my open source project.
+
+  The first step is to find a co-founder CEO.
+
+  I got the advice from Jared Schrieber to look for the following:
+
+  "marketing person at a similar freemium user/product-led growth tools company"
+
+  Based on this info write a text that I can forward to the headhunter!
+
+  Name Jared and quote his advice!
+os: OSX
