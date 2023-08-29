@@ -1,0 +1,7 @@
+task: prompt/task/doc/improve.md
+attention:
+  - docs/README.md
+  - README.md
+requirements: |
+  Eliminate the warnings.
+os: OSX

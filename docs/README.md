@@ -1,5 +1,3 @@
-Warn: This README is AI generated, just like all the source files of this project.
-
 # Junior - Your AI-first IDE 
 
 [![Video: Junior codes itself](/assets/video_cover.jpg)](https://youtu.be/NL4uFJSvfW0)
