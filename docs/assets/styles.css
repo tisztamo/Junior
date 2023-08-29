@@ -5,3 +5,16 @@
 iframe {
   margin: 16px;
 }
+
+/* Adding logo colors to cover page */
+.cover-color-1 {
+  color: rgb(59, 130, 246);
+}
+
+.cover-color-2 {
+  color: rgb(253, 186, 116);
+}
+
+.cover-color-3 {
+  color: rgb(185, 28, 28);
+}

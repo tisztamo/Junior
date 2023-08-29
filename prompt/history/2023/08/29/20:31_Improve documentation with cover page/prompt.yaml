@@ -1,0 +1,13 @@
+task: prompt/task/doc/improve.md
+attention:
+  - ./
+  - docs/
+  - docs/README.md
+  - docs/index.html
+  - docs/docsifyConfig.js
+  - docs/assets/styles.css
+  - docs/assets/logo.svg
+requirements: >
+  Create a cover page for the docs, with "You are the Pro, Junior codes" as the
+  main message. Use the logo colors extensively.
+os: OSX

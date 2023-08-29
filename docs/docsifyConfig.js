@@ -4,5 +4,6 @@ window.$docsify = {
   loadSidebar: true,
   autoHeader: true,
   logo: "assets/logo.svg",
-  nameLink: 'https://github.com/tisztamo/Junior'
+  nameLink: 'https://github.com/tisztamo/Junior',
+  coverpage: true
 }
