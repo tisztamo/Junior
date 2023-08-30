@@ -7,14 +7,17 @@ iframe {
 }
 
 /* Adding logo colors to cover page */
-.cover-color-1 {
-  color: rgb(59, 130, 246);
+.cover-color-blue {
+  color: rgb(59, 130, 246) !important;
 }
 
-.cover-color-2 {
-  color: rgb(253, 186, 116);
+.cover-color-orange {
+  color: rgb(253, 186, 116) !important;
 }
 
-.cover-color-3 {
-  color: rgb(185, 28, 28);
+.cover-color-red {
+  color: rgb(185, 28, 28) !important;
+}
+.cover-color-green {
+  color: rgb(21, 128, 61) !important;
 }

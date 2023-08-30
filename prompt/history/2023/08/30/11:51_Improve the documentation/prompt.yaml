@@ -1,0 +1,16 @@
+task: prompt/task/doc/improve.md
+attention:
+  - docs/_coverpage.md
+  - docs/index.html
+  - docs/assets/styles.css
+  - docs/assets/logo.svg
+requirements: >
+  1. Rename the cover-color classes to cover-color-red, -orange and -blue.
+
+  2. Add a class for the missing green color.
+
+  3. Make the colors in the cover classes !important.
+
+  4. Make "codes" orange by merging with the previous "Junior". Also disallow
+  line breaks between these two words.
+os: OSX

@@ -1,5 +1,6 @@
-# <span class="cover-color-1">You are the Pro,</span> <span class="cover-color-2">Junior</span> <span class="cover-color-3">codes</span>
+# <span class="cover-color-blue">You are the Pro,</span> <span class="cover-color-orange">Junior&nbsp;codes</span>
 
 Welcome to **Junior**, your AI-first IDE.
 
 ![](assets/logo.svg)
+
