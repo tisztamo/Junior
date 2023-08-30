@@ -20,3 +20,5 @@ echo "\033[32mDone: $goal\033[0m\n"
 ```
 
 EXAMPLE END
+
+<%= ask_for_missing_files %>

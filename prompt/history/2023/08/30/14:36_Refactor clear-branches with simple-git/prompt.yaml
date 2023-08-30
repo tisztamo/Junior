@@ -1,0 +1,10 @@
+task: prompt/task/feature/implement.md
+attention:
+  - package.json
+  - src/git/clearBranches.js
+  - scripts/clearBranchesCommand.js
+requirements: >
+  clear-branches should skip branches that are not merged. Currently it stops
+  with error on them. Also switch from exec to simple-git, eliminating
+  executeCommand.
+os: OSX

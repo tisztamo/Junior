@@ -1,3 +1,11 @@
+#!/bin/sh
+set -e
+goal="Refactor clear-branches with better error handling"
+echo "Plan:"
+echo "1. Refactor clearBranches.js to better handle not fully merged branches"
+echo "2. Handle the exception during branch deletion and continue with the next branch"
+
+cat > src/git/clearBranches.js << 'EOF'
 import simpleGit from 'simple-git';
 
 const git = simpleGit();
@@ -27,3 +35,6 @@ export default async function clearBranches(exceptions = []) {
     console.error(`An error occurred: ${err}`);
   }
 }
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
