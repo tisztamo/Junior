@@ -1,0 +1,15 @@
+task: prompt/task/doc/improve.md
+attention:
+  - docs/_coverpage.md
+  - docs/index.html
+  - docs/assets/styles.css
+  - docs/assets/logo.svg
+requirements: >-
+  1. Make "You are the Pro, Junior codes" bold
+
+  2. Rewrite the welcome sentence to "Kraft code with the **Junior AI IDE**"
+
+  3. Add a paragraph after it: "Works on large codebases, soon on Mobile"
+  (reword "on Mobile" if needed: I want to say that the user can develop
+  software using only their mobile phone, no desktop needed)
+os: OSX
