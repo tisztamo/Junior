@@ -1,3 +1,12 @@
+#!/bin/sh
+set -e
+goal="Count and log deleted/skipped branches"
+echo "Plan:"
+echo "1. Modify the clearBranches.js to track the count of deleted and skipped branches."
+echo "2. Log the count of deleted and skipped branches at the end of the clearBranches function."
+
+# Step 1: Modify clearBranches.js to track the count of deleted and skipped branches
+cat > src/git/clearBranches.js << 'EOF'
 import simpleGit from 'simple-git';
 
 const git = simpleGit();
@@ -36,3 +45,6 @@ export default async function clearBranches(exceptions = []) {
   console.log(`Deleted branches: ${deletedCount}`);
   console.log(`Skipped branches: ${skippedCount}`);
 }
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

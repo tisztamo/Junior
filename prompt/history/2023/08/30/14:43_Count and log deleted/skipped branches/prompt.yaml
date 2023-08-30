@@ -1,0 +1,5 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/git/clearBranches.js
+requirements: Count deleted and skipped(errorneous) branches separately and log at the end
+os: OSX
