@@ -15,7 +15,8 @@
     "build:css": "postcss ./src/frontend/styles.css -o ./dist/styles.css",
     "update-logo": "node ./scripts/updateLogo.js",
     "clear-branches": "node ./scripts/clearBranchesCommand.js $@",
-    "test": "cypress open"
+    "test": "cypress open",
+    "rollback": "node ./scripts/rollbackCommand.js"
   },
   "keywords": [
     "cli",

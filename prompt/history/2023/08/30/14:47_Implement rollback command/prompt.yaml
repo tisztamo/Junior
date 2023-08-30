@@ -1,0 +1,8 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/git/resetGit.js
+  - package.json
+  - scripts/clearBranchesCommand.js
+requirements: |
+  Create a command "rollback" that calls resetGit!
+os: OSX
