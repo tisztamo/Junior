@@ -1,0 +1,7 @@
+task: prompt/task/doc/improve.md
+attention:
+  - docs/assets/styles.css
+  - docs/index.html
+  - docs/_coverpage.md
+requirements: Make Works on large codebases red, soon on your mobile phone green.
+os: OSX
