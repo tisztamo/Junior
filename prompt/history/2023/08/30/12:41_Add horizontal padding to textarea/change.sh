@@ -1,3 +1,11 @@
+#!/bin/sh
+set -e
+goal="Add horizontal padding to textarea"
+echo "Plan:"
+echo "1. Add 'px-2' to the AutoGrowingTextarea's class to give it horizontal padding."
+
+# Edit the RequirementsEditor.jsx to add padding
+cat > src/frontend/components/RequirementsEditor.jsx <<'EOF'
 import { createSignal, createEffect } from 'solid-js';
 import postDescriptor from '../service/postDescriptor';
 import { promptDescriptor, setPromptDescriptor } from '../model/promptDescriptor'; 
@@ -54,3 +62,6 @@ const RequirementsEditor = () => {
 };
 
 export default RequirementsEditor;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
