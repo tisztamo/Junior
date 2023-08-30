@@ -8,13 +8,13 @@ assignees: ''
 
 ---
 
-Please help us select the best next communication platform for the project!
-
-Vote here: https://github.com/tisztamo/Junior/issues/78
-
 ## Project Description
 
 Hey, Contributor!
+
+Please help us select the best next communication platform for the project!
+
+Vote here: https://github.com/tisztamo/Junior/issues/78
 
 Interpret issues freely. Need help or have ideas? Comment right here. 
 
