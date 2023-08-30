@@ -1,0 +1,5 @@
+task: prompt/task/doc/improve.md
+attention:
+  - docs/docsifyConfig.js
+requirements: 'Add auto2top: true to docsify config'
+os: OSX
