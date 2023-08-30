@@ -1,0 +1,8 @@
+task: prompt/task/feature/implement.md
+attention:
+  - package.json
+  - src/git/resetGit.js
+  - scripts/rollbackCommand.js
+requirements: |
+  "npx junior-rollback" should also execute resetGit.
+os: OSX

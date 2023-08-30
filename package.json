@@ -7,7 +7,8 @@
   "bin": {
     "junior": "src/main.js",
     "junior-web": "src/web.js",
-    "junior-init": "src/init.js"
+    "junior-init": "src/init.js",
+    "junior-rollback": "src/junior-rollback.js"
   },
   "scripts": {
     "cli": "node src/main.js",
