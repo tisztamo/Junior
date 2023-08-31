@@ -1,0 +1,25 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./
+  - src/backend/
+  - src/backend/setupRoutes.js
+  - src/backend/fileutils/
+  - src/backend/handlers/executeHandler.js
+requirements: |
+  Create a new endpoint GET files/list/ that lists all files in the
+  project recursively, like:
+
+  {
+    "type": "dir",
+    "name": "src"
+    "children": [
+      { 
+        "type": "file"
+        "name": "main.js"
+      }
+    ]
+  }
+
+  exclude dirs: node_modules and prompt
+  Implement the fs-related part in src/backend/fileutils/readFileList.js 
+os: OSX
