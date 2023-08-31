@@ -1,0 +1,10 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./
+  - src/backend/setupRoutes.js
+  - src/backend/fileutils/readFileList.js
+requirements: |
+  Create a handler file and move the file list handler function to there.
+  Also handle errors.
+  Also ignore .git
+os: OSX

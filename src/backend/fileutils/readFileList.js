@@ -5,6 +5,7 @@ async function readFileList(dir, relativePath = "") {
   const items = await fs.promises.readdir(dir);
   const itemDetails = await Promise.all(
     items.map(async item => {
+      if (item === ".git") return; // Ignore .git directory
       const fullPath = path.join(dir, item);
       const stats = await fs.promises.stat(fullPath);
       if (stats.isDirectory()) {
