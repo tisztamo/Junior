@@ -1,0 +1,13 @@
+task: prompt/task/refactor/custom.md
+attention:
+  - src/backend/fileutils/readFileList.js
+requirements: >-
+  A single if should be enough for ignoring. Store the ignored dirs in an array
+  that is filled
+
+  - from a const containing the current ones
+
+  - extended from --ignore=dir1,dir2 style cli argument if exists
+
+  - and extended from JUNIOR_IGNORE env variable if exists
+os: OSX
