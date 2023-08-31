@@ -1,0 +1,22 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/PromptCreation.jsx
+  - src/frontend/components/TasksList.jsx
+  - src/frontend/components/NavBar.jsx
+  - src/frontend/components/RollbackButton.jsx
+  - src/frontend/components/ChangeExecution.jsx
+  - src/frontend/components/GitStatusDisplay.jsx
+requirements: >-
+  We need a Sample Component, which is short but shows
+
+  how we write our components.
+
+  We need to show: - How the model is used - How local state is managed - How
+  services are called - etc.
+
+  Imagine a sample service and model, use it in the sample component, but do not
+  write it.
+
+  Write a comprehensive and concise sample to
+  src/frontend/components/SampleComponent.jsx
+os: OSX
