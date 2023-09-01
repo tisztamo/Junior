@@ -1,0 +1,7 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/model/gitStatus.js
+  - src/frontend/model/commitMessage.js
+requirements: |
+  Create a model/sampleModel.js with a sample like these
+os: OSX
