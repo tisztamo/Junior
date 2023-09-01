@@ -1,3 +1,14 @@
+#!/bin/sh
+set -e
+goal="Limit file list to 5 items"
+echo "Plan:"
+echo "1. Modify the AttentionFileList.jsx to limit the displayed fileList to 5 items."
+echo "2. Remove all existing comments from the code."
+echo "3. Comment every change with a single line describing the GOAL OF THE CHANGE."
+
+# Step 1: Modify the AttentionFileList.jsx to limit the displayed fileList to 5 items.
+
+cat > src/frontend/components/AttentionFileList.jsx << 'EOF'
 import { onCleanup, createEffect } from 'solid-js';
 import { fileList, setFileList } from '../model/fileList';
 import fetchFileList from '../service/fetchFileList';
@@ -32,3 +43,6 @@ const AttentionFileList = () => {
 
 export default AttentionFileList;
 
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
