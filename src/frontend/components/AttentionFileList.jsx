@@ -2,6 +2,7 @@ import { createEffect } from 'solid-js';
 import { fileList, setFileList } from '../model/fileList';
 import fetchFileList from '../service/fetchFileList';
 import MultiSelect from './MultiSelect';
+import getComparison from '../services/helpers/getComparison';
 
 const AttentionFileList = () => {
   createEffect(async () => {
@@ -24,7 +25,7 @@ const AttentionFileList = () => {
 
   return (
     <div class="w-full">
-      <MultiSelect availableItems={fileList()} selectedItems={[]} itemCount={5} />
+      <MultiSelect availableItems={fileList()} selectedItems={[]} compare={getComparison()} itemCount={5} />
     </div>
   );
 };

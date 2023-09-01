@@ -1,0 +1,11 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/MultiSelect.jsx
+  - src/frontend/components/AttentionFileList.jsx
+  - src/frontend/components/FilteredList.jsx
+requirements: |
+  If the filtered list gets a function, treat it as a comparison function.
+  Create a new function in services/helpers/ (Create the dir)
+  that returns another which is then used to match.
+  Don't forget to update MultiSelect
+os: OSX

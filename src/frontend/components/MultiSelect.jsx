@@ -8,7 +8,12 @@ const MultiSelect = (props) => {
     <div class="w-full rounded border p-4">
       <ResultSet items={props.selectedItems} />
       <SearchBar />
-      <FilteredList items={props.availableItems} filter={searchValue()} itemCount={props.itemCount} />
+      <FilteredList 
+        items={props.availableItems} 
+        filter={searchValue()} 
+        compare={props.compare} 
+        itemCount={props.itemCount} 
+      />
     </div>
   );
 };
