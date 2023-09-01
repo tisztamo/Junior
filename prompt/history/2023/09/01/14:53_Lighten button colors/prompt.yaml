@@ -1,0 +1,6 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/CommitButton.jsx
+  - src/frontend/components/RollbackButton.jsx
+requirements: Make the button colors lighter
+os: OSX
