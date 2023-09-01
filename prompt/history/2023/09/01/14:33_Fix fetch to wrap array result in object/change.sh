@@ -1,3 +1,10 @@
+#!/bin/sh
+set -e
+goal="Fix fetch to wrap array result in object"
+echo "Plan:"
+echo "1. Modify fetchFileList.js to wrap array results into a specified object."
+
+cat > src/frontend/service/fetchFileList.js << 'EOF'
 import { getBaseUrl } from '../getBaseUrl';
 
 async function fetchFileList() {
@@ -18,3 +25,6 @@ async function fetchFileList() {
 }
 
 export default fetchFileList;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
