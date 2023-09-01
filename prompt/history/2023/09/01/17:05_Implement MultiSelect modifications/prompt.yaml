@@ -1,0 +1,15 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/MultiSelect.jsx
+  - src/frontend/components/AttentionFileList.jsx
+  - src/frontend/components/FilteredList.jsx
+requirements: |-
+  - In the attention file list:
+    - Remove padding and border
+    - Pass all the files to the multiselect
+    - Pass a new prop for item count of search results
+  - In MultiSelect:
+    - forward the new prop
+  - In The Filtered list
+    - Use the new prop
+os: OSX

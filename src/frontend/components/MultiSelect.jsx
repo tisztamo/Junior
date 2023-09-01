@@ -8,7 +8,7 @@ const MultiSelect = (props) => {
     <div class="rounded border p-4">
       <ResultSet items={props.selectedItems} />
       <SearchBar />
-      <FilteredList items={props.availableItems} filter={searchValue()} />
+      <FilteredList items={props.availableItems} filter={searchValue()} itemCount={props.itemCount} />
     </div>
   );
 };
