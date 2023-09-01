@@ -1,3 +1,12 @@
+#!/bin/sh
+set -e
+goal="Integrate MultiSelect with AttentionFileList"
+echo "Plan:"
+echo "1. Modify AttentionFileList to utilize MultiSelect for displaying the fileList."
+echo "2. Remove the direct div generation from AttentionFileList and use MultiSelect to achieve the functionality."
+
+# Modifying AttentionFileList.jsx to incorporate MultiSelect component.
+cat << 'EOF' > src/frontend/components/AttentionFileList.jsx
 import { onCleanup, createEffect } from 'solid-js';
 import { fileList, setFileList } from '../model/fileList';
 import fetchFileList from '../service/fetchFileList';
@@ -32,3 +41,6 @@ const AttentionFileList = () => {
 };
 
 export default AttentionFileList;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
