@@ -1,3 +1,11 @@
+#!/bin/sh
+set -e
+goal="Return object with root dir object"
+echo "Plan:"
+echo "1. Adjust the readFileList function to return an object with a root dir object."
+
+# Adjusting the readFileList.js
+cat > src/backend/fileutils/readFileList.js << 'EOF'
 import fs from 'fs';
 import path from 'path';
 import getIgnoreList from './getIgnoreList.js';
@@ -40,3 +48,6 @@ async function readFileList(dir, relativePath = "") {
 }
 
 export default readFileList;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
