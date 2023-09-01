@@ -1,0 +1,8 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/services/helpers/getComparison.js
+  - src/frontend/components/FilteredList.jsx
+requirements: |
+  In the default comparison function
+  Break the filter to words and look for any of them case-insensitively.
+os: OSX
