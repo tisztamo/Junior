@@ -1,0 +1,14 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/model/sampleModel.js
+  - src/frontend/service/sampleService.js
+  - src/frontend/components/SampleComponent.jsx
+requirements: >
+  Create new components:
+
+  <MultiSelect> is for selecting items from an array. It contains three parts:
+  List of the selected items on the top, search bar in the middle (!), and the
+  filtered list of selectables on the bottom.
+    - <ResultSet> and <FilteredList> are each a list of items, which comes as prop
+    - <SearchBar> Is text input with placeholder "Enter space-separated search terms!" Keep the state in the model!
+os: OSX
