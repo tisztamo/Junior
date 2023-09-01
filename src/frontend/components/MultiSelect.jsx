@@ -5,7 +5,7 @@ import FilteredList from './FilteredList';
 
 const MultiSelect = (props) => {
   return (
-    <div class="rounded border p-4">
+    <div class="w-full rounded border p-4">
       <ResultSet items={props.selectedItems} />
       <SearchBar />
       <FilteredList items={props.availableItems} filter={searchValue()} itemCount={props.itemCount} />

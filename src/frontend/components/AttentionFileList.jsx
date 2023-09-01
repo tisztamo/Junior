@@ -23,7 +23,7 @@ const AttentionFileList = () => {
   };
 
   return (
-    <div>
+    <div class="w-full">
       <MultiSelect availableItems={fileList()} selectedItems={[]} itemCount={5} />
     </div>
   );
