@@ -1,4 +1,5 @@
 import TasksList from './TasksList';
+import AttentionFileList from './AttentionFileList';
 import PromptDescriptor from './PromptDescriptor';
 import GenerateButton from './GenerateButton';
 import PromptDisplay from './PromptDisplay';
@@ -9,6 +10,7 @@ const PromptCreation = () => {
     <>
       <TasksList />
       <RequirementsEditor />
+      <AttentionFileList />
       <PromptDescriptor />
       <GenerateButton />
       <PromptDisplay />

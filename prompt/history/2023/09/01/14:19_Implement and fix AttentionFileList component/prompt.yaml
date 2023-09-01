@@ -1,0 +1,31 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/service/fetchDescriptor.js
+  - src/frontend/components/SampleComponent.jsx
+  - src/frontend/model/sampleModel.js
+  - src/frontend/service/sampleService.js
+  - src/frontend/components/PromptCreation.jsx
+requirements: >
+  Create <AttentionFileList>, model/fileList.js and service/fetchFileList.js
+  that
+
+  loads files from files/list endpoint which returns like:
+
+
+  {
+    "type": "dir",
+    "name": "src"
+    "children": [
+      { 
+        "type": "file"
+        "name": "main.js"
+      }
+    ]
+  }
+
+
+  Flat this out to filepaths in the component and print them to a div
+
+
+  Put the new component after RequirementsEditor
+os: OSX
