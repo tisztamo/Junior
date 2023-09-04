@@ -1,0 +1,14 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/MultiSelect/FilteredList.jsx
+requirements: |
+  Create and use FilteredListItem component
+  which
+  - Is full width
+  - Contains the text on the left and a single-digit number on the right.
+  - Does not wrap lines
+  - Uses mono font
+  - Horizontally scrollable
+  - Aligns to the right
+  Use it in FilteredList, provide it the idx in the list and the item.
+os: OSX
