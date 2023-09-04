@@ -1,13 +1,15 @@
-import { searchValue } from '../model/searchBarModel';
+import { createSignal } from 'solid-js';
 import SearchBar from './SearchBar';
 import ResultSet from './ResultSet';
 import FilteredList from './FilteredList';
 
 const MultiSelect = (props) => {
+  const [searchValue, setSearchValue] = createSignal(''); // Moved the searchBarModel logic to this component
+
   return (
     <div class="w-full rounded border p-4">
       <ResultSet items={props.selectedItems} />
-      <SearchBar />
+      <SearchBar searchValue={searchValue} setSearchValue={setSearchValue} />
       <FilteredList 
         items={props.availableItems} 
         filter={searchValue()} 

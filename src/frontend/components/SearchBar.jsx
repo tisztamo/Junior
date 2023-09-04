@@ -1,15 +1,13 @@
-import { searchValue, setSearchValue } from '../model/searchBarModel';
-
-const SearchBar = () => {
+const SearchBar = (props) => {
   const handleInputChange = (e) => {
-    setSearchValue(e.target.value);
+    props.setSearchValue(e.target.value);
   };
 
   return (
     <input 
       type="text"
       placeholder="Enter space-separated search terms!"
-      value={searchValue()}
+      value={props.searchValue()}
       onInput={handleInputChange}
       class="border rounded p-2 w-full"
     />
