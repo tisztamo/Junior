@@ -1,3 +1,11 @@
+#!/bin/sh
+set -e
+goal="Enhance FilteredListItem styling and behavior"
+echo "Plan:"
+echo "1. Update the FilteredListItem component to not allow word wrap, add the break-keep class, never show scrollbars, and leave more space between the number and the vertical border."
+
+# Implementing the plan
+cat > src/frontend/components/MultiSelect/FilteredListItem.jsx << 'EOF'
 import { createEffect } from "solid-js";
 
 const FilteredListItem = (props) => {
@@ -18,3 +26,6 @@ const FilteredListItem = (props) => {
 };
 
 export default FilteredListItem;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
