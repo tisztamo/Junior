@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/NavBar.jsx
+requirements: |
+  Create a new component <RepoInfo> which displays
+  "@aijunior/dev main" with small mono font and emphasized
+  background with some paddig, rounded, no border.
+  Add it at as a new line of NavBar
+os: OSX
