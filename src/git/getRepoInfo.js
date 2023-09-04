@@ -13,11 +13,13 @@ export default async function getRepoInfo() {
     const remote = await git.getRemotes(true);
     const currentBranch = await git.revparse(['--abbrev-ref', 'HEAD']);
     const packageJSON = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
+    const workingDir = path.resolve(__dirname, '../../');
 
     return {
         url: remote[0]?.refs?.fetch || '',
         branch: currentBranch,
         name: packageJSON.name || '',
-        description: packageJSON.description || ''
+        description: packageJSON.description || '',
+        workingDir: workingDir
     };
 }
