@@ -1,3 +1,14 @@
+#!/bin/sh
+set -e
+goal="Modify FilteredListItem.jsx UI components"
+echo "Plan:"
+echo "1. Update FilteredListItem.jsx by removing my-1 from div"
+echo "2. Add py-2 to the first span in FilteredListItem.jsx"
+echo "3. Add border-border to the second span in FilteredListItem.jsx"
+echo "4. Save changes to FilteredListItem.jsx"
+
+# Create the modified FilteredListItem.jsx
+cat > src/frontend/components/MultiSelect/FilteredListItem.jsx << 'EOF'
 import { createEffect } from "solid-js";
 
 const FilteredListItem = (props) => {
@@ -18,3 +29,6 @@ const FilteredListItem = (props) => {
 };
 
 export default FilteredListItem;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

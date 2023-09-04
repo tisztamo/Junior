@@ -1,0 +1,8 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/MultiSelect/FilteredListItem.jsx
+requirements: |
+  - Remove my-1 from the div
+  - Add py-2 to the first span
+  - Add border-border to the second span
+os: OSX
