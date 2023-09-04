@@ -1,3 +1,10 @@
+#!/bin/sh
+set -e
+goal="Fix path in getRepoInfo.js"
+echo "Plan:"
+echo "1. Update the path in getRepoInfo.js to use correct amount of dotdots."
+
+cat <<EOF > src/git/getRepoInfo.js
 import simpleGit from 'simple-git';
 import fs from 'fs';
 import path from 'path';
@@ -21,3 +28,6 @@ export default async function getRepoInfo() {
         description: packageJSON.description || ''
     };
 }
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
