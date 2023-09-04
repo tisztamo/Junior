@@ -9,7 +9,7 @@ const SearchBar = (props) => {
       placeholder="Enter space-separated search terms!"
       value={props.searchValue()}
       onInput={handleInputChange}
-      class="border rounded p-2 w-full"
+      class="border rounded p-2 w-full bg-emphasize text-emphasize"
     />
   );
 };

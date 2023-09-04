@@ -13,7 +13,7 @@ const MultiSelect = (props) => {
   });
 
   return (
-    <div class="w-full rounded border p-4">
+    <div class="w-full bg-emphasize text-emphasize p-4 rounded border border-border">
       <ResultSet items={props.selectedItems} />
       <SearchBar searchValue={searchValue} setSearchValue={setSearchValue} />
       <FilteredList items={filteredList()} />
