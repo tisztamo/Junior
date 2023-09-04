@@ -15,8 +15,8 @@ const SearchBar = (props) => {
       placeholder="Enter space-separated search terms!"
       value={props.searchValue()}
       onInput={handleInputChange}
-      onKeyPress={handleKeyPress}  // Detect key press
-      class="border rounded p-2 w-full bg-emphasize text-emphasize"
+      onKeyPress={handleKeyPress}
+      class="border border-gray-300 rounded p-2 w-full bg-emphasize text-emphasize my-2"
     />
   );
 };
