@@ -11,7 +11,7 @@ const MultiSelect = (props) => {
 
   createEffect(() => {
     const currentQuery = searchValue() || props.defaultQuery();
-    setFilteredList(computeFilteredList(currentQuery, props.availableItems, props.compare, props.itemCount, selectedItems()));
+    setFilteredList(computeFilteredList(currentQuery, props.availableItems, props.compare, props.itemCount, selectedItems(), props.defaultQuery()));
   });
 
   const handleKeyPress = (e) => {
