@@ -1,0 +1,12 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/MultiSelect/MultiSelect.jsx
+  - src/frontend/components/MultiSelect/SearchBar.jsx
+  - src/frontend/components/MultiSelect/FilteredList.jsx
+  - src/frontend/components/MultiSelect/FilteredListItem.jsx
+requirements: >-
+  - Set the placeholder to "Suggestions below. Search here!"
+
+  - When clicking a filteredlistitem, add the corresponding value to the result
+  set
+os: OSX

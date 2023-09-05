@@ -6,7 +6,7 @@ const SearchBar = (props) => {
   return (
     <input 
       type="text"
-      placeholder="Enter space-separated search terms!"
+      placeholder="Suggestions below. Search here!"
       value={props.searchValue()}
       onInput={handleInputChange}
       onKeyPress={props.onKeyPress}

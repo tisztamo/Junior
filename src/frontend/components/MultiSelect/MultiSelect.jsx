@@ -21,11 +21,16 @@ const MultiSelect = (props) => {
     }
   };
 
+  const handleItemClick = (item) => {
+    const updatedItems = [item, ...selectedItems()];
+    setSelectedItems(updatedItems);
+  };
+
   return (
     <div class="w-full bg-emphasize text-emphasize p-2 rounded border border-border">
       <ResultSet items={selectedItems()} />
       <SearchBar searchValue={searchValue} setSearchValue={setSearchValue} onKeyPress={handleKeyPress} />
-      <FilteredList items={filteredList()} />
+      <FilteredList items={filteredList()} onItemClick={handleItemClick} />
     </div>
   );
 };
