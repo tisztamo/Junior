@@ -1,4 +1,4 @@
-import { createEffect } from 'solid-js';
+import { createEffect, createSignal } from 'solid-js';
 import { fileList, setFileList } from '../model/fileList';
 import fetchFileList from '../service/fetchFileList';
 import MultiSelect from './MultiSelect/MultiSelect';
@@ -14,10 +14,10 @@ const AttentionFileList = () => {
     setFileList(flattenedPaths);
   });
 
-  let defaultQuery = "";
+  const [defaultQuery, setDefaultQuery] = createSignal("");
 
   createEffect(() => {
-    defaultQuery = extractQuery(requirements());
+    setDefaultQuery(extractQuery(requirements()));
   });
 
   return (

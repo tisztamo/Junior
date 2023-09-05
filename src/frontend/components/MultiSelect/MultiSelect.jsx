@@ -10,7 +10,8 @@ const MultiSelect = (props) => {
   const [selectedItems, setSelectedItems] = createSignal([...props.selectedItems]);
 
   createEffect(() => {
-    setFilteredList(computeFilteredList(searchValue(), props.availableItems, props.compare, props.itemCount, selectedItems()));
+    const currentQuery = searchValue() || props.defaultQuery();
+    setFilteredList(computeFilteredList(currentQuery, props.availableItems, props.compare, props.itemCount, selectedItems()));
   });
 
   const addFirstFilteredItem = () => {
