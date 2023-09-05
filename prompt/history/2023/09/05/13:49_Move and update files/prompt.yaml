@@ -1,0 +1,7 @@
+task: prompt/task/refactor/move_files.md
+attention:
+  - src/frontend/generatePrompt.js
+  - src/frontend/service/handleGeneratePrompt.js
+requirements: |
+  Move generatePrompt to service/
+os: OSX
