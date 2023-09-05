@@ -1,0 +1,7 @@
+task: prompt/task/bug/fix.md
+attention:
+  - src/git/getRepoInfo.js
+requirements: >
+  This is not the correct amount of dotdots, seems like we need one less: Check
+  the path!
+os: OSX
