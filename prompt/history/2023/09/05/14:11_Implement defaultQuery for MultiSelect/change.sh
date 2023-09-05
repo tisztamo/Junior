@@ -1,3 +1,24 @@
+#!/bin/sh
+set -e
+goal="Implement defaultQuery for MultiSelect"
+echo "Plan:"
+echo "1. Create the extractQuery function in service/helpers/extractQuery.js."
+echo "2. Modify the AttentionFileList.jsx component to use createEffect for changes in the requirements model."
+echo "3. Pass the generated query to MultiSelect as defaultQuery prop."
+
+# Step 1: Create the extractQuery function in service/helpers/extractQuery.js.
+cat << EOF > src/frontend/service/helpers/extractQuery.js
+const ignoreList = ['and', 'or', 'the'];
+
+export default function extractQuery(requirements) {
+  return requirements.split(/\W+/)
+    .filter(word => word.length > 2 && !ignoreList.includes(word.toLowerCase()))
+    .join(' ');
+}
+EOF
+
+# Step 2: Modify the AttentionFileList.jsx component
+cat << EOF > src/frontend/components/AttentionFileList.jsx
 import { createEffect } from 'solid-js';
 import { fileList, setFileList } from '../model/fileList';
 import fetchFileList from '../service/fetchFileList';
@@ -28,3 +49,6 @@ const AttentionFileList = () => {
 };
 
 export default AttentionFileList;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
