@@ -1,3 +1,10 @@
+#!/bin/sh
+set -e
+goal="Implement lighter orange paste input"
+echo "Plan:"
+echo "1. Update the textarea's background color to a lighter orange than the button in ExecuteButton.jsx."
+
+cat > src/frontend/components/ExecuteButton.jsx << 'EOF'
 import handleExecuteChange from '../service/handleExecuteChange';
 import { setChangeInput, changeInput } from '../model/changeInput';
 
@@ -28,3 +35,6 @@ const ExecuteButton = () => {
 };
 
 export default ExecuteButton;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

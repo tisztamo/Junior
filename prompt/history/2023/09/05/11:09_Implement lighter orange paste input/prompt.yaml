@@ -1,0 +1,5 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/ExecuteButton.jsx
+requirements: Make the paste input bg a bit lighter orange than the button
+os: OSX
