@@ -1,3 +1,16 @@
+#!/bin/sh
+set -e
+goal="Integrate simple-git, fix fileURLToPath issue"
+echo "Plan:"
+echo "1. Import the necessary fileURLToPath function from the 'url' module in init.js."
+echo "2. Rewrite init.js to utilize simple-git for Git operations."
+echo "3. Check if the current directory is a git repository."
+echo "4. If it's a git repo, validate if the repository is clean."
+echo "5. If not clean, abort the process."
+echo "6. If not a repo, initialize git, and commit the setup."
+
+# Modify init.js to fix the fileURLToPath issue and utilize simple-git
+cat > src/init.js << 'EOF'
 #!/usr/bin/env node
 import simpleGit from 'simple-git';
 import { fileURLToPath } from 'url';
@@ -38,3 +51,6 @@ async function juniorInit() {
 
 juniorInit();
 
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
