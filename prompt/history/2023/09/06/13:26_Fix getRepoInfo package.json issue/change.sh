@@ -1,3 +1,12 @@
+#!/bin/sh
+set -e
+goal="Fix getRepoInfo package.json issue"
+echo "Plan:"
+echo "1. Modify the way we get the root directory using git.revparse."
+echo "2. Modify the path for the package.json using the corrected root directory."
+echo "3. Handle the scenario where the file might not be found."
+
+cat <<EOF >src/git/getRepoInfo.js
 import simpleGit from 'simple-git';
 import fs from 'fs';
 import path from 'path';
@@ -31,3 +40,6 @@ export default async function getRepoInfo() {
         workingDir: workingDir
     };
 }
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
