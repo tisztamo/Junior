@@ -1,0 +1,6 @@
+task: prompt/task/bug/fix.md
+attention:
+  - src/init.js
+requirements: |
+  We need to always commit at the end, and never where we do now.
+os: OSX
