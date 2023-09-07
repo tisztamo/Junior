@@ -1,3 +1,33 @@
+#!/bin/sh
+set -e
+goal="Implement reactive empty message for MultiSelect with padding"
+echo "Plan:"
+echo "1. Modify ResultSet.jsx to use SolidJS reactive statements for conditional rendering and add padding to the empty message."
+echo "2. Adjust MultiSelect.jsx to pass the 'empty message' prop value to ResultSet component."
+
+# Step 1: Modify ResultSet.jsx
+cat > src/frontend/components/MultiSelect/ResultSet.jsx << 'EOF'
+import ListItem from "./ListItem";
+
+const ResultSet = (props) => {
+  return (
+    <div>
+      {props.items.length === 0 ? (
+        <div class="text-gray-400 pl-2">{props.emptyMessage}</div>
+      ) : (
+        <ul class="list-inside">
+          {props.items.map(item => <ListItem key={item} item={item} />)}
+        </ul>
+      )}
+    </div>
+  );
+};
+
+export default ResultSet;
+EOF
+
+# Step 2: Adjust MultiSelect.jsx
+cat > src/frontend/components/MultiSelect/MultiSelect.jsx << 'EOF'
 import { createSignal, createEffect } from 'solid-js';
 import SearchBar from './SearchBar';
 import ResultSet from './ResultSet';
@@ -36,3 +66,6 @@ const MultiSelect = (props) => {
 };
 
 export default MultiSelect;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
