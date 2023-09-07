@@ -1,3 +1,13 @@
+#!/bin/sh
+set -e
+goal="Implement requested changes for FilteredListItem"
+echo "Plan:"
+echo "1. Remove the numbering from the FilteredListItem component."
+echo "2. Modify the layout to prioritize the filename over the directory path."
+echo "3. Ensure directory path is scrollable and is scrolled to the right on load."
+
+# Removing numbering and making necessary layout changes
+cat > src/frontend/components/MultiSelect/FilteredListItem.jsx << 'EOF'
 import { createEffect } from "solid-js";
 
 const FilteredListItem = (props) => {
@@ -28,3 +38,6 @@ const FilteredListItem = (props) => {
 };
 
 export default FilteredListItem;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

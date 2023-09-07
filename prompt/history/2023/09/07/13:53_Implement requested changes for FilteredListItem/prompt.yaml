@@ -1,0 +1,12 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/MultiSelect/FilteredListItem.jsx
+requirements: >
+  1. Remove the numbering.
+
+  2. When there is not enough horizontal space, shrink the path first, not the
+  filename.
+
+  3. Allow scrolling the path and scroll that (instead of the filename) to the
+  right at load.
+os: OSX
