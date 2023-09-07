@@ -1,3 +1,12 @@
+#!/bin/sh
+set -e
+goal="Style FilteredListItem"
+echo "Plan:"
+echo "1. Update styles for the filename: set font to mono, 1em font size, bg-main background color, and rounded padding."
+echo "2. Update styles for the path to make it a bit smaller."
+
+# Update the FilteredListItem component styles according to the requirements
+cat > src/frontend/components/MultiSelect/FilteredListItem.jsx << 'EOF'
 import { createEffect } from "solid-js";
 
 const FilteredListItem = (props) => {
@@ -28,3 +37,6 @@ const FilteredListItem = (props) => {
 };
 
 export default FilteredListItem;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
