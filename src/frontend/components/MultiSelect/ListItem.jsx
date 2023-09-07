@@ -20,7 +20,7 @@ const ListItem = (props) => {
   const directory = pathParts.reverse().join('/');
 
   return (
-    <div onClick={handleClick} class="flex justify-between items-center w-full font-mono cursor-pointer">
+    <div onClick={handleClick} class={`flex justify-between items-center w-full font-mono cursor-pointer transition-fast item-${props.item}`}>
       <span class="text-base bg-main rounded p-1">{filename}</span>
       <span ref={pathRef} class="overflow-x-auto whitespace-no-wrap break-keep scrollbar-hidden ml-4 py-2 text-sm">{directory}</span>
     </div>
