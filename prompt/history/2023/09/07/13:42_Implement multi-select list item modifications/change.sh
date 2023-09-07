@@ -1,3 +1,12 @@
+#!/bin/sh
+set -e
+goal="Implement multi-select list item modifications"
+echo "Plan:"
+echo "1. Adjust the JSX structure to show numbers on the left."
+echo "2. Split the item text into filename and directory, and display them with the specified styles."
+
+# Step 1: Adjust the JSX structure to show numbers on the left.
+cat > src/frontend/components/MultiSelect/FilteredListItem.jsx << 'EOF'
 import { createEffect } from "solid-js";
 
 const FilteredListItem = (props) => {
@@ -29,3 +38,6 @@ const FilteredListItem = (props) => {
 };
 
 export default FilteredListItem;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
