@@ -1,0 +1,9 @@
+task: prompt/task/refactor/move_files.md
+attention:
+  - src/frontend/components/MultiSelect/FilteredListItem.jsx
+  - src/frontend/components/MultiSelect/ResultSet.jsx
+  - src/frontend/components/MultiSelect/FilteredList.jsx
+requirements: |
+  1. Rename FilteredlListItem to ListItem (also the file)
+  2. Use ListItem when rendering the result set.
+os: OSX

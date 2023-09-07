@@ -1,6 +1,6 @@
 import { createEffect } from "solid-js";
 
-const FilteredListItem = (props) => {
+const ListItem = (props) => {
   let pathRef;
 
   const handleClick = () => {
@@ -27,4 +27,4 @@ const FilteredListItem = (props) => {
   );
 };
 
-export default FilteredListItem;
+export default ListItem;
