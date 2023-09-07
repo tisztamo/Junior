@@ -1,0 +1,17 @@
+task: prompt/task/doc/improve.md
+attention:
+  - docs/open_jobs.md
+requirements: |
+  Add details about my offer:
+
+    - **0.1% share for every candidate** who gets selected for in-person interview.
+    - **'1%** of my (Krisztián) share (which is 95% of all at the time) for the selected
+    candidate' at the beginning of work,
+    and every month during the first 12 months of work together.
+    (Calculated and transferred at 1. of next month)
+    - Terms are to be negotiated.
+
+  Make it easy to read, clear and understandable.
+    
+  Ask if something is not described enough here!
+os: OSX

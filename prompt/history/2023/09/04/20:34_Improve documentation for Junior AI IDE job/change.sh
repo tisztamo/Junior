@@ -1,3 +1,12 @@
+#!/bin/sh
+set -e
+goal="Improve documentation for Junior AI IDE job"
+echo "Plan:"
+echo "1. Append detailed offer to the open_jobs.md file."
+echo "2. Ensure readability, clarity, and comprehension."
+
+# Append the detailed offer
+cat > docs/open_jobs.md << 'EOF'
 # Open Positions at Junior AI IDE
 
 We're in the early stages of building an exciting startup based on our open source project, Junior AI IDE. Our primary goal right now is to find the right leadership to steer the ship and take our vision to the next level. Discover more about us at [aijunior.dev](https://aijunior.dev).
@@ -18,3 +27,6 @@ A "local big gun" (translated from "helyi nagyágyú") suggested looking for a "
 - Terms and conditions of this offer are negotiable.
 
 Interested candidates or those who can connect us to potential candidates are encouraged to reach out. Together, we can make Junior AI IDE a groundbreaking success.
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
