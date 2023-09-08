@@ -1,0 +1,5 @@
+task: prompt/task/refactor/custom.md
+attention:
+  - src/frontend/components/MultiSelect/MultiSelect.jsx
+requirements: factor out handleResultSetItem to its own .js file
+os: OSX
