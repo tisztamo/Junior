@@ -1,5 +1,5 @@
 Encode and enclose your results as ./change.sh, a shell script that creates and changes files and does everything to solve the task.
-Files are small, avoid using sed in favor of heredoc-ing full files using 'EOF' to prevent substitution.
+Files are small, avoid using sed in favor of heredoc-ing full files.
 
 OS: <%= os %>
 
@@ -15,7 +15,9 @@ set -e
 goal=[Task description, max 7 words]
 echo "Plan:"
 echo "1. [...]"
-[Commands solving the task]
+cat > x.js << 'EOF'
+[...]
+'EOF'
 echo "\033[32mDone: $goal\033[0m\n"
 ```
 

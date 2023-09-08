@@ -1,0 +1,8 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/MultiSelect/MultiSelect.jsx
+  - src/frontend/components/MultiSelect/handleResultSetItem.js
+requirements: |
+  Rename the handler file to handleResultSetItemClick.js
+  Instead of translating, it should fade and shrink vertically, in 0.3 sec
+os: OSX
