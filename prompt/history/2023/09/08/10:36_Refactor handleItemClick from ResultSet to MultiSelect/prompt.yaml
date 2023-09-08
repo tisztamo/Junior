@@ -1,0 +1,10 @@
+task: prompt/task/refactor/custom.md
+attention:
+  - src/frontend/components/MultiSelect/ResultSet.jsx
+  - src/frontend/components/MultiSelect/MultiSelect.jsx
+  - src/frontend/components/MultiSelect/ListItem.jsx
+  - src/frontend/components/MultiSelect/handleUnselectItem.jsx
+requirements: >-
+  Move handleItemClick from ResultSet to MultiSelect. Rename the one already
+  there to handleFilterListItemCLick and this one to handleResultSetItemClick
+os: OSX

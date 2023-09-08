@@ -1,3 +1,40 @@
+#!/bin/sh
+set -e
+goal="Refactor handleItemClick from ResultSet to MultiSelect"
+echo "Plan:"
+echo "1. Remove handleItemClick from ResultSet"
+echo "2. Update ListItem usage in ResultSet"
+echo "3. Rename handleItemClick in MultiSelect to handleFilterListItemClick"
+echo "4. Add handleResultSetItemClick in MultiSelect"
+echo "5. Update imports"
+
+# Step 1: Remove handleItemClick from ResultSet
+cat <<EOF > src/frontend/components/MultiSelect/ResultSet.jsx
+import ListItem from "./ListItem";
+
+const ResultSet = (props) => {
+  return (
+    <div>
+      {props.items.length === 0 ? (
+        <div class="text-gray-400 pl-2">{props.emptyMessage}</div>
+      ) : (
+        <ul class="list-inside">
+          {props.items.map(item => <ListItem key={item} item={item} onItemClick={props.onItemClick} />)}
+        </ul>
+      )}
+    </div>
+  );
+};
+
+export default ResultSet;
+EOF
+
+# Step 2: Update ListItem usage in ResultSet
+# No change required, since we just passed the prop in ResultSet
+
+# Step 3: Rename handleItemClick in MultiSelect to handleFilterListItemClick
+# Step 4: Add handleResultSetItemClick in MultiSelect
+cat <<EOF > src/frontend/components/MultiSelect/MultiSelect.jsx
 import { createSignal, createEffect } from 'solid-js';
 import SearchBar from './SearchBar';
 import ResultSet from './ResultSet';
@@ -41,3 +78,9 @@ const MultiSelect = (props) => {
 };
 
 export default MultiSelect;
+EOF
+
+# Step 5: Update imports
+# Already included in the MultiSelect refactoring
+
+echo "\033[32mDone: $goal\033[0m\n"
