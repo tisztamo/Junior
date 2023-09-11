@@ -8,7 +8,8 @@ import handleResultSetItemClick from './handleResultSetItemClick';
 const MultiSelect = (props) => {
   const [searchValue, setSearchValue] = createSignal('');
   const [filteredList, setFilteredList] = createSignal([]);
-  const [selectedItems, setSelectedItems] = createSignal([...props.selectedItems]);
+  const selectedItemsSignal = props.selectedItemsSignal || createSignal([]);
+  const [selectedItems, setSelectedItems] = selectedItemsSignal;
 
   createEffect(() => {
     const currentQuery = searchValue() || props.defaultQuery();

@@ -12,7 +12,7 @@ EXAMPLE START
 ```sh
 #!/bin/sh
 set -e
-goal=[Task description, max 7 words]
+goal=[Task description, max 9 words]
 echo "Plan:"
 echo "1. [...]"
 cat > x.js << 'EOF'
