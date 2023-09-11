@@ -1,0 +1,14 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/AttentionFileList.jsx
+  - src/frontend/components/TasksList.jsx
+requirements: >-
+  High level context: The attention multiselect result set should be
+  synchronized with the prompt descriptor attention field
+
+  Current task:
+    In the attention file list, get the prompt descriptor's attention field,
+    it is a list of strings.
+    Set the attention model from it reactively.
+    Tasks list is for your reference.
+os: OSX

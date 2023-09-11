@@ -1,3 +1,27 @@
+#!/bin/sh
+set -e
+goal="Synchronize attention list with prompt descriptor"
+echo "Plan:"
+echo "1. Create a new service to fetch the attention field from the prompt descriptor."
+echo "2. Update the AttentionFileList component to use this new service to set the attention model reactively."
+echo "3. Ensure that all required imports are present in AttentionFileList component."
+
+# 1. Create a service function to get the attention field from the prompt descriptor
+cat > src/frontend/service/getAttentionFromDescriptor.js << 'EOF'
+import { promptDescriptor } from '../model/promptDescriptor';
+import { getYamlEntry } from './getYamlEntry';
+
+export const getAttentionFromDescriptor = () => {
+  const descriptor = promptDescriptor();
+  if (descriptor !== '') {
+    return getYamlEntry(descriptor, 'attention');
+  }
+  return [];
+};
+EOF
+
+# 2. Update the AttentionFileList component to use this service function and ensure imports are correct
+cat > src/frontend/components/AttentionFileList.jsx << 'EOF'
 import { createEffect, createSignal } from 'solid-js';
 import { fileList, setFileList } from '../model/fileList';
 import fetchFileList from '../service/fetchFileList';
@@ -35,3 +59,6 @@ const AttentionFileList = () => {
 };
 
 export default AttentionFileList;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
