@@ -1,0 +1,5 @@
+task: prompt/task/feature/implement.md
+attention:
+  - /./src/frontend/components/CommitButton.jsx
+requirements: Do not clear the attention after commit
+os: OSX

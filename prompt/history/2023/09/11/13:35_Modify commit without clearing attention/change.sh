@@ -1,3 +1,11 @@
+#!/bin/sh
+set -e
+goal="Modify commit without clearing attention"
+echo "Plan:"
+echo "1. Modify handleCommit in CommitButton.jsx to not clear the attention after commit."
+echo "2. Adjust the postDescriptor method call."
+
+cat > ./src/frontend/components/CommitButton.jsx << 'EOF'
 import { postCommit } from '../service/postCommit';
 import postDescriptor from '../service/postDescriptor';
 import { commitMessage } from '../model/commitMessage';
@@ -22,3 +30,6 @@ const CommitButton = () => {
 };
 
 export default CommitButton;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
