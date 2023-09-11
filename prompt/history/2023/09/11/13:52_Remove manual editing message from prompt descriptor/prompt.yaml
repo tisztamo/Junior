@@ -1,0 +1,5 @@
+task: prompt/task/feature/implement.md
+attention:
+  - /./src/frontend/components/PromptDescriptor.jsx
+requirements: In the prompt descriptor, do not print the msg about manual editing.
+os: OSX

@@ -1,3 +1,10 @@
+#!/bin/sh
+set -e
+goal="Remove manual editing message from prompt descriptor"
+echo "Plan:"
+echo "1. Modify PromptDescriptor.jsx to remove the message about manual editing."
+
+cat > ./src/frontend/components/PromptDescriptor.jsx << 'EOF'
 import { onMount, onCleanup } from 'solid-js';
 import { fetchDescriptor } from '../service/fetchDescriptor';
 import { fetchGitStatus } from '../service/fetchGitStatus';
@@ -38,3 +45,6 @@ const PromptDescriptor = () => {
 };
 
 export default PromptDescriptor;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
