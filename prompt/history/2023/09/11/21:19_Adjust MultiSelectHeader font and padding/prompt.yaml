@@ -1,0 +1,8 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/MultiSelect/MultiSelectHeader.jsx
+  - ./src/frontend/components/TasksList.jsx
+requirements: >-
+  Multiselect header should use the same font as the task selector and have some
+  padding both left to the message and left to the summary element
+os: OSX
