@@ -1,3 +1,25 @@
+#!/bin/sh
+set -e
+goal="Implement Attention MultiSelect Header"
+echo "Plan:"
+echo "1. Create MultiSelectHeader.jsx to handle the display of the number of selected items and empty message."
+echo "2. Update MultiSelect.jsx to use the new MultiSelectHeader component."
+
+# 1. Create MultiSelectHeader.jsx
+cat > ./src/frontend/components/MultiSelect/MultiSelectHeader.jsx << 'EOF'
+const MultiSelectHeader = (props) => {
+  return (
+    <div class="w-full p-2 bg-lightgray">
+      { props.items().length > 0 ? `${props.items().length} files in attention` : props.emptyMessage }
+    </div>
+  );
+};
+
+export default MultiSelectHeader;
+EOF
+
+# 2. Update MultiSelect.jsx to use MultiSelectHeader
+cat > ./src/frontend/components/MultiSelect/MultiSelect.jsx << 'EOF'
 import { createSignal, createEffect } from 'solid-js';
 import SearchBar from './SearchBar';
 import ResultSet from './ResultSet';
@@ -45,3 +67,6 @@ const MultiSelect = (props) => {
 };
 
 export default MultiSelect;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
