@@ -1,3 +1,12 @@
+#!/bin/sh
+set -e
+goal="Enhance ExecuteButton component"
+echo "Plan:"
+echo "1. Modify the textarea to have a darker background than the button."
+echo "2. Empty the textarea's content after execution."
+
+# Step 1: Modify the textarea to have a darker background.
+cat > src/frontend/components/ExecuteButton.jsx << 'EOF'
 import { createEffect } from 'solid-js';
 import handleExecuteChange from '../service/handleExecuteChange';
 import { setChangeInput, changeInput } from '../model/changeInput';
@@ -38,3 +47,6 @@ const ExecuteButton = () => {
 };
 
 export default ExecuteButton;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

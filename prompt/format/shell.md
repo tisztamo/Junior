@@ -8,7 +8,6 @@ Installed tools: <%= installedTools %>
 Do NOT write any text outside the script!
 
 EXAMPLE START
-
 ```sh
 #!/bin/sh
 set -e
@@ -20,7 +19,6 @@ cat > x.js << 'EOF'
 'EOF'
 echo "\033[32mDone: $goal\033[0m\n"
 ```
-
 EXAMPLE END
 
 <%= ask_for_missing_files %>
