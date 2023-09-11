@@ -1,8 +1,8 @@
 const MultiSelectHeader = (props) => {
   return (
-    <div class="w-full p-2 bg-lightgray">
+    <summary class="w-full p-2">
       { props.items().length > 0 ? `${props.items().length} files in attention` : props.emptyMessage }
-    </div>
+    </summary>
   );
 };
 
