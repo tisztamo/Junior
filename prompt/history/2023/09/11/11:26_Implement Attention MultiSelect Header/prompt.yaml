@@ -1,0 +1,7 @@
+task: prompt/task/feature/implement.md
+attention: []
+requirements: >-
+  Show the number of selected items as "N files in attention" in the attention
+  multiselect header, when any.  Create MultiSelectHeader.jsx and move the
+  current empty message to it too.
+os: OSX

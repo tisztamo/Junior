@@ -1,0 +1,12 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/MultiSelect/ResultSet.jsx
+  - src/frontend/components/MultiSelect/MultiSelect.jsx
+  - src/frontend/components/MultiSelect/ListItem.jsx
+  - src/frontend/components/MultiSelect/handleUnselectItem.jsx
+requirements: |-
+  Eliminate the transition
+  Delete handleUnselectItem.jsx
+  Delete the transition helper classes from listitem
+  Do the unselect in multiselect.jsx
+os: OSX

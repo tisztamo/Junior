@@ -1,0 +1,5 @@
+task: prompt/task/refactor/move_files.md
+attention:
+  - src/frontend/components/AttentionFileList.jsx
+requirements: ''
+os: OSX

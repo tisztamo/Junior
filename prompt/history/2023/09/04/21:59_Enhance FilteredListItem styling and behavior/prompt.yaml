@@ -1,0 +1,8 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/MultiSelect/FilteredListItem.jsx
+requirements: |
+  - Do not allow word wrap in FilteredListItem, and also add break-keep class.
+  - Never show scrollbars in FilteredListItem
+  - Leave more space between the number and the vertical border
+os: OSX

@@ -1,0 +1,7 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/service/fetchDescriptor.js
+requirements: >-
+  Create service/sampleService.js same-name fn in it, content based on this,
+  except that it should default export instead of named
+os: OSX

@@ -1,0 +1,21 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/AttentionFileList.jsx
+  - src/frontend/model/requirements.js
+requirements: >
+  In the attention file list:
+
+  When the requirements model changes, generate a query from it by passing
+
+  to extraxtQuery in service/helpers/extraxtQuery.js, which:
+
+  - Splits the requirements to words at any non-word char
+
+  - Drops words that are less than 3 chars in length or found in the ignore list
+  (a constant array)
+
+  - joins them with space
+
+
+  Pass it to multiselect as a new prop: defaultQuery
+os: OSX

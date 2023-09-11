@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/MultiSelect/SearchBar.jsx
+  - src/frontend/components/MultiSelect/MultiSelect.jsx
+  - src/frontend/components/TasksList.jsx
+requirements: >
+  Style the border, background and text colors of MultiSelect and SearchBar like
+  TasksLists
+os: OSX

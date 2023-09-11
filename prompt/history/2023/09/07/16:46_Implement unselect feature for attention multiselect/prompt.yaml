@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/MultiSelect/ResultSet.jsx
+  - src/frontend/components/MultiSelect/MultiSelect.jsx
+  - src/frontend/components/MultiSelect/ListItem.jsx
+requirements: >-
+  In the attention multiselect, when I click an item in the result set, fade it
+  fast and then unselect it. Note that the list item is reused elsewhere.
+os: OSX

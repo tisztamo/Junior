@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/ExecuteButton.jsx
+requirements: >-
+  Executebutton: the input inside should have similar but a bit darker bg than
+  the button.
+
+  Also empty its content after exec.
+os: OSX

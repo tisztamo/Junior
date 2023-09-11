@@ -1,0 +1,13 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/MultiSelect/FilteredListItem.jsx
+requirements: >
+  - Do not allow scrolling the full FilteredListItem, only the
+
+  item span.
+
+  - Scroll the item span to the right automatically when the content changes.
+  Use js if needed.
+
+  - Add margin between the two spans
+os: OSX

@@ -1,0 +1,14 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/MultiSelect/MultiSelect.jsx
+  - src/frontend/components/AttentionFileList.jsx
+  - src/frontend/model/sampleModel.js
+requirements: >-
+  High level context: The attention multiselect result set should be
+  synchronized with the prompt descriptor attention field
+
+  Current task:
+    - Create a new model signal named attentionModel.js
+    - MultiSelect should get the signal in selectedItems / setSelectedItems props
+    - AttentionFileList should give the new signal to its multiselect
+os: OSX

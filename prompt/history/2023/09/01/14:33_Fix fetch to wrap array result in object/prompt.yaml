@@ -1,0 +1,18 @@
+task: prompt/task/bug/fix.md
+attention:
+  - src/frontend/service/fetchFileList.js
+requirements: |
+  When the returned value is an array,
+  Add root object similar to this:
+
+  {
+    "type": "dir",
+    "name": "."
+    "children": [
+      { 
+        "type": "file"
+        "name": "main.js"
+      }
+    ]
+  }
+os: OSX

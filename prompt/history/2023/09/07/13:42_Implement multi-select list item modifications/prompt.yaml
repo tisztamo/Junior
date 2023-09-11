@@ -1,0 +1,13 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/MultiSelect/FilteredListItem.jsx
+requirements: >-
+  In multiselect list item:
+
+  - Numbers should be shown on the left. Also adjust the separating border
+  accordingly.
+
+  - Item text should be displayed in two separate parts: Assume it is a path,
+  the filename should be on the left with larger font, followed by the directory
+  path.
+os: OSX

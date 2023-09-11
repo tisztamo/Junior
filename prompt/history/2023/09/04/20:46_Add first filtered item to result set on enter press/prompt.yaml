@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/MultiSelect/MultiSelect.jsx
+  - src/frontend/components/MultiSelect/ResultSet.jsx
+  - src/frontend/components/MultiSelect/SearchBar.jsx
+requirements: |
+  When the user presses enter, add the first filtered item
+  to the result set!
+os: OSX

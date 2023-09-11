@@ -9,7 +9,7 @@ const CommitButton = () => {
     const response = await postCommit(commitMessage());
     console.log(response.message);
     
-    await postDescriptor({ requirements: '', attention: '' });
+    await postDescriptor({ requirements: '' });
     
     const status = await fetchGitStatus();
     console.log(status);
@@ -17,7 +17,7 @@ const CommitButton = () => {
   };
 
   return (
-    <button className="w-full px-4 py-4 bg-green-700 text-lg text-bg font-semibold rounded" onClick={handleCommit}>Commit</button>
+    <button className="w-full px-4 py-4 bg-green-500 text-lg text-bg font-semibold rounded" onClick={handleCommit}>Commit</button>
   );
 };
 

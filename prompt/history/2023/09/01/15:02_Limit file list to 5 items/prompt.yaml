@@ -1,0 +1,6 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/AttentionFileList.jsx
+requirements: |
+  Limit file the list to 5 items.
+os: OSX

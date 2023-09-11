@@ -1,0 +1,8 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/MultiSelect.jsx
+  - src/frontend/components/PromptCreation.jsx
+  - src/frontend/components/AttentionFileList.jsx
+requirements: |
+  Give the file list to a multiselect instead of generating divs!
+os: OSX

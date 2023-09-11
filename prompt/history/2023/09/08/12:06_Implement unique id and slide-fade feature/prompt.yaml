@@ -1,0 +1,14 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/MultiSelect/ResultSet.jsx
+  - src/frontend/components/MultiSelect/ListItem.jsx
+  - src/frontend/styles/styles.css
+  - src/frontend/components/MultiSelect/MultiSelect.jsx
+requirements: >-
+  1. In ListItem, do not add the class item-${props.item}, generate a unique id
+  attribute instead
+
+  2. Pass the id to the click handler as the second argument
+
+  3. In MultiSelect, slide-fade the div based on the id before unselecting
+os: OSX

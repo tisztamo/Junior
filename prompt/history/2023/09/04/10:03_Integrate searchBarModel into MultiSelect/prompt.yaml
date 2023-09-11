@@ -1,0 +1,10 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/MultiSelect.jsx
+  - src/frontend/components/SearchBar.jsx
+  - src/frontend/components/ResultSet.jsx
+  - src/frontend/components/FilteredList.jsx
+  - src/frontend/model/searchBarModel.js
+requirements: |
+  Move the serachbar model to multiselect, deleting the separate file.
+os: OSX

@@ -1,0 +1,10 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/MultiSelect/MultiSelect.jsx
+  - src/frontend/components/MultiSelect/ResultSet.jsx
+  - src/frontend/components/MultiSelect/SearchBar.jsx
+requirements: |
+  1. Add vertical margin to the search bar, and make its border less emphasized.
+  2. Hide the discs both in resultset and filteredlist
+  3. Make the multiselect padding smaller
+os: OSX

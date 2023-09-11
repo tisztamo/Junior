@@ -1,0 +1,8 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/MultiSelect/MultiSelectHeader.jsx
+  - src/frontend/components/MultiSelect/MultiSelect.jsx
+requirements: |
+  Allow closing the multiselect using html details tag!
+  When closed, only the header should be visible.
+os: OSX

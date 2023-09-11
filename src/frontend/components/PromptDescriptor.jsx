@@ -27,7 +27,7 @@ const PromptDescriptor = () => {
 
   return (
     <details class="w-full max-w-screen overflow-x-auto whitespace-normal">
-      <summary class="font-mono">{descriptorFileName} <span class="text-sm font-normal">(Edit the attention manually)</span></summary>
+      <summary class="font-mono">{descriptorFileName}</summary>
       <div class="mt-4 overflow-auto max-w-full">
         <div class="whitespace-pre-wrap overflow-x-scroll overflow-y-auto font-mono">
           {promptDescriptor()}

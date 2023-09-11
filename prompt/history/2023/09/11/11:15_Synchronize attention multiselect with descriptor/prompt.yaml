@@ -1,0 +1,14 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/AttentionFileList.jsx
+  - src/backend/routes/setupPromptRoutes.js
+  - src/frontend/service/handleTaskChange.js
+requirements: >-
+  High level context: The attention multiselect result set should be
+  synchronized with the prompt descriptor attention field
+
+  Current task:
+    - Create handleAttentionChange.js, which can post to /descriptor as { attention }
+    - When the user changes the attention, use it.
+    - handleTaskChange is for reference
+os: OSX

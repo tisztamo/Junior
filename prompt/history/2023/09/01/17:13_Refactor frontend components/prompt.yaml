@@ -1,0 +1,9 @@
+task: prompt/task/refactor/general.md
+attention:
+  - src/frontend/components/MultiSelect.jsx
+  - src/frontend/components/AttentionFileList.jsx
+  - src/frontend/components/FilteredList.jsx
+requirements: |
+  - Remove the extra div in multiselect.
+  - Make all the components w-full.
+os: OSX

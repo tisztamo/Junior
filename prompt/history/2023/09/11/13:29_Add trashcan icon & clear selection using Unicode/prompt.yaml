@@ -1,0 +1,8 @@
+task: prompt/task/feature/implement.md
+attention:
+  - /./src/frontend/components/MultiSelect/ListItem.jsx
+  - /./src/frontend/components/MultiSelect/FilteredList.jsx
+requirements: |
+  Add a trashcan icon to the right of the multiselect header when the
+  selection is not empty. Clear the selection when clicked.
+os: OSX

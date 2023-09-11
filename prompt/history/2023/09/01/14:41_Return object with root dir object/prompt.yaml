@@ -1,0 +1,7 @@
+task: prompt/task/bug/fix.md
+attention:
+  - src/backend/fileutils/readFileList.js
+requirements: >
+  This returns an array, but it should return an object, just like during
+  recursion: Add a root dir object with name "." 
+os: OSX

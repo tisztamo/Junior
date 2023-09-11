@@ -1,7 +1,7 @@
-import { generatePrompt } from '../generatePrompt';
+import { generatePrompt } from './generatePrompt';
 import { marked } from 'marked';
 import { setPrompt } from '../model/prompt';
-import postDescriptor from '../service/postDescriptor';
+import postDescriptor from './postDescriptor';
 import { requirements } from '../model/requirements';
 import copyToClipboard from './copyToClipboard';
 

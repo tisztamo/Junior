@@ -1,0 +1,11 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/services/helpers/getComparison.js
+  - src/frontend/components/FilteredList.jsx
+requirements: >
+  The comparison function should return the rank: The sum of the lengths of the
+  matching words.
+
+  The filtered list should look for non-zero ranks and sort the items before
+  rendering, highest rank first.
+os: OSX

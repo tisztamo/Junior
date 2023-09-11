@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/ExecuteButton.jsx
+requirements: >-
+  In executebutton, remove the createEffect which tries to delete the change
+  after commit, it is not working and not needed.
+
+  Also await the handleExecuteChange
+os: OSX

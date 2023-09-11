@@ -1,0 +1,8 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/MultiSelect/FilteredListItem.jsx
+requirements: |-
+  In filtered list item:
+  - Make the filename mono, 1em font, bg-main, with some rounded padding
+  - Make the path a bit smaller.
+os: OSX

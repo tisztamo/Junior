@@ -1,4 +1,4 @@
-import { getBaseUrl } from './getBaseUrl';
+import { getBaseUrl } from '../getBaseUrl';
 
 const generatePrompt = async (notes) => {
   const baseUrl = getBaseUrl();

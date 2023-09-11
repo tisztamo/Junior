@@ -1,3 +1,4 @@
+import { createEffect } from 'solid-js';
 import handleExecuteChange from '../service/handleExecuteChange';
 import { setChangeInput, changeInput } from '../model/changeInput';
 
@@ -7,7 +8,8 @@ const ExecuteButton = () => {
   const handlePaste = async (e) => {
     const paste = (e.clipboardData || window.clipboardData).getData('text');
     setChangeInput(paste);
-    handleExecuteChange();
+    await handleExecuteChange();
+    setChangeInput(''); // To clear the input after execution
   };
 
   return (
@@ -17,7 +19,7 @@ const ExecuteButton = () => {
       ) : (
         <textarea
           rows="1"
-          className="w-full px-2 py-2 bg-orange-200 text-lg text-bg font-semibold resize-none" // Changed from bg-white to bg-orange-200
+          className="w-full px-2 py-2 bg-orange-200 text-lg text-bg font-semibold resize-none"
           placeholder="Paste here to execute"
           value={changeInput()}
           onPaste={handlePaste}
@@ -28,3 +30,4 @@ const ExecuteButton = () => {
 };
 
 export default ExecuteButton;
+
