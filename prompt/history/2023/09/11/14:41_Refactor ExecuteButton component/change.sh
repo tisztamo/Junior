@@ -1,3 +1,11 @@
+#!/bin/sh
+set -e
+goal="Refactor ExecuteButton component"
+echo "Plan:"
+echo "1. Remove the createEffect from ExecuteButton.jsx"
+echo "2. Modify handlePaste to await handleExecuteChange"
+
+cat > src/frontend/components/ExecuteButton.jsx << 'EOF'
 import { createEffect } from 'solid-js';
 import handleExecuteChange from '../service/handleExecuteChange';
 import { setChangeInput, changeInput } from '../model/changeInput';
@@ -31,3 +39,6 @@ const ExecuteButton = () => {
 
 export default ExecuteButton;
 
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
