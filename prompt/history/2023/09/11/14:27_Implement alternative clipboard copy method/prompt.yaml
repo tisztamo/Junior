@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - /./src/frontend/components/GenerateButton.jsx
+  - /./src/frontend/service/generatePrompt.js
+  - /./src/frontend/service/handleGeneratePrompt.js
+requirements: >-
+  When generating the prompt, if writetext is not available, use an alternative
+  method to copy to the clipboard
+os: OSX
