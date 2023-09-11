@@ -1,0 +1,7 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/service/helpers/flattenPaths.js
+requirements: >-
+  The current flattening method adds "/./" to the beginning of every path.
+  Eliminate it.
+os: OSX
