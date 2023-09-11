@@ -1,0 +1,13 @@
+task: prompt/task/feature/implement.md
+attention:
+  - /./src/frontend/components/MultiSelect/MultiSelectHeader.jsx
+requirements: >-
+  In the multiselect header:
+
+  - Use a link "clear" with left padding instead of the bin icon
+
+  - When clicking clear, do not switch the details tag
+
+  - Create a function for generating the N files... msg and ensure it print
+  grammatically correct msg for 1 file too.
+os: OSX

@@ -1,3 +1,12 @@
+#!/bin/sh
+set -e
+goal="Implementing MultiSelect Header Feature"
+echo "Plan:"
+echo "1. Modify MultiSelectHeader.jsx to replace bin icon with 'clear' link."
+echo "2. Implement the function 'attentionFileCountMessage' for generating the message for 'N files...' ensuring it's grammatically correct."
+
+# Modify MultiSelectHeader.jsx
+cat > ./src/frontend/components/MultiSelect/MultiSelectHeader.jsx << 'EOF'
 const MultiSelectHeader = (props) => {
   const handleClearClick = async (event) => {
     event.preventDefault(); // This prevents the details tag from being switched
@@ -28,3 +37,6 @@ const MultiSelectHeader = (props) => {
 };
 
 export default MultiSelectHeader;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
