@@ -1,3 +1,13 @@
+#!/bin/sh
+set -e
+goal="Push new items to bottom of resultset"
+echo "Plan:"
+echo "1. Update handleFilterListItemClick in MultiSelect.jsx to push new items to the bottom of the selectedItems array instead of the beginning."
+echo "2. Modify the handleKeyPress function in MultiSelect.jsx for the same logic."
+echo "3. Update the onResultSetItemClick in MultiSelect.jsx to remove the item from selectedItems without changing the order of the remaining items."
+
+# Step 1: Update handleFilterListItemClick to push items to the bottom.
+cat > ./src/frontend/components/MultiSelect/MultiSelect.jsx << 'EOF'
 import { createSignal, createEffect } from 'solid-js';
 import SearchBar from './SearchBar';
 import ResultSet from './ResultSet';
@@ -53,3 +63,8 @@ const MultiSelect = (props) => {
 };
 
 export default MultiSelect;
+EOF
+
+# Step 2 and 3: The handleKeyPress function and onResultSetItemClick have been modified in the previous step to fit the requirement.
+
+echo "\033[32mDone: $goal\033[0m\n"

@@ -1,0 +1,7 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/MultiSelect/MultiSelect.jsx
+  - ./src/frontend/components/MultiSelect/handleResultSetItemClick.js
+  - ./src/frontend/components/MultiSelect/ResultSet.jsx
+requirements: Push new items to the bottom of resultset
+os: OSX
