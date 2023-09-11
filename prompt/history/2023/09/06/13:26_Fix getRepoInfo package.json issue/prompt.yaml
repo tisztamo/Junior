@@ -1,0 +1,7 @@
+task: prompt/task/bug/fix.md
+attention:
+  - src/git/getRepoInfo.js
+requirements: |
+  Use the package.json in the current working dir.
+  When file not found, return affected fields empty.
+os: OSX

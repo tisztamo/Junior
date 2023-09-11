@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/init.js
+requirements: |-
+  1. Rewrite init.js to use simple-git (it is installed)
+  2. When the current dir is already a git repo:
+  - Check if it is clean, and abort if not
+  - If clean, skip git init
+os: OSX

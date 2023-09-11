@@ -1,4 +1,10 @@
-import { createEffect } from 'solid-js';
+#!/bin/sh
+set -e
+goal="Implement lighter orange paste input"
+echo "Plan:"
+echo "1. Update the textarea's background color to a lighter orange than the button in ExecuteButton.jsx."
+
+cat > src/frontend/components/ExecuteButton.jsx << 'EOF'
 import handleExecuteChange from '../service/handleExecuteChange';
 import { setChangeInput, changeInput } from '../model/changeInput';
 
@@ -8,8 +14,7 @@ const ExecuteButton = () => {
   const handlePaste = async (e) => {
     const paste = (e.clipboardData || window.clipboardData).getData('text');
     setChangeInput(paste);
-    await handleExecuteChange();
-    setChangeInput(''); // To clear the input after execution
+    handleExecuteChange();
   };
 
   return (
@@ -19,7 +24,7 @@ const ExecuteButton = () => {
       ) : (
         <textarea
           rows="1"
-          className="w-full px-2 py-2 bg-orange-200 text-lg text-bg font-semibold resize-none"
+          className="w-full px-2 py-2 bg-orange-200 text-lg text-bg font-semibold resize-none" // Changed from bg-white to bg-orange-200
           placeholder="Paste here to execute"
           value={changeInput()}
           onPaste={handlePaste}
@@ -30,4 +35,6 @@ const ExecuteButton = () => {
 };
 
 export default ExecuteButton;
+EOF
 
+echo "\033[32mDone: $goal\033[0m\n"

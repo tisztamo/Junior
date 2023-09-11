@@ -1,0 +1,11 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/prompt/createPromptYaml.js
+requirements: >-
+  1. Delete prompt/defaults/prompt.yaml 2. In createPromptYaml, replace the
+  requirements section to multiline using | with the following content:
+    1. Create the src/ dir
+    2. Create src/main.js with a Hello World in Node.js
+    3. Update package.json to enable running it.
+    4. Print instructions on how to run it.
+os: OSX

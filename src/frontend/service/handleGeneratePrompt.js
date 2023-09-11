@@ -11,7 +11,12 @@ const handleGeneratePrompt = async () => {
 
     const response = await generatePrompt();
 
-    await copyToClipboard(response.prompt);
+    try {
+      await copyToClipboard(response.prompt);
+      console.log('Prompt copied to clipboard!');
+    } catch (err) {
+      console.error('Failed to copy prompt: ', err);
+    }
 
     const htmlPrompt = marked(response.prompt);
     setPrompt(htmlPrompt);

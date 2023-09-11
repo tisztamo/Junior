@@ -1,0 +1,15 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/RepoInfo.jsx
+  - src/backend/handlers/git/gitStatusHandler.js
+  - src/git/clearBranches.js
+  - src/backend/routes/setupGitRoutes.js
+requirements: |
+  Create a new route "/git/repoinfo" which returns an object with fields:
+    - url: The repository url
+    - branch: Current branch
+    - name: Project name read out of package.json
+    - description: Description read out of package.json
+
+  Put the git and package.json logic to src/git/
+os: OSX

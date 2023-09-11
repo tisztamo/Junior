@@ -1,0 +1,11 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/git/getRepoInfo.js
+  - src/frontend/components/RepoInfo.jsx
+requirements: |
+  1. getRepoInfo should also return the current working dir
+  2. When clicking the RepoInfo component, it should
+  grow and display the working dir in a new line and then
+  all the remaining info, one item per line with labels.
+  3. When clicking again, it should go back to its original state.
+os: OSX

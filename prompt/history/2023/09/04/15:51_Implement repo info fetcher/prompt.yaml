@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/RepoInfo.jsx
+  - src/frontend/service/fetchDescriptor.js
+requirements: |
+  Create service/fetchers/, make a fetcher in it
+  similar to fetchDescriptor, and use that for fetching
+  the repo info
+os: OSX

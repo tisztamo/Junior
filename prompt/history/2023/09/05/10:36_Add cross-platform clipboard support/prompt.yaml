@@ -1,0 +1,9 @@
+task: prompt/task/bug/fix.md
+attention:
+  - src/frontend/components/ExecutionResultDisplay.jsx
+  - src/frontend/service/handleGeneratePrompt.js
+requirements: |
+  When writeText is not available, we need an alternative.
+  Create service/copyToClipboard.js which can handle the situation
+  and use it!
+os: OSX
