@@ -1,0 +1,6 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/index.html
+  - ./src/frontend/components/files/SourceFileDisplay.jsx
+requirements: "Use Prism to highlight code blocks.\n\nUse unpkg\n\nSet the language from the file extension (use it directly)\n\nRelevant docs snippet:\n\nUsage with CDNs\nIn combination with CDNs, we recommend using the Autoloader plugin which automatically loads languages when necessary.\n\nThe setup of the Autoloader, will look like the following. You can also add your own themes of course.\n\n<!DOCTYPE html>\n<html>\n<head>\n\t...\n\t<link href=\"https://{{cdn}}/prismjs@v1.x/themes/prism.css\" rel=\"stylesheet\" />\n</head>\n<body>\n\t...\n\t<script src=\"https://{{cdn}}/prismjs@v1.x/components/prism-core.min.js\"></script>\n\t<script src=\"https://{{cdn}}/prismjs@v1.x/plugins/autoloader/prism-autoloader.min.js\"></script>\n</body>\n</html>\nPlease note that links in the above code sample serve as placeholders. You have to replace them with valid links to the CDN of your choice.\n\nCDNs which provide PrismJS are e.g. cdnjs, jsDelivr, and UNPKG."
+os: OSX
