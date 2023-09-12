@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/backend/setupRoutes.js
+requirements: >-
+  Create route /files/read/[filepath]  that returns the raw contents of that
+  file relative to the working dir.
+
+  e.g. GET /files/read/.gitignore
+os: OSX
