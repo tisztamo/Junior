@@ -1,0 +1,5 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/PromptCreation.jsx
+requirements: Remove the sample code viewer from prompt creation
+os: OSX
