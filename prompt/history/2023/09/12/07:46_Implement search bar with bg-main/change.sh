@@ -1,3 +1,10 @@
+#!/bin/sh
+set -e
+goal="Implement search bar with bg-main"
+echo "Plan:"
+echo "1. Modify SearchBar.jsx to use the class bg-main for the search bar."
+
+cat > ./src/frontend/components/MultiSelect/SearchBar.jsx << 'EOF'
 const SearchBar = (props) => {
   const handleInputChange = (e) => {
     props.setSearchValue(e.target.value);
@@ -16,3 +23,6 @@ const SearchBar = (props) => {
 };
 
 export default SearchBar;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
