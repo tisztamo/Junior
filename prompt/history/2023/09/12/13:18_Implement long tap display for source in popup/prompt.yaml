@@ -1,0 +1,10 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/files/SourceFileDisplay.jsx
+  - ./src/frontend/components/MultiSelect/FilteredList.jsx
+  - ./src/frontend/components/MultiSelect/ListItem.jsx
+  - ./src/frontend/components/MultiSelect/FilteredList.js
+requirements: >-
+  long tap on multiselect filter list items should open a source display in full
+  screen popup
+os: OSX
