@@ -1,0 +1,5 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/files/SourceFileDisplay.jsx
+requirements: 'In source display: Remove p-4 from the div and add m-0 to the pre'
+os: OSX

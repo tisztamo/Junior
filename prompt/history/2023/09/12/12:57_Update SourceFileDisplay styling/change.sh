@@ -1,3 +1,11 @@
+#!/bin/sh
+set -e
+goal="Update SourceFileDisplay styling"
+echo "Plan:"
+echo "1. Update the class for the div by removing 'p-4'."
+echo "2. Update the class for the pre by adding 'm-0'."
+
+cat > ./src/frontend/components/files/SourceFileDisplay.jsx << 'EOF'
 import { createSignal, onMount } from 'solid-js';
 import fileReadService from '../../service/files/fileReadService';
 
@@ -26,3 +34,6 @@ const SourceFileDisplay = (props) => {
 };
 
 export default SourceFileDisplay;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
