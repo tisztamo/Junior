@@ -1,3 +1,10 @@
+#!/bin/sh
+set -e
+goal="Prevent long tap during scrolling"
+echo "Plan:"
+echo "1. Enhance the useLongTap function to detect scrolling and prevent the long tap."
+
+cat > ./src/frontend/components/MultiSelect/LongTapDetector.js << 'EOF'
 import { onCleanup } from 'solid-js';
 
 const useLongTap = (callback, duration = 500) => {
@@ -38,3 +45,6 @@ const useLongTap = (callback, duration = 500) => {
 
 export default useLongTap;
 
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

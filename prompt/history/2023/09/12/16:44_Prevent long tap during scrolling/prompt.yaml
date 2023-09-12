@@ -1,0 +1,5 @@
+task: prompt/task/bug/fix.md
+attention:
+  - ./src/frontend/components/MultiSelect/LongTapDetector.js
+requirements: Scrolling should prevent long tap
+os: OSX
