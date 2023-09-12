@@ -1,0 +1,11 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/PromptCreation.jsx
+  - ./src/frontend/components/SampleComponent.jsx
+  - ./src/frontend/service/sampleService.js
+requirements: >-
+  Create a component to display a source file. It should get the path as prop,
+  GET from /files/read/[path] and render inside <code>.
+
+  Put an example (path: package.json) into prompt creation.
+os: OSX

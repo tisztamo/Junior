@@ -4,6 +4,7 @@ import PromptDescriptor from './PromptDescriptor';
 import GenerateButton from './GenerateButton';
 import PromptDisplay from './PromptDisplay';
 import RequirementsEditor from './RequirementsEditor';
+import SourceFileDisplay from './files/SourceFileDisplay';
 
 const PromptCreation = () => {
   return (
@@ -14,6 +15,7 @@ const PromptCreation = () => {
       <PromptDescriptor />
       <GenerateButton />
       <PromptDisplay />
+      <SourceFileDisplay path="package.json" />
     </>
   );
 };
