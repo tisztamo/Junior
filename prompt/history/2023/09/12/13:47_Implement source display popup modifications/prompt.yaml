@@ -1,0 +1,12 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/MultiSelect/FullScreenPopup.jsx
+  - ./src/frontend/components/files/SourceFileDisplay.jsx
+requirements: >-
+  1. Make the source display popup w-full mx-2 (it should remain h-3/4)
+
+  2. Remove the "close" label, it should just close on any click.
+
+  3. Prism is not running on newly created source viewers. Do we need to call
+  something on mount? (Prism is loaded from a cdn in the html)
+os: OSX

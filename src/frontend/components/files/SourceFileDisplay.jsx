@@ -12,6 +12,11 @@ const SourceFileDisplay = (props) => {
   const fetchData = async () => {
     const data = await fileReadService(props.path);
     setFileContent(data);
+
+    // Ensure Prism highlights the loaded content
+    if (window.Prism) {
+      window.Prism.highlightAll();
+    }
   };
 
   onMount(fetchData);
