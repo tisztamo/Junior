@@ -1,4 +1,4 @@
-import readFileList from '../fileutils/readFileList.js';
+import readFileList from '../../fileutils/readFileList.js';
 
 export async function fileListHandler(req, res) {
   try {

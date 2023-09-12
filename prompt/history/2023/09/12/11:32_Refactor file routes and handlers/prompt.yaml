@@ -1,0 +1,10 @@
+task: prompt/task/refactor/custom.md
+attention:
+  - ./src/backend/handlers/fileListHandler.js
+  - ./src/backend/handlers/fileReadHandler.js
+  - ./src/backend/setupRoutes.js
+requirements: |-
+  Move files-prefixed routes to setupFilesRoutes.js
+  Move the related handlers to handlers/files/ 
+  Create the dir.
+os: OSX
