@@ -13,6 +13,9 @@ export async function fileReadHandler(req, res) {
 
   try {
     const resolvedPath = sanitizeAndResolvePath(filepath);
+    if (!fs.existsSync(resolvedPath)) {  // Check if file exists
+      return res.status(404).send({ error: 'File not found' });
+    }
     const fileContent = await readFileAsync(resolvedPath, 'utf8');
     res.send(fileContent);
   } catch (error) {

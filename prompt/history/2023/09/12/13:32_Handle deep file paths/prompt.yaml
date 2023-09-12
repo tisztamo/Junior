@@ -1,0 +1,8 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/backend/handlers/files/fileReadHandler.js
+  - ./src/backend/routes/setupFilesRoutes.js
+requirements: >-
+  GET files/read/src/main.js returns 404. Seems like we need to handle such deep
+  paths when setting up the route.
+os: OSX
