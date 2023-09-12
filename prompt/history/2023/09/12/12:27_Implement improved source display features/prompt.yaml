@@ -1,0 +1,11 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/files/SourceFileDisplay.jsx
+  - ./src/frontend/index.html
+requirements: >-
+  Make the source display w-full and allow scrolling the code horizontally if it
+  does not fit.
+
+  Change the theme to:
+  https://unpkg.com/prism-themes@1.9.0/themes/prism-holi-theme.min.css
+os: OSX

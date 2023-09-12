@@ -19,7 +19,7 @@ const SourceFileDisplay = (props) => {
   const language = getLanguageFromPath(props.path);
 
   return (
-    <div class="rounded border p-4">
+    <div class="rounded border p-4 w-full overflow-x-auto">
       <pre><code class={`language-${language}`}>{fileContent()}</code></pre>
     </div>
   );
