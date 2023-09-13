@@ -1,0 +1,5 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/backend/handlers/files/fileReadHandler.js
+requirements: ''
+os: OSX

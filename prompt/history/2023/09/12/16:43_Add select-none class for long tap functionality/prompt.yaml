@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/MultiSelect/FilteredList.jsx
+  - ./src/frontend/components/MultiSelect/ResultSet.jsx
+requirements: >-
+  Long tap activates  default functionality (text selection) of the browser, 
+  which should be prevented. For this add select-none class to the filtered list
+  and the result set
+os: OSX
