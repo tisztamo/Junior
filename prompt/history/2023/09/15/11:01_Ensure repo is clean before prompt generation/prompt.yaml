@@ -1,0 +1,10 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/init.js
+  - ./src/prompt/processPrompt.js
+  - ./src/backend/handlers/generateHandler.js
+requirements: >-
+  Check if repo is clean before generating the prompt. Report error if not. Put
+  the clean-check logic to src/git/isRepoClean.js and also use this file from
+  init.js
+os: OSX

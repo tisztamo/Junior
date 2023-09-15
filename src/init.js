@@ -6,22 +6,16 @@ import { createGitignore } from './git/createGitignore.js';
 import { createPromptDir } from './prompt/createPromptDir.js';
 import copyDefaults from './command/init/copyDefaults.js';
 import path from 'path';
+import isRepoClean from './git/isRepoClean.js';
 
 const git = simpleGit();
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 async function juniorInit() {
-  const isRepo = await git.checkIsRepo();
-
-  if (isRepo) {
-    const status = await git.status();
-    if (!status.isClean()) {
-      console.error("\x1b[31mDirectory is not clean. Please commit or stash changes and try again.\x1b[0m");
-      process.exit(1);
-    }
-  } else {
-    await git.init();
+  if (!await isRepoClean()) {
+    console.error("\x1b[31mDirectory is not clean. Please commit or stash changes and try again.\x1b[0m");
+    process.exit(1);
   }
 
   createGitignore();
