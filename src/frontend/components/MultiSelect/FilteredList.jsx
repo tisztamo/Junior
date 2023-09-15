@@ -1,20 +1,14 @@
 import ListItem from "./ListItem";
 import FullScreenPopup from "./FullScreenPopup";
-import { createSignal } from 'solid-js';
+import handleLongTap from './handleLongTap';
 
 const FilteredList = (props) => {
-  const [showPopup, setShowPopup] = createSignal(false);
-  const [popupPath, setPopupPath] = createSignal('');
-
-  const handleLongTap = (path) => {
-    setPopupPath(path);
-    setShowPopup(true);
-  };
+  const { showPopup, popupPath, invoke, setShowPopup } = handleLongTap();
 
   return (
     <div class="select-none">
       <ul class="list-inside select-none">
-        {props.items.map((item, idx) => <ListItem key={item} item={item} idx={idx + 1} onItemClick={props.onItemClick} onLongTap={handleLongTap} />)}
+        {props.items.map((item, idx) => <ListItem key={item} item={item} idx={idx + 1} onItemClick={props.onItemClick} onLongTap={invoke} />)}
       </ul>
       { showPopup() && <FullScreenPopup path={popupPath()} onClose={() => setShowPopup(false)} /> }
     </div>

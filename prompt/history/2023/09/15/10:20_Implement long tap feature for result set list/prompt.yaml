@@ -1,0 +1,10 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/MultiSelect/FilteredList.jsx
+  - ./src/frontend/components/AttentionFileList.jsx
+  - ./src/frontend/components/MultiSelect/handleResultSetItemClick.js
+  - ./integrations/vscode/out/getCurrentOpenDocuments.js
+requirements: >-
+  Long tap on result set list items should also open the code viewer, exactly
+  like in the filtered list
+os: OSX
