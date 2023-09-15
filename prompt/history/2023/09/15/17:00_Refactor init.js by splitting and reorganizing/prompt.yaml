@@ -1,0 +1,8 @@
+task: prompt/task/refactor/split.md
+attention:
+  - ./src/init.js
+  - ./src/git/commitGit.js
+requirements: >-
+  init.js should not use simple-git directly. We have  src/git/ dir, please
+  create new files as needed and factor simple-git out.
+os: OSX

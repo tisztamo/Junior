@@ -1,15 +1,9 @@
-import { exec } from 'child_process';
+import simpleGit from 'simple-git';
 
-export default function commitGit(message) {
-  return new Promise((resolve, reject) => {
-    exec(`git add . && git commit -m "${message}"`, (err, stdout, stderr) => {
-      if (err) {
-        console.error(`exec error: ${err}`);
-        reject(err);
-        return;
-      }
-      console.log(`stdout: ${stdout}`);
-      resolve(`Committed with message: ${message}`);
-    });
-  });
+const git = simpleGit();
+
+export default async function commitGit(message) {
+    await git.add('.');
+    await git.commit(message);
+    console.log(`Committed with message: ${message}`);
 }
