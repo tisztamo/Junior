@@ -1,0 +1,6 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/backend/handlers/git/gitRepoInfoHandler.js
+  - ./src/git/getRepoInfo.js
+requirements: Also return current tags
+os: OSX

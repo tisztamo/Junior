@@ -1,3 +1,11 @@
+#!/bin/sh
+set -e
+goal="Implement return of current tags in git repo info"
+echo "Plan:"
+echo "1. Modify the ./src/git/getRepoInfo.js file to also fetch the current tags from the repository."
+echo "2. Adjust the returned object to include the fetched tags."
+
+cat > ./src/git/getRepoInfo.js << 'EOF'
 import simpleGit from 'simple-git';
 import fs from 'fs';
 import path from 'path';
@@ -33,3 +41,6 @@ export default async function getRepoInfo() {
         workingDir: workingDir
     };
 }
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
