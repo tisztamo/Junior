@@ -1,0 +1,8 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/RepoInfo.jsx
+  - ./src/frontend/service/fetchers/fetchRepoInfo.js
+requirements: >-
+  Repo info now contains tags array. List among details. Say not available if
+  missing
+os: OSX

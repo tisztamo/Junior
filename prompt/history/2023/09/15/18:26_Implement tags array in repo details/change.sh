@@ -1,3 +1,12 @@
+#!/bin/sh
+set -e
+goal="Implement tags array in repo details"
+echo "Plan:"
+echo "1. Update RepoInfo.jsx to display tags array."
+echo "2. Ensure that if tags are missing, it displays 'not available'."
+
+# Update RepoInfo.jsx to incorporate tags array display
+cat > ./src/frontend/components/RepoInfo.jsx << 'EOF'
 import { createSignal, onCleanup } from 'solid-js';
 import fetchRepoInfo from '../service/fetchers/fetchRepoInfo';
 
@@ -41,3 +50,6 @@ const RepoInfo = () => {
 };
 
 export default RepoInfo;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
