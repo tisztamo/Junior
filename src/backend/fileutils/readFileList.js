@@ -4,12 +4,13 @@ import getIgnoreList from './getIgnoreList.js';
 
 async function readFileList(dir, relativePath = "") {
   const items = await fs.promises.readdir(dir);
-  const ignoreList = getIgnoreList();
+  const { nameIgnore, pathIgnore } = getIgnoreList();
 
   const itemDetails = await Promise.all(
     items.map(async item => {
-      if (ignoreList.includes(item)) return;
+      if (nameIgnore.includes(item)) return;
       const fullPath = path.join(dir, item);
+      if (pathIgnore.includes(fullPath.replace(/^.\//, ''))) return;
       const stats = await fs.promises.stat(fullPath);
       if (stats.isDirectory()) {
         return {
@@ -27,7 +28,6 @@ async function readFileList(dir, relativePath = "") {
     })
   );
 
-  // GOAL OF THE CHANGE: Return the file list as an object with a root dir object named "."
   if (!relativePath) {
     return {
       type: "dir",
@@ -40,3 +40,4 @@ async function readFileList(dir, relativePath = "") {
 }
 
 export default readFileList;
+

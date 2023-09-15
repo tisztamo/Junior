@@ -1,0 +1,10 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/backend/fileutils/getIgnoreList.js
+  - ./src/backend/fileutils/readFileList.js
+requirements: >-
+  Separate entries in the ignore list starting with "./", like "./prompt", and
+  only ignore items matching them when the full path matches, not just the name.
+
+  Also change "prompt" in the default ignore list to "./prompt"
+os: OSX
