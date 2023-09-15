@@ -1,0 +1,7 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./.gitignore
+requirements: >-
+  When updating .md files, backup files might be created with the old content.
+  We need to gitignore them: add usual patterns to .gitignore, like .md.backup,
+  .md.bak etc. 
