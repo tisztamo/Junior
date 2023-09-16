@@ -1,0 +1,11 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/GitStatusDisplay.jsx
+requirements: >-
+  1. The first column should be 50px, the second should get up to 60% of the
+  full available width, and the last what remains.
+
+  2. Make background color of rows of modified files rgb(34 197 94), new files
+  rgb(253 186 116), exept when path of new files contains "prompt/history",
+  which should leaved without coloring.
+os: OSX
