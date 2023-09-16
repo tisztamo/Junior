@@ -1,0 +1,13 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/GitStatusDisplay.jsx
+  - ./src/backend/handlers/git/gitStatusHandler.js
+requirements: >-
+  The git status endpoint now returns the json output of simple-git.
+
+  Update the backend to return the value in the data field, not message.
+
+  Update the frontend to render the json similar to porcelain output in three
+  columns: status marker, filename, basedir.  Allow to separately style the
+  cells of this table.
+os: OSX

@@ -3,7 +3,7 @@ import gitStatus from '../../../git/gitStatus.js';
 export default async function gitStatusHandler(req, res) {
   try {
     const status = await gitStatus();
-    res.status(200).send({ message: status });
+    res.status(200).send({ data: status });
   } catch (error) {
     let errorMessage = 'Error in getting Git status';
     if (error.stderr && error.stderr.includes('Not a git repository')) {
