@@ -1,0 +1,10 @@
+task: prompt/task/refactor/custom.md
+attention:
+  - ./src/frontend/components/GitStatusDisplay.jsx
+requirements: |-
+  Factor the rendering of a single row out to
+  GitStatusRow.jsx
+  While doing so, also eliminate innerHTML use!
+  Render normally, using jsx/solid.
+  Simplify, if possible.
+os: OSX
