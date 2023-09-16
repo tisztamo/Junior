@@ -1,0 +1,8 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/GitStatusRow.jsx
+  - ./src/frontend/components/MultiSelect/ListItem.jsx
+requirements: >-
+  In git status, set styles for filename and dir exactly as in ListItem. The
+  first column should use what it needs and p-1. Do not create new files.
+os: OSX

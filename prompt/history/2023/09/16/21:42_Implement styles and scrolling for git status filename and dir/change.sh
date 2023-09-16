@@ -1,3 +1,13 @@
+#!/bin/sh
+set -e
+goal="Implement styles and scrolling for git status filename and dir"
+echo "Plan:"
+echo "1. Modify GitStatusRow.jsx to set styles for filename and dir similar to ListItem.jsx."
+echo "2. Incorporate the scrolling logic from ListItem to GitStatusRow."
+echo "3. Adjust the styles to meet the given requirements."
+
+# Step 1, 2 & 3: Modify GitStatusRow.jsx
+cat > ./src/frontend/components/GitStatusRow.jsx << 'EOF'
 import { createEffect } from "solid-js";
 import getBackgroundColorForFile from './getBackgroundColorForFile';
 
@@ -30,3 +40,6 @@ const GitStatusRow = (props) => {
 };
 
 export default GitStatusRow;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
