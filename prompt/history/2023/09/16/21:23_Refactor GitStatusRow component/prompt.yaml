@@ -1,0 +1,11 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/GitStatusRow.jsx
+requirements: >-
+  Render index and working_dir fields concatenated in the first column. Cut the
+  filename from path and print it in the second column, and render the remaining
+  base dir in the third.
+
+  If text does not fit in any of the columns, scroll in the cell, not in the
+  row.
+os: OSX
