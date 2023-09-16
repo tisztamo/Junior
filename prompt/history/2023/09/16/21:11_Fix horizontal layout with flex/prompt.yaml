@@ -1,0 +1,8 @@
+task: prompt/task/bug/fix.md
+attention:
+  - ./src/frontend/components/GitStatusRow.jsx
+requirements: >-
+  Fix the horizontal layout: Do not use grid, as it does not allow setting
+  width. Use flex horizontally, and keep the exact width values as in the
+  current version, just make it working.
+os: OSX

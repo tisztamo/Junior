@@ -1,3 +1,12 @@
+#!/bin/sh
+set -e
+goal="Fix horizontal layout with flex"
+echo "Plan:"
+echo "1. Replace grid layout with flexbox in GitStatusRow.jsx"
+echo "2. Retain the width values as provided in the current version."
+
+# Modify GitStatusRow.jsx with flex layout and width properties
+cat > ./src/frontend/components/GitStatusRow.jsx << 'EOF'
 import getBackgroundColorForFile from './getBackgroundColorForFile';
 
 const GitStatusRow = (props) => {
@@ -13,3 +22,6 @@ const GitStatusRow = (props) => {
 };
 
 export default GitStatusRow;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
