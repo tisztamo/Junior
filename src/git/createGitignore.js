@@ -1,7 +1,7 @@
 import { appendFileSync, existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 
-function createGitignore() {
+const createGitignore = () => {
   const gitignorePath = join(process.cwd(), '.gitignore');
   const ignoreContent = ['/prompt.yaml', '/prompt.md', '/change.sh', 'node_modules'];
 
@@ -19,4 +19,4 @@ function createGitignore() {
   });
 }
 
-export { createGitignore };
+export default createGitignore;

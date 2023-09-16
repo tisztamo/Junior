@@ -1,14 +1,15 @@
-import { promisify } from 'util';
-import { exec } from 'child_process';
+import simpleGit from 'simple-git';
 
-const execAsync = promisify(exec);
+const git = simpleGit();
 
-export default async function gitStatus() {
+const gitStatus = async () => {
   try {
-    const { stdout, stderr } = await execAsync('git status --porcelain=v1');
-    return stdout;
+    const status = await git.status();
+    return status;
   } catch (error) {
     console.error();
     throw error;
   }
 }
+
+export default gitStatus;

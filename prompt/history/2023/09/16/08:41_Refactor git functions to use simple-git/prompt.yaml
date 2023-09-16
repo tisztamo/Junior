@@ -1,0 +1,8 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/git/createGitignore.js
+  - src/git/getRepoInfo.js
+  - src/git/gitStatus.js
+  - src/git/resetGit.js
+requirements: ''
+os: OSX

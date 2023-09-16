@@ -1,23 +1,16 @@
-import { promisify } from 'util';
-import { exec as execCb } from 'child_process';
+import simpleGit from 'simple-git';
 
-const exec = promisify(execCb);
+const git = simpleGit();
 
-export default async function resetGit() {
+const resetGit = async () => {
   try {
-    await executeCommand('git clean -f -d');
-    await executeCommand('git reset --hard');
+    console.log("Running command: git clean -f -d");
+    await git.clean('f', ['-d']);
+    console.log("Running command: git reset --hard");
+    await git.reset('hard');
   } catch (err) {
     console.error(`An error occurred: ${err}`);
   }
 }
 
-async function executeCommand(command) {
-  try {
-    console.log(`Running command: ${command}`);
-    const { stdout } = await exec(command);
-    console.log(`stdout: ${stdout}`);
-  } catch (err) {
-    console.error(`An error occurred while executing the command: ${command}. Error: ${err}`);
-  }
-}
+export default resetGit;

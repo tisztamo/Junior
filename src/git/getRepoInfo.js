@@ -8,7 +8,7 @@ const __dirname = path.dirname(__filename);
 
 const git = simpleGit();
 
-export default async function getRepoInfo() {
+const getRepoInfo = async () => {
     const remote = await git.getRemotes(true);
     const currentBranch = await git.revparse(['--abbrev-ref', 'HEAD']);
     const rootDir = await git.revparse(['--show-toplevel']);
@@ -33,3 +33,5 @@ export default async function getRepoInfo() {
         workingDir: workingDir
     };
 }
+
+export default getRepoInfo;
