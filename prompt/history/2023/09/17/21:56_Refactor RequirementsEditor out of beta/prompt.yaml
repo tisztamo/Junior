@@ -1,0 +1,7 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/RequirementsEditor.jsx
+requirements: >-
+  Requirements editor is out of beta, eliminate every beta-related check and
+  just work.
+os: OSX

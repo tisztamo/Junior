@@ -1,3 +1,12 @@
+#!/bin/sh
+set -e
+goal="Refactor RequirementsEditor out of beta"
+echo "Plan:"
+echo "1. Remove beta-related checks and variables from RequirementsEditor.jsx"
+echo "2. Adjust properties of the AutoGrowingTextarea component"
+echo "3. Clean up any unused imports or variables and ensure all needed ones are present"
+
+cat > ./src/frontend/components/RequirementsEditor.jsx << 'EOF'
 import { createSignal, createEffect } from 'solid-js';
 import postDescriptor from '../service/postDescriptor';
 import { promptDescriptor, setPromptDescriptor } from '../model/promptDescriptor'; 
@@ -45,3 +54,6 @@ const RequirementsEditor = () => {
 
 export default RequirementsEditor;
 
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
