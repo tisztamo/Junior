@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/init.js
+  - ./src/git/initRepo.js
+  - ./src/git/isRepo.js
+requirements: >-
+  At the beginning of the init procedure, check if the git repo exists and init
+  if not.
+os: OSX

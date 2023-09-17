@@ -1,3 +1,25 @@
+#!/bin/sh
+set -e
+goal="Implement check and init Git repo feature"
+echo "Plan:"
+echo "1. Create checkAndInitRepo.js function to check and initialize a Git repo if needed."
+echo "2. Modify init.js to use the new function at the start of the init procedure."
+
+# Create the new function
+cat > ./src/git/checkAndInitRepo.js << 'EOF'
+import isRepo from './isRepo.js';
+import initRepo from './initRepo.js';
+
+export default async function checkAndInitRepo() {
+    const repoExists = await isRepo();
+    if (!repoExists) {
+        await initRepo();
+    }
+}
+EOF
+
+# Modify the init.js to utilize the new function
+cat > ./src/init.js << 'EOF'
 #!/usr/bin/env node
 import { fileURLToPath } from 'url';
 import { createPromptYaml } from './prompt/createPromptYaml.js';
@@ -32,3 +54,6 @@ async function juniorInit() {
 }
 
 juniorInit();
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
