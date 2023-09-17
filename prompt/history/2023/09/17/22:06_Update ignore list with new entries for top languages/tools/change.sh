@@ -1,3 +1,9 @@
+#!/bin/sh
+set -e
+goal="Update ignore list with new entries for top languages/tools"
+echo "Plan:"
+echo "1. Modify getIgnoreList.js to include new default ignore entries for top languages/tools."
+cat > ./src/backend/fileutils/getIgnoreList.js << 'EOF'
 function getIgnoreList() {
   const DEFAULT_IGNORE = [
     '.git',
@@ -69,3 +75,5 @@ function getIgnoreList() {
 }
 
 export default getIgnoreList;
+EOF
+echo "\033[32mDone: $goal\033[0m\n"

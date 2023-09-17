@@ -1,0 +1,7 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/backend/fileutils/getIgnoreList.js
+requirements: >-
+  Add "dist", "build", "tmp", "temp" and at least 5 but up to 100 reasonable
+  entries to the ignore list!
+os: OSX
