@@ -1,3 +1,10 @@
+#!/bin/sh
+set -e
+goal="Fix module import/export discrepancy"
+echo "Plan:"
+echo "1. Modify the import statement in init.js to use default import."
+
+cat > ./src/init.js << 'EOF'
 #!/usr/bin/env node
 import { fileURLToPath } from 'url';
 import createGitignore from './git/createGitignore.js';
@@ -32,3 +39,6 @@ async function juniorInit() {
 }
 
 juniorInit();
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
