@@ -9,20 +9,14 @@ import getStatus from './git/getStatus.js';
 import initRepo from './git/initRepo.js';
 import commitGit from './git/commitGit.js';
 import path from 'path';
+import isRepoClean from './git/isRepoClean.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 async function juniorInit() {
-  const repoExists = await isRepo();
-
-  if (repoExists) {
-    const status = await getStatus();
-    if (!status.isClean()) {
-      console.error("\x1b[31mDirectory is not clean. Please commit or stash changes and try again.\x1b[0m");
-      process.exit(1);
-    }
-  } else {
-    await initRepo();
+  if (!await isRepoClean()) {
+    console.error("\x1b[31mDirectory is not clean. Please commit or stash changes and try again.\x1b[0m");
+    process.exit(1);
   }
 
   createGitignore();
