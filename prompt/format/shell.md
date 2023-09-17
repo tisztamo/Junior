@@ -5,7 +5,7 @@ OS: <%= os %>
 
 Installed tools: <%= installedTools %>
 
-Do NOT write any text outside the script!
+<%= task_readme %>
 
 EXAMPLE START
 ```sh
