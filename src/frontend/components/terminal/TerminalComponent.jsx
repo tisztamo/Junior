@@ -1,18 +1,28 @@
 import { onCleanup, onMount } from 'solid-js';
 import { Terminal } from 'xterm';
 import 'xterm/css/xterm.css';
+import terminalConnection from '../../service/terminal/terminalConnection';
 
-const XtermComponent = () => {
+const TerminalComponent = () => {
   let container;
   const term = new Terminal();
   
   onMount(() => {
     term.open(container);
+
+    terminalConnection.setOnDataReceived((data) => {
+      term.write(data);
+    });
+
+    term.onData((data) => {
+      terminalConnection.sendDataToTerminal(data);
+    });
   });
   
-  // Ensure terminal instance gets destroyed on component cleanup
+  // Ensure terminal instance gets destroyed and WebSocket connection gets closed on component cleanup
   onCleanup(() => {
     term.dispose();
+    terminalConnection.closeConnection();
   });
 
   return (
@@ -22,4 +32,4 @@ const XtermComponent = () => {
   );
 };
 
-export default XtermComponent;
+export default TerminalComponent;
