@@ -1,0 +1,6 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/CommitMessageInput.jsx
+  - ./src/frontend/components/CommitButton.jsx
+requirements: ''
+os: OSX
