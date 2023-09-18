@@ -1,0 +1,8 @@
+task: prompt/task/refactor/move_files.md
+attention:
+  - ./src/frontend/components/XtermComponent.jsx
+  - ./src/frontend/App.jsx
+requirements: |-
+  - create frontend/components/terminal/
+  - move XtermComponent.jsx there and rename it TerminalComponent.jsx
+os: OSX
