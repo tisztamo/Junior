@@ -1,0 +1,13 @@
+task: prompt/task/question/answer.md
+attention:
+  - ./src/frontend/service/useWebsocket.js
+  - ./src/frontend/service/createWebSocket.js
+  - ./src/backend/startServer.js
+requirements: >-
+  We need a terminal on the frontend. We already have a websocket server, we
+  should use it.
+
+  What are the best tools on either side? We prefer not to install anything, but
+  don't yet want to write much code. Write your answer to
+  docs/design/terminal_dependency_selection.md
+os: OSX
