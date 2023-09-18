@@ -1,0 +1,6 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/backend/startServer.js
+  - src/frontend/startVite.js
+requirements: ''
+os: OSX

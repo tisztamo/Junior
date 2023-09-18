@@ -1,15 +1,15 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { createServer } from 'vite';
-import process from 'process';
+import hostConfig from '../config/hostConfig.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, '../..');
 
 export async function startVite() {
-  const hostArgPresent = process.argv.includes('--host');
+  const { enabled, ip } = hostConfig();
 
-  if (hostArgPresent) {
+  if (enabled) {
     console.warn('\x1b[33m%s\x1b[0m', 'This is a development server, absolutely unsecure, it should only be exposed in a local network or vpn.');
   }
 
@@ -17,7 +17,7 @@ export async function startVite() {
     root: projectRoot + '/src/frontend',
     server: {
       open: true,
-      ...(hostArgPresent ? { host: true } : {})
+      ...(enabled ? { host: ip || true } : {})
     },
   });
   await server.listen();
