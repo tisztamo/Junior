@@ -6,6 +6,7 @@ import { setupRoutes } from './setupRoutes.js';
 import { notifyOnFileChange } from './notifyOnFileChange.js';
 import { getServerPort } from './serverConfig.js';
 import hostConfig from '../config/hostConfig.js';
+import terminalRoutes from './terminal/terminalRoutes.js';
 
 export function startServer() {
   const app = express();
@@ -17,8 +18,8 @@ export function startServer() {
   const wss = new WebSocketServer({ server });
 
   notifyOnFileChange(wss);
-
   setupRoutes(app);
+  terminalRoutes(wss);
 
   const { enabled, ip } = hostConfig();
 
