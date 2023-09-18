@@ -1,3 +1,41 @@
+#!/bin/sh
+set -e
+goal="Integrate xterm.js with SolidJS"
+echo "Plan:"
+echo "1. Create an XtermComponent that uses xterm.js correctly"
+echo "2. Import and utilize the XtermComponent in the main App"
+
+# Step 1: Revise XtermComponent to initialize terminal correctly
+cat > ./src/frontend/components/XtermComponent.jsx << 'EOF'
+import { onCleanup, onMount } from 'solid-js';
+import { Terminal } from 'xterm';
+import 'xterm/css/xterm.css';
+
+const XtermComponent = () => {
+  let container;
+  const term = new Terminal();
+  
+  onMount(() => {
+    term.open(container);
+  });
+  
+  // Ensure terminal instance gets destroyed on component cleanup
+  onCleanup(() => {
+    term.dispose();
+  });
+
+  return (
+    <div class="rounded border p-4" ref={container}>
+      {/* The terminal will be rendered inside this div */}
+    </div>
+  );
+};
+
+export default XtermComponent;
+EOF
+
+# Step 2: Integrate XtermComponent into App.jsx
+cat > ./src/frontend/App.jsx << 'EOF'
 import { onCleanup } from 'solid-js';
 import useKeyBindings from './service/useKeyBindings';
 import keyBindings from './config/keyBindings';
@@ -27,3 +65,6 @@ const App = () => {
 };
 
 export default App;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
