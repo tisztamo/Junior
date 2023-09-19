@@ -1,3 +1,10 @@
+#!/bin/sh
+set -e
+goal="Fix git status reactivity issue"
+echo "Plan:"
+echo "1. Update GitStatusDisplay to listen for changes in gitStatus signal and act accordingly."
+
+cat > ./src/frontend/components/GitStatusDisplay.jsx << 'EOF'
 import { onCleanup, onMount, createEffect, createSignal } from 'solid-js';
 import GitStatusRow from './GitStatusRow';
 import { gitStatus } from '../model/gitStatus';
@@ -37,3 +44,6 @@ const GitStatusDisplay = () => {
 };
 
 export default GitStatusDisplay;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
