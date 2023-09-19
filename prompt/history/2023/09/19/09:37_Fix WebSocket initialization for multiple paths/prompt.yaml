@@ -1,0 +1,64 @@
+task: prompt/task/bug/fix.md
+attention:
+  - ./src/backend/terminal/setupTerminalServer.js
+  - ./src/backend/terminal/terminalRoutes.js
+  - ./src/backend/startServer.js
+  - ./src/backend/notifyOnFileChange.js
+requirements: >-
+  Initialization of multiple websocket connections and separating paths for them
+  is incorrect.
+
+
+  The goal is to the terminal runs on /terminal why the notification on /
+
+
+  Here is an example of how to do it correctly.
+
+
+  import { createServer } from 'http';
+
+  import { parse } from 'url';
+
+  import { WebSocketServer } from 'ws';
+
+
+  const server = createServer();
+
+  const wss1 = new WebSocketServer({ noServer: true });
+
+  const wss2 = new WebSocketServer({ noServer: true });
+
+
+  wss1.on('connection', function connection(ws) {
+    ws.on('error', console.error);
+
+    // ...
+  });
+
+
+  wss2.on('connection', function connection(ws) {
+    ws.on('error', console.error);
+
+    // ...
+  });
+
+
+  server.on('upgrade', function upgrade(request, socket, head) {
+    const { pathname } = parse(request.url);
+
+    if (pathname === '/foo') {
+      wss1.handleUpgrade(request, socket, head, function done(ws) {
+        wss1.emit('connection', ws, request);
+      });
+    } else if (pathname === '/bar') {
+      wss2.handleUpgrade(request, socket, head, function done(ws) {
+        wss2.emit('connection', ws, request);
+      });
+    } else {
+      socket.destroy();
+    }
+  });
+
+
+  server.listen(8080);
+os: OSX
