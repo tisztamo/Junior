@@ -1,0 +1,5 @@
+task: prompt/task/bug/fix.md
+attention:
+  - ./src/frontend/components/AutoGrowingTextarea.jsx
+requirements: AutoGrowingTextarea  fails to grow on load.
+os: OSX
