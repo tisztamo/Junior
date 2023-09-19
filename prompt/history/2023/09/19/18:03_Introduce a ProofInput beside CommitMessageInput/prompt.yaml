@@ -1,0 +1,10 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/CommitMessageInput.jsx
+  - ./src/frontend/components/ChangeFinalization.jsx
+requirements: |-
+  Add another input, ProofInput after the commit message
+  They are on the same line on the screen
+  commit message: 70%
+  Proof: 30%
+os: OSX
