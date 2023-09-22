@@ -36,6 +36,7 @@
     "js-yaml": "^4.1.0",
     "markdown-it": "^13.0.1",
     "marked": "^5.1.0",
+    "node-pty": "^1.0.0",
     "postcss": "^8.4.26",
     "postcss-nested": "^6.0.1",
     "sharp": "^0.32.4",
