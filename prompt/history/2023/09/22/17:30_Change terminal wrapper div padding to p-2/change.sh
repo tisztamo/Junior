@@ -1,3 +1,11 @@
+#!/bin/sh
+set -e
+goal="Change terminal wrapper div padding to p-2"
+echo "Plan:"
+echo "1. Modify the TerminalComponent.jsx to change the padding of the terminal wrapper div."
+
+# Editing TerminalComponent.jsx file
+cat > ./src/frontend/components/terminal/TerminalComponent.jsx << 'EOF'
 import { onCleanup, onMount } from 'solid-js';
 import 'xterm/css/xterm.css';
 import terminalConnection from '../../service/terminal/terminalConnection';
@@ -34,3 +42,6 @@ const TerminalComponent = () => {
 };
 
 export default TerminalComponent;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
