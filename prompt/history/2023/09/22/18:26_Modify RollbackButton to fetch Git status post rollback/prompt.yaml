@@ -1,0 +1,7 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/backend/handlers/git/commitGitHandler.js
+  - ./src/frontend/service/fetchGitStatus.js
+  - ./src/frontend/components/RollbackButton.jsx
+requirements: Call fetchgitstatus after rollback too
+os: OSX

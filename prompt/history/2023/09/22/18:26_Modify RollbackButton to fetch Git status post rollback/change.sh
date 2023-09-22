@@ -1,3 +1,11 @@
+#!/bin/sh
+set -e
+goal="Modify RollbackButton to fetch Git status post rollback"
+echo "Plan:"
+echo "1. Modify RollbackButton.jsx to call fetchGitStatus after rollback"
+
+# Here we are using a heredoc to modify the RollbackButton.jsx file
+cat > ./src/frontend/components/RollbackButton.jsx << 'EOF'
 import { createSignal } from "solid-js";
 import { resetGit } from '../service/resetGit';
 import { fetchGitStatus } from '../service/fetchGitStatus';
@@ -37,3 +45,6 @@ const RollbackButton = () => {
 };
 
 export default RollbackButton;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
