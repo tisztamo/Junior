@@ -1,14 +1,15 @@
 import { onCleanup, onMount } from 'solid-js';
-import { Terminal } from 'xterm';
 import 'xterm/css/xterm.css';
 import terminalConnection from '../../service/terminal/terminalConnection';
+import { initializeXTerm } from '../../service/terminal/setupXTerm';
 
 const TerminalComponent = () => {
   let container;
-  const term = new Terminal();
+  const { term, fitAddon } = initializeXTerm();
   
   onMount(() => {
     term.open(container);
+    fitAddon.fit();
 
     terminalConnection.setOnDataReceived((data) => {
       term.write(data);
