@@ -1,0 +1,8 @@
+task: prompt/task/bug/fix.md
+attention:
+  - ./src/frontend/components/RequirementsEditor.jsx
+  - ./src/frontend/model/requirements.js
+  - ./src/frontend/components/MultiSelect/FilteredList.jsx
+  - ./src/frontend/components/AutoGrowingTextarea.jsx
+requirements: While editing requirements, update the multiselect after every keystroke.
+os: OSX

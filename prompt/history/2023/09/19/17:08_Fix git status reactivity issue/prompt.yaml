@@ -1,0 +1,6 @@
+task: prompt/task/bug/fix.md
+attention:
+  - ./src/frontend/components/GitStatusDisplay.jsx
+  - ./src/frontend/components/GitStatusRow.jsx
+requirements: git status is not reactive
+os: OSX

@@ -1,0 +1,16 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/service/lifecycle/handleCommitService.js
+  - ./src/frontend/components/ProofInput.jsx
+  - ./src/frontend/model/sampleModel.js
+  - ./src/frontend/service/postCommit.js
+requirements: >-
+  Add Proof value to the commit request:
+
+  - Move the proof signal to a model
+
+  - Include the value in the "proof" field of the commit request
+
+  - Change the signature of postCommit to (message, proof), where both are
+  strings, not objects.
+os: OSX

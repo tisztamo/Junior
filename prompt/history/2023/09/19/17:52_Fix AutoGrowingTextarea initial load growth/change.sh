@@ -1,3 +1,9 @@
+#!/bin/sh
+set -e
+goal="Fix AutoGrowingTextarea initial load growth"
+echo "Plan:"
+echo "1. Modify the AutoGrowingTextarea.jsx to ensure it resizes on initial load."
+cat > ./src/frontend/components/AutoGrowingTextarea.jsx << 'EOF'
 import { createEffect, onCleanup } from 'solid-js';
 
 const AutoGrowingTextarea = (props) => {
@@ -43,3 +49,5 @@ const AutoGrowingTextarea = (props) => {
 };
 
 export default AutoGrowingTextarea;
+EOF
+echo "\033[32mDone: $goal\033[0m\n"

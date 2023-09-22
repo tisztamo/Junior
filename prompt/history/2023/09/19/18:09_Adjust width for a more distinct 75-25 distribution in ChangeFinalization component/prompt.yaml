@@ -1,0 +1,6 @@
+task: prompt/task/bug/fix.md
+attention:
+  - ./src/frontend/components/CommitMessageInput.jsx
+  - ./src/frontend/components/ChangeFinalization.jsx
+requirements: ''
+os: OSX
