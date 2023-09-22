@@ -1,0 +1,7 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/backend/handlers/git/commitGitHandler.js
+requirements: >-
+  The commit request now contains the "proof" field. Add it (if not empty) to
+  the commit message, separated by a space.
+os: OSX
