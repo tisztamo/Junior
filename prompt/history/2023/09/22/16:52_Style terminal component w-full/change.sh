@@ -1,3 +1,11 @@
+#!/bin/sh
+set -e
+goal="Style terminal component w-full"
+echo "Plan:"
+echo "1. Add w-full Tailwind class to the terminal container in TerminalComponent.jsx."
+
+# Update the TerminalComponent.jsx
+cat > ./src/frontend/components/terminal/TerminalComponent.jsx << 'EOF'
 import { onCleanup, onMount } from 'solid-js';
 import { Terminal } from 'xterm';
 import 'xterm/css/xterm.css';
@@ -33,3 +41,6 @@ const TerminalComponent = () => {
 };
 
 export default TerminalComponent;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

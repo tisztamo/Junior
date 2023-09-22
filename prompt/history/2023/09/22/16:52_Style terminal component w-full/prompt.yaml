@@ -1,0 +1,5 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/terminal/TerminalComponent.jsx
+requirements: Style the terminal component w-full
+os: OSX
