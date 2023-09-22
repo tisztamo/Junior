@@ -1,0 +1,6 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/startVite.js
+  - ./src/backend/getServerPort.js
+requirements: Change default vite port to 5864, and allow config like the backend
+os: OSX
