@@ -1,0 +1,6 @@
+task: prompt/task/refactor/custom.md
+attention:
+  - ./src/backend/terminal/setupTerminalServer.js
+  - ./src/backend/terminal/terminalRoutes.js
+requirements: Remove console.logs from terminal backend
+os: OSX
