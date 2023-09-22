@@ -1,0 +1,10 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/backend/startServer.js
+  - ./src/backend/setupRoutes.js
+requirements: |-
+  - Create backend/terminal/ directory
+  - Write a backend server to be used with xterm.js.
+  - Design the communication protocol.
+  - Start the server automatically during app init.
+os: OSX

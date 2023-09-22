@@ -1,0 +1,10 @@
+task: prompt/task/bug/fix.md
+attention:
+  - ./src/backend/terminal/setupTerminalServer.js
+  - ./src/backend/startServer.js
+  - ./src/backend/terminal/terminalRoutes.js
+requirements: |-
+  - terminalRoutes must be called on the ws terminal
+  - The ws incoming message name is message, not data
+  - Add console.logs in setupTerminalServer
+os: OSX

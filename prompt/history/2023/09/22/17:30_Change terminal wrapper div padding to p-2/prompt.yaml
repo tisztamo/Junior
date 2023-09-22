@@ -1,0 +1,5 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/terminal/TerminalComponent.jsx
+requirements: Change the padding of the terminal wrapper div to p-2
+os: OSX

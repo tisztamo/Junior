@@ -1,3 +1,13 @@
+#!/bin/sh
+set -e
+goal="Fix the terminal WebSocket implementation"
+echo "Plan:"
+echo "1. Modify startServer.js to call terminalRoutes for the terminal WebSocket."
+echo "2. Update the WebSocket event name in setupTerminalServer.js."
+echo "3. Add debugging console logs in setupTerminalServer.js."
+
+# 1. Modify startServer.js
+cat > ./src/backend/startServer.js << 'EOF'
 import express from 'express';
 import cors from 'cors';
 import { createServer } from 'http';
@@ -47,3 +57,37 @@ export function startServer() {
     console.log('Server is running on port', port);
   });
 }
+EOF
+
+# 2. Update WebSocket event name and add logs in setupTerminalServer.js
+cat > ./src/backend/terminal/setupTerminalServer.js << 'EOF'
+import { spawn } from 'child_process';
+
+export default function setupTerminalServer(socket) {
+  console.log("Setting up terminal server...");
+
+  const shell = spawn('/bin/sh');
+
+  socket.on('message', (data) => {
+    console.log("Received message:", data.toString());
+    shell.stdin.write(data);
+  });
+
+  shell.stdout.on('data', (data) => {
+    console.log("Shell output:", data.toString());
+    socket.send(data);
+  });
+
+  shell.stderr.on('data', (data) => {
+    console.log("Shell error output:", data.toString());
+    socket.send(data);
+  });
+
+  shell.on('exit', () => {
+    console.log("Shell exited");
+    socket.close();
+  });
+}
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

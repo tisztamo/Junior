@@ -1,0 +1,5 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/backend/terminal/setupTerminalServer.js
+requirements: Start the default shell, not sh
+os: OSX

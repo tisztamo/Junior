@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/service/createWebSocket.js
+  - ./src/frontend/App.jsx
+  - ./src/frontend/components/SampleComponent.jsx
+requirements: |-
+  1. xterm.js is installed, create a component to utilize it!
+  2. Add it to the end of the app.
+os: OSX

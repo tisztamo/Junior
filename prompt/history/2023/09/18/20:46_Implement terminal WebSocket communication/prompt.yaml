@@ -1,0 +1,16 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/backend/terminal/setupTerminalServer.js
+  - ./src/backend/terminal/terminalRoutes.js
+  - ./src/frontend/service/createWebSocket.js
+  - ./src/frontend/service/useWebsocket.js
+  - ./src/frontend/components/PromptDescriptor.jsx
+  - ./src/frontend/components/terminal/TerminalComponent.jsx
+  - ./src/frontend/service/terminal/terminalConnection.js
+requirements: |-
+  - create frontent/service/terminal/
+  - in it, create terminalConnection.js that connects
+  to /terminal on websocket, and speaks with the server
+  - Update the terminal component to use this new service
+  - PromptDescriptor is for your reference only
+os: OSX

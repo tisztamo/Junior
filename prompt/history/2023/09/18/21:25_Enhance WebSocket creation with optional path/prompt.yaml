@@ -1,0 +1,12 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/service/terminal/terminalConnection.js
+  - ./src/frontend/service/createWebSocket.js
+requirements: >-
+  - Allow createwebsocket to handle optional path (default "/" ) for the
+  connection
+
+  - Connect to /terminal as the terminal connection.
+
+  - Do not change existing exports even if they are non-conformant.
+os: OSX

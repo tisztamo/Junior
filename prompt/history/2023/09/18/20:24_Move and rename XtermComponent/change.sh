@@ -1,3 +1,19 @@
+#!/bin/sh
+set -e
+goal="Move and rename XtermComponent"
+echo "Plan:"
+echo "1. Create frontend/components/terminal directory."
+echo "2. Move XtermComponent.jsx to the new directory and rename it."
+echo "3. Update App.jsx to reflect the new component name and path."
+
+# Create the new directory
+mkdir -p ./src/frontend/components/terminal/
+
+# Move and rename XtermComponent.jsx to TerminalComponent.jsx
+mv ./src/frontend/components/XtermComponent.jsx ./src/frontend/components/terminal/TerminalComponent.jsx
+
+# Update App.jsx to reflect the new component name and path
+cat > ./src/frontend/App.jsx << 'EOF'
 import { onCleanup } from 'solid-js';
 import useKeyBindings from './service/useKeyBindings';
 import keyBindings from './config/keyBindings';
@@ -27,3 +43,6 @@ const App = () => {
 };
 
 export default App;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
