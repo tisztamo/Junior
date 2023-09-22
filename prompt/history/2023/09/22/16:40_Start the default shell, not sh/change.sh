@@ -1,3 +1,11 @@
+#!/bin/sh
+set -e
+goal="Start the default shell, not sh"
+echo "Plan:"
+echo "1. Modify setupTerminalServer.js to get the default shell from the ENV variable."
+echo "2. Replace /bin/sh with the logic to fetch the default shell or fallback to /bin/sh."
+
+cat > ./src/backend/terminal/setupTerminalServer.js << 'EOF'
 import os from 'os';
 import pty from 'node-pty';
 
@@ -26,3 +34,6 @@ export default function setupTerminalServer(socket) {
     socket.close();
   });
 }
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
