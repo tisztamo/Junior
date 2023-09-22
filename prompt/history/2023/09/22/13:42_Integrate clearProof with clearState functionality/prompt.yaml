@@ -1,0 +1,6 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/service/clearState.js
+  - ./src/frontend/model/proofModel.js
+requirements: Also clear the proof model
+os: OSX
