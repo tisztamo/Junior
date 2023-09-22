@@ -1,3 +1,12 @@
+#!/bin/sh
+set -e
+goal="Update frontend port and describe commit button"
+echo "Plan:"
+echo "1. Update frontend port to 5864."
+echo "2. Add information about the green commit button after rollback."
+
+# Change to web.md, updating frontend port and adding new commit button description
+cat > change_web.md << 'EOF'
 # Web Interface
 
 Junior's web interface was designed for use with ChatGPT Pro and doesn't require an API key.
@@ -35,3 +44,8 @@ For a more detailed guide on using the web interface, refer to our video tutoria
 Remember, you can always refer to your `prompt.yaml` file to modify the task details or attention mechanism.
 
 Happy developing with your AI contributor!
+EOF
+
+mv change_web.md ./docs/web.md
+
+echo "\033[32mDone: $goal\033[0m\n"

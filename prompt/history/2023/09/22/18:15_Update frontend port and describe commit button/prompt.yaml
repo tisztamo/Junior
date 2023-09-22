@@ -1,0 +1,7 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./docs/web.md
+requirements: |-
+  Change the frontend port to 5864.
+  After the rollback, write about the green commit button which commits to git.
+os: OSX
