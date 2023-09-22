@@ -1,8 +1,7 @@
 import { createSignal } from 'solid-js';
+import { proof, setProof } from '../model/proofModel';
 
 const ProofInput = () => {
-  const [proof, setProof] = createSignal('');
-
   const handleChange = (e) => {
     setProof(e.target.value);
   };
