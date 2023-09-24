@@ -1,3 +1,10 @@
+#!/bin/sh
+set -e
+goal="Implement prompt formatting features"
+echo "Plan:"
+echo "1. Update the createPrompt function in createPrompt.js to trim the injected strings and add two newlines after the system prompt."
+
+cat > ./src/prompt/createPrompt.js << 'EOF'
 import { readAttention } from "../attention/readAttention.js";
 import yaml from 'js-yaml';
 import { getSystemPromptIfNeeded } from './getSystemPromptIfNeeded.js';
@@ -29,3 +36,6 @@ const createPrompt = async (userInput, forceSystemPrompt) => {
 }
 
 export { createPrompt };
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

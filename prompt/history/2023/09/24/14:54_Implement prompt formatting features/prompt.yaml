@@ -1,0 +1,8 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/prompt/generatePrompt.js
+  - ./src/prompt/createPrompt.js
+requirements: |-
+  - trim strings that are injected to the prompt
+  - add two newlines after the system prompt
+os: OSX
