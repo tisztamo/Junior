@@ -1,0 +1,9 @@
+task: prompt/task/refactor/custom.md
+attention:
+  - ./src/backend/handlers/generateHandler.js
+  - ./src/interactiveSession/startInteractiveSession.js
+  - ./src/prompt/processPrompt.js
+requirements: |-
+  - Rename processPrompt to generatePrompt (both filename and fn)
+  - In startInteractivesession, rename the task variable to notes
+os: OSX

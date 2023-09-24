@@ -1,4 +1,4 @@
-import processPrompt from '../../prompt/processPrompt.js';
+import generatePrompt from '../../prompt/generatePrompt.js';
 import isRepoClean from '../../git/isRepoClean.js';
 
 export const generateHandler = async (req, res) => {
@@ -8,7 +8,7 @@ export const generateHandler = async (req, res) => {
     }
 
     const { notes, systemPrompt } = req.body;
-    const { prompt } = await processPrompt(notes, systemPrompt);
+    const { prompt } = await generatePrompt(notes, systemPrompt);
     res.json({ prompt: prompt });
   } catch (error) {
     console.warn(error);
