@@ -1,0 +1,8 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/terminal/TerminalComponent.jsx
+  - ./src/frontend/components/terminal/VirtualButton.jsx
+requirements: >-
+  Virtual keys are have bg-main class and can be scrolled horizontally in a
+  single row.
+os: OSX
