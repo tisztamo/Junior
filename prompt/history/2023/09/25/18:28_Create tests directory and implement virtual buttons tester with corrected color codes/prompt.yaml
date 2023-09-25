@@ -1,0 +1,15 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/terminal/TerminalComponent.jsx
+  - ./src/frontend/components/terminal/VirtualButton.jsx
+requirements: >-
+  - Create tests/ and write testVirtualButtons.js, a nodejs command line
+  application in it!
+
+  - The app asks the user to click all the virtual buttons.
+
+  - While waiting/getting the key events, it prints out ansi colored
+  instructions and feedback.
+
+  - The app exits only after every button was pressed
+os: OSX
