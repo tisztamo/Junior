@@ -1,3 +1,26 @@
+#!/bin/sh
+set -e
+goal="Move terminal to ChangeInspection"
+echo "Plan:"
+echo "1. Update ChangeInspection.jsx to include TerminalComponent."
+echo "2. Remove TerminalComponent from App.jsx."
+cat > ./src/frontend/components/ChangeInspection.jsx << 'EOF'
+import GitStatusDisplay from './GitStatusDisplay';
+import TerminalComponent from './terminal/TerminalComponent';
+
+const ChangeInspection = () => {
+  return (
+    <>
+      <GitStatusDisplay />
+      <TerminalComponent />
+    </>
+  );
+};
+
+export default ChangeInspection;
+EOF
+
+cat > ./src/frontend/App.jsx << 'EOF'
 import { onCleanup } from 'solid-js';
 import useKeyBindings from './service/useKeyBindings';
 import keyBindings from './config/keyBindings';
@@ -25,3 +48,5 @@ const App = () => {
 };
 
 export default App;
+EOF
+echo "\033[32mDone: $goal\033[0m\n"

@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/ChangeInspection.jsx
+  - ./src/frontend/App.jsx
+  - ./src/frontend/components/GitStatusDisplay.jsx
+requirements: |-
+  Move the terminal component from the app to the change inspection.
+  Put it after the git status.
+os: OSX

@@ -1,8 +1,12 @@
 import GitStatusDisplay from './GitStatusDisplay';
+import TerminalComponent from './terminal/TerminalComponent';
 
 const ChangeInspection = () => {
   return (
-    <GitStatusDisplay />
+    <>
+      <GitStatusDisplay />
+      <TerminalComponent />
+    </>
   );
 };
 
