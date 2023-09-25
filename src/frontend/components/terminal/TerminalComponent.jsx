@@ -2,6 +2,7 @@ import { onCleanup, onMount } from 'solid-js';
 import 'xterm/css/xterm.css';
 import terminalConnection from '../../service/terminal/terminalConnection';
 import { initializeXTerm } from '../../service/terminal/setupXTerm';
+import DetailsComponent from '../DetailsComponent';
 
 const TerminalComponent = () => {
   let container;
@@ -27,9 +28,15 @@ const TerminalComponent = () => {
   });
 
   return (
-    <div class="rounded border p-2 w-full" ref={container}>
-      {/* The terminal will be rendered inside this div */}
-    </div>
+    <DetailsComponent 
+      defaultState="closed"
+      localStorageKey="terminalState"
+      generateHeader={() => "Terminal"}
+    >
+      <div class="rounded border p-2 w-full" ref={container}>
+        {/* The terminal will be rendered inside this div */}
+      </div>
+    </DetailsComponent>
   );
 };
 

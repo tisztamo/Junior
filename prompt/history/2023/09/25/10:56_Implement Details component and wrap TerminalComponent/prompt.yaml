@@ -1,0 +1,15 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/SampleComponent.jsx
+  - ./src/frontend/components/terminal/TerminalComponent.jsx
+requirements: >-
+  1. Create a "Details" component that
+
+  - Puts its content in a html details tag
+
+  - Accepts a function as a prop to generate the header, and calls it reactively
+
+  - Saves its state in localStorage. The key is passed as prop. If no state is
+  saved, use the default value from a prop, or "open" if no default is provided.
+
+  2. Wrap the terminal in a Details component which is closed by default.
