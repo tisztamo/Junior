@@ -1,3 +1,21 @@
+#!/bin/sh
+set -e
+goal="Notify server on terminal resize"
+echo "Plan:"
+echo "1. Create a new function sendTerminalResizeNotification to handle sending resize notifications."
+echo "2. Modify TerminalComponent to use this new function and attach to xterm's resize event."
+
+# Creating the sendTerminalResizeNotification.js file
+cat > ./src/frontend/service/terminal/sendTerminalResizeNotification.js << 'EOF'
+import terminalConnection from './terminalConnection';
+
+export function sendTerminalResizeNotification(rows, cols) {
+    terminalConnection.sendDataToTerminal(JSON.stringify({ type: 'resize', rows, cols }));
+}
+EOF
+
+# Modifying the TerminalComponent.jsx to use the new function and attach to the resize event
+cat > ./src/frontend/components/terminal/TerminalComponent.jsx << 'EOF'
 import { onCleanup, onMount } from 'solid-js';
 import 'xterm/css/xterm.css';
 import terminalConnection from '../../service/terminal/terminalConnection';
@@ -50,3 +68,6 @@ const TerminalComponent = () => {
 };
 
 export default TerminalComponent;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

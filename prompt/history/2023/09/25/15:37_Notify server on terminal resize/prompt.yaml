@@ -1,0 +1,6 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/terminal/TerminalComponent.jsx
+requirements: >-
+  When the container size changes, notify the terminal server. Attach to the
+  terminal resize event. Factor out the notification sending to a function
