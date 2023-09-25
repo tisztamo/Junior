@@ -1,0 +1,6 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/git/getRepoInfo.js
+requirements: >-
+  When package.json is not found, get the name of the project from the git repo
+  url

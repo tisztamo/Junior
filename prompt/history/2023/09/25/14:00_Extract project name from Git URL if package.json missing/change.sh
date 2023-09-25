@@ -1,3 +1,11 @@
+#!/bin/sh
+set -e
+goal="Extract project name from Git URL if package.json missing"
+echo "Plan:"
+echo "1. Update getRepoInfo.js to parse the Git repo URL when package.json is absent."
+echo "2. Use the parsed name as the project name."
+
+cat > ./src/git/getRepoInfo.js << 'EOF'
 import simpleGit from 'simple-git';
 import fs from 'fs';
 import path from 'path';
@@ -44,3 +52,6 @@ const getRepoInfo = async () => {
 }
 
 export default getRepoInfo;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
