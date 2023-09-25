@@ -1,3 +1,36 @@
+#!/bin/sh
+set -e
+goal="Add virtual buttons to TerminalComponent"
+echo "Plan:"
+echo "1. Create a new JSX component for the virtual button with styles and click handlers."
+echo "2. Integrate the VirtualButton component in the TerminalComponent."
+
+# Create a new JSX component for the virtual buttons
+cat > ./src/frontend/components/terminal/VirtualButton.jsx << 'EOF'
+import { createSignal } from 'solid-js';
+
+const VirtualButton = (props) => {
+  const sendKey = () => {
+    if (props.action) {
+      props.action();
+    }
+  };
+
+  return (
+    <button
+      className="m-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
+      onClick={sendKey}
+    >
+      {props.label}
+    </button>
+  );
+};
+
+export default VirtualButton;
+EOF
+
+# Integrate the VirtualButton component in the TerminalComponent
+cat > ./src/frontend/components/terminal/TerminalComponent.jsx << 'EOF'
 import { onCleanup, onMount } from 'solid-js';
 import 'xterm/css/xterm.css';
 import terminalConnection from '../../service/terminal/terminalConnection';
@@ -67,3 +100,6 @@ const TerminalComponent = () => {
 };
 
 export default TerminalComponent;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

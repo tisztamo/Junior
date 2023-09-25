@@ -1,0 +1,31 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/terminal/TerminalComponent.jsx
+requirements: >-
+  Add virtual buttons to the terminal.
+
+  Virtual buttons are clickable buttons on top of the terminal, (visible when
+  opened):
+
+  - Esc
+
+  - -
+
+  - :
+
+  - Ctrl-Z
+
+  - Ctrl-Y
+
+  - Ctrl-X
+
+  - Ctrl-V
+
+  - F1
+
+  - F5
+
+  - F6
+
+  - F7
+os: OSX
