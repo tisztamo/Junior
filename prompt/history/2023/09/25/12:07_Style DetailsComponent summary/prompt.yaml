@@ -1,0 +1,10 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/DetailsComponent.jsx
+requirements: >
+  - Add horizontal padding px-2 to the summary
+
+  - Add an extra wrapper span inside the summary with pl-2
+
+  - When opened, some space should be visible between the summary and the
+  content

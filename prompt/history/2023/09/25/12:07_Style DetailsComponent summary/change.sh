@@ -1,3 +1,9 @@
+#!/bin/sh
+set -e
+goal="Style DetailsComponent summary"
+echo "Plan:"
+echo "1. Adjust the styling of the summary within the DetailsComponent.jsx."
+cat > ./src/frontend/components/DetailsComponent.jsx << 'EOF'
 import { createSignal, onCleanup, onMount } from 'solid-js';
 
 const DetailsComponent = (props) => {
@@ -34,3 +40,5 @@ const DetailsComponent = (props) => {
 };
 
 export default DetailsComponent;
+EOF
+echo "\033[32mDone: $goal\033[0m\n"
