@@ -2,4 +2,4 @@ Improve the documentation!
 
 <%= requirements %>
 
-Do not create backup files.
+Do NOT create backup files.
