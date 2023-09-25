@@ -1,3 +1,9 @@
+#!/bin/sh
+set -e
+goal="Fix workingDir in getRepoInfo.js"
+echo "Plan:"
+echo "1. Modify getRepoInfo.js to use process.cwd() for the workingDir."
+cat > ./src/git/getRepoInfo.js << 'EOF'
 import simpleGit from 'simple-git';
 import fs from 'fs';
 import path from 'path';
@@ -35,3 +41,5 @@ const getRepoInfo = async () => {
 }
 
 export default getRepoInfo;
+EOF
+echo "\033[32mDone: $goal\033[0m\n"

@@ -1,0 +1,6 @@
+task: prompt/task/bug/fix.md
+attention:
+  - ./src/git/getRepoInfo.js
+requirements: >-
+  the repoinfo component mistakenly reports the dir of the source of the running
+  instance as the working dir, instead of cwd.
