@@ -1,0 +1,10 @@
+task: prompt/task/bug/fix.md
+attention:
+  - ./src/frontend/components/DetailsComponent.jsx
+  - ./src/frontend/components/terminal/TerminalComponent.jsx
+requirements: >-
+  - The detail component fails to save the state on change. Set the signal based
+  on the state of the details tag before saving!
+
+  - Set the storage key to "Junior.terminal.isOpen" with values "true" and
+  "false"
