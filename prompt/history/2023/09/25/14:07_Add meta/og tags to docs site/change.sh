@@ -1,3 +1,13 @@
+#!/bin/sh
+set -e
+
+goal="Add meta/og tags to docs site"
+echo "Plan:"
+echo "1. Update index.html to add meta/og tags."
+echo "2. Use content from README.md for title and description."
+echo "3. Use video_cover.jpg from README.md as og:image."
+
+cat > ./docs/index.html << 'EOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,3 +34,6 @@
   <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
 </body>
 </html>
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

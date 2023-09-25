@@ -1,0 +1,7 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./docs/index.html
+  - ./docs/README.md
+  - ./docs/_coverpage.md
+  - ./docs/_sidebar.md
+requirements: Meta/og for docs site
