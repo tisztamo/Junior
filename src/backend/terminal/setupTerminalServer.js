@@ -10,7 +10,13 @@ export default function setupTerminalServer(socket) {
   });
 
   socket.on('message', (data) => {
-    terminal.write(data);
+    const parsedData = JSON.parse(data);
+
+    if (parsedData.type === 'resize') {
+      terminal.resize(parsedData.cols, parsedData.rows);
+    } else if (parsedData.type === 'input') {
+      terminal.write(parsedData.data);
+    }
   });
 
   terminal.on('data', (data) => {

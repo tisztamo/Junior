@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/service/terminal/setupXTerm.js
+  - ./src/frontend/components/terminal/TerminalComponent.jsx
+  - ./src/backend/terminal/setupTerminalServer.js
+  - ./src/frontend/service/terminal/terminalConnection.js
+requirements: >-
+  We set the terminal size to fit the width of the container element. However,
+  the shell running inside is not notified. How to do it?
