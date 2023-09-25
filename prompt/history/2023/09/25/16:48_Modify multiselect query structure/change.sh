@@ -1,3 +1,37 @@
+#!/bin/sh
+set -e
+goal="Modify multiselect query structure"
+echo "Plan:"
+echo "1. Modify extractQuery to return an array of objects with keywords (lowercased) and weights."
+echo "2. Adjust getComparison to process the new array structure."
+echo "3. Update MultiSelect component to use modified extractQuery on search value only if it's not the default query."
+
+cat > ./src/frontend/service/helpers/extractQuery.js << 'EOF'
+const ignoreList = ['and', 'or', 'the'];
+
+export default function extractQuery(requirements) {
+  return requirements.split(/\W+/)
+    .filter(word => word.length > 2 && !ignoreList.includes(word.toLowerCase()))
+    .map(word => ({ keyword: word.toLowerCase(), weight: 1.0 }));
+}
+EOF
+
+cat > ./src/frontend/service/helpers/getComparison.js << 'EOF'
+const getComparison = () => {
+  return (item, filter) => {
+    const lowercasedItem = item.toLowerCase();
+    // Calculate the rank based on the sum of the lengths of matching words multiplied by their weights.
+    const rank = filter.reduce((acc, { keyword, weight }) => {
+      return lowercasedItem.includes(keyword) ? acc + (keyword.length * weight) : acc;
+    }, 0);
+    return rank;
+  };
+};
+
+export default getComparison;
+EOF
+
+cat > ./src/frontend/components/MultiSelect/MultiSelect.jsx << 'EOF'
 import { createSignal, createEffect } from 'solid-js';
 import SearchBar from './SearchBar';
 import ResultSet from './ResultSet';
@@ -54,3 +88,6 @@ const MultiSelect = (props) => {
 };
 
 export default MultiSelect;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

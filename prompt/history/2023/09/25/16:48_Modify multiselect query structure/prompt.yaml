@@ -1,0 +1,15 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/MultiSelect/MultiSelect.jsx
+  - ./src/frontend/components/MultiSelect/computeFilteredList.js
+  - ./src/frontend/components/AttentionFileList.jsx
+  - ./src/frontend/service/helpers/extractQuery.js
+  - ./src/frontend/service/helpers/getComparison.js
+requirements: |-
+  in multiselect, queries should be array of objects like:
+  { keyword: "frontend", weight: 1.0 }
+
+  Modify extractQuery to return such an array.
+  Call extractquery on the search value
+  In getComparison, eliminate split and weight words based correctly
+os: OSX
