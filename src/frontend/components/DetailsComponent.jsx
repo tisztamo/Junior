@@ -16,8 +16,10 @@ const DetailsComponent = (props) => {
     localStorage.setItem(props.localStorageKey, isOpen() ? 'open' : 'closed');
   };
 
+  const classes = props.classes || "";
+
   return (
-    <details open={isOpen()} onToggle={updateLocalStorage}>
+    <details class={classes} open={isOpen()} onToggle={updateLocalStorage}>
       <summary>{props.generateHeader()}</summary>
       {props.children}
     </details>

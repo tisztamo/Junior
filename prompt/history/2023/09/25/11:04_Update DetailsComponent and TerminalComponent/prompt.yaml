@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/terminal/TerminalComponent.jsx
+  - ./src/frontend/components/DetailsComponent.jsx
+requirements: >-
+  In details component allow setting classes on the details tag from a prop
+
+  In the terminal component move all the current classes from the inner div out
+  to the details.

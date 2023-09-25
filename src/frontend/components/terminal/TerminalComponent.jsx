@@ -32,8 +32,9 @@ const TerminalComponent = () => {
       defaultState="closed"
       localStorageKey="terminalState"
       generateHeader={() => "Terminal"}
+      classes="rounded border p-2 w-full"
     >
-      <div class="rounded border p-2 w-full" ref={container}>
+      <div ref={container}>
         {/* The terminal will be rendered inside this div */}
       </div>
     </DetailsComponent>
