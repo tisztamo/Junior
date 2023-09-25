@@ -3,7 +3,7 @@ import commitGit from '../../../git/commitGit.js';
 export default async function commitGitHandler(req, res) {
   try {
     const message = req.body.message;
-    const proof = req.body.proof;
+    const tags = req.body.tags;
     
     if (!message) {
       res.status(400).send({ message: 'Commit message is required' });
@@ -11,8 +11,8 @@ export default async function commitGitHandler(req, res) {
     }
 
     let finalMessage = message;
-    if (proof && proof.trim() !== "") {
-      finalMessage = `${message} ${proof}`;
+    if (tags && tags.trim() !== "") {
+      finalMessage = `${message} ${tags}`;
     }
     
     await commitGit(finalMessage);

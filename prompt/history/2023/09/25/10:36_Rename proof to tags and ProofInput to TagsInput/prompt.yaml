@@ -1,0 +1,10 @@
+task: prompt/task/refactor/rename.md
+attention:
+  - ./src/frontend/model/proofModel.js
+  - ./src/frontend/components/ProofInput.jsx
+  - ./src/backend/handlers/git/commitGitHandler.js
+  - ./src/frontend/service/clearState.js
+  - ./src/frontend/components/ChangeFinalization.jsx
+  - ./src/frontend/service/lifecycle/handleCommitService.js
+  - ./src/frontend/service/postCommit.js
+requirements: Rename "proof" to "tags" and ProofInput to TagsInput.

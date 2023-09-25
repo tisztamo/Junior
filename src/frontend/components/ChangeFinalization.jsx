@@ -1,5 +1,5 @@
 import CommitMessageInput from './CommitMessageInput';
-import ProofInput from './ProofInput';
+import TagsInput from './TagsInput';
 import CommitButton from './CommitButton';
 import RollbackButton from './RollbackButton';
 
@@ -11,7 +11,7 @@ const ChangeFinalization = () => {
           <CommitMessageInput />
         </div>
         <div className="w-1/4">
-          <ProofInput />
+          <TagsInput />
         </div>
       </div>
       <div className="flex w-full mt-1 space-x-4">
@@ -23,4 +23,3 @@ const ChangeFinalization = () => {
 };
 
 export default ChangeFinalization;
-

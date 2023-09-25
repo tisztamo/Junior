@@ -3,7 +3,7 @@ import { setExecutionResult } from '../model/executionResult';
 import { setCommitMessage } from '../model/commitMessage';
 import { setPrompt } from '../model/prompt';
 import { setGitStatus } from '../model/gitStatus';
-import { setProof } from '../model/proofModel';
+import { setTags } from '../model/tagsModel';
 
 const clearState = () => {
   setChange('');
@@ -11,7 +11,7 @@ const clearState = () => {
   setCommitMessage('');
   setPrompt('');
   setGitStatus('');
-  setProof('');
+  setTags('');
 };
 
 export default clearState;
