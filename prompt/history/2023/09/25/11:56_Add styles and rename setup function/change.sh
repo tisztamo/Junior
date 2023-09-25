@@ -1,3 +1,27 @@
+#!/bin/sh
+set -e
+goal="Add styles and rename setup function"
+echo "Plan:"
+echo "1. Rename function in setupXTerm.js"
+echo "2. Update function import in TerminalComponent.jsx"
+echo "3. Add required styles in TerminalComponent.jsx"
+
+# Renaming the function in setupXTerm.js
+cat > ./src/frontend/service/terminal/setupXTerm.js << 'EOF'
+import { Terminal } from 'xterm';
+import { FitAddon } from 'xterm-addon-fit';
+
+export function setupXTerm() {
+  const term = new Terminal();
+  const fitAddon = new FitAddon();
+  term.loadAddon(fitAddon);
+  
+  return { term, fitAddon };
+}
+EOF
+
+# Updating the function import and adding styles in TerminalComponent.jsx
+cat > ./src/frontend/components/terminal/TerminalComponent.jsx << 'EOF'
 import { onCleanup, onMount } from 'solid-js';
 import 'xterm/css/xterm.css';
 import terminalConnection from '../../service/terminal/terminalConnection';
@@ -42,3 +66,6 @@ const TerminalComponent = () => {
 };
 
 export default TerminalComponent;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

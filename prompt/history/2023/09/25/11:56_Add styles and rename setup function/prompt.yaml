@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/service/terminal/setupXTerm.js
+  - ./src/frontend/components/terminal/TerminalComponent.jsx
+requirements: >-
+  - Add "border-border" and "bg-emphasize" to the details in the terminal
+  component (and retain "border").
+
+  - Rename the setup function to setupXTerm for consistency
