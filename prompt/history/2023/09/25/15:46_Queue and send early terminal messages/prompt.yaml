@@ -1,0 +1,4 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/service/terminal/terminalConnection.js
+requirements: Terminalconnection should queue and send early messages.

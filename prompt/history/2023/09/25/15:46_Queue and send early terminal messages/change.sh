@@ -1,3 +1,12 @@
+#!/bin/sh
+set -e
+goal="Queue and send early terminal messages"
+echo "Plan:"
+echo "1. Update 'terminalConnection.js' to introduce a message queuing functionality."
+echo "2. Implement an event handler for the WebSocket's 'onopen' event to flush the queue and send all messages when the connection opens."
+
+# 1. Update 'terminalConnection.js' to introduce a message queuing functionality
+cat > ./src/frontend/service/terminal/terminalConnection.js << 'EOF'
 import { createWebSocket } from '../createWebSocket';
 
 const socket = createWebSocket('/terminal');
@@ -40,3 +49,6 @@ export default {
   setOnDataReceived,
   closeConnection,
 };
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
