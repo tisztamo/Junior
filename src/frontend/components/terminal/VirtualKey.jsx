@@ -1,6 +1,6 @@
 import { createSignal } from 'solid-js';
 
-const VirtualButton = (props) => {
+const VirtualKey = (props) => {
   const sendKey = () => {
     if (props.action) {
       props.action();
@@ -9,7 +9,7 @@ const VirtualButton = (props) => {
 
   return (
     <button
-      className="text-text m-1 bg-main hover:bg-blue-500 font-bold py-1 px-2 rounded"
+      className="text-text m-1 bg-main hover:bg-blue-500 font-bold py-2 px-3 rounded" 
       onClick={sendKey}
     >
       {props.label}
@@ -17,4 +17,4 @@ const VirtualButton = (props) => {
   );
 };
 
-export default VirtualButton;
+export default VirtualKey;

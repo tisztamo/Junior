@@ -1,0 +1,8 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/terminal/VirtualButton.jsx
+  - ./src/frontend/components/terminal/TerminalComponent.jsx
+requirements: |-
+  Add more padding to the virtual keys
+  Rename the component and the file to VirtualKey
+os: OSX
