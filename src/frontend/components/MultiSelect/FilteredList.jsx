@@ -1,5 +1,5 @@
 import ListItem from "./ListItem";
-import FullScreenPopup from "./FullScreenPopup";
+import FileViewer from "../files/FileViewer";
 import handleLongTap from './handleLongTap';
 
 const FilteredList = (props) => {
@@ -10,7 +10,7 @@ const FilteredList = (props) => {
       <ul class="list-inside select-none">
         {props.items.map((item, idx) => <ListItem key={item} item={item} idx={idx + 1} onItemClick={props.onItemClick} onLongTap={invoke} />)}
       </ul>
-      { showPopup() && <FullScreenPopup path={popupPath()} onClose={() => setShowPopup(false)} /> }
+      { showPopup() && <FileViewer path={popupPath()} onClose={() => setShowPopup(false)} /> }
     </div>
   );
 };

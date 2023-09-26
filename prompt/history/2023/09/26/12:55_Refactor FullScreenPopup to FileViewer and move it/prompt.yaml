@@ -1,0 +1,9 @@
+task: prompt/task/refactor/custom.md
+attention:
+  - ./src/frontend/components/MultiSelect/FullScreenPopup.jsx
+  - ./src/frontend/components/MultiSelect/ResultSet.jsx
+  - ./src/frontend/components/MultiSelect/FilteredList.jsx
+requirements: >
+  Rename FullScreenPopup to FileViewer (both filename and component), and move
+  it to components/files
+os: OSX
