@@ -1,3 +1,25 @@
+#!/bin/sh
+set -e
+goal="Refactor style getter for GitStatusRow"
+echo "Plan:"
+echo "1. Modify getStyleForFileStatus to accept and utilize working_dir."
+echo "2. Update the function to return text color styles."
+echo "3. Update GitStatusRow component to pass working_dir to the style getter."
+
+# Update getStyleForFileStatus.jsx
+cat > ./src/frontend/components/getStyleForFileStatus.jsx << 'EOF'
+export default function getStyleForFileStatus(working_dir, path) {
+  if (working_dir === 'M') {
+    return { color: 'rgb(34, 197, 94)' };
+  } else if (working_dir === 'A' && !path.includes('prompt/history')) {
+    return { color: 'rgb(253, 186, 116)' };
+  }
+  return {}; // Default no text color style
+}
+EOF
+
+# Update GitStatusRow.jsx to pass working_dir to style getter
+cat > ./src/frontend/components/GitStatusRow.jsx << 'EOF'
 import { createEffect } from "solid-js";
 import getStyleForFileStatus from './getStyleForFileStatus';
 
@@ -29,3 +51,6 @@ const GitStatusRow = (props) => {
 };
 
 export default GitStatusRow;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

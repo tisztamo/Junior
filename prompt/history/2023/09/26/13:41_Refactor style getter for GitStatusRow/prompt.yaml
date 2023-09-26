@@ -1,0 +1,10 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/GitStatusRow.jsx
+  - ./src/frontend/components/getStyleForFileStatus.jsx
+requirements: |-
+  1. Also pass working_dir to the style getter
+  2. In the style getter:
+  - Use working_dir instead of index for style selection (with same logic)
+  - Set text color, not background color
+os: OSX

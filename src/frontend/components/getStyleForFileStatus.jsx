@@ -1,8 +1,8 @@
-export default function getStyleForFileStatus(index, path) {
-  if (index === 'M') {
-    return { backgroundColor: 'rgb(34, 197, 94)' };
-  } else if (index === 'A' && !path.includes('prompt/history')) {
-    return { backgroundColor: 'rgb(253, 186, 116)' };
+export default function getStyleForFileStatus(working_dir, path) {
+  if (working_dir === 'M') {
+    return { color: 'rgb(34, 197, 94)' };
+  } else if (working_dir === 'A' && !path.includes('prompt/history')) {
+    return { color: 'rgb(253, 186, 116)' };
   }
-  return {}; // Default no background style
+  return {}; // Default no text color style
 }
