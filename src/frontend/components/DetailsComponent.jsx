@@ -3,9 +3,12 @@ import { createSignal, onCleanup, onMount } from 'solid-js';
 const DetailsComponent = (props) => {
   const [isOpen, setIsOpen] = createSignal(props.defaultState === 'open');
 
+  // Extract localStorage key from props
+  const localStorageKey = props.localStorageKey || "";
+
   // On mount, check local storage and set state accordingly
   onMount(() => {
-    const savedState = localStorage.getItem("Junior.terminal.isOpen");
+    const savedState = localStorage.getItem(localStorageKey);
     if (savedState) {
       setIsOpen(savedState === 'true');
     }
@@ -16,7 +19,7 @@ const DetailsComponent = (props) => {
     // Capture the open state from the details tag before saving
     const currentState = event.currentTarget.open;
     setIsOpen(currentState);
-    localStorage.setItem("Junior.terminal.isOpen", currentState ? 'true' : 'false');
+    localStorage.setItem(localStorageKey, currentState ? 'true' : 'false');
   };
 
   const classes = props.classes || "";

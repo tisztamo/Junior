@@ -1,0 +1,8 @@
+task: prompt/task/bug/fix.md
+attention:
+  - ./src/frontend/components/terminal/TerminalComponent.jsx
+  - ./src/frontend/components/DetailsComponent.jsx
+requirements: >-
+  The passed key should be used for localstorage in detailscomponent. Pass
+  "Junior.terminal.isOpen"
+os: OSX
