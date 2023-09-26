@@ -1,0 +1,7 @@
+task: prompt/task/bug/fix.md
+attention:
+  - ./src/frontend/components/GitStatusDisplay.jsx
+requirements: |-
+  - There is no color-gray, use a tailwind class
+  - Remove quotes around the "clear" message
+os: OSX

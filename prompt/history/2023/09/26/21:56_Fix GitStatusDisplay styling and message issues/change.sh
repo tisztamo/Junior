@@ -1,3 +1,11 @@
+#!/bin/sh
+set -e
+goal="Fix GitStatusDisplay styling and message issues"
+echo "Plan:"
+echo "1. Replace non-existent 'color-gray' with a valid Tailwind class."
+echo "2. Remove the unnecessary quotes around the 'clear' status message."
+
+cat > ./src/frontend/components/GitStatusDisplay.jsx << 'EOF'
 import { onCleanup, onMount, createEffect, createSignal } from 'solid-js';
 import GitStatusRow from './GitStatusRow';
 import FileViewer from './files/FileViewer';
@@ -69,3 +77,6 @@ const GitStatusDisplay = () => {
 };
 
 export default GitStatusDisplay;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
