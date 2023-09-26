@@ -1,0 +1,10 @@
+task: prompt/task/bug/fix.md
+attention:
+  - ./src/frontend/components/GitStatusRow.jsx
+  - ./src/frontend/components/getBackgroundColorForFile.jsx
+requirements: >-
+  In git status, file background color values are rgb, set them as background
+  color styles, not classes in git status
+
+  Also rename the file and fn to file getStyleForFileStatus
+os: OSX

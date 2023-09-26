@@ -1,5 +1,5 @@
 import { createEffect } from "solid-js";
-import getBackgroundColorForFile from './getBackgroundColorForFile';
+import getStyleForFileStatus from './getStyleForFileStatus';
 
 const GitStatusRow = (props) => {
   const { index, path, working_dir } = props.entry;
@@ -9,7 +9,7 @@ const GitStatusRow = (props) => {
   const fileName = splitPath.pop();
   const baseDir = splitPath.join('/');
 
-  const bgColor = getBackgroundColorForFile(index, path);
+  const bgStyle = getStyleForFileStatus(index, path);
 
   let pathRef;
 
@@ -20,7 +20,7 @@ const GitStatusRow = (props) => {
   });
 
   return (
-    <div class={`flex ${bgColor ? 'bg-' + bgColor : ''}`} onClick={() => onClick(path)}>
+    <div class="flex" style={bgStyle} onClick={() => onClick(path)}>
       <span class="w-50px overflow-x-auto p-1">{index + ' ' + working_dir}</span>
       <span class="text-base bg-main rounded p-1">{fileName}</span>
       <span ref={pathRef} class="overflow-x-auto whitespace-no-wrap break-keep scrollbar-hidden ml-4 py-2 text-sm">{baseDir}</span>
