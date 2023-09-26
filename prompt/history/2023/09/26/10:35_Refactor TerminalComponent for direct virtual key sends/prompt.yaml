@@ -1,0 +1,10 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/terminal/TerminalComponent.jsx
+  - ./src/frontend/components/terminal/VirtualButton.jsx
+requirements: >-
+  1. The terminal component should send virtual key  codes to the terminal
+  connection, not to xterm.js.
+
+  2. Add text-text class to the virtual buttons
+os: OSX

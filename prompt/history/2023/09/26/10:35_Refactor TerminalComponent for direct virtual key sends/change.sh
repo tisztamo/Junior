@@ -1,3 +1,12 @@
+#!/bin/sh
+set -e
+goal="Refactor TerminalComponent for direct virtual key sends"
+echo "Plan:"
+echo "1. Modify the sendVirtualKey function in TerminalComponent.jsx to send key codes using the same format as direct keypresses."
+echo "2. Update VirtualButton component to include the 'text-text' class."
+
+# Change TerminalComponent.jsx to send virtual keys in the same format as direct keypresses
+cat > ./src/frontend/components/terminal/TerminalComponent.jsx << 'EOF'
 import { onCleanup, onMount } from 'solid-js';
 import 'xterm/css/xterm.css';
 import terminalConnection from '../../service/terminal/terminalConnection';
@@ -67,3 +76,30 @@ const TerminalComponent = () => {
 };
 
 export default TerminalComponent;
+EOF
+
+# Update VirtualButton to include the 'text-text' class
+cat > ./src/frontend/components/terminal/VirtualButton.jsx << 'EOF'
+import { createSignal } from 'solid-js';
+
+const VirtualButton = (props) => {
+  const sendKey = () => {
+    if (props.action) {
+      props.action();
+    }
+  };
+
+  return (
+    <button
+      className="text-text m-1 bg-main hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
+      onClick={sendKey}
+    >
+      {props.label}
+    </button>
+  );
+};
+
+export default VirtualButton;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
