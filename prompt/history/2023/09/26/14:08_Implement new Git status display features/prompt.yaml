@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/getStyleForFileStatus.jsx
+  - ./src/frontend/components/GitStatusDisplay.jsx
+  - ./src/frontend/components/GitStatusRow.jsx
+requirements: |-
+  1. New files are marked with ?, not A
+  2. Add max-w-full to the wrapper div of the git status display
+os: OSX

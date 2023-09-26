@@ -1,7 +1,7 @@
 export default function getStyleForFileStatus(working_dir, path) {
   if (working_dir === 'M') {
     return { color: 'var(--color-green)' };
-  } else if (working_dir === 'A' && !path.includes('prompt/history')) {
+  } else if ((working_dir === 'A' || working_dir === '?') && !path.includes('prompt/history')) {
     return { color: 'var(--color-orange)' };
   } else if (working_dir === 'D') {
     return { color: 'var(--color-red)' };
