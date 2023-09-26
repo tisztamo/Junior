@@ -1,0 +1,5 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/GitStatusDisplay.jsx
+requirements: clean header should be "nothing to commit, working tree clean" in gray
+os: OSX

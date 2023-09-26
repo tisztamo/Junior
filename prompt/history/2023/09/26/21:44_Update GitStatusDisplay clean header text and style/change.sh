@@ -1,3 +1,10 @@
+#!/bin/sh
+set -e
+goal="Update GitStatusDisplay clean header text and style"
+echo "Plan:"
+echo "1. Modify the generateHeader function to update the clean header text and style."
+
+cat > ./src/frontend/components/GitStatusDisplay.jsx << 'EOF'
 import { onCleanup, onMount, createEffect, createSignal } from 'solid-js';
 import GitStatusRow from './GitStatusRow';
 import FileViewer from './files/FileViewer';
@@ -69,3 +76,6 @@ const GitStatusDisplay = () => {
 };
 
 export default GitStatusDisplay;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
