@@ -1,0 +1,7 @@
+task: prompt/task/bug/fix.md
+attention:
+  - ./src/frontend/service/terminal/setupXTerm.js
+requirements: >-
+  As a hotfix of xterm import issues in ES6 modules, import xterm from
+  https://cdn.jsdelivr.net/npm/xterm@5.3.0/+esm
+os: OSX
