@@ -1,9 +1,9 @@
 import { Terminal } from 'xterm';
-import { FitAddon } from 'xterm-addon-fit';
+import { FitAddon } from './fitAddOn';
 
 export function setupXTerm() {
   const term = new Terminal();
-  const fitAddon = new FitAddon();
+  const fitAddon = FitAddon();
   term.loadAddon(fitAddon);
   
   return { term, fitAddon };
