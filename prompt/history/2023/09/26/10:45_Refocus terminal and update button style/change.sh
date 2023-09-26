@@ -1,3 +1,37 @@
+#!/bin/sh
+set -e
+goal="Refocus terminal and update button style"
+echo "Plan:"
+echo "1. Modify VirtualButton.jsx to remove 'text-white' class."
+echo "2. After sending the virtual key, shift the focus back to the terminal."
+echo "3. Ensure all changes maintain single export per file rule."
+
+# Step 1: Modify VirtualButton.jsx
+cat > ./src/frontend/components/terminal/VirtualButton.jsx << 'EOF'
+import { createSignal } from 'solid-js';
+
+const VirtualButton = (props) => {
+  const sendKey = () => {
+    if (props.action) {
+      props.action();
+    }
+  };
+
+  return (
+    <button
+      className="text-text m-1 bg-main hover:bg-blue-700 font-bold py-1 px-2 rounded"
+      onClick={sendKey}
+    >
+      {props.label}
+    </button>
+  );
+};
+
+export default VirtualButton;
+EOF
+
+# Step 2: Modify TerminalComponent.jsx to refocus terminal
+cat > ./src/frontend/components/terminal/TerminalComponent.jsx << 'EOF'
 import { onCleanup, onMount } from 'solid-js';
 import 'xterm/css/xterm.css';
 import terminalConnection from '../../service/terminal/terminalConnection';
@@ -68,3 +102,6 @@ const TerminalComponent = () => {
 };
 
 export default TerminalComponent;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

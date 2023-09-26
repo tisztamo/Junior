@@ -1,0 +1,10 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/terminal/TerminalComponent.jsx
+  - ./src/frontend/components/terminal/VirtualButton.jsx
+requirements: >-
+  1. After clicking a virtual key, focus should go the terminal. Call focus on
+  the xterm terminal instance for this.
+
+  2. Remove text-white from the virtual button
+os: OSX
