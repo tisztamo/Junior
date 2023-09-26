@@ -1,0 +1,7 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/index.html
+  - ./docs/README.md
+  - ./src/frontend/index.jsx
+requirements: Make the app installable.
+os: OSX

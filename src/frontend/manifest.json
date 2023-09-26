@@ -1,0 +1,16 @@
+{
+  "name": "Junior",
+  "short_name": "Junior",
+  "description": "AI-first IDE for developers",
+  "display": "standalone",
+  "start_url": "/",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/assets/favicon.ico",
+      "sizes": "64x64",
+      "type": "image/x-icon"
+    }
+  ]
+}
