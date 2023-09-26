@@ -1,0 +1,8 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/styles/colors.css
+  - ./src/frontend/components/GitStatusDisplay.jsx
+requirements: >-
+  Use the orange color from the css variable inline for the git sttus header if
+  the directory is not clean. The generated header can be jsx.
+os: OSX

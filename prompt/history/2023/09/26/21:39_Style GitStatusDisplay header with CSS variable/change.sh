@@ -1,3 +1,11 @@
+#!/bin/sh
+set -e
+goal="Style GitStatusDisplay header with CSS variable"
+echo "Plan:"
+echo "1. Modify the generateHeader function to return a JSX that adjusts the style based on directory cleanliness."
+echo "2. Add the orange color in the JSX using an inline style and accessing the CSS variable directly."
+
+cat > ./src/frontend/components/GitStatusDisplay.jsx << 'EOF'
 import { onCleanup, onMount, createEffect, createSignal } from 'solid-js';
 import GitStatusRow from './GitStatusRow';
 import FileViewer from './files/FileViewer';
@@ -65,3 +73,6 @@ const GitStatusDisplay = () => {
 };
 
 export default GitStatusDisplay;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
