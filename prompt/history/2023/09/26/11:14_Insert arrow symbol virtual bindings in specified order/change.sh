@@ -1,3 +1,12 @@
+#!/bin/sh
+set -e
+
+goal="Insert arrow symbol virtual bindings in specified order"
+echo "Plan:"
+echo "1. Modify terminalVirtualKeyBindings.js to add arrow symbols (Left, Up, Down, Right) as virtual bindings."
+echo "2. Place them immediately after the 'Esc' key binding in the specified sequence."
+
+cat > ./src/frontend/config/terminalVirtualKeyBindings.js << 'EOF'
 const terminalVirtualKeyBindings = () => {
   return [
     { label: 'Tab', action: '\t' },
@@ -18,3 +27,6 @@ const terminalVirtualKeyBindings = () => {
 };
 
 export default terminalVirtualKeyBindings;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
