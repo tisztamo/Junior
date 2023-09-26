@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/backend/routes/setupGitRoutes.js
+  - ./src/backend/handlers/git/gitStatusHandler.js
+  - ./src/git/gitStatus.js
+requirements: >-
+  Install Diff2Html and create a route for git diff. Return colorised word diffs
+  as html
+os: OSX
