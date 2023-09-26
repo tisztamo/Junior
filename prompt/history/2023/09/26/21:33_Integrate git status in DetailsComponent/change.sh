@@ -1,3 +1,13 @@
+#!/bin/sh
+set -e
+goal="Integrate git status in DetailsComponent"
+echo "Plan:"
+echo "1. Modify GitStatusDisplay.jsx to incorporate DetailsComponent."
+echo "2. Implement dynamic header logic based on git status."
+echo "3. Clean up any redundant comments and functions."
+
+# Step 1 & 2: Modify GitStatusDisplay.jsx to incorporate DetailsComponent and dynamic header.
+cat > ./src/frontend/components/GitStatusDisplay.jsx << 'EOF'
 import { onCleanup, onMount, createEffect, createSignal } from 'solid-js';
 import GitStatusRow from './GitStatusRow';
 import FileViewer from './files/FileViewer';
@@ -57,3 +67,6 @@ const GitStatusDisplay = () => {
 };
 
 export default GitStatusDisplay;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

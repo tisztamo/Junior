@@ -1,0 +1,13 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/styles/colors.css
+  - ./src/frontend/components/GitStatusDisplay.jsx
+  - ./src/frontend/components/terminal/TerminalComponent.jsx
+requirements: >
+  - Use the details component in git status! The terminal is for your reference.
+
+  - Storage key: "Junior.gitStatus.isOpen"
+
+  - Header: "Directory clean"  text, or "N Files changed" - Remove comments and
+  empty functions
+os: OSX
