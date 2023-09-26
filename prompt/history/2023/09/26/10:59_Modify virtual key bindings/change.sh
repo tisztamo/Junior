@@ -1,3 +1,11 @@
+#!/bin/sh
+set -e
+goal="Modify virtual key bindings"
+echo "Plan:"
+echo "1. Remove key bindings for '-' and ':'."
+echo "2. Add 'Tab' key binding as the first one."
+
+cat > ./src/frontend/config/terminalVirtualKeyBindings.js << 'EOF'
 const terminalVirtualKeyBindings = () => {
   return [
     { label: 'Tab', action: '\t' },
@@ -14,3 +22,6 @@ const terminalVirtualKeyBindings = () => {
 };
 
 export default terminalVirtualKeyBindings;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

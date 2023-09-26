@@ -1,0 +1,5 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/config/terminalVirtualKeyBindings.js
+requirements: Remove virtual key bindings for - and :, and add Tab as the first one
+os: OSX
