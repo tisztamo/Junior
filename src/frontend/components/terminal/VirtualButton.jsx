@@ -9,7 +9,7 @@ const VirtualButton = (props) => {
 
   return (
     <button
-      className="text-text m-1 bg-main hover:bg-blue-700 font-bold py-1 px-2 rounded"
+      className="text-text m-1 bg-main hover:bg-blue-500 font-bold py-1 px-2 rounded"
       onClick={sendKey}
     >
       {props.label}

@@ -1,0 +1,14 @@
+task: prompt/task/refactor/custom.md
+attention:
+  - ./src/frontend/components/terminal/TerminalComponent.jsx
+  - ./src/frontend/components/terminal/VirtualButton.jsx
+  - ./src/frontend/config/keyBindings.js
+requirements: >-
+  1. Factor out the virtual key bindings to
+  frontend/config/terminalVirtualKeyBindings.js
+
+  Create a function there which returns an array of objects like { label, action
+  }
+
+  2. change the key hover color to bg-blue-500
+os: OSX
