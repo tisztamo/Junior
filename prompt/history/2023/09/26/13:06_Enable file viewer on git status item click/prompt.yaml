@@ -1,0 +1,7 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/files/FileViewer.jsx
+  - ./src/frontend/components/GitStatusDisplay.jsx
+  - ./src/frontend/components/GitStatusRow.jsx
+requirements: Click on git status items should open the file viewer with the file.
+os: OSX
