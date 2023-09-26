@@ -1,3 +1,9 @@
+#!/bin/sh
+set -e
+goal="Reduce space between App items"
+echo "Plan:"
+echo "1. Modify App.jsx to change space-y-8 to space-y-4"
+cat > ./src/frontend/App.jsx << 'EOF'
 import { onCleanup } from 'solid-js';
 import useKeyBindings from './service/useKeyBindings';
 import keyBindings from './config/keyBindings';
@@ -25,3 +31,5 @@ const App = () => {
 };
 
 export default App;
+EOF
+echo "\033[32mDone: $goal\033[0m\n"

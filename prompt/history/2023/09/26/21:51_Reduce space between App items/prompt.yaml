@@ -1,0 +1,5 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/App.jsx
+requirements: Lower the space between items in the app to space-y-4
+os: OSX
