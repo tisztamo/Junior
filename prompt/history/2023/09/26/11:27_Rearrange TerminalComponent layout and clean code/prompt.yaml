@@ -1,0 +1,7 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/terminal/TerminalComponent.jsx
+requirements: |-
+  Put the virtual keys under the terminal
+  Remove comments
+os: OSX

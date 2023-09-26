@@ -1,3 +1,12 @@
+#!/bin/sh
+set -e
+goal="Rearrange TerminalComponent layout and clean code"
+echo "Plan:"
+echo "1. Move the virtual keys div below the terminal div in the JSX."
+echo "2. Remove comments from TerminalComponent.jsx."
+echo "3. Adjust styling and layout as necessary."
+
+cat > ./src/frontend/components/terminal/TerminalComponent.jsx << 'EOF'
 import { onCleanup, onMount } from 'solid-js';
 import 'xterm/css/xterm.css';
 import terminalConnection from '../../service/terminal/terminalConnection';
@@ -59,3 +68,6 @@ const TerminalComponent = () => {
 };
 
 export default TerminalComponent;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
