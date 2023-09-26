@@ -1,0 +1,11 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/getStyleForFileStatus.jsx
+  - ./src/frontend/styles/colors.css
+  - ./docs/assets/styles.css
+requirements: >
+  1. Create variables color-blue, color-orange. color-red, color-green in
+  colors.css based on the colors in the docs styles
+
+  2. Use the variables in the styles returned for file status
+os: OSX

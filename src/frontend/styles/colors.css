@@ -4,6 +4,10 @@
   --emphasize-color: #16181f;
   --background-emphasize-color: #f2f4f6;
   --border-color: #d1d5db;
+  --color-blue: rgb(59, 130, 246);
+  --color-orange: rgb(253, 186, 116);
+  --color-red: rgb(185, 28, 28);
+  --color-green: rgb(21, 128, 61);
 }
 
 .dark {

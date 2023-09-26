@@ -1,8 +1,8 @@
 export default function getStyleForFileStatus(working_dir, path) {
   if (working_dir === 'M') {
-    return { color: 'rgb(34, 197, 94)' };
+    return { color: 'var(--color-green)' };
   } else if (working_dir === 'A' && !path.includes('prompt/history')) {
-    return { color: 'rgb(253, 186, 116)' };
+    return { color: 'var(--color-orange)' };
   }
   return {}; // Default no text color style
 }
