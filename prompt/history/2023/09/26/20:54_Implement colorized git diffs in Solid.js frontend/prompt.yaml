@@ -1,0 +1,12 @@
+task: prompt/task/question/answer.md
+attention: []
+requirements: >-
+  We have a nodejs backend that serves git-based functionality and a solidjs
+  frontend for it.
+
+  We need colorized display of diffs.
+
+  What are our options?
+
+  Write the answer to docs/design/diff_dependency_selection.md
+os: OSX
