@@ -1,5 +1,5 @@
 const ejsConfig = {
-    async: true,
+    async: false,
     escape: str => str
 };
 
