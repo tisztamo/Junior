@@ -1,0 +1,13 @@
+envAndCli:
+  - src/backend/fileutils/getIgnoreList.js
+  - src/backend/getServerPort.js
+  - src/backend/handlers/configHandler.js
+  - src/backend/serverConfig.js
+  - src/backend/terminal/setupTerminalServer.js
+  - src/config/hostConfig.js
+  - src/config.js
+  - src/execute/AuditTrailConfig.js
+  - src/frontend/getFrontendPort.js
+  - src/llm/openai/createApi.js
+  - src/prompt/getPromptFlag.js
+  - src/prompt/getSystemPromptIfNeeded.js

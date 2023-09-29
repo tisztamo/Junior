@@ -1,0 +1,21 @@
+task: prompt/task/feature/implement.md
+attention: []
+requirements: >-
+  Create ./scripts/updateConfigList.js, which runs trough src/ recursively and 
+  prints out the relative path from . to all .js files that access environment
+  variables and/or argv!
+
+
+  Helper functions should be placed in src/command/updateConfigList/ (Create
+  this dir)
+
+
+  The nodejs script whould write its output to
+  docs/design/config-file-list.yaml, which looks like:
+
+  ```
+
+  envAndCli:
+    - src/...
+  ```
+os: OSX
