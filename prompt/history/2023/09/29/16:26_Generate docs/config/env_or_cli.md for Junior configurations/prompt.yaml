@@ -1,0 +1,32 @@
+task: prompt/task/doc/improve.md
+attention:
+  - src/backend/fileutils/getIgnoreList.js
+  - src/backend/getServerPort.js
+  - src/backend/handlers/configHandler.js
+  - src/backend/serverConfig.js
+  - src/backend/terminal/setupTerminalServer.js
+  - src/config/hostConfig.js
+  - src/config.js
+  - src/execute/AuditTrailConfig.js
+  - src/frontend/getFrontendPort.js
+  - src/llm/openai/createApi.js
+  - src/prompt/getSystemPromptIfNeeded.js
+  - src/prompt/getPromptFlag.js
+requirements: >-
+  Generate docs/config/env_or_cli.md which documents all the possible
+  configurations.
+
+  Structure it like follows:
+
+  - intro, similar to a man page in its content
+
+  - list of configurations (merge env/argv configs where they do the same)
+
+  - examples (include one for hosting on a vpn ip, and one ignoring a dir from
+  attention scan.
+
+
+  The Junior process is started with npx junior-web [args], npx junior-cli
+  [args], or, in the case you start it from the git repo for self-development:
+  npm start -- [args]
+os: OSX
