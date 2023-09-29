@@ -1,3 +1,12 @@
+#!/bin/sh
+set -e
+goal="Update roadmap and .gitignore"
+echo "Plan:"
+echo "1. Update the roadmap.md with the given requirements."
+echo "2. Place the *_backup.md ignore pattern in the existing backup patterns section of .gitignore."
+
+# Updating the roadmap.md file
+cat > ./docs/roadmap.md << 'EOF'
 # Roadmap
 
 ## Usability & fixes
@@ -26,3 +35,28 @@
 ## Prompt herds
 `v0.6 (Expected: Q2 2024)`
 - Scan and transform (refactor) the codebase gradually
+EOF
+
+# Updating the .gitignore file with the backup pattern in the appropriate section
+cat > ./.gitignore << 'EOF'
+/secret.sh
+/node_modules/
+/tmp/
+/prompt.yaml
+/prompt.md
+/change.sh
+
+node_modules
+
+# Backup patterns for .md files
+*.md.backup
+*.md.bak
+*_backup.md
+*.md~
+*.md.tmp
+*.md.old
+*.md.orig
+*.md.save
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

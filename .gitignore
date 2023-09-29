@@ -6,9 +6,11 @@
 /change.sh
 
 node_modules
+
 # Backup patterns for .md files
 *.md.backup
 *.md.bak
+*_backup.md
 *.md~
 *.md.tmp
 *.md.old

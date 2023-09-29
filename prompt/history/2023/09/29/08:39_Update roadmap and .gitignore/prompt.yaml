@@ -1,0 +1,11 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./docs/roadmap.md
+  - ./.gitignore
+requirements: |-
+  1. Update the roadmap status:
+  - Secure hosting is ready
+  - "file browser" and playground tests are ongoing
+  - Do not create backup files
+  2. gitignore *_backup.md files
+os: OSX
