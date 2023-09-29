@@ -1,0 +1,11 @@
+task: prompt/task/doc/improve.md
+attention:
+  - ./docs/index.html
+  - ./docs/_sidebar.md
+  - ./docs/web.md
+requirements: >-
+  Link docs/config/env_or_cli.md with label "Configuration" from the sidebar.
+
+  Also add  to the section about process starting in web.md a short note about
+  the config and its docs, with a link
+os: OSX

@@ -2,5 +2,6 @@
 * [Usage](./usage.md)
 * [Web](./web.md)
 * [Prompt Descriptor](./descriptor.md)
+* [Configuration](./config/env_or_cli.md)
 * [Roadmap](./roadmap.md)
 * [Open Jobs](./open_jobs.md)
