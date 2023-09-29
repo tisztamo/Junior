@@ -1,0 +1,10 @@
+task: prompt/task/doc/improve.md
+attention:
+  - ./docs/_coverpage.md
+requirements: |-
+  Add a new line at the end of the cover page, in black:
+
+  Scroll
+
+  Add unicode upwards icons before and after the text
+os: OSX
