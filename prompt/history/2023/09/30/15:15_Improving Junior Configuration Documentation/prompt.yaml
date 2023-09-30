@@ -1,0 +1,11 @@
+task: prompt/task/doc/improve.md
+attention:
+  - ./docs/config/env_or_cli.md
+requirements: >-
+  - Format the process start commands as code
+
+  - Do not use a table for the list of configs, as it looks bad on mobile
+
+  - For cli args accepting a value, use the form --configname= to indicate this.
+  For --host, show both forms.
+os: OSX
