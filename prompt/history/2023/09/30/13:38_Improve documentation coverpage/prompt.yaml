@@ -1,0 +1,9 @@
+task: prompt/task/doc/improve.md
+attention:
+  - ./docs/_coverpage.md
+requirements: >-
+  Move the logo link down the bottom of the cover.
+
+  Make the line with text "scroll" to a html div, positioned relatively 30px
+  below
+os: OSX
