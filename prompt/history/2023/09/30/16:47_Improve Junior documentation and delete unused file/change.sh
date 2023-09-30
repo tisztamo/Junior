@@ -1,9 +1,18 @@
+#!/bin/sh
+set -e
+goal="Improve Junior documentation and delete unused file"
+echo "Plan:"
+echo "1. Update env_or_cli.md with improved documentation."
+echo "2. Delete the getPromptFlag.js file."
+
+# Update env_or_cli.md
+cat > ./docs/config/env_or_cli.md << EOF
 # Junior Configuration
 
 The Junior process can be started using the following commands:
-- `npx junior-web [args]`
-- `npx junior-cli [args]`
-- For self-development from the git repo: `npm start -- [args]`.
+- \`npx junior-web [args]\`
+- \`npx junior-cli [args]\`
+- For self-development from the git repo: \`npm start -- [args]\`.
 
 ## Configurations
 
@@ -44,12 +53,18 @@ The Junior process can be started using the following commands:
 ## Examples
 
 ### Hosting on a VPN IP
-```
+\`\`\`
 npx junior-web --host=192.168.1.2
-```
+\`\`\`
 
 ### Ignoring a Directory from Attention Scan
-```
+\`\`\`
 npx junior-cli --ignore=./myDirectory
-```
+\`\`\`
 
+EOF
+
+# Delete the getPromptFlag.js file
+rm -f ./src/prompt/getPromptFlag.js
+
+echo "\033[32mDone: $goal\033[0m\n"

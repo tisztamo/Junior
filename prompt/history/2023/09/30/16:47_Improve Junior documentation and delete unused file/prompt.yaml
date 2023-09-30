@@ -1,0 +1,21 @@
+task: prompt/task/doc/improve.md
+attention:
+  - ./docs/config/env_or_cli.md
+  - ./src/backend/fileutils/getIgnoreList.js
+  - ./src/prompt/getPromptFlag.js
+requirements: >-
+  Add more info:
+
+
+  1. --ignore accepts a comma-separated list of paths to be ignored from the
+  attention scan. List the defaults and describe how the different sources are
+  merged.
+
+
+  2. the --prompt flag is not used, remove from the docs and delete
+  getPromptFlag.js
+
+
+  3. -s and -d and their long variants are only used in the cli. Spearate them
+  and add a note that the cli is not fully functional at the time.
+os: OSX
