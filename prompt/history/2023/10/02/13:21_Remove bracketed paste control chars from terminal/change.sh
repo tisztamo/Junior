@@ -1,3 +1,9 @@
+#!/bin/sh
+set -e
+goal="Remove bracketed paste control chars from terminal"
+echo "Plan:"
+echo "1. Update prependAndExtractLastLine.js to use a more encompassing regex for removing control characters"
+cat > ./src/frontend/components/terminal/prependAndExtractLastLine.js << 'EOF'
 export function prependAndExtractLastLine(lastLine, currentData) {
   const combinedData = `${lastLine}${currentData}`;
   const cleanedData = combinedData
@@ -18,3 +24,5 @@ function getValidLastLine(lines) {
   
   return lastLine;
 }
+EOF
+echo "\033[32mDone: $goal\033[0m\n"

@@ -1,0 +1,8 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/terminal/TerminalSummary.jsx
+  - ./src/frontend/components/terminal/prependAndExtractLastLine.js
+requirements: >-
+  Also remove bracketed paste control characters from the terminal summary,
+  e.g.  ^[[2004h and ^[[2004l 
+os: OSX
