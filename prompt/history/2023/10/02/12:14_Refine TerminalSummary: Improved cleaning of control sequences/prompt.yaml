@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/terminal/TerminalSummary.jsx
+requirements: >-
+  - To handle multiple writes on the same line, TerminalSummary should prepend
+  the last line to the current write before splitting it.
+
+  - Delete every control character before rendering
+os: OSX

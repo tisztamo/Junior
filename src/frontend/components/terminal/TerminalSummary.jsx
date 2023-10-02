@@ -1,16 +1,14 @@
 import { createEffect, createSignal } from 'solid-js';
-
-function extractLastLine(data) {
-  const lines = data.split('\n');
-  return lines[lines.length - 1];
-}
+import { prependAndExtractLastLine } from './prependAndExtractLastLine';
 
 export function TerminalSummary(props) {
-  const [lastLine, setLastLine] = createSignal("");
+  const [lastLineSignal, setLastLineSignal] = createSignal("");
+  let localLastLine = "";
 
   createEffect(() => {
-    setLastLine(extractLastLine(props.lastWritten));
+    localLastLine = prependAndExtractLastLine(localLastLine, props.lastWritten);
+    setLastLineSignal(localLastLine);
   });
 
-  return <span>{lastLine()}</span>;
+  return <span>{lastLineSignal()}</span>;
 }
