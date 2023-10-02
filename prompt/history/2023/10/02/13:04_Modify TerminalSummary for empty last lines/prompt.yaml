@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/terminal/TerminalSummary.jsx
+  - ./src/frontend/components/terminal/prependAndExtractLastLine.js
+requirements: >-
+  If the newly extracted last line is empty, do not overwrite the currently
+  displayed one with it in the signal, only in the local variable. Remove every
+  comment from the source files 
+os: OSX

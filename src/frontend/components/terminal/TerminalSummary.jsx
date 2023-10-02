@@ -7,7 +7,9 @@ export function TerminalSummary(props) {
 
   createEffect(() => {
     localLastLine = prependAndExtractLastLine(localLastLine, props.lastWritten);
-    setLastLineSignal(localLastLine);
+    if (localLastLine !== "") {
+      setLastLineSignal(localLastLine);
+    }
   });
 
   return <span>{lastLineSignal()}</span>;
