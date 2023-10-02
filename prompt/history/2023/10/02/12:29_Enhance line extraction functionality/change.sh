@@ -1,3 +1,11 @@
+#!/bin/sh
+set -e
+goal="Enhance line extraction functionality"
+echo "Plan:"
+echo "1. Modify splitting mechanism to consider '\\n' and '\\r'."
+echo "2. Implement recursion to go back through lines."
+
+cat > ./src/frontend/components/terminal/prependAndExtractLastLine.js << 'EOF'
 export function prependAndExtractLastLine(lastLine, currentData) {
   const combinedData = `${lastLine}${currentData}`;
   // Remove ANSI escape codes
@@ -19,3 +27,6 @@ function getValidLastLine(lines) {
   
   return lastLine;
 }
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

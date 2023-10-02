@@ -1,0 +1,10 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/terminal/prependAndExtractLastLine.js
+requirements: >-
+  - Also split at \r
+
+  - When the last line, after trimming, ends with "$" or "%", or is empty, use
+  the previous one. Go back to the first that does not match this criteria.
+  Return empty string if no line found.
+os: OSX
