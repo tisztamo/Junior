@@ -1,0 +1,8 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/terminal/TerminalSummary.jsx
+requirements: >-
+  Show the terminal summary with mono font, and add left padding to it, and do
+  not allow it to wrap lines and grow verticaly. Cut the content with elippis
+  instead.
+os: OSX
