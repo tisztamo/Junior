@@ -1,3 +1,12 @@
+#!/bin/sh
+set -e
+goal="Echo '$\n$\n' to TerminalSummary on enter keypress"
+echo "Plan:"
+echo "1. Modify TerminalComponent.jsx to detect when the 'enter' key is pressed."
+echo "2. Update the 'lastWritten' signal with the string '$\n$\n' when 'enter' is pressed to echo it to the TerminalSummary component."
+
+# Detect 'enter' keypress in TerminalComponent.jsx and echo '$\n$\n'
+cat > ./src/frontend/components/terminal/TerminalComponent.jsx << 'EOF'
 import { onCleanup, onMount, createSignal } from 'solid-js';
 import 'xterm/css/xterm.css';
 import terminalConnection from '../../service/terminal/terminalConnection';
@@ -65,3 +74,6 @@ const TerminalComponent = () => {
 };
 
 export default TerminalComponent;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

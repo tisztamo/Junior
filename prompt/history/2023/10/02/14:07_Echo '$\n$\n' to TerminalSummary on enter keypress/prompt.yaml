@@ -1,0 +1,6 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/terminal/TerminalSummary.jsx
+  - ./src/frontend/components/terminal/TerminalComponent.jsx
+requirements: When the user presses enter, also write it to the summary as local echo.
+os: OSX
