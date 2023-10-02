@@ -5,3 +5,5 @@
 
 - Every js file should *only export a single function*!
 - Prefer *async/await* over promises!
+
+<%- include("specifics.md", { language: "ES6" }) %>

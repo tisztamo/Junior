@@ -1,1 +1,1 @@
-Write concise, self-documenting and idiomatic code!
+Write concise, self-documenting and idiomatic <%= locals.language %> code!
