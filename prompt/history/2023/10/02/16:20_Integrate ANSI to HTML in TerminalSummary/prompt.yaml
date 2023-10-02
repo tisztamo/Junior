@@ -1,0 +1,23 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/execute/ansiToHtml.js
+  - ./src/frontend/components/terminal/TerminalSummary.jsx
+requirements: >-
+  Call ansiToHtml on the last line before setting the signal, and inject it to
+  the innerHtml to allow coloring. 
+
+
+  FYI the docs says:
+
+
+  #innerHTML/textContent
+
+  These work the same as their property equivalent. Set a string and they will
+  be set. Be careful!! Setting innerHTML with any data that could be exposed to
+  an end user as it could be a vector for malicious attack. textContent while
+  generally not needed is actually a performance optimization when you know the
+  children will only be text as it bypasses the generic diffing routine.
+
+
+  <div textContent={state.text} />
+os: OSX
