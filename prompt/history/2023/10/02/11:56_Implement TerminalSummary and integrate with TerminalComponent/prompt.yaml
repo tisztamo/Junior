@@ -1,0 +1,10 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/terminal/TerminalComponent.jsx
+requirements: >-
+  Create a TerminalSummary component and use it as the details summary. It
+  should get a string prop "lastWritten", find the last line of the input and
+  render it reactively. Use a span, not a div for making it inline.
+
+  Add the summary component after the "Terminal" text in the summary.
+os: OSX

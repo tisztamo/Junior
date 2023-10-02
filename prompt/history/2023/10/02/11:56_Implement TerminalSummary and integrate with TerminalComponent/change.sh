@@ -1,3 +1,34 @@
+#!/bin/sh
+set -e
+goal="Implement TerminalSummary and integrate with TerminalComponent"
+echo "Plan:"
+echo "1. Create TerminalSummary.jsx for rendering the last line from the terminal."
+echo "2. Modify TerminalComponent.jsx to use TerminalSummary and pass the last written line."
+
+# 1. Create TerminalSummary.jsx
+
+cat > ./src/frontend/components/terminal/TerminalSummary.jsx << 'EOF'
+import { createEffect, createSignal } from 'solid-js';
+
+function extractLastLine(data) {
+  const lines = data.split('\n');
+  return lines[lines.length - 1];
+}
+
+export function TerminalSummary(props) {
+  const [lastLine, setLastLine] = createSignal("");
+
+  createEffect(() => {
+    setLastLine(extractLastLine(props.lastWritten));
+  });
+
+  return <span>{lastLine()}</span>;
+}
+EOF
+
+# 2. Modify TerminalComponent.jsx
+
+cat > ./src/frontend/components/terminal/TerminalComponent.jsx << 'EOF'
 import { onCleanup, onMount, createSignal } from 'solid-js';
 import 'xterm/css/xterm.css';
 import terminalConnection from '../../service/terminal/terminalConnection';
@@ -62,3 +93,6 @@ const TerminalComponent = () => {
 };
 
 export default TerminalComponent;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
