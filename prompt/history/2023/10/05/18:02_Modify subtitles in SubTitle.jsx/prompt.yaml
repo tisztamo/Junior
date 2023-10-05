@@ -1,0 +1,7 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/SubTitle.jsx
+requirements: >-
+  Add "Metaprogramming in English" to the list of navbar subtitles, and remove
+  "revolutionizing development"
+os: OSX
