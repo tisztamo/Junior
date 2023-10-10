@@ -1,3 +1,14 @@
+#!/bin/sh
+set -e
+
+goal="Refine Junior's documentation, with precise terminology"
+echo "Plan:"
+echo "1. Correct ChatGPT naming"
+echo "2. Remove the architecture section"
+echo "3. Redefine the workflow section with appropriate 'execution' usage"
+
+# Modifying the documentation according to the task specifications.
+cat > ./docs/web.md << 'EOF'
 # Web Interface
 
 Junior's web interface was designed for use with ChatGPT Plus and doesn't require an API key.
@@ -37,3 +48,6 @@ For a more detailed guide on using the web interface, refer to our video tutoria
 Remember, you can always refer to your `prompt.yaml` file to modify the task details or attention mechanism.
 
 Happy developing with your AI contributor!
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

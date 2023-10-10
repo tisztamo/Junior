@@ -1,0 +1,11 @@
+task: prompt/task/doc/improve.md
+attention:
+  - ./docs/config/env_or_cli.md
+  - ./docs/web.md
+requirements: >-
+  - npx is not needed to run Junior, the commands are on the path after install
+  now.
+
+  - Remove mentions of npm start from the repo this is a separate workflow that
+  we will document elsewhere
+os: OSX

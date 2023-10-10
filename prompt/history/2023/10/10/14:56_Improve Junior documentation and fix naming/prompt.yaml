@@ -1,0 +1,11 @@
+task: prompt/task/doc/improve.md
+attention:
+  - ./docs/README.md
+  - ./docs/usage.md
+requirements: >-
+  Global install is the recommended way, so that npx is not needed to start
+  Junior. The user has to run junior-web in the project they want to work on.
+  Update the docs!
+
+  Also fix the naming issue: The paid ChatGPT is calles Plus, not Pro.
+os: OSX
