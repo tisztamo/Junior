@@ -22,4 +22,4 @@ Your contributions make a difference! At Junior, we value the collaboration of t
 
 For questions or assistance, please raise an issue in our GitHub repository.
 
-**Note:** We've tested Junior primarily with the GPT-4 model. However, you're welcome to experiment with similarly capable models and share your findings. It's not compatible with GPT-3.5.
+**Note:** We've tested Junior primarily with the ChatGPT Plus model. However, you're welcome to experiment with similarly capable models and share your findings. It's not compatible with GPT-3.5.

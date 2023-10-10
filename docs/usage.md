@@ -2,19 +2,19 @@
 
 ## Installation
 
-Install Junior as a development dependency by running the following command:
+Install Junior globally by running the following command:
 
 ```
-npm add @aijunior/dev --save-dev
+npm install -g @aijunior/dev
 ```
 Additionally, you can install the "Junior" vscode extension from the vscode extension marketplace.
 
 ## Initialization
 
-You can initialize the necessary files in the repository with the command:
+Navigate to the project directory where you want to work with Junior and initialize the necessary files with the command:
 
 ```
-npx junior-init
+junior-init
 ```
 
 This will create the following files:
@@ -36,10 +36,10 @@ The Task Interaction Files (TIF) will be gitignored:
 
 ## Starting Junior
 
-You can start Junior with:
+Start Junior within your project directory with:
 
 ```
-npx junior-web
+junior-web
 ```
 
 For more information about the web interface, please refer to [web.md](./web.md).
