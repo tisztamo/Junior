@@ -1,3 +1,16 @@
+#!/bin/sh
+set -e
+goal="Reimplement DetailsComponent with divs and Unicode"
+echo "Plan:"
+echo "1. Replace details tag with divs, manage open/close with SolidJS."
+echo "2. Use Unicode chars (triangles) to indicate open/close state."
+echo "3. Ensure styling and interactivity with TailwindCSS and SolidJS."
+echo "4. Adhere to project guidelines regarding code style/structuring."
+echo "5. Render details content always, toggle display with isOpen state."
+echo "6. Adjust padding around Unicode characters."
+
+# Replacing existing DetailsComponent.jsx file with the updated implementation.
+cat > ./src/frontend/components/DetailsComponent.jsx << 'EOF'
 import { createSignal, onCleanup, onMount } from 'solid-js';
 
 const DetailsComponent = (props) => {
@@ -35,3 +48,6 @@ const DetailsComponent = (props) => {
 };
 
 export default DetailsComponent;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

@@ -1,0 +1,10 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/DetailsComponent.jsx
+requirements: >-
+  Eliminate the use of the details tag in favor of using divs and creating the
+  openable layout with tailwind classes.
+
+  Use unicode chars for displaying the state: A triangle pointing to left when
+  closed, and pointing down when opened.
+os: OSX
