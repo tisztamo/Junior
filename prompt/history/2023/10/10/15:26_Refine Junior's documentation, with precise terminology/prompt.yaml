@@ -1,0 +1,13 @@
+task: prompt/task/doc/improve.md
+attention:
+  - ./docs/web.md
+requirements: >-
+  - Fix the naming of ChatGPT Plus (not Pro)
+
+  - Remove the architecture section
+
+  - Rewrite the workflow section: Editing prompt.yaml directly is not needed
+  anymore, remove. The current workflow is: Starting junior-web from the project
+  dir, entering the requirements, selecting the attention files, generating the
+  prompt, executing it with ChatGPT and pasting back the output for execution.
+os: OSX
