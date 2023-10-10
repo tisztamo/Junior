@@ -1,9 +1,8 @@
 # Junior Configuration
 
 The Junior process can be started using the following commands:
-- `npx junior-web [args]`
-- `npx junior-cli [args]`
-- For self-development from the git repo: `npm start -- [args]`.
+- `junior-web [args]`
+- `junior-cli [args]`
 
 ## Configurations
 
@@ -45,11 +44,10 @@ The Junior process can be started using the following commands:
 
 ### Hosting on a VPN IP
 ```
-npx junior-web --host=192.168.1.2
+junior-web --host=192.168.1.2
 ```
 
 ### Ignoring a Directory from Attention Scan
 ```
-npx junior-cli --ignore=./myDirectory
+junior-cli --ignore=./myDirectory
 ```
-

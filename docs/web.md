@@ -8,7 +8,7 @@ The web interface is composed of two different servers: a frontend and a backend
 
 ## Starting the Web Interface
 
-Run the application with `npx junior-web` from your project or with `npm start` from Junior itself. A web browser window will automatically open at `http://localhost:5864`, which is where you can access the web interface.
+Run the application with `junior-web` from your project. A web browser window will automatically open at `http://localhost:5864`, which is where you can access the web interface.
 
 For configuration options and details, refer to the [Configuration](./config/env_or_cli.md) documentation.
 
