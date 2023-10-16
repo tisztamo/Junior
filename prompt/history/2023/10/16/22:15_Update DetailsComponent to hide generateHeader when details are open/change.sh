@@ -1,3 +1,10 @@
+#!/bin/sh
+set -e
+goal="Update DetailsComponent to hide generateHeader when details are open"
+
+echo "Plan:"
+echo "1. Modify DetailsComponent.jsx to conditionally display generateHeader."
+cat > ./src/frontend/components/DetailsComponent.jsx << 'EOF'
 import { createSignal, onCleanup, onMount } from 'solid-js';
 
 const DetailsComponent = (props) => {
@@ -36,3 +43,6 @@ const DetailsComponent = (props) => {
 };
 
 export default DetailsComponent;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

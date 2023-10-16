@@ -1,0 +1,6 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/DetailsComponent.jsx
+  - ./docs/config/env_or_cli.md
+requirements: Do not display the result of generateHeader when the details is opened
+os: OSX
