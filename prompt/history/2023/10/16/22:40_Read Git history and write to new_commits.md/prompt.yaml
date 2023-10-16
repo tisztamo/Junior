@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./scripts/rollbackCommand.js
+  - ./src/git/resetGit.js
+requirements: >-
+  Create a nodejs script in scripts (Sample files provided in working set for
+  reference), which reads the git history back to the latest tag, and writes the
+  comments into ./tmp/new_commits.md (create the dir)
+os: OSX
