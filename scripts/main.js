@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import { startInteractiveSession } from './interactiveSession/startInteractiveSession.js';
-import { getApi, get_model, rl } from './config.js';
+import { startInteractiveSession } from '../src/interactiveSession/startInteractiveSession.js';
+import { getApi, get_model, rl } from '../src/config.js';
 
 (async () => {
   console.log("Welcome to Junior. Model: " + get_model() + "\n");

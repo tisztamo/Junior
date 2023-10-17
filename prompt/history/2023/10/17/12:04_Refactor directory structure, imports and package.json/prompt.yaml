@@ -1,0 +1,13 @@
+task: prompt/task/refactor/move_files.md
+attention:
+  - ./package.json
+  - ./src/main.js
+  - ./src/web.js
+  - ./src/junior-rollback.js
+  - ./scripts/rollbackCommand.js
+  - ./src/init.js
+requirements: |-
+  Move the attached "bin" scripts from src/ to scripts/
+  They are only referenced from package.json
+  The rollback functionality is duplicated, eliminate the duplication.
+os: OSX

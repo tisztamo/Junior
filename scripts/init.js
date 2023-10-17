@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 import { fileURLToPath } from 'url';
-import createGitignore from './git/createGitignore.js';
-import { createPromptYaml } from './prompt/createPromptYaml.js';
-import { createPromptDir } from './prompt/createPromptDir.js';
-import copyDefaults from './command/init/copyDefaults.js';
-import checkAndInitRepo from './git/checkAndInitRepo.js';
-import commitGit from './git/commitGit.js';
+import createGitignore from '../src/git/createGitignore.js';
+import { createPromptYaml } from '../src/prompt/createPromptYaml.js';
+import { createPromptDir } from '../src/prompt/createPromptDir.js';
+import copyDefaults from '../src/command/init/copyDefaults.js';
+import checkAndInitRepo from '../src/git/checkAndInitRepo.js';
+import commitGit from '../src/git/commitGit.js';
 import path from 'path';
-import isRepoClean from './git/isRepoClean.js';
+import isRepoClean from '../src/git/isRepoClean.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -23,7 +23,7 @@ async function juniorInit() {
   await createPromptDir();
   createPromptYaml();
 
-  const defaultsPath = path.join(__dirname, '../prompt/defaults');
+  const defaultsPath = path.join(__dirname, '../src/prompt/defaults');
   await copyDefaults(defaultsPath, './prompt/');
 
   await commitGit("Junior init");

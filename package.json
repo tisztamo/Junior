@@ -5,10 +5,10 @@
   "type": "module",
   "main": "src/main.js",
   "bin": {
-    "junior": "src/main.js",
-    "junior-web": "src/web.js",
-    "junior-init": "src/init.js",
-    "junior-rollback": "src/junior-rollback.js"
+    "junior": "scripts/main.js",
+    "junior-web": "scripts/web.js",
+    "junior-init": "scripts/init.js",
+    "junior-rollback": "scripts/junior-rollback.js"
   },
   "scripts": {
     "cli": "node src/main.js",
