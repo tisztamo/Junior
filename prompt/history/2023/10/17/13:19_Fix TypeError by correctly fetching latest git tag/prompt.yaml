@@ -1,0 +1,7 @@
+task: prompt/task/bug/fix.md
+attention:
+  - ./src/git/getGitHistory.js
+requirements: >-
+  An error occurred while fetching git history: TypeError: git.latestTag is not
+  a function
+os: OSX

@@ -1,3 +1,10 @@
+#!/bin/sh
+set -e
+goal="Fix TypeError by correctly fetching latest git tag"
+echo "Plan:"
+echo "1. Replace git.latestTag with a correct method to fetch the latest tag."
+echo "2. Modify getGitHistory.js with the updated method to fetch the latest git tag."
+cat > ./src/git/getGitHistory.js << 'EOF'
 import simpleGit from 'simple-git';
 
 const git = simpleGit();
@@ -15,3 +22,5 @@ const getGitHistory = async () => {
 }
 
 export default getGitHistory;
+EOF
+echo "\033[32mDone: $goal\033[0m\n"
