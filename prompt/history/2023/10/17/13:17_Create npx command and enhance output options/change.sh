@@ -1,3 +1,16 @@
+#!/bin/sh
+set -e
+goal="Create npx command and enhance output options"
+echo "Plan:"
+echo "1. Update package.json to include the 'junior-news' bin command."
+echo "2. Modify the readGitHistoryToMd.js script to accept the --output argument or JUNIOR_NEWS_OUTPUT environment variable for file output."
+echo "3. Add a shebang to the readGitHistoryToMd.js script and make it executable."
+
+# 1. Update package.json
+jq '.bin["junior-news"] = "scripts/readGitHistoryToMd.js"' ./package.json > temp.json && mv temp.json ./package.json
+
+# 2. Modify the readGitHistoryToMd.js script and 3. Add a shebang
+cat > ./scripts/readGitHistoryToMd.js << 'EOF'
 #!/usr/bin/env node
 import fs from 'fs/promises';
 import path from 'path';
@@ -33,3 +46,9 @@ async function executeGitHistoryRead() {
 
 executeGitHistoryRead();
 
+EOF
+
+# Making the script executable
+chmod +x ./scripts/readGitHistoryToMd.js
+
+echo "\033[32mDone: $goal\033[0m\n"

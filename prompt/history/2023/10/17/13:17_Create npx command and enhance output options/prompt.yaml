@@ -1,0 +1,11 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./scripts/readGitHistoryToMd.js
+  - ./package.json
+requirements: >-
+  Create npm bin command to be executed with npx junior-news which calls the
+  exisiting function to read the git history.
+
+  Update the function to allow --output=[filename] cli arg or JUNIOR_NEWS_OUTPUT
+  env var to set the filename.
+os: OSX

@@ -8,7 +8,8 @@
     "junior": "scripts/main.js",
     "junior-web": "scripts/web.js",
     "junior-init": "scripts/init.js",
-    "junior-rollback": "scripts/junior-rollback.js"
+    "junior-rollback": "scripts/junior-rollback.js",
+    "junior-news": "scripts/readGitHistoryToMd.js"
   },
   "scripts": {
     "cli": "node scripts/main.js",
