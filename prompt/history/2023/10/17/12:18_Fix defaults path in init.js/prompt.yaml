@@ -1,0 +1,5 @@
+task: prompt/task/bug/fix.md
+attention:
+  - ./scripts/init.js
+requirements: The correct defaults path is ../prompt/defaults/ relative to __dirname
+os: OSX

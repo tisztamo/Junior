@@ -1,3 +1,9 @@
+#!/bin/sh
+set -e
+goal="Fix defaults path in init.js"
+echo "Plan:"
+echo "1. Modify defaultsPath in init.js to the correct relative path."
+cat > ./scripts/init.js << 'EOF'
 #!/usr/bin/env node
 import { fileURLToPath } from 'url';
 import createGitignore from '../src/git/createGitignore.js';
@@ -32,3 +38,5 @@ async function juniorInit() {
 }
 
 juniorInit();
+EOF
+echo "\033[32mDone: $goal\033[0m\n"
