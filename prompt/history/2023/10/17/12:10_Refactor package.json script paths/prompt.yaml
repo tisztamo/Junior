@@ -1,0 +1,8 @@
+task: prompt/task/refactor/custom.md
+attention:
+  - ./package.json
+requirements: >-
+  npm binary scripts were moved from src/ to scripts/ but the scripts section of
+  package.json was not updated. For every item in "bin", find the corresponding
+  item in "script" and update it! Do not change the ones not listed in bin!
+os: OSX
