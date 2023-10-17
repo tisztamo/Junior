@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import resetGit from './git/resetGit.js';
+import resetGit from '../src/git/resetGit.js';
 
 async function executeRollback() {
   try {

@@ -1,0 +1,5 @@
+task: prompt/task/bug/fix.md
+attention:
+  - ./scripts/junior-rollback.js
+requirements: ''
+os: OSX
