@@ -5,7 +5,7 @@ import { parse } from 'url';
 import { WebSocketServer } from 'ws';
 import { setupRoutes } from './setupRoutes.js';
 import { notifyOnFileChange } from './notifyOnFileChange.js';
-import getServerPort from './getServerPort.js';
+import getBackendPort from './getBackendPort.js';
 import hostConfig from '../config/hostConfig.js';
 import terminalRoutes from './terminal/terminalRoutes.js';
 
@@ -42,8 +42,8 @@ export function startServer() {
   setupRoutes(app);
 
   const { enabled, ip } = hostConfig();
-  const port = getServerPort();
+  const port = getBackendPort();
   server.listen(port, ip || (enabled ? '0.0.0.0' : undefined), () => {
-    console.log('Server is running on port', port);
+    console.log('Backend is running on port', port);
   });
 }

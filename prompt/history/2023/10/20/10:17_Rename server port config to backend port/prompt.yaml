@@ -1,0 +1,9 @@
+task: prompt/task/refactor/custom.md
+attention:
+  - ./src/backend/getServerPort.js
+  - ./docs/config/env_or_cli.md
+  - ./src/backend/startServer.js
+requirements: >-
+  Rename "server port" config (in all of: cli arg, env var, function and file
+  name) to "backend port" and update the docs
+os: OSX

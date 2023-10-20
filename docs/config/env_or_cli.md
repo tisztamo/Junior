@@ -12,10 +12,10 @@ The Junior process can be started using the following commands:
   - The final ignore list is a combination of the default list, command line arguments, and environmental variables.
   - Example: --ignore=./pathToIgnore
 
-- **--server-port, JUNIOR_SERVER_PORT**
-  - The port for the server.
+- **--backend-port, JUNIOR_BACKEND_PORT**
+  - The port for the backend.
   - Default: 10101
-  - Example: --server-port=8080
+  - Example: --backend-port=8080
 
 - **--host**
   - Host configuration. If provided without a value, it enables the host. Otherwise, specify an IP.
@@ -43,11 +43,9 @@ The Junior process can be started using the following commands:
 ## Examples
 
 ### Hosting on a VPN IP
-```
-junior-web --host=192.168.1.2
-```
+
+`junior-web --host=192.168.1.2`
 
 ### Ignoring a Directory from Attention Scan
-```
-junior-cli --ignore=./myDirectory
-```
+
+`junior-cli --ignore=./myDirectory`
