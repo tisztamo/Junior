@@ -16,3 +16,6 @@ node_modules
 *.md.old
 *.md.orig
 *.md.save
+
+# Ignoring build output directory
+/dist/

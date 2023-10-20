@@ -1,0 +1,11 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./package.json
+  - ./src/frontend/vite.config.js
+  - ./.gitignore
+requirements: >-
+  - Configure vite to put the build output to ./dist/fronted/ in the project
+  root (two levels up from the vite config)
+
+  - gitignore dist/
+os: OSX
