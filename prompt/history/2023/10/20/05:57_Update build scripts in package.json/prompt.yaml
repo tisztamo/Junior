@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./package.json
+requirements: >-
+  - Remove build:css script from package.json
+
+  - Create build:frontend script which runs vite build in the ./src/frontend/
+  dir (the config file is there)
+os: OSX

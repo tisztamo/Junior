@@ -14,11 +14,11 @@
   "scripts": {
     "cli": "node scripts/main.js",
     "start": "node scripts/web.js",
-    "build:css": "postcss ./src/frontend/styles.css -o ./dist/styles.css",
     "update-logo": "node ./scripts/updateLogo.js",
     "clear-branches": "node ./scripts/clearBranchesCommand.js $@",
     "test": "cypress open",
-    "rollback": "node scripts/junior-rollback.js"
+    "rollback": "node scripts/junior-rollback.js",
+    "build:frontend": "cd ./src/frontend/ && vite build"
   },
   "keywords": [
     "cli",
