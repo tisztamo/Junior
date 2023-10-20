@@ -5,15 +5,16 @@
   "type": "module",
   "main": "src/main.js",
   "bin": {
-    "junior": "scripts/main.js",
-    "junior-web": "scripts/dev.js",
+    "junior": "scripts/web.js",
+    "junior-web": "scripts/web.js",
+    "junior-cli": "scripts/cli.js",
     "junior-init": "scripts/init.js",
     "junior-rollback": "scripts/junior-rollback.js",
     "junior-news": "scripts/readGitHistoryToMd.js"
   },
   "scripts": {
-    "cli": "node scripts/main.js",
-    "start": "node scripts/dev.js",
+    "cli": "node scripts/cli.js",
+    "start": "node scripts/web.js",
     "update-logo": "node ./scripts/updateLogo.js",
     "clear-branches": "node ./scripts/clearBranchesCommand.js $@",
     "test": "cypress open",

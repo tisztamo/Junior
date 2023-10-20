@@ -1,0 +1,12 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./package.json
+  - ./scripts/main.js
+requirements: >-
+  - Update package.json to execute web.js both on npx junior and on npx
+  junior-web.
+
+  - Rename main.js to cli.js
+
+  - Create a new bin command for it: npx junior-cli
+os: OSX
