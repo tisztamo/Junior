@@ -1,0 +1,11 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./package.json
+  - ./src/backend/startServer.js
+requirements: >-
+  - Create an npm script build:backend which runs rollup in the src/backend dir
+
+  - Create rollup config in ./src/backend with ./src/backend/startServer.js as
+  entry, output dir: ./dist/backend/ (two levels up from the rollup config file)
+  Do not include dependencies in the build.
+os: OSX

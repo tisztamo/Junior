@@ -18,7 +18,8 @@
     "clear-branches": "node ./scripts/clearBranchesCommand.js $@",
     "test": "cypress open",
     "rollback": "node scripts/junior-rollback.js",
-    "build:frontend": "cd ./src/frontend/ && vite build"
+    "build:frontend": "cd ./src/frontend/ && vite build",
+    "build:backend": "cd src/backend && rollup --config rollup.config.js"
   },
   "keywords": [
     "cli",
