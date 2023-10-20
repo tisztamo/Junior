@@ -1,0 +1,8 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./package.json
+  - ./scripts/web.js
+requirements: >-
+  Rename web.js to dev.js and update package.json accordingly. Also create a
+  script for npm run dev that calls it.
+os: OSX
