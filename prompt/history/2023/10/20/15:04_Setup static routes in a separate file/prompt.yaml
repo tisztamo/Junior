@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/backend/startServer.js
+  - ./src/backend/setupRoutes.js
+requirements: stati
+os: OSX
+upStaticRoutes.js
+requirements: ''
+os: OSX
