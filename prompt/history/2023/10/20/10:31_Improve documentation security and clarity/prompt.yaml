@@ -1,0 +1,9 @@
+task: prompt/task/doc/improve.md
+attention:
+  - ./docs/config/env_or_cli.md
+requirements: >-
+  1. --host without a value enables hosting on all IPs.
+
+  2. Add a warning to --host that it is unsecure and should only be exposed on a
+  VPN, or a secured local network
+os: OSX
