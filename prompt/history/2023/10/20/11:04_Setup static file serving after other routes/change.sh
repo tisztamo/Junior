@@ -1,3 +1,10 @@
+#!/bin/sh
+set -e
+goal="Setup static file serving after other routes"
+echo "Plan:"
+echo "1. Update startServer.js to serve static files from the current directory after setting up other routes."
+
+cat > ./src/backend/startServer.js << 'EOF'
 import express from 'express';
 import cors from 'cors';
 import { createServer } from 'http';
@@ -22,3 +29,6 @@ export function startServer() {
 
   serverSetup(server);
 }
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

@@ -1,0 +1,6 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/backend/setupRoutes.js
+  - ./src/backend/startServer.js
+requirements: setup static file serving from the current directory
+os: OSX
