@@ -1,0 +1,7 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/backend/startServer.js
+  - ./src/backend/serverConfig.js
+  - ./src/backend/getServerPort.js
+requirements: Delete serverConfig.js and use getServerPort.js instead in startServer
+os: OSX

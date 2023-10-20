@@ -1,3 +1,17 @@
+#!/bin/sh
+set -e
+goal="Refactor code to use getServerPort.js"
+echo "Plan:"
+echo "1. Delete serverConfig.js"
+echo "2. Modify startServer.js to use getServerPort.js instead of serverConfig.js"
+echo "3. Ensure ES6 imports are used and the code adheres to the project specifics."
+
+# Step 1: Delete serverConfig.js
+rm ./src/backend/serverConfig.js
+echo "Deleted serverConfig.js"
+
+# Step 2: Modify startServer.js
+cat > ./src/backend/startServer.js << 'EOF'
 import express from 'express';
 import cors from 'cors';
 import { createServer } from 'http';
@@ -47,3 +61,7 @@ export function startServer() {
     console.log('Server is running on port', port);
   });
 }
+EOF
+echo "Modified startServer.js to use getServerPort.js"
+
+echo "\033[32mDone: $goal\033[0m\n"
