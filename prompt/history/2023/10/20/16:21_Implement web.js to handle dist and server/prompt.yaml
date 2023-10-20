@@ -1,0 +1,11 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./scripts/dev.js
+requirements: >-
+  Create scripts/web.js which
+
+  -  Logs a note to the console and then runs npm run build if the dist/ dir
+  does not exists
+
+  - Starts the server, but not vite
+os: OSX
