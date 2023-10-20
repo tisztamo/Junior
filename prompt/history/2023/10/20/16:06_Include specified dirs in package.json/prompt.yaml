@@ -1,0 +1,13 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./package.json
+requirements: >-
+  Update package.json to define the files to be included in the package as every
+  file in the dirs: 
+
+  - dist/
+
+  - prompt/
+
+  - scripts/
+os: OSX
