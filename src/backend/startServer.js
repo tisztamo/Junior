@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import { createServer } from 'http';
-import { setupRoutes } from './setupRoutes.js';
+import { setupRoutes } from './routes/setupRoutes.js';  // Updated path
 import { websocketSetup } from './websocketSetup.js';
 import { serverSetup } from './serverSetup.js';
 
@@ -16,9 +16,6 @@ export function startServer() {
   websocketSetup(server);
 
   setupRoutes(app);
-  
-  // Serve static files from current directory after other routes
-  app.use('/', express.static('.'));
 
   serverSetup(server);
 }
