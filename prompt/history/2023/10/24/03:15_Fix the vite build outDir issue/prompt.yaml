@@ -1,0 +1,19 @@
+task: prompt/task/bug/fix.md
+attention:
+  - ./package.json
+requirements: >
+  > @aijunior/dev@0.3.10 build:frontend
+
+  > cd ./src/frontend/ && vite build
+
+
+  vite v4.4.11 building for production...
+
+  ✓ 174 modules transformed.
+
+
+  (!) outDir /Users/ko/projects-new/Junior/dist/frontend is not inside project
+  root and will not be emptied.
+
+  Use --emptyOutDir to override.
+os: OSX
