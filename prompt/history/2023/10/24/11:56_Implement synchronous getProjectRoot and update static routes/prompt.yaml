@@ -1,0 +1,10 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/backend/routes/setupStaticRoutes.js
+requirements: >-
+  Create src/backend/fileutils/getProjectRoot.js with a function which, when
+  first called, goes up from import.meta in the file system to the first dir
+  containing a package.json. If found, returns and memoizes it. If not, throws
+  an error. Use this new function instead of the dot-dot based logic when
+  setting up static routes.
+os: OSX
