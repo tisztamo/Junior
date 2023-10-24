@@ -1,5 +1,8 @@
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 
+const BIN_PATH = '../../bin/';
+const DIST_PATH = '../../dist/';
+
 const commonConfig = {
   output: {
     format: 'esm'
@@ -18,23 +21,31 @@ export default [
     input: './startServer.js',
     output: {
       ...commonConfig.output,
-      dir: '../../dist/backend/'
+      dir: `${DIST_PATH}backend/`
     }
   },
   {
     ...commonConfig,
-    input: '../../bin/init.js',
+    input: `${BIN_PATH}init.js`,
     output: {
       ...commonConfig.output,
-      dir: '../../dist/bin/'
+      dir: `${DIST_PATH}bin/`
     }
   },
   {
     ...commonConfig,
-    input: '../../bin/rollback.js',
+    input: `${BIN_PATH}rollback.js`,
     output: {
       ...commonConfig.output,
-      dir: '../../dist/bin/'
+      dir: `${DIST_PATH}bin/`
+    }
+  },
+  {
+    ...commonConfig,
+    input: `${BIN_PATH}web.js`,
+    output: {
+      ...commonConfig.output,
+      dir: `${DIST_PATH}bin/`
     }
   }
 ];

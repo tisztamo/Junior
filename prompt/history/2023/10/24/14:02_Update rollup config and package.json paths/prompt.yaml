@@ -1,0 +1,10 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./package.json
+  - ./src/backend/rollup.config.js
+  - ./bin/web.js
+requirements: |-
+  - bin commands in package.json should refer to dist/bin/ instead of bin/
+  - Also roll up web.js
+  - Factor out ../../bin/ and ../../dist to two const in rollup config
+os: OSX
