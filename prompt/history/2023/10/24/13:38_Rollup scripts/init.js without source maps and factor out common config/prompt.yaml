@@ -1,0 +1,6 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./package.json
+  - ./src/backend/rollup.config.js
+requirements: Backend build should also rollup scripts/init.js with the same config.
+os: OSX
