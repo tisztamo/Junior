@@ -1,3 +1,13 @@
+#!/bin/sh
+set -e
+goal="Refactor web.js for dynamic imports, correct paths using import.meta and shebang for npx"
+echo "Plan:"
+echo "1. Add a shebang for npx execution."
+echo "2. Modify web.js to use paths relative to project root using import.meta."
+echo "3. Adjust project root to be one level up from the script's directory."
+echo "4. Dynamically import startServer from dist/backend/startServer.js."
+
+cat > ./scripts/web.js << 'EOF'
 #!/usr/bin/env node
 
 import fs from 'fs';
@@ -23,3 +33,6 @@ async function main() {
 
 main();
 
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

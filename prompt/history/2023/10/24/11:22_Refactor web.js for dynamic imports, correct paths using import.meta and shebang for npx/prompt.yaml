@@ -1,0 +1,11 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./scripts/web.js
+requirements: >-
+  1. In web.js, checking for the dist dir should not be relative to cwd but to
+  the project root
+
+  2. When building, run the build from the project  root
+
+  3. startServer should be imported dynamically from dist/backend/startServer.js
+os: OSX
