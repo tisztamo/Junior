@@ -1,0 +1,12 @@
+task: prompt/task/refactor/custom.md
+attention:
+  - ./package.json
+  - ./bin/web.js
+  - ./bin/junior-rollback.js
+  - ./src/backend/rollup.config.js
+requirements: >-
+  - Rename junior-rollback.js to rollback.js and create a new entry for it in
+  the rollup config
+
+  - init.js was moved from scripts to bin. Update the rollup config accordingly
+os: OSX

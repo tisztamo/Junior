@@ -1,3 +1,16 @@
+#!/bin/sh
+set -e
+
+goal="Refactor files and update rollup config"
+echo "Plan:"
+echo "1. Rename junior-rollback.js to rollback.js"
+echo "2. Update rollup config for new paths and additions"
+
+# Rename junior-rollback.js to rollback.js
+mv ./bin/junior-rollback.js ./bin/rollback.js
+
+# Update rollup.config.js with new input paths and new entry for rollback.js
+cat > ./src/backend/rollup.config.js << 'EOF'
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 
 const commonConfig = {
@@ -38,3 +51,6 @@ export default [
     }
   }
 ];
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
