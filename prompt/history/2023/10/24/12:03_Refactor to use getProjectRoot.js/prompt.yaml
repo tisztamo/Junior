@@ -1,0 +1,10 @@
+task: prompt/task/refactor/custom.md
+attention:
+  - ./src/backend/fileutils/getProjectRoot.js
+  - ./src/frontend/startVite.js
+  - ./src/frontend/vite.config.js
+  - ./src/backend/handlers/listTasks.js
+requirements: >-
+  Use getProjectRoot instead of calculating the project root from import.meta
+  with dotdots
+os: OSX

@@ -1,17 +1,17 @@
 import { defineConfig } from 'vite'
 import solidPlugin from 'vite-plugin-solid'
-import { join, dirname } from 'path'
-import { fileURLToPath } from 'url'
+import { join } from 'path'
+import getProjectRoot from '../backend/fileutils/getProjectRoot.js'
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
+const projectRoot = getProjectRoot();
 
 export default defineConfig({
   plugins: [solidPlugin()],
   css: {
-    postcss: join(__dirname, 'postcss.config.cjs'),
+    postcss: join(projectRoot, 'src/frontend/postcss.config.cjs'),
   },
   build: {
     target: 'esnext',
-    outDir: join(__dirname, '../../dist/frontend')
+    outDir: join(projectRoot, 'dist/frontend')
   },
 })

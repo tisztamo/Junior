@@ -1,11 +1,9 @@
-import path from 'path';
-import { fileURLToPath } from 'url';
 import { createServer } from 'vite';
 import hostConfig from '../config/hostConfig.js';
 import getFrontendPort from './getFrontendPort.js';
+import getProjectRoot from '../backend/fileutils/getProjectRoot.js';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const projectRoot = path.resolve(__dirname, '../..');
+const projectRoot = getProjectRoot();
 
 export async function startVite() {
   const { enabled, ip } = hostConfig();
