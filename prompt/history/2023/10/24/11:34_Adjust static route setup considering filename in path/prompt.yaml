@@ -1,0 +1,7 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/backend/routes/setupStaticRoutes.js
+requirements: >-
+  When serving static files, project root is only two levels up from import.meta
+  if it contains "dist/backend/"
+os: OSX
