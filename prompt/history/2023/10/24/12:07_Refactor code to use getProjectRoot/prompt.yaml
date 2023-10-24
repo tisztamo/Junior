@@ -1,0 +1,9 @@
+task: prompt/task/refactor/custom.md
+attention:
+  - ./src/backend/fileutils/getProjectRoot.js
+  - ./src/prompt/loadPromptFile.js
+  - ./src/prompt/getPromptDirectories.js
+requirements: >-
+  Use getProjectRoot instead of calculating the project root from import.meta
+  with dotdots
+os: OSX

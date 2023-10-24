@@ -1,10 +1,7 @@
 import fs from 'fs';
-import path from 'path';
 import ejs from 'ejs';
-import { fileURLToPath } from 'url';
+import getProjectRoot from '../backend/fileutils/getProjectRoot.js';
 import ejsConfig from './ejsConfig.js';
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const loadPromptFile = async (filePath, templateVars) => {
   try {
@@ -12,7 +9,7 @@ const loadPromptFile = async (filePath, templateVars) => {
     return await ejs.renderFile(filePath, templateVars, ejsConfig);
   } catch (err) {
     // If the file doesn't exist, try reading it from the project root directory
-    const rootPath = path.resolve(__dirname, '../../', filePath);
+    const rootPath = `${getProjectRoot()}/${filePath}`;
     return await ejs.renderFile(rootPath, templateVars, ejsConfig);
   }
 };

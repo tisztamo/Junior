@@ -1,15 +1,12 @@
 import path from 'path';
-import url from 'url';
-
-const __filename = url.fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import getProjectRoot from '../backend/fileutils/getProjectRoot.js';
 
 const getPromptDirectories = () => {
-  const rootDir = path.resolve();
+  const rootDir = getProjectRoot();
   const workingDir = process.cwd();
   
   return [
-    path.join(path.resolve(__dirname, '../../'), 'prompt'),
+    path.join(rootDir, 'prompt'),
     path.join(workingDir, 'prompt')
   ];
 }
