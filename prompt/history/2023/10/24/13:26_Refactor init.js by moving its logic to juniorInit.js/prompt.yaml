@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./scripts/init.js
+requirements: >-
+  - Move the init functionality from init.js to src/git/juniorInit.js
+
+  - import the new file from init.js and call the function. The shebang should
+  remain in init.js
+os: OSX
