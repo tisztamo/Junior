@@ -1,0 +1,5 @@
+task: prompt/task/bug/fix.md
+attention:
+  - ./src/frontend/components/files/SourceFileDisplay.jsx
+requirements: "The syntax highlighter is slow. \nslow.\n\nA Prism issue says doinf something like this may help:\nvar codeElement = $('#download-' + type + ' code');\n\t\t\t\tvar pre = codeElement.parentElement;\n\n\t\t\t\tvar newCode = document.createElement('CODE');\n\t\t\t\tnewCode.className = codeElement.className;\n\t\t\t\tnewCode.textContent = text;\n\n\t\t\t\tPrism.highlightElement(newCode, true, function () {\n\t\t\t\t\tpre.replaceChild(newCode, codeElement);\n\t\t\t\t});"
+os: OSX

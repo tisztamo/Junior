@@ -1,3 +1,9 @@
+#!/bin/sh
+set -e
+goal="Optimize Prism syntax highlighting performance"
+echo "Plan:"
+echo "1. Modify SourceFileDisplay.jsx to optimize Prism highlighting as per the suggestion provided."
+cat > ./src/frontend/components/files/SourceFileDisplay.jsx << 'EOF'
 import { createSignal, onMount } from 'solid-js';
 import fileReadService from '../../service/files/fileReadService';
 
@@ -40,3 +46,5 @@ const SourceFileDisplay = (props) => {
 };
 
 export default SourceFileDisplay;
+EOF
+echo "\033[32mDone: $goal\033[0m\n"
