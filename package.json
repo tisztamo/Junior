@@ -61,10 +61,11 @@
   },
   "homepage": "https://github.com/tisztamo/Junior#readme",
   "devDependencies": {
-    "cypress": "^13.0.0",
     "@rollup/plugin-node-resolve": "^15.2.3",
+    "cypress": "^13.0.0",
     "postcss": "^8.4.26",
     "postcss-nested": "^6.0.1",
+    "rollup-plugin-preserve-shebang": "^1.0.1",
     "vite": "^4.3.9",
     "vite-plugin-solid": "^2.7.0"
   },

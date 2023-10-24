@@ -1,0 +1,5 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/backend/rollup.config.js
+requirements: ''
+os: OSX
