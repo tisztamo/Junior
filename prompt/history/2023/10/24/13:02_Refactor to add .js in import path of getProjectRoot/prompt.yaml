@@ -1,0 +1,5 @@
+task: prompt/task/refactor/custom.md
+attention:
+  - ./src/backend/routes/setupStaticRoutes.js
+requirements: Add .js to the import path of getprojectroot
+os: OSX
