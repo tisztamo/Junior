@@ -1,0 +1,6 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./package.json
+  - ./scripts/dev.js
+requirements: npm start should run scripts/dev.js
+os: OSX
