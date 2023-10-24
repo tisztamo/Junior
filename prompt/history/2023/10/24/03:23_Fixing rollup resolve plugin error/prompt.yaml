@@ -1,0 +1,17 @@
+task: prompt/task/bug/fix.md
+attention:
+  - ./package.json
+  - ./src/backend/rollup.config.js
+requirements: >-
+  > @aijunior/dev@0.3.10 build:backend
+
+  > cd src/backend && rollup --config rollup.config.js
+
+
+  [!] Error: Cannot find package '@rollup/plugin-node-resolve' imported from
+  /Users/ko/projects-new/Junior/src/backend/rollup.config.js
+      at new NodeError (node:internal/errors:388:5)
+
+  To fix this, check if we need the missing resolve plugin: We need a build that
+  does not contain its deps, but uses them from the runtime environment.
+os: OSX
