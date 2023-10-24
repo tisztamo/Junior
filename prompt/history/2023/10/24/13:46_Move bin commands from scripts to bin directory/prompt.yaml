@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./package.json
+requirements: >-
+  Create bin/ dir and move the bin command files from scripts to there. No need
+  to edit the files, only update package.json
+
+  For the files also used from the "scripts" section, leave a copy there.
+os: OSX

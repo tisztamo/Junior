@@ -5,12 +5,12 @@
   "type": "module",
   "main": "src/main.js",
   "bin": {
-    "junior": "scripts/web.js",
-    "junior-web": "scripts/web.js",
-    "junior-cli": "scripts/cli.js",
-    "junior-init": "scripts/init.js",
-    "junior-rollback": "scripts/junior-rollback.js",
-    "junior-news": "scripts/readGitHistoryToMd.js"
+    "junior": "bin/web.js",
+    "junior-web": "bin/web.js",
+    "junior-cli": "bin/cli.js",
+    "junior-init": "bin/init.js",
+    "junior-rollback": "bin/junior-rollback.js",
+    "junior-news": "bin/readGitHistoryToMd.js"
   },
   "scripts": {
     "cli": "node scripts/cli.js",
