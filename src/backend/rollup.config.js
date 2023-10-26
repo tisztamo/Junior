@@ -1,5 +1,6 @@
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import shebang from 'rollup-plugin-preserve-shebang';
+import { makeExecutableRollupPlugin } from './build/makeExecutableRollupPlugin.js';
 
 const BIN_PATH = '../../bin/';
 const DIST_PATH = '../../dist/';
@@ -12,7 +13,8 @@ const commonConfig = {
     nodeResolve({
       preferBuiltins: true,
     }),
-    shebang()
+    shebang(),
+    makeExecutableRollupPlugin()
   ],
   external: [/node_modules/]
 };
