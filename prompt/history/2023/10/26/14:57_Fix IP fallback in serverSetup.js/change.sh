@@ -1,3 +1,10 @@
+#!/bin/sh
+set -e
+goal="Fix IP fallback in serverSetup.js"
+echo "Plan:"
+echo "1. Modify serverSetup.js to handle IP fallback scenario"
+
+cat > ./src/backend/serverSetup.js << 'EOF'
 import getBackendPort from './getBackendPort.js';
 import hostConfig from '../config/hostConfig.js';
 import { logServerURLs } from './logServerURLs.js';
@@ -13,3 +20,6 @@ export function serverSetup(server) {
     logServerURLs(enabled, ip, port);
   });
 }
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
