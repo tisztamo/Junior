@@ -1,0 +1,9 @@
+task: prompt/task/bug/fix.md
+attention:
+  - ./package.json
+  - ./bin/rollback.js
+requirements: |
+  The bin command  "junior-rollback" is served by rollback.js
+
+  Fix package.json!
+os: OSX
