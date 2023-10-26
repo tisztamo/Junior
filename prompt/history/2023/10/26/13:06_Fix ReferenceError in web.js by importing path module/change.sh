@@ -1,3 +1,10 @@
+#!/bin/sh
+set -e
+goal="Fix ReferenceError in web.js by importing path module"
+echo "Plan:"
+echo "1. Update web.js to import the path module."
+
+cat > ./bin/web.js << 'EOF'
 #!/usr/bin/env node
 
 import fs from 'fs';
@@ -22,3 +29,6 @@ async function main() {
 }
 
 main();
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

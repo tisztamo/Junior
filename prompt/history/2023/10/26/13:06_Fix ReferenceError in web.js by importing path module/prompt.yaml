@@ -1,0 +1,6 @@
+task: prompt/task/bug/fix.md
+attention:
+  - ./src/backend/fileutils/getProjectRoot.js
+  - ./bin/web.js
+requirements: Use getprojectroot in web.js
+os: OSX
