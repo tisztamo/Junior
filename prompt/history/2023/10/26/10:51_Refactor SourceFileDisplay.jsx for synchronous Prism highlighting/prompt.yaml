@@ -1,0 +1,7 @@
+task: prompt/task/bug/fix.md
+attention:
+  - ./src/frontend/components/files/SourceFileDisplay.jsx
+requirements: |-
+  - Make prism highlighting synchronous
+  - Add the language-specific class to the pre element too
+os: OSX

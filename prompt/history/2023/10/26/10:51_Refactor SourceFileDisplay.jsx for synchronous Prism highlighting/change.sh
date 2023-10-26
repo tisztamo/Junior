@@ -1,3 +1,12 @@
+#!/bin/sh
+set -e
+goal="Refactor SourceFileDisplay.jsx for synchronous Prism highlighting"
+echo "Plan:"
+echo "1. Modify SourceFileDisplay.jsx to make Prism highlighting synchronous."
+echo "2. Add the language-specific class to the pre element."
+
+# Making changes to SourceFileDisplay.jsx
+cat > ./src/frontend/components/files/SourceFileDisplay.jsx << 'EOF'
 import { createSignal, onMount } from 'solid-js';
 import fileReadService from '../../service/files/fileReadService';
 
@@ -39,3 +48,6 @@ const SourceFileDisplay = (props) => {
 };
 
 export default SourceFileDisplay;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
