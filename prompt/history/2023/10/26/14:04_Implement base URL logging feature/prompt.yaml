@@ -1,0 +1,7 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/backend/startServer.js
+  - ./src/backend/serverSetup.js
+  - ./src/backend/logServerURLs.js
+requirements: ''
+os: OSX
