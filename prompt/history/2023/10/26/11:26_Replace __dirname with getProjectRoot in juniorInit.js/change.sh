@@ -1,3 +1,12 @@
+#!/bin/sh
+set -e
+goal="Replace __dirname with getProjectRoot in juniorInit.js"
+echo "Plan:"
+echo "1. Import getProjectRoot function into juniorInit.js."
+echo "2. Replace the use of __dirname with getProjectRoot for determining the path to the defaults directory."
+
+# Modifying juniorInit.js
+cat > ./src/git/juniorInit.js << 'EOF'
 import { fileURLToPath } from 'url';
 import createGitignore from './createGitignore.js';
 import { createPromptYaml } from '../prompt/createPromptYaml.js';
@@ -29,3 +38,6 @@ export async function juniorInit() {
 
   console.log('\x1b[32mRepo initialized for Junior development\x1b[0m');
 }
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

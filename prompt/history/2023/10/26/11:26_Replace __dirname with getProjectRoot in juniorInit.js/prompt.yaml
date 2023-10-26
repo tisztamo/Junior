@@ -1,0 +1,8 @@
+task: prompt/task/bug/fix.md
+attention:
+  - ./src/backend/fileutils/getProjectRoot.js
+  - ./src/git/juniorInit.js
+requirements: >-
+  Eliminate dirname, use getprojectroot in juniorinit! The correct defaults path
+  is [project root]/prompt/defaults/
+os: OSX
