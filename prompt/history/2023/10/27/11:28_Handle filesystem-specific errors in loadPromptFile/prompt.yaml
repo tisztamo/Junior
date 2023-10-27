@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/prompt/loadPromptFile.js
+  - ./src/prompt/ejsConfig.js
+requirements: >-
+  When loading the prompt file from the working dir results in error, check if
+  the error is a filesystem-related one from nodejs. If yes, try the other dir.
+  If no, log the error to the console and rethrow it.
+os: OSX

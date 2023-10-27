@@ -1,3 +1,12 @@
+#!/bin/sh
+set -e
+goal="Handle filesystem-specific errors in loadPromptFile"
+echo "Plan:"
+echo "1. Modify loadPromptFile.js to correctly identify filesystem-specific errors and handle them."
+echo "2. If it's a filesystem error, try loading from project root directory."
+echo "3. If it's a non-filesystem error, log to the console and rethrow."
+
+cat > ./src/prompt/loadPromptFile.js << 'EOF'
 import fs from 'fs';
 import ejs from 'ejs';
 import getProjectRoot from '../backend/fileutils/getProjectRoot.js';
@@ -21,3 +30,6 @@ const loadPromptFile = async (filePath, templateVars) => {
 };
 
 export { loadPromptFile };
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
