@@ -6,4 +6,4 @@
 - Prefer *async/await* over promises!
 - The frontend uses *Solidjs* and Tailwind, edit .jsx files accordingly!
 
-<%- include("specifics.md", { language: "ES6" }) %>
+<%- include("prompt/specifics.md", { language: "ES6" }) %>

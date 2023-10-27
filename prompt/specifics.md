@@ -1,1 +1,1 @@
-<%- include("languageSpecifics.md", { language: locals.language }) %>
+<%- include("prompt/languageSpecifics.md", { language: locals.language }) %>
