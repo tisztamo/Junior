@@ -1,0 +1,20 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/prompt/ejsConfig.js
+  - ./src/backend/fileutils/getProjectRoot.js
+requirements: >
+  - We need to load ejs includes relative to the current working dir, or when
+  not found, relative to the project root.
+
+  - Set both ejs root and views
+
+
+  From ejs docs:
+
+
+  root Set project root for includes with an absolute path (e.g, /file.ejs). Can
+  be array to try to resolve include from multiple directories.
+
+
+  views An array of paths to use when resolving includes with relative paths.
+os: OSX
