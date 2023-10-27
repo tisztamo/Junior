@@ -1,0 +1,11 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/backend/handlers/generateHandler.js
+requirements: >-
+  - Create src/config/isDebug.js which checks for --debug cli arg and
+  JUNIOR_DEBUG=true env var.
+
+  - If debug is enabled, do not error when the directory is dirty.
+
+  - If debug not enabled, mention --debug in the Error
+os: OSX
