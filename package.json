@@ -1,6 +1,6 @@
 {
   "name": "@aijunior/dev",
-  "version": "0.3.12",
+  "version": "0.3.13",
   "description": "Your AI Contributor which codes itself",
   "type": "module",
   "main": "src/main.js",
