@@ -1,7 +1,7 @@
 
 ## Project Specifics
 
-<%= "\n\n# Sample `prompt/projectSpecifics.md`, remove this line. Keep this short and clean. Note that Junior does not like large files!\n" %>
+<%= "\n\n# !!!! Sample !!!! \n\n Edit `prompt/projectSpecifics.md` and remove this line! Keep it short and clean. Note that Junior prefers small files.\n" %>
 
 - Every js file should *only export a single function*!
 - Prefer *async/await* over promises!
