@@ -1,3 +1,12 @@
+#!/bin/sh
+set -e
+goal="Enhance terminal reconnection messages, reset color, and add delay"
+echo "Plan:"
+echo "1. Modify setupTerminalServer.js to add a newline before disconnection notice."
+echo "2. Send a yellow notice with instructions to the newly connected socket after a short delay."
+echo "3. Ensure newline and yellow prompt \"unknown shell $ \" are added, then reset color."
+
+cat > ./src/backend/terminal/setupTerminalServer.js << 'EOF'
 import os from 'os';
 import pty from 'node-pty';
 
@@ -53,3 +62,6 @@ export default function setupTerminalServer(socket, id = "1") {
   // Update the socket reference in the terminals dictionary
   terminals[id].socket = socket;
 }
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

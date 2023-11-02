@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/backend/terminal/setupTerminalServer.js
+requirements: >-
+  - Add a newline before the disconnection notice
+
+  - Send a yellow notice to the newly connected socket that the terminal is
+  reused, history is not copied. Add a newline and the yellow prompt "unknown
+  shell $ "
