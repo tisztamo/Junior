@@ -16,7 +16,7 @@ echo "Plan:"
 echo "1. [...]"
 cat > x.js << 'EOF'
 [...]
-'EOF'
+EOF
 echo "\033[32mDone: $goal\033[0m\n"
 ```
 EXAMPLE END
