@@ -1,0 +1,14 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./bin/web.js
+  - ./src/prompt/createPromptYaml.js
+  - ./src/git/juniorInit.js
+requirements: >-
+  - When the ./prompt/ dir does not exists relative to the current working dir
+  (not the project root), we should log a yellow warning and call juniorInit
+  before starting the server in web.js
+
+  - If ./prompt/ exists but ./prompt.yaml does not (also relative to cwd), call
+  createPromptYaml
+
+  Put these checks and actions to src/prompt/prepareDirForJunior.js

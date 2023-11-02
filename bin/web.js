@@ -3,9 +3,13 @@
 import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
+import { prepareDirForJunior } from '../src/prompt/prepareDirForJunior.js';
 import getProjectRoot from '../src/backend/fileutils/getProjectRoot.js';
 
 async function main() {
+    // Prepare the directory for Junior
+    await prepareDirForJunior();
+
     // Determine the project root based on the getProjectRoot function
     const projectRoot = getProjectRoot();
 
