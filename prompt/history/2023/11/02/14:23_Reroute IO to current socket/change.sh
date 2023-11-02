@@ -1,3 +1,12 @@
+#!/bin/sh
+set -e
+goal="Reroute IO to current socket"
+echo "Plan:"
+echo "1. Modify setupTerminalServer.js to update terminal data event handler."
+echo "2. Ensure terminal output is directed to the new socket when reusing a terminal."
+
+# Modifying setupTerminalServer.js
+cat > ./src/backend/terminal/setupTerminalServer.js << 'EOF'
 import os from 'os';
 import pty from 'node-pty';
 
@@ -49,3 +58,6 @@ export default function setupTerminalServer(socket, id = "1") {
   terminals[id].socket = socket;
 }
 
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

@@ -1,0 +1,4 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/backend/terminal/setupTerminalServer.js
+requirements: We need to "reroute" the IO to the current socket.
