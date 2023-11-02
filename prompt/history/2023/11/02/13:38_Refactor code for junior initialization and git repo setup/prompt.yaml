@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/git/initRepo.js
+  - ./src/prompt/prepareDirForJunior.js
+requirements: >-
+  - initRepo should log with yellow "Initializing git repo"
+
+  - Reword the warning in prepareDirForJunior, remove "prompt directory does not
+  exists" from it

@@ -7,7 +7,7 @@ export async function prepareDirForJunior() {
   const promptDir = path.join(process.cwd(), 'prompt');
 
   if (!fs.existsSync(promptDir)) {
-    console.warn('\x1b[33mWarning: prompt/ directory does not exist. Initializing Junior...\x1b[0m');
+    console.warn('\x1b[33mWarning: Initializing Junior...\x1b[0m');
     await juniorInit();
   } else {
     const promptYaml = path.join(promptDir, 'prompt.yaml');
