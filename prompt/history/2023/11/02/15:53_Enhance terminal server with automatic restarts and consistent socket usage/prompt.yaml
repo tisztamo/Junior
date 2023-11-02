@@ -1,0 +1,8 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/backend/terminal/setupTerminalServer.js
+requirements: >-
+  - Restart the shell after exit and update the dict
+
+  - At every send and close: get the socket from the dict, not from the
+  argument.

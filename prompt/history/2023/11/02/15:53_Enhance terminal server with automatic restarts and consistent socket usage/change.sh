@@ -1,3 +1,34 @@
+#!/bin/sh
+set -e
+goal="Enhance terminal server with automatic restarts and consistent socket usage"
+echo "Plan:"
+echo "1. Create a function to initialize a terminal."
+echo "2. Modify event listeners to restart the terminal on exit."
+echo "3. Update the existing code to use the socket from the dictionary."
+
+# Step 1: Create a function to initialize a terminal
+cat > ./src/backend/terminal/initializeTerminal.js << 'EOF'
+import os from 'os';
+import pty from 'node-pty';
+
+export default function initializeTerminal(socket, id) {
+  const defaultShell = process.env.SHELL || '/bin/sh';
+  const shell = os.platform() === 'win32' ? 'powershell.exe' : defaultShell;
+  const terminal = pty.spawn(shell, [], {
+    name: 'xterm-color',
+    env: process.env,
+  });
+
+  terminal.on('data', (data) => {
+    socket.send(data);
+  });
+
+  return terminal;
+}
+EOF
+
+# Step 2: Modify event listeners to restart the terminal on exit
+cat > ./src/backend/terminal/setupTerminalServer.js << 'EOF'
 import os from 'os';
 import pty from 'node-pty';
 import initializeTerminal from './initializeTerminal.js';
@@ -44,3 +75,6 @@ export default function setupTerminalServer(socket, id = "1") {
   // Update the socket reference in the terminals dictionary
   terminals[id].socket = socket;
 }
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
