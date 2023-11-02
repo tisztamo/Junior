@@ -1,3 +1,10 @@
+#!/bin/sh
+set -e
+goal="Enhance terminal ID management with logs and reuse"
+echo "Plan:"
+echo "1. Amend setupTerminalServer.js to send a disconnect log to the old socket."
+echo "2. Reuse the existing terminal if available and log the action to the console."
+cat > ./src/backend/terminal/setupTerminalServer.js << 'EOF'
 import os from 'os';
 import pty from 'node-pty';
 
@@ -41,3 +48,5 @@ export default function setupTerminalServer(socket, id = "1") {
 
   terminals[id].socket = socket;
 }
+EOF
+echo "\033[32mDone: $goal\033[0m\n"
