@@ -1,0 +1,7 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/backend/terminal/setupTerminalServer.js
+requirements: |-
+  Use a lighter yellow for the terminal notices
+  Send two spaces instead of newline before the prompt
+  Remove the word "Notice: "
