@@ -1,3 +1,10 @@
+#!/bin/sh
+set -e
+goal="Implement terminal server ID management"
+echo "Plan:"
+echo "1. Update setupTerminalServer.js to accept an id parameter and store terminals and sockets in a dictionary."
+echo "2. Modify the handling of new connections to check for existing ids and close previous sockets if necessary."
+cat > ./src/backend/terminal/setupTerminalServer.js << 'EOF'
 import os from 'os';
 import pty from 'node-pty';
 
@@ -36,3 +43,5 @@ export default function setupTerminalServer(socket, id = "1") {
 
   terminals[id] = { terminal, socket };
 }
+EOF
+echo "\033[32mDone: $goal\033[0m\n"

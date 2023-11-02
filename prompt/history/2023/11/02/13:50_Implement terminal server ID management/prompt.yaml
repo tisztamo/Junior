@@ -1,0 +1,10 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/backend/terminal/setupTerminalServer.js
+requirements: >-
+  - Allow specifying a string id for the terminal server (default:&#34;1&#34;)
+
+  - Store the terminal and the socket in a dict, keyed with the id
+
+  - When a new call arrives with an already-used id, close its socket and use
+  the new one
