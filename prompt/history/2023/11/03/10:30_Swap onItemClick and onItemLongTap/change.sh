@@ -1,3 +1,11 @@
+#!/bin/sh
+set -e
+goal="Swap onItemClick and onItemLongTap"
+echo "Plan:"
+echo "1. Modify the MultiSelect component to swap the onItemClick and onItemLongTap functions."
+echo "2. Ensure the changes follow the ES6 and SolidJS standards."
+
+cat > ./src/frontend/components/MultiSelect/MultiSelect.jsx << 'EOF'
 import { createSignal, createEffect } from 'solid-js';
 import SearchBar from './SearchBar';
 import ResultSet from './ResultSet';
@@ -59,3 +67,5 @@ const MultiSelect = (props) => {
 
 export default MultiSelect;
 
+EOF
+echo "\033[32mDone: $goal\033[0m\n"

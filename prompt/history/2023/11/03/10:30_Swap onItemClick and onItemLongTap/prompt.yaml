@@ -1,0 +1,4 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/MultiSelect/MultiSelect.jsx
+requirements: Swap onItemLongTap and onItemClick values
