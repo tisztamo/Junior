@@ -1,0 +1,9 @@
+task: prompt/task/bug/fix.md
+attention:
+  - ./src/prompt/prepareDirForJunior.js
+  - ./src/prompt/promptDescriptorConfig.js
+requirements: >-
+  When checking prompt.yaml in the second if, do not prepend the prompt dir to
+  the filename, use the config instead. Again: leave the first check as is,
+  remove the join call from the second, and use the config instead of the
+  literal.

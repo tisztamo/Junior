@@ -1,3 +1,13 @@
+#!/bin/sh
+set -e
+goal="Refactor promptDir checks using config"
+echo "Plan:"
+echo "1. Import descriptor file name from the config in prepareDirForJunior.js."
+echo "2. Use the config variable for the 'prompt.yaml' check, ensuring it's relative to the current directory."
+
+# Step 1: Import descriptor file name from the config in prepareDirForJunior.js
+# Step 2: Use the config variable for the 'prompt.yaml' check
+cat > ./src/prompt/prepareDirForJunior.js << 'EOF'
 import fs from 'fs';
 import path from 'path';
 import { createPromptYaml } from './createPromptYaml.js';
@@ -17,3 +27,6 @@ export async function prepareDirForJunior() {
     }
   }
 }
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
