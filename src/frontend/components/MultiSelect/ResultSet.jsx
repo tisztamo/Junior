@@ -1,20 +1,15 @@
 import ListItem from "./ListItem";
-import FileViewer from "../files/FileViewer";
-import handleFilePopup from './handleFilePopup';
 
 const ResultSet = (props) => {
-  const { showPopup, popupPath, invoke, setShowPopup } = handleFilePopup();
-
   return (
     <div class="select-none">
       {props.items.length === 0 ? (
         <div class="text-gray-400 pl-2">{props.emptyMessage}</div>
       ) : (
         <ul class="list-inside select-none">
-          {props.items.map(item => <ListItem key={item} item={item} onItemClick={props.onItemClick} onLongTap={invoke} />)}
+          {props.items.map(item => <ListItem key={item} item={item} onItemClick={props.onItemClick} onLongTap={props.onItemLongTap} />)}
         </ul>
       )}
-      { showPopup() && <FileViewer path={popupPath()} onClose={() => setShowPopup(false)} /> }
     </div>
   );
 };

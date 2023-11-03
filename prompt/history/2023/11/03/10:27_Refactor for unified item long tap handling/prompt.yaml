@@ -1,0 +1,12 @@
+task: prompt/task/refactor/custom.md
+attention:
+  - ./src/frontend/components/MultiSelect/ResultSet.jsx
+  - ./src/frontend/components/MultiSelect/FilteredList.jsx
+  - ./src/frontend/components/MultiSelect/MultiSelect.jsx
+requirements: >-
+  - Add a new prop named onItemLongTap to RessultSet and FilteredList
+
+  - Move the handleFilePopup call up to the MultiSelect (We need only one such
+  handler there)
+
+  - Also move the FileViewer rendering to MultiSelect

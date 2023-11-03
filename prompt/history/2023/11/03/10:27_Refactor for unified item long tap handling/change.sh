@@ -1,3 +1,54 @@
+#!/bin/sh
+set -e
+goal="Refactor for unified item long tap handling"
+echo "Plan:"
+echo "1. Modify ResultSet.jsx to accept onItemLongTap prop."
+echo "2. Modify FilteredList.jsx to accept onItemLongTap prop."
+echo "3. Move handleFilePopup and FileViewer from ResultSet and FilteredList to MultiSelect.jsx."
+echo "4. Update MultiSelect.jsx accordingly."
+
+# Modify ResultSet.jsx
+cat > ./src/frontend/components/MultiSelect/ResultSet.jsx << 'EOF'
+import ListItem from "./ListItem";
+
+const ResultSet = (props) => {
+  return (
+    <div class="select-none">
+      {props.items.length === 0 ? (
+        <div class="text-gray-400 pl-2">{props.emptyMessage}</div>
+      ) : (
+        <ul class="list-inside select-none">
+          {props.items.map(item => <ListItem key={item} item={item} onItemClick={props.onItemClick} onLongTap={props.onItemLongTap} />)}
+        </ul>
+      )}
+    </div>
+  );
+};
+
+export default ResultSet;
+EOF
+echo "1. Modified ResultSet.jsx"
+
+# Modify FilteredList.jsx
+cat > ./src/frontend/components/MultiSelect/FilteredList.jsx << 'EOF'
+import ListItem from "./ListItem";
+
+const FilteredList = (props) => {
+  return (
+    <div class="select-none">
+      <ul class="list-inside select-none">
+        {props.items.map((item, idx) => <ListItem key={item} item={item} idx={idx + 1} onItemClick={props.onItemClick} onLongTap={props.onItemLongTap} />)}
+      </ul>
+    </div>
+  );
+};
+
+export default FilteredList;
+EOF
+echo "2. Modified FilteredList.jsx"
+
+# Update MultiSelect.jsx
+cat > ./src/frontend/components/MultiSelect/MultiSelect.jsx << 'EOF'
 import { createSignal, createEffect } from 'solid-js';
 import SearchBar from './SearchBar';
 import ResultSet from './ResultSet';
@@ -58,3 +109,6 @@ const MultiSelect = (props) => {
 };
 
 export default MultiSelect;
+EOF
+echo "3. Updated MultiSelect.jsx"
+echo "\033[32mDone: $goal\033[0m\n"
