@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/files/FileViewerHeader.jsx
+  - ./src/frontend/components/files/FileViewer.jsx
+requirements: |-
+  - Set a 50% gray background for the outer div of the FileViewer
+  - Eliminate the header title
+  - Move the close button to the left
+  - Add a wrapper to the listitem and make it fill the available width
