@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/files/FileViewerHeader.jsx
+  - ./src/frontend/components/files/FileViewer.jsx
+requirements: |-
+  - The div with bg-white should be bg-emphasize instead
+  - replace h-3/4 with max-h-3/4
+  - replace  bg-gray-100 with bg-emphasize
+  - Replace text-gray-600 with text-emphasize and remove hover:text-gray-800
