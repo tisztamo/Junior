@@ -1,9 +1,9 @@
 import ListItem from "./ListItem";
 import FileViewer from "../files/FileViewer";
-import handleLongTap from './handleLongTap';
+import handleFilePopup from './handleFilePopup';
 
 const ResultSet = (props) => {
-  const { showPopup, popupPath, invoke, setShowPopup } = handleLongTap();
+  const { showPopup, popupPath, invoke, setShowPopup } = handleFilePopup();
 
   return (
     <div class="select-none">

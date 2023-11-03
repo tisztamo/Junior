@@ -1,6 +1,6 @@
 import { createSignal } from 'solid-js';
 
-const handleLongTap = () => {
+const handleFilePopup = () => {
   const [showPopup, setShowPopup] = createSignal(false);
   const [popupPath, setPopupPath] = createSignal('');
 
@@ -12,4 +12,4 @@ const handleLongTap = () => {
   return { showPopup, setShowPopup, popupPath, invoke };
 };
 
-export default handleLongTap;
+export default handleFilePopup;

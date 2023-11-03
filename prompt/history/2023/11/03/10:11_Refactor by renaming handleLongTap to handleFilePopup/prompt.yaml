@@ -1,0 +1,6 @@
+task: prompt/task/refactor/rename.md
+attention:
+  - ./src/frontend/components/MultiSelect/ResultSet.jsx
+  - ./src/frontend/components/MultiSelect/handleLongTap.jsx
+  - ./src/frontend/components/MultiSelect/FilteredList.jsx
+requirements: Rename handleLongTap to handleFilePopup (both file and fn)
