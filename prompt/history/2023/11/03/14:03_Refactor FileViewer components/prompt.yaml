@@ -1,0 +1,8 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/files/FileViewer.jsx
+  - ./src/frontend/components/files/SourceFileDisplay.jsx
+requirements: |-
+  - Add horizontal padding to the right of the close button
+  - Replace max-h-3/4 with max-h-full
+  - In sourcefiledisplay, use inline style to set margin to 0 and remove m-0

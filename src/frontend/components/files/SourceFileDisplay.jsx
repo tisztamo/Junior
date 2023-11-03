@@ -13,7 +13,6 @@ const SourceFileDisplay = (props) => {
     const data = await fileReadService(props.path);
     setFileContent(data);
 
-    // Synchronous Prism highlighting
     if (window.Prism) {
       const codeElement = document.querySelector('.source-display-code');
       const pre = codeElement.parentElement;
@@ -27,13 +26,17 @@ const SourceFileDisplay = (props) => {
     }
   };
 
-  onMount(fetchData);
+  onMount(() => {
+    fetchData();
+  });
 
   const language = getLanguageFromPath(props.path);
 
   return (
     <div class="rounded border w-full overflow-x-auto">
-      <pre class={`m-0 language-${language}`}><code class={`language-${language} source-display-code`}>{fileContent()}</code></pre>
+      <pre class={`language-${language}`} style={{ margin: 0 }}>
+        <code class={`language-${language} source-display-code`}>{fileContent()}</code>
+      </pre>
     </div>
   );
 };

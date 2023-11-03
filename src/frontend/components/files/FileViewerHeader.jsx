@@ -1,10 +1,10 @@
 import ListItem from '../MultiSelect/ListItem';
 
-export const FileViewerHeader = (props) => {
+const FileViewerHeader = (props) => {
   return (
     <div class="flex items-center p-4 bg-emphasize">
       <button
-        class="text-3xl font-bold text-emphasize mr-auto"
+        class="text-3xl font-bold text-emphasize mr-auto pr-2"
         onClick={props.onClose}
       >
         &times;
@@ -15,3 +15,5 @@ export const FileViewerHeader = (props) => {
     </div>
   );
 };
+
+export default FileViewerHeader;
