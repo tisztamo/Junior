@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/files/FileViewer.jsx
+  - ./src/frontend/components/SampleComponent.jsx
+requirements: >-
+  - Remove empty divs from the file viewer
+
+  - Create a header component for the file viewer. It should contain a big X on
+  the right that closes the viewer.
