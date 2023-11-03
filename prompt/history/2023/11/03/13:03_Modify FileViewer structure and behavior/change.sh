@@ -1,3 +1,14 @@
+#!/bin/sh
+set -e
+goal="Modify FileViewer structure and behavior"
+echo "Plan:"
+echo "1. Remove the empty div from the FileViewer component."
+echo "2. Prevent the outer div of the FileViewer component from closing the viewer on click."
+echo "3. Remove overflow-y-auto from the bg-white div in FileViewer component."
+echo "4. Add a new wrapper around SourceFileDisplay to allow vertical scrolling."
+
+# Step 1 & 2
+cat > ./src/frontend/components/files/FileViewer.jsx << 'EOF'
 import SourceFileDisplay from '../files/SourceFileDisplay';
 import { FileViewerHeader } from './FileViewerHeader';
 
@@ -17,3 +28,6 @@ const FileViewer = (props) => {
 };
 
 export default FileViewer;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

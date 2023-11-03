@@ -1,0 +1,13 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/files/FileViewerHeader.jsx
+  - ./src/frontend/components/files/FileViewer.jsx
+requirements: >-
+  - Remove the empty div from the file viewer
+
+  - Do not close the viewer when clicking the outer div
+
+  - Remove overflow-0-auto from the bg-white div
+
+  - Add an extra wrapper around the sourcefiledisplay and allow it to scroll
+  vertically inside the new wrapper. 
