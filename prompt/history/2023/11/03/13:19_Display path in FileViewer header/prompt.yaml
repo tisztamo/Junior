@@ -1,0 +1,8 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/files/FileViewerHeader.jsx
+  - ./src/frontend/components/files/FileViewer.jsx
+  - ./src/frontend/components/MultiSelect/ListItem.jsx
+requirements: >-
+  The FileViewer should display the path in its header. For rendering the path,
+  use a ListItem.

@@ -1,4 +1,5 @@
 import { createSignal } from 'solid-js';
+import ListItem from '../MultiSelect/ListItem';
 
 export const FileViewerHeader = (props) => {
   const [headerTitle, setHeaderTitle] = createSignal('File Viewer');
@@ -6,6 +7,7 @@ export const FileViewerHeader = (props) => {
   return (
     <div class="flex justify-between items-center p-4 bg-gray-100">
       <h1 class="text-xl font-bold">{headerTitle()}</h1>
+      <ListItem item={props.path} />
       <button
         class="text-3xl font-bold text-gray-600 hover:text-gray-800"
         onClick={props.onClose}
