@@ -1,0 +1,13 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/files/FileViewer.jsx
+  - ./src/frontend/components/files/SourceFileDisplay.jsx
+requirements: |-
+  In FileViewer:
+  - Add h-full to the div with classes "absolute inset-0"
+  - Replace max-h-full with h-full
+  - Remove the wrapper around SourceFileDisplay
+
+  In SourceFileDisplay:
+  - Add "overflow-y-auto h-full" to the div with overflow-x-auto
+os: OSX
