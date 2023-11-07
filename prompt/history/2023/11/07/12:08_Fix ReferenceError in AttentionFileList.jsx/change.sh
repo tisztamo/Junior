@@ -1,3 +1,9 @@
+#!/bin/sh
+set -e
+goal="Fix ReferenceError in AttentionFileList.jsx"
+echo "Plan:"
+echo "1. Add ES6 import statements for extractQuery and flattenPaths."
+cat > ./src/frontend/components/AttentionFileList.jsx << 'EOF'
 import { createEffect, createSignal } from 'solid-js';
 import { fileList, setFileList } from '../model/fileList';
 import fetchFileList from '../service/fetchFileList';
@@ -50,3 +56,5 @@ const AttentionFileList = () => {
 };
 
 export default AttentionFileList;
+EOF
+echo "\033[32mDone: $goal\033[0m\n"

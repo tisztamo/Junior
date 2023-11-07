@@ -1,0 +1,72 @@
+task: prompt/task/bug/fix.md
+attention:
+  - ./src/frontend/components/AttentionFileList.jsx
+  - ./src/frontend/service/helpers/extractQuery.js
+  - ./src/frontend/service/helpers/flattenPaths.js
+requirements: >-
+  Uncaught ReferenceError: extractQuery is not defined
+      at Object.fn (AttentionFileList.jsx:36:5)
+      at runComputation (chunk-ZA7VKWKE.js?v=484326ba:798:22)
+      at updateComputation (chunk-ZA7VKWKE.js?v=484326ba:777:3)
+      at runTop (chunk-ZA7VKWKE.js?v=484326ba:901:7)
+      at runUserEffects (chunk-ZA7VKWKE.js?v=484326ba:1031:5)
+      at chunk-ZA7VKWKE.js?v=484326ba:982:22
+      at runUpdates (chunk-ZA7VKWKE.js?v=484326ba:922:17)
+      at completeUpdates (chunk-ZA7VKWKE.js?v=484326ba:982:5)
+      at runUpdates (chunk-ZA7VKWKE.js?v=484326ba:923:5)
+      at createRoot (chunk-ZA7VKWKE.js?v=484326ba:187:12)
+  (anonymous) @ AttentionFileList.jsx:36
+
+  runComputation @ chunk-ZA7VKWKE.js?v=484326ba:798
+
+  updateComputation @ chunk-ZA7VKWKE.js?v=484326ba:777
+
+  runTop @ chunk-ZA7VKWKE.js?v=484326ba:901
+
+  runUserEffects @ chunk-ZA7VKWKE.js?v=484326ba:1031
+
+  (anonymous) @ chunk-ZA7VKWKE.js?v=484326ba:982
+
+  runUpdates @ chunk-ZA7VKWKE.js?v=484326ba:922
+
+  completeUpdates @ chunk-ZA7VKWKE.js?v=484326ba:982
+
+  runUpdates @ chunk-ZA7VKWKE.js?v=484326ba:923
+
+  createRoot @ chunk-ZA7VKWKE.js?v=484326ba:187
+
+  render @ chunk-DXTYZR5Z.js?v=484326ba:539
+
+  (anonymous) @ index.jsx:4
+
+  useWebsocket.js:7 WebSocket is connected
+
+  AttentionFileList.jsx:26 Uncaught (in promise) ReferenceError: flattenPaths is
+  not defined
+      at Object.fn (AttentionFileList.jsx:26:28)
+  (anonymous) @ AttentionFileList.jsx:26
+
+  await in (anonymous) (async)
+
+  runComputation @ chunk-ZA7VKWKE.js?v=484326ba:798
+
+  updateComputation @ chunk-ZA7VKWKE.js?v=484326ba:777
+
+  runTop @ chunk-ZA7VKWKE.js?v=484326ba:901
+
+  runUserEffects @ chunk-ZA7VKWKE.js?v=484326ba:1031
+
+  (anonymous) @ chunk-ZA7VKWKE.js?v=484326ba:982
+
+  runUpdates @ chunk-ZA7VKWKE.js?v=484326ba:922
+
+  completeUpdates @ chunk-ZA7VKWKE.js?v=484326ba:982
+
+  runUpdates @ chunk-ZA7VKWKE.js?v=484326ba:923
+
+  createRoot @ chunk-ZA7VKWKE.js?v=484326ba:187
+
+  render @ chunk-DXTYZR5Z.js?v=484326ba:539
+
+  (anonymous) @ index.jsx:4
+os: OSX
