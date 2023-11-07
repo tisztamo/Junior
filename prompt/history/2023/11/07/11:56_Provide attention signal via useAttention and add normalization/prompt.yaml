@@ -1,0 +1,11 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/files/FileViewerHeader.jsx
+  - ./src/frontend/model/useAttention.js
+  - src/frontend/model/useAttention.js
+requirements: >-
+  - Use useAttention in attentionfilelist instead of directly using the model
+
+  - When adding a file to the attention, normalize the path by removing "./"
+  from its beginning. (It is a relative path)
+os: OSX

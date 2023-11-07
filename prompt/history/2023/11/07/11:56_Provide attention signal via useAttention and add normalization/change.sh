@@ -1,3 +1,34 @@
+#!/bin/sh
+set -e
+goal="Provide attention signal via useAttention and add normalization"
+echo "Plan:"
+echo "1. Update useAttention.js to export the attention signal."
+echo "2. Include path normalization within the useAttention hook."
+echo "3. Update AttentionFileList.jsx to consume the attention signal from useAttention."
+
+# Step 1: Update useAttention.js to include path normalization and export the attention signal
+cat > ./src/frontend/model/useAttention.js << 'EOF'
+import { attention, setAttention } from './attentionModel';
+
+// Function to normalize the path
+const normalizePath = (path) => path.startsWith('./') ? path.substring(2) : path;
+
+const useAttention = () => {
+  // Function to add a path to the attention list with normalization
+  const addAttention = (path) => {
+    path = normalizePath(path); // Normalize the path
+    setAttention((prev) => [...prev, path]);
+  };
+
+  // Return both the action and the signal
+  return { addAttention, attention };
+};
+
+export { useAttention };
+EOF
+
+# Step 2: Update AttentionFileList.jsx to use the normalized addAttention function and attention signal from the useAttention hook
+cat > ./src/frontend/components/AttentionFileList.jsx << 'EOF'
 import { createEffect, createSignal } from 'solid-js';
 import { fileList, setFileList } from '../model/fileList';
 import fetchFileList from '../service/fetchFileList';
@@ -48,3 +79,6 @@ const AttentionFileList = () => {
 };
 
 export default AttentionFileList;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
