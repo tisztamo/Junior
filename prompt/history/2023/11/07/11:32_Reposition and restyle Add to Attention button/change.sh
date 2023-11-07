@@ -1,3 +1,11 @@
+#!/bin/sh
+set -e
+goal="Reposition and restyle Add to Attention button"
+echo "Plan:"
+echo "1. Modify the layout in FileViewerHeader.jsx to adjust button positions and padding."
+echo "2. Implement a plus sign icon for the Add to Attention button with appropriate alt text."
+echo "3. Update the onClick event to close the viewer after adding to attention."
+cat > ./src/frontend/components/files/FileViewerHeader.jsx << 'EOF'
 import ListItem from '../MultiSelect/ListItem';
 import { useAttention } from '../../model/useAttention'; // Fixed import
 
@@ -34,3 +42,5 @@ const FileViewerHeader = (props) => {
 };
 
 export default FileViewerHeader;
+EOF
+echo "\033[32mDone: $goal\033[0m\n"

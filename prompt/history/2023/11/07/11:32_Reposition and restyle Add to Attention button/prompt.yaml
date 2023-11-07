@@ -1,0 +1,11 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/files/FileViewerHeader.jsx
+  - ./src/frontend/model/useAttention.js
+requirements: |-
+  Improve the add to attention button:
+  - Move it next to the close button
+  - Use a large plus sign as label, no text
+  - Add the current text as alt
+  - Close the fileviewer when clicked
+os: OSX
