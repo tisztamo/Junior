@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/components/files/FileViewer.jsx
+  - ./src/frontend/components/files/FileViewerHeader.jsx
+  - ./src/frontend/model/attentionModel.js
+requirements: >-
+  Add a button to the file viewer header (next to the close button) that adds
+  the current file to the attention.
+os: OSX
