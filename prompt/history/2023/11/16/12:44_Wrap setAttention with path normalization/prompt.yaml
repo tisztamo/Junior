@@ -1,0 +1,8 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/model/useAttention.js
+requirements: >-
+  Instead of directly returning setAttention, useAttention should provide a
+  version of it under the same name which normalizes all the paths before
+  calling setAttention
+os: OSX

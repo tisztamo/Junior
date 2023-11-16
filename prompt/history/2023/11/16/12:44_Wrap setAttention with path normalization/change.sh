@@ -1,3 +1,13 @@
+#!/bin/sh
+set -e
+goal="Wrap setAttention with path normalization"
+echo "Plan:"
+echo "1. Implement a wrapper for setAttention in useAttention.js."
+echo "2. Export the new wrapper instead of the original setAttention."
+echo "3. Adjust existing setAttention calls to use the wrapper."
+
+# Modifying useAttention.js
+cat > ./src/frontend/model/useAttention.js << 'EOF'
 import { handleAttentionChange } from '../service/handleAttentionChange';
 import { attention, setAttention as originalSetAttention } from './attentionModel';
 
@@ -30,3 +40,6 @@ const useAttention = () => {
 };
 
 export { useAttention };
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
