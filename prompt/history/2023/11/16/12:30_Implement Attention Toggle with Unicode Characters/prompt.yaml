@@ -1,0 +1,8 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/files/FileViewerHeader.jsx
+  - ./src/frontend/model/useAttention.js
+requirements: >-
+  When a file is already in the attention, provide a remove button instead of
+  the add. 
+os: OSX
