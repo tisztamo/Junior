@@ -1,0 +1,8 @@
+task: prompt/task/bug/fix.md
+attention:
+  - ./src/frontend/model/useAttention.js
+  - ./src/frontend/service/handleAttentionChange.js
+  - ./src/frontend/components/files/FileViewerHeader.jsx
+  - ./src/frontend/model/attentionModel.js
+requirements: '- addAttention should call handleAttentionChange instead of setAttention'
+os: OSX
