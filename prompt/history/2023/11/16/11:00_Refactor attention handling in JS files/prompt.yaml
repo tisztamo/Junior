@@ -1,0 +1,9 @@
+task: prompt/task/refactor/custom.md
+attention:
+  - ./src/frontend/model/useAttention.js
+  - ./src/frontend/service/handleAttentionChange.js
+  - ./src/frontend/components/AttentionFileList.jsx
+requirements: |-
+  - handleAttentionChange should also call setAttention with the new attention.
+  - Remove setAttention calls where it is not needed anymore after this change
+os: OSX
