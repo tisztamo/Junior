@@ -1,0 +1,8 @@
+task: prompt/task/feature/implement.md
+attention:
+  - ./src/frontend/service/helpers/flattenPaths.js
+requirements: >-
+  in the ? : expression of the recursive call of flattenPath: If the path is .
+  or ./ , do not prepend it to the name, use the name as in the case of empty
+  path.
+os: OSX
