@@ -1,0 +1,12 @@
+task: prompt/task/bug/fix.md
+attention:
+  - ./src/frontend/components/AttentionFileList.jsx
+  - ./src/frontend/model/useAttention.js
+  - ./src/frontend/model/attentionModel.js
+requirements: >-
+  Instead of adding every element to the attention one by one, set the attention
+  to the new one in both the createEffect and in onAttentionChange.
+
+  Also return setAttention from useAttention for this to work without importing
+  the model in the component
+os: OSX

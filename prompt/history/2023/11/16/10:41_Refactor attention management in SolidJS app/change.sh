@@ -1,3 +1,31 @@
+#!/bin/sh
+set -e
+goal="Refactor attention management in SolidJS app"
+echo "Plan:"
+echo "1. Modify useAttention.js to return setAttention."
+echo "2. Update AttentionFileList.jsx to include createSignal and use setAttention for bulk updates."
+echo "3. Ensure compliance with project specifics and coding standards."
+
+# Modifying useAttention.js
+cat > ./src/frontend/model/useAttention.js << 'EOF'
+import { attention, setAttention } from './attentionModel';
+
+const normalizePath = (path) => path.startsWith('./') ? path.substring(2) : path;
+
+const useAttention = () => {
+  const addAttention = (path) => {
+    path = normalizePath(path);
+    setAttention((prev) => [...prev, path]);
+  };
+
+  return { addAttention, attention, setAttention };
+};
+
+export { useAttention };
+EOF
+
+# Updating AttentionFileList.jsx
+cat > ./src/frontend/components/AttentionFileList.jsx << 'EOF'
 import { createEffect, createSignal } from 'solid-js';
 import { fileList, setFileList } from '../model/fileList';
 import fetchFileList from '../service/fetchFileList';
@@ -50,3 +78,6 @@ const AttentionFileList = () => {
 };
 
 export default AttentionFileList;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"
