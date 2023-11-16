@@ -1,3 +1,12 @@
+#!/bin/sh
+set -e
+goal="Remove './' prefix from file paths"
+echo "Plan:"
+echo "1. Modify readFileList to remove './' prefix from paths."
+echo "2. Ensure the solution adheres to ES6 standards and project constraints."
+
+# Modifying readFileList.js
+cat > src/backend/fileutils/readFileList.js << 'EOF'
 import fs from 'fs';
 import path from 'path';
 import getIgnoreList from './getIgnoreList.js';
@@ -45,3 +54,6 @@ async function readFileList(dir, relativePath = "") {
 }
 
 export default readFileList;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

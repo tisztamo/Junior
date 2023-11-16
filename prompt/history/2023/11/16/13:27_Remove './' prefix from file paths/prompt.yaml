@@ -1,0 +1,7 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/backend/fileutils/readFileList.js
+requirements: >-
+  When the returned path of a file starts with ./ , remove the ./ from the
+  beginning.
+os: OSX
