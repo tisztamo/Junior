@@ -1,5 +1,5 @@
 export const scoringConstants = {
-    START_SCORE: 1.0,
-    DECREMENT: 0.125,
-    MIN_SCORE: 0.25
+    START_SCORE: 0.5,
+    DECREMENT: 0.05,
+    MIN_SCORE: 0.1
 };

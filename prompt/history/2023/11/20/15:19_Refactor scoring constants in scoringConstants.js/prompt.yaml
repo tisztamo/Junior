@@ -1,0 +1,7 @@
+task: prompt/task/refactor/custom.md
+attention:
+  - src/frontend/service/helpers/scoringConstants.js
+requirements: |-
+  Set scoring constants as follows
+  start: 0.5 decrement: 0.05, min: 0.1
+os: OSX
