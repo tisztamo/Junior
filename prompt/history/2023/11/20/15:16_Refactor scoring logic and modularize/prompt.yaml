@@ -1,0 +1,13 @@
+task: prompt/task/refactor/custom.md
+attention:
+  - src/frontend/service/helpers/scoringConstants.js
+  - src/frontend/components/MultiSelect/computeFilteredList.js
+  - src/frontend/components/MultiSelect/computeRank.js
+  - src/frontend/service/helpers/extractQuery.js
+requirements: >-
+  - Factor out the getDecreasingScore function to its own file with the same
+  name.
+
+  - Fix the working of getDecreasingScore so that it goes down exponentially in
+  (1 - DECREMENT) steps.
+os: OSX

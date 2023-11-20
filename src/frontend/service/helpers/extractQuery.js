@@ -1,4 +1,4 @@
-import { getDecreasingScore } from './scoringConstants';
+import { getDecreasingScore } from './getDecreasingScore';
 
 const ignoreList = ['and', 'or', 'the'];
 
