@@ -1,9 +1,5 @@
 <%- system %>
 
-# Working set
-
-<%- attention.join("\n") %>
-
 # Task
 
 <%- task %>
@@ -11,5 +7,9 @@
 # Output Format
 
 <%- format %>
+
+# Working set
+
+<%- attention.join("\n") %>
 
 <%- userInput ? userInput.trim() : "" %>
