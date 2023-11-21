@@ -1,3 +1,32 @@
+#!/bin/sh
+set -e
+goal="Implement prompt template system"
+echo "Plan:"
+echo "1. Create prompt/task.ejs with template contents."
+echo "2. Modify createPrompt function to use new template."
+echo "3. Combine template vars and constants into a single object."
+
+# Step 1: Create prompt/task.ejs
+cat > src/prompt/task.ejs << 'EOF'
+<%- system %>
+
+# Working set
+
+<%- attention.join("\n") %>
+
+# Task
+
+<%- task %>
+
+# Output Format
+
+<%- format %>
+
+<%- userInput ? userInput.trim() : "" %>
+EOF
+
+# Step 2: Modify createPrompt.js
+cat > src/prompt/createPrompt.js << 'EOF'
 import { readAttention } from "../attention/readAttention.js";
 import yaml from 'js-yaml';
 import { getSystemPromptIfNeeded } from './getSystemPromptIfNeeded.js';
@@ -35,3 +64,6 @@ const createPrompt = async (userInput, forceSystemPrompt) => {
 }
 
 export { createPrompt };
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

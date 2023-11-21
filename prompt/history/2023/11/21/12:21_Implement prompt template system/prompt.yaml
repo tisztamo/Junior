@@ -1,0 +1,12 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/prompt/createPrompt.js
+  - src/prompt/loadPromptFile.js
+requirements: >-
+  - Create prompt/task.ejs with the contents of the prompt template in
+  createPrompt.js
+
+  - In createPrompt, load and fill the template with loadPromptFile
+
+  - Pass all the template vars and the consts as a single object
+os: OSX
