@@ -1,3 +1,19 @@
+#!/bin/sh
+set -e
+goal="Move and update task.ejs file reference"
+echo "Plan:"
+echo "1. Create the new directory structure."
+echo "2. Move the task.ejs file to the new location."
+echo "3. Update the reference in createPrompt.js."
+
+# Step 1: Create new directory structure
+mkdir -p ./prompt/layout
+
+# Step 2: Move the task.ejs file
+mv ./src/prompt/task.ejs ./prompt/layout/task.md
+
+# Step 3: Update the reference in createPrompt.js
+cat > ./src/prompt/createPrompt.js << 'EOF'
 import { readAttention } from "../attention/readAttention.js";
 import yaml from 'js-yaml';
 import { getSystemPromptIfNeeded } from './getSystemPromptIfNeeded.js';
@@ -35,3 +51,6 @@ const createPrompt = async (userInput, forceSystemPrompt) => {
 }
 
 export { createPrompt };
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

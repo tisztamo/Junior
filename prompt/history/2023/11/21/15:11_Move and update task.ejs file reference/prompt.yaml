@@ -1,0 +1,7 @@
+task: prompt/task/bug/fix.md
+attention:
+  - src/prompt/createPrompt.js
+requirements: >-
+  Move ./src/prompt/task.ejs to ./prompt/layout/task.md relative to the project
+  root. Create the dir.
+os: OSX
