@@ -1,5 +1,5 @@
-import { createEffect, createSignal } from 'solid-js';
-import { fileList, setFileList } from '../model/fileList';
+import { createEffect } from 'solid-js';
+import { fileList } from '../model/fileList';
 import fetchFileList from '../service/fetchFileList';
 import MultiSelect from './MultiSelect/MultiSelect';
 import getComparison from '../service/helpers/getComparison';
@@ -8,15 +8,12 @@ import { useAttention } from '../model/useAttention';
 import { getAttentionFromDescriptor } from '../service/getAttentionFromDescriptor';
 import { handleAttentionChange as handleAttentionChangeService } from '../service/handleAttentionChange';
 import extractQuery from '../service/helpers/extractQuery';
-import flattenPaths from '../service/helpers/flattenPaths';
 
 const AttentionFileList = () => {
   const { addAttention, attention, setAttention } = useAttention();
 
-  createEffect(async () => {
-    const data = await fetchFileList();
-    const flattenedPaths = flattenPaths(data, '');
-    setFileList(flattenedPaths);
+  createEffect(() => {
+    fetchFileList();
   });
 
   createEffect(() => {

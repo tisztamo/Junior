@@ -1,0 +1,16 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/model/fileList.js
+  - src/frontend/service/fetchFileList.js
+  - src/frontend/components/AttentionFileList.jsx
+  - src/frontend/service/lifecycle/handleCommitService.js
+requirements: >-
+  Reload the file list after commit!
+
+  For this:
+
+  - Move the flattenting and the setFIleList call to from the createEffect in
+  AttentionFileList to fetchFileList, call only fetchFileList there
+
+  - Also call fetchFileList in handleCommitService
+os: OSX
