@@ -1,5 +1,5 @@
 import { createEffect } from 'solid-js';
-import handleExecuteChange from '../service/handleExecuteChange';
+import handleExecuteChange from '../service/execute/handleExecuteChange';
 import { setChangeInput, changeInput } from '../model/changeInput';
 
 const ExecuteButton = () => {

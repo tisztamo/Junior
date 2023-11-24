@@ -1,0 +1,10 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/service/handleExecuteChange.js
+  - src/frontend/components/ExecuteButton.jsx
+requirements: >
+  - Create src/frontend/service/execute/ and move handleExecuteChange there.
+
+  - Before executing the change, replace windows-style newlines to unix-style
+  ones in it. Create a new file for this in the new dir.
+os: OSX
