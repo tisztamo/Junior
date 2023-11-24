@@ -1,0 +1,9 @@
+task: prompt/task/bug/fix.md
+attention:
+  - src/frontend/service/fetchFileList.js
+requirements: |+
+  fileList should contain the flattened version of
+  - the data if the data is not an array
+  - The object that wraps the data if data is an array
+
+os: OSX

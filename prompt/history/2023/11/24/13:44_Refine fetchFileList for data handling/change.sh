@@ -1,3 +1,9 @@
+#!/bin/sh
+set -e
+goal="Refine fetchFileList for data handling"
+echo "Plan:"
+echo "1. Modify fetchFileList.js to handle both array and non-array data using flattenPaths"
+cat > src/frontend/service/fetchFileList.js << 'EOF'
 import { getBaseUrl } from '../getBaseUrl';
 import { setFileList } from '../model/fileList';
 import flattenPaths from './helpers/flattenPaths';
@@ -26,3 +32,5 @@ async function fetchFileList() {
 }
 
 export default fetchFileList;
+EOF
+echo "\033[32mDone: $goal\033[0m\n"
