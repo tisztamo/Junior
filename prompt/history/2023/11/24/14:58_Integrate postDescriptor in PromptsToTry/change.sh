@@ -1,3 +1,12 @@
+#!/bin/sh
+set -e
+goal="Integrate postDescriptor in PromptsToTry"
+echo "Plan:"
+echo "1. Modify PromptsToTry.jsx to call postDescriptor after setRequirements."
+echo "2. Import postDescriptor in PromptsToTry.jsx."
+
+# Modifying src/frontend/components/promptCreation/PromptsToTry.jsx
+cat > src/frontend/components/promptCreation/PromptsToTry.jsx << 'EOF'
 import { For } from 'solid-js';
 import { promptsToTry } from '../../model/promptsToTryModel';
 import { setRequirements } from '../../model/requirements';
@@ -20,3 +29,6 @@ const PromptsToTry = () => {
 };
 
 export default PromptsToTry;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

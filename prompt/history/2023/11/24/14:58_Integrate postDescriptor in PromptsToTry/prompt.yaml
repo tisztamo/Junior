@@ -1,0 +1,6 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/promptCreation/PromptsToTry.jsx
+  - src/frontend/service/postDescriptor.js
+requirements: 'Call postDescriptor with { requirements: ... } after setRequitements'
+os: OSX
