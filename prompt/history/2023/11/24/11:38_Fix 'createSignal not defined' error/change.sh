@@ -1,3 +1,10 @@
+#!/bin/sh
+set -e
+goal="Fix 'createSignal not defined' error"
+echo "Plan:"
+echo "1. Import 'createSignal' from 'solid-js' in AttentionFileList.jsx"
+echo "2. Ensure single function export and adherence to SolidJS and ES6 standards"
+cat > src/frontend/components/AttentionFileList.jsx << 'EOF'
 import { createEffect, createSignal } from 'solid-js';
 import { fileList } from '../model/fileList';
 import fetchFileList from '../service/fetchFileList';
@@ -45,3 +52,5 @@ const AttentionFileList = () => {
 };
 
 export default AttentionFileList;
+EOF
+echo "\033[32mDone: $goal\033[0m\n"

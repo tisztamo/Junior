@@ -1,0 +1,8 @@
+task: prompt/task/bug/fix.md
+attention:
+  - src/frontend/components/AttentionFileList.jsx
+requirements: |-
+  AttentionFileList.jsx:24 Uncaught ReferenceError: createSignal is not defined
+      at _$$component.location (AttentionFileList.jsx:24:43)
+      at @solid-refresh:25:42
+os: OSX
