@@ -1,0 +1,14 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/promptCreation/PromptsToTry.jsx
+  - src/frontend/model/requirements.js
+requirements: >-
+  - Prompts should look be simple links. Use a tags with classe cursor-pointer
+  ml-2 text-blue-500
+
+  - Remove the bold class from the label and remove the space from the lest of
+  the label
+
+  - When a user clicks a prompt, set the corresponding content as the
+  requirements.
+os: OSX
