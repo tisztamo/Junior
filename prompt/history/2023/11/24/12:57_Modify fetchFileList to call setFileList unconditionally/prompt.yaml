@@ -1,0 +1,5 @@
+task: prompt/task/bug/fix.md
+attention:
+  - src/frontend/service/fetchFileList.js
+requirements: Call setFileList unconditionally as the last step of fetchFileList
+os: OSX
