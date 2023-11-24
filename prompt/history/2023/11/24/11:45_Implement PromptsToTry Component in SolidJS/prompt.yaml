@@ -1,0 +1,20 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/SampleComponent.jsx
+  - src/frontend/model/sampleModel.js
+  - src/frontend/components/PromptCreation.jsx
+requirements: >-
+  - Create a new dir src/frontend/components/promptCreation/
+
+  Create a component PromptsToTry in it, which is a single-line, horizontally
+  scrollable list.
+
+  - Before the first item it has a label "Prompts to try"
+
+  - Read the list from a new model named "promptsToTryModel", populated with 3
+  sample objects having name and content fields.
+
+  - Do not yet handle clicks.
+
+  - Put the new component before the requirements editor
+os: OSX

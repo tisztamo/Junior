@@ -4,11 +4,13 @@ import PromptDescriptor from './PromptDescriptor';
 import GenerateButton from './GenerateButton';
 import PromptDisplay from './PromptDisplay';
 import RequirementsEditor from './RequirementsEditor';
+import PromptsToTry from "./promptCreation/PromptsToTry";
 
 const PromptCreation = () => {
   return (
     <>
       <TasksList />
+<PromptsToTry />
       <RequirementsEditor />
       <AttentionFileList />
       <PromptDescriptor />
