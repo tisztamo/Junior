@@ -1,0 +1,11 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/promptCreation/PromptsToTry.jsx
+  - src/frontend/components/RequirementsEditor.jsx
+requirements: >-
+  - Remove background and vertical padding from the PromptsToTry links
+
+  - In RequirementsEditor, in the last createEffect, instead of calling
+  requirements() in the if directly, call untrack(requirements) instead to avoid
+  loopholes. Import untrack from solidjs
+os: OSX

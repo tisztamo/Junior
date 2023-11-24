@@ -8,10 +8,10 @@ const PromptsToTry = () => {
   };
 
   return (
-    <div class="flex space-x-4 overflow-x-auto py-2">
+    <div class="flex space-x-4 overflow-x-auto">
       <div>Prompts to try:</div>
       <For each={promptsToTry()}>{(prompt) => 
-        <a href="#" class="cursor-pointer ml-2 text-blue-500 bg-gray-200 rounded px-4 py-2" onClick={() => handleClick(prompt.name)}>{prompt.name}</a>
+        <a href="#" class="cursor-pointer ml-2 text-blue-500 bg-transparent rounded px-4" onClick={() => handleClick(prompt.name)}>{prompt.name}</a>
       }</For>
     </div>
   );
