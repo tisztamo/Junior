@@ -1,0 +1,13 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/backend/routes/setupPromptRoutes.js
+  - src/backend/fileutils/readFileList.js
+requirements: >-
+  - Create dir "./prompt/totry/" 
+
+  - Create a route "promptstotry" which reads the list of files and their
+  contents from dir "./prompt/totry/" and returns a flattened array with objects
+  {name, content}
+
+  - To read the files, use readFileList, then go through it and read the files.
+os: OSX
