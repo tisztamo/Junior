@@ -1,3 +1,13 @@
+#!/bin/sh
+set -e
+goal="Fix directory path and result check in promptstotryHandler"
+echo "Plan:"
+echo "1. Correct directory path to 'prompt/totry/'"
+echo "2. Use files.children.length for checking empty result"
+echo "3. Ensure ES6 and Solidjs standards in code"
+
+# Correcting promptstotryHandler.js
+cat > src/backend/handlers/promptstotryHandler.js << 'EOF'
 import readFileList from '../fileutils/readFileList.js';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
@@ -20,3 +30,6 @@ export async function promptstotryHandler(req, res) {
     }));
     res.json(fileContents);
 }
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

@@ -1,0 +1,6 @@
+task: prompt/task/bug/fix.md
+attention:
+  - src/backend/handlers/promptstotryHandler.js
+requirements: |-
+  - The correct dir relative to cwd is prompt/totry/
+  - When checking if the result is empty, use files.children.length
