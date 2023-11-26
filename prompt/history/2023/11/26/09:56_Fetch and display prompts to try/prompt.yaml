@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/model/promptsToTryModel.js
+  - src/frontend/components/promptCreation/PromptsToTry.jsx
+  - src/frontend/service/fetchDescriptor.js
+requirements: >-
+  Fetch prompts to try from "/promptstotry" when the PromptsToTry component is
+  created. Create a fetcher for this. Set the model from the fetcher.
+os: OSX
