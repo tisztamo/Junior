@@ -1,5 +1,5 @@
 Assuming you are in an empty directory.
-- Set up a Nodejs project named prompt-api
+- Set up an ES6 module type Node.js project named prompt-api
 - Install express.js
 - Create src/main.js with a single sample route
 - create src/handlers/sampleHandler.js that serves it
