@@ -1,3 +1,9 @@
+#!/bin/sh
+set -e
+goal="Handle ENOENT error in readFileList"
+echo "Plan:"
+echo "1. Modify readFileList to handle ENOENT error based on relativePath."
+cat > src/backend/fileutils/readFileList.js << 'EOF'
 import fs from 'fs';
 import path from 'path';
 import getIgnoreList from './getIgnoreList.js';
@@ -57,3 +63,5 @@ async function readFileList(dir, relativePath = "") {
 }
 
 export default readFileList;
+EOF
+echo "\033[32mDone: $goal\033[0m\n"

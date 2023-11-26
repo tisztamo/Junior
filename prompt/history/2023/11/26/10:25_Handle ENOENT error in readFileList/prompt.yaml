@@ -1,0 +1,7 @@
+task: prompt/task/bug/fix.md
+attention:
+  - src/backend/fileutils/readFileList.js
+requirements: >-
+  In case of ENOENT also check the relative path. If empty, return an object
+  similar to the one in the non-error path. If not empty, throw.
+os: OSX
