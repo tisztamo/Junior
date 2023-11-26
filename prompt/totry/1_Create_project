@@ -1,0 +1,5 @@
+Assuming you are in an empty directory.
+- Set up a Nodejs project named prompt-api
+- Install express
+- Create src/main.js with a single sample route
+- Allow running with npm start 
