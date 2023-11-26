@@ -1,0 +1,5 @@
+task: prompt/task/refactor/custom.md
+attention:
+  - src/backend/fileutils/readFileList.js
+requirements: Merge the two ifs inside the catch
+os: OSX
