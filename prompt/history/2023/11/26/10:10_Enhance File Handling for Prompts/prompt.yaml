@@ -1,0 +1,11 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/backend/handlers/promptstotryHandler.js
+  - src/backend/fileutils/readFileList.js
+requirements: >-
+  1. Handle missing directory in readFileList. Return empty array if dir
+  missing.
+
+  2. When serving prompts to try: First load from ./prompt/ relative to cwd. If
+  empty, then load from then currently used location
+os: OSX
