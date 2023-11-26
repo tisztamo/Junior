@@ -1,0 +1,7 @@
+task: prompt/task/refactor/custom.md
+attention:
+  - src/backend/handlers/promptstotryHandler.js
+  - src/frontend/components/promptCreation/PromptsToTry.jsx
+requirements: >-
+  Prompts to try click should write the content, not the name to the
+  requirements.
