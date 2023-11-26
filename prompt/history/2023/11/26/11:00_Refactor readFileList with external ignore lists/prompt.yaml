@@ -1,0 +1,5 @@
+task: prompt/task/refactor/custom.md
+attention:
+  - src/backend/fileutils/readFileList.js
+requirements: '- Move the map callback to a new function!'
+os: OSX
