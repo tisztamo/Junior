@@ -1,0 +1,9 @@
+task: prompt/task/refactor/custom.md
+attention:
+  - src/backend/handlers/promptstotryHandler.js
+  - src/backend/fileutils/getProjectRoot.js
+requirements: >-
+  Instead of __dirname and dotdots use  getProjectRoot() in the second attempt
+  to load the totry prompts. The correct dir relative to the project root is the
+  same as in the first attempt: prompt/totry (use a const for this). The first
+  attempt should remain relative to cwd.
