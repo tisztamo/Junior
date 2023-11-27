@@ -9,7 +9,7 @@
     "junior-web": "dist/bin/web.js",
     "junior-cli": "dist/bin/cli.js",
     "junior-init": "dist/bin/init.js",
-    "junior-rollback": "bin/rollback.js",
+    "junior-rollback": "dist/bin/rollback.js",
     "junior-news": "dist/bin/readGitHistoryToMd.js"
   },
   "scripts": {
