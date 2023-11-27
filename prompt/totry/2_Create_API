@@ -1,0 +1,6 @@
+// Set attention and remove this line!
+Create route /api/[relative path]/
+with separate handler
+which loads ./api/[relative path] (Create ./api) relative to cwd
+and evaluates it using ejs. (install it)
+
