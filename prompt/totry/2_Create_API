@@ -1,6 +1,4 @@
-// Set attention and remove this line!
-Create route /api/[relative path]/
-with separate handler
-which loads ./api/[relative path] (Create ./api) relative to cwd
-and evaluates it using ejs. (install it)
-
+// Set attention to main.js and sampleHandler.js and remove this line!
+- Create dir ./api/
+- Install ejs
+- Create route /api/[relative_path]/ with separate handler which renders file ./api/[relative_path].ejs relative to cwd using ejs
