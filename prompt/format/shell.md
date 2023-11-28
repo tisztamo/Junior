@@ -14,8 +14,11 @@ set -e
 goal=[Task description, max 9 words]
 echo "Plan:"
 echo "1. [...]"
-cat > x.js << 'EOF'
-[FULL content of the file]
+
+# Always output the full file!
+cat > x.js << EOF
+  let i = 1
+  console.log(\`i: \${i}\`)
 EOF
 echo "\033[32mDone: $goal\033[0m\n"
 ```
