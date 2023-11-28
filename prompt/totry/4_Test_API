@@ -1,0 +1,3 @@
+// Set attention and remove this line!
+- Create api/test/ejsBasics.md.ejs which showcases ejs basic capabilities. It will be executed using ejs. It's output should be a markdown.
+- Create test/testEjsBasics.js which imports main.js, gets localhost:3000/api/ejsBasics.md and checks if ejs was really run on it.
