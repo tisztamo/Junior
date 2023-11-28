@@ -1,0 +1,7 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/backend/fileutils/processItem.js
+requirements: |-
+  Do not differentiate EACCESS errors. Instead:
+  - warn every error with ("Error while creating file list", error)
+  - return undefined on any error

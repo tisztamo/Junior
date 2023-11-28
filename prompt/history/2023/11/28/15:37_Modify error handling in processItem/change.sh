@@ -1,3 +1,11 @@
+#!/bin/sh
+set -e
+goal="Modify error handling in processItem"
+echo "Plan:"
+echo "1. Update processItem.js to handle errors uniformly."
+
+# Update processItem.js
+cat > src/backend/fileutils/processItem.js << EOF
 import fs from 'fs';
 import path from 'path';
 
@@ -31,3 +39,5 @@ async function processItem(readFileList, dir, relativePath, item, nameIgnore, pa
 }
 
 export default processItem;
+EOF
+echo "\033[32mDone: $goal\033[0m\n"
