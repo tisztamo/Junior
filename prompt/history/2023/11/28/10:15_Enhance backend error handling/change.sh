@@ -1,3 +1,12 @@
+#!/bin/sh
+set -e
+goal="Enhance backend error handling"
+echo "Plan:"
+echo "1. Update processItem.js to handle EACCESS error."
+echo "2. Update fileListHandler.js to log errors."
+
+# Updating processItem.js
+cat > src/backend/fileutils/processItem.js << EOF
 import fs from 'fs';
 import path from 'path';
 
@@ -26,7 +35,7 @@ async function processItem(readFileList, dir, relativePath, item, nameIgnore, pa
     }
   } catch (error) {
     if (error.code === 'EACCES') {
-      console.warn(`Access denied for ${fullPath}. Use --ignore=[directoryname] to exclude.`);
+      console.warn(\`Access denied for \${fullPath}. Use --ignore=[directoryname] to exclude.\`);
       return undefined;
     }
     throw error;
@@ -34,3 +43,21 @@ async function processItem(readFileList, dir, relativePath, item, nameIgnore, pa
 }
 
 export default processItem;
+EOF
+
+# Updating fileListHandler.js
+cat > src/backend/handlers/files/fileListHandler.js << EOF
+import readFileList from '../../fileutils/readFileList.js';
+
+export async function fileListHandler(req, res) {
+  try {
+    const filesList = await readFileList("./");
+    res.json(filesList);
+  } catch (error) {
+    console.warn(\`Error in fileListHandler: \${error.message}\`);
+    res.status(500).json({ error: 'Failed to list files' });
+  }
+}
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

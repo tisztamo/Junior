@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/backend/fileutils/processItem.js
+  - src/backend/handlers/files/fileListHandler.js
+requirements: >-
+  - In processItem, when an EACCESS error occurs, console.warn a succint message
+  + a note: "Use --ignore=[directoryname] to exclude", then return undefined.
+
+  - In fileListHandler, console.warn errors before returning 500
