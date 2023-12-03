@@ -1,0 +1,7 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/promptCreation/PromptsToTry.jsx
+requirements: >-
+  Make PromptsToTry w-full, p-2 and ensure its content is single-line and
+  horizontally scrollable. Remove unnecessary css classes and add wrappers if
+  needed.

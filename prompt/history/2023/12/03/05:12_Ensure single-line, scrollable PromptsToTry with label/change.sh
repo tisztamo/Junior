@@ -1,3 +1,11 @@
+#!/bin/sh
+set -e
+goal="Ensure single-line, scrollable PromptsToTry with label"
+echo "Plan:"
+echo "1. Restructure the HTML in PromptsToTry.jsx to make the entire container, including the label, single-line and horizontally scrollable."
+echo "2. Apply appropriate Tailwind CSS classes for styling and layout."
+
+cat > src/frontend/components/promptCreation/PromptsToTry.jsx << EOF
 import { For, onMount } from 'solid-js';
 import { promptsToTry, setPromptsToTry } from '../../model/promptsToTryModel';
 import { fetchPromptsToTry } from '../../service/fetchPromptsToTry';
@@ -30,3 +38,5 @@ const PromptsToTry = () => {
 };
 
 export default PromptsToTry;
+EOF
+echo "\033[32mDone: $goal\033[0m\n"
