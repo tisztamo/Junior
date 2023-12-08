@@ -1,0 +1,14 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/promptCreation/PromptsToTry.jsx
+  - src/frontend/components/promptCreation/PromptsToTryHelp.jsx
+requirements: >-
+  - Use the information emoji instead of the question mark
+
+  - change the help to the following (rephrase if needed):
+
+
+  These are sample prompts you can use with Junior. Run through them from an
+  empty repo to build a sample project with Junior. To override this list:
+  create a prompt/totry folder in your project directory and add files to have
+  them displayed here.
