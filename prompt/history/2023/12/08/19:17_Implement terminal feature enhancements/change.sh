@@ -1,3 +1,23 @@
+#!/bin/sh
+set -e
+goal="Implement terminal feature enhancements"
+echo "Plan:"
+echo "1. Modify setupXTerm.js to remove fitAddon and set terminal size"
+echo "2. Update TerminalComponent.jsx for container div adjustments"
+
+# Modify setupXTerm.js
+cat > src/frontend/service/terminal/setupXTerm.js << EOF
+import { Terminal } from 'https://cdn.jsdelivr.net/npm/xterm@5.3.0/+esm';
+
+export function setupXTerm() {
+  const term = new Terminal({ rows: 24, cols: 80 });
+  
+  return { term };
+}
+EOF
+
+# Update TerminalComponent.jsx
+cat > src/frontend/components/terminal/TerminalComponent.jsx << EOF
 import { onCleanup, onMount, createSignal } from 'solid-js';
 import 'xterm/css/xterm.css';
 import terminalConnection from '../../service/terminal/terminalConnection';
@@ -65,3 +85,6 @@ const TerminalComponent = () => {
 
 export default TerminalComponent;
 
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

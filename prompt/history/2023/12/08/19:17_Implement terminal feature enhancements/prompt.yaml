@@ -1,0 +1,8 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/terminal/TerminalComponent.jsx
+  - src/frontend/service/terminal/setupXTerm.js
+requirements: |-
+  - Do not use the fitaddon (delete the file)
+  - Make the terminal 24x80
+  - Put the container div into a wrapper with flex overflow-x-auto
