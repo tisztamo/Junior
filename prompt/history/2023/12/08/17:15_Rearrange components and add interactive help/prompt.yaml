@@ -1,0 +1,20 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/promptCreation/PromptsToTry.jsx
+  - src/frontend/components/PromptCreation.jsx
+requirements: >-
+  - Move promptstotry before taskslist
+
+  - Create a new component PromptsToTryHelp and add it after the colon. It
+  should render as an emoji qestion mark in circle, inline, and when clicked,
+  alert the following help (rephrase for readability)
+
+
+  """
+
+  These are sample prompts you can use for trying out Junior.
+
+  If you create prompt/totry folder in the project where you work with  Junior,
+  and put files there, they will be shown here instead.
+
+  """

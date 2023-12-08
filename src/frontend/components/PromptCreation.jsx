@@ -9,8 +9,8 @@ import PromptsToTry from "./promptCreation/PromptsToTry";
 const PromptCreation = () => {
   return (
     <>
+      <PromptsToTry />
       <TasksList />
-<PromptsToTry />
       <RequirementsEditor />
       <AttentionFileList />
       <PromptDescriptor />
@@ -21,4 +21,3 @@ const PromptCreation = () => {
 };
 
 export default PromptCreation;
-
