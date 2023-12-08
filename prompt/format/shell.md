@@ -15,7 +15,7 @@ goal=[Task description, max 9 words]
 echo "Plan:"
 echo "1. [...]"
 
-# Always output the full file!
+# Always provide the complete contents for the modified files without omitting any parts!
 cat > x.js << EOF
   let i = 1
   console.log(\`i: \${i}\`)
