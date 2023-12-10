@@ -1,0 +1,28 @@
+task: prompt/task/bug/fix.md
+attention:
+  - src/frontend/components/promptCreation/PromptsToTry.jsx
+requirements: >-
+  handleClick was accidentally removed in a previous edit this file.
+
+
+  -import { setRequirements } from '../../model/requirements';
+
+  -import postDescriptor from '../../service/postDescriptor';
+
+
+  -  const handleClick = async (prompt) => {
+
+  -    setRequirements(prompt.content);
+
+  -    await postDescriptor({ requirements: prompt.content });
+
+  -  };
+
+  -
+
+  -        <a href="#" class="ml-2 cursor-pointer text-blue-500 bg-transparent
+  rounded px-4 whitespace-nowrap" onClick={() =>
+  handleClick(prompt)}>{prompt.name}</a>
+
+
+  write handleClick and its call back again!

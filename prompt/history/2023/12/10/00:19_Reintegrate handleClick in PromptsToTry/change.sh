@@ -1,3 +1,12 @@
+#!/bin/sh
+set -e
+goal="Reintegrate handleClick in PromptsToTry"
+echo "Plan:"
+echo "1. Add handleClick function."
+echo "2. Update <a> element to use onClick with handleClick."
+
+# Update PromptsToTry.jsx
+cat > src/frontend/components/promptCreation/PromptsToTry.jsx << EOF
 import { For, onMount } from 'solid-js';
 import { promptsToTry, setPromptsToTry } from '../../model/promptsToTryModel';
 import { fetchPromptsToTry } from '../../service/fetchPromptsToTry';
@@ -31,3 +40,5 @@ const PromptsToTry = () => {
 };
 
 export default PromptsToTry;
+EOF
+echo "\033[32mDone: $goal\033[0m\n"
