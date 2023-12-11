@@ -1,0 +1,10 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/interactiveSession/startInteractiveSession.js
+  - src/prompt/watchPromptDescriptor.js
+requirements: >-
+  - Make y the default when asking for prompt sending
+
+  - Instead of passing console.log directly to watchPromptDescriptor, create a
+  function that wraps console.log and prints the sentence starting with "Press
+  Enter..." again with green after the content.
