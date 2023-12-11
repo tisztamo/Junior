@@ -1,0 +1,7 @@
+task: prompt/task/bug/fix.md
+attention:
+  - src/backend/rollup.config.js
+  - bin/cli.js
+requirements: >-
+  Edit cli.js to auto-execute the main function instead of exporting it. Also
+  build cli.js with rollup like the other files in bin.
