@@ -1,1 +1,0 @@
-Create a git repository and gitignore common IDE folders!
