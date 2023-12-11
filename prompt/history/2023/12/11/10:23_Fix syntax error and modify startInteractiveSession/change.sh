@@ -1,3 +1,12 @@
+#!/bin/sh
+set -e
+goal="Fix syntax error and modify startInteractiveSession"
+echo "Plan:"
+echo "1. Replace octal escape sequences with ANSI codes."
+echo "2. Update startInteractiveSession function to handle new message format."
+
+# Modifying startInteractiveSession.js
+cat > src/interactiveSession/startInteractiveSession.js << 'EOF'
 import { saveAndSendPrompt } from './saveAndSendPrompt.js';
 import generatePrompt from '../prompt/generatePrompt.js';
 import { loadPromptDescriptor } from '../prompt/loadPromptDescriptor.js';
@@ -25,3 +34,6 @@ const startInteractiveSession = async () => {
 };
 
 export { startInteractiveSession };
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

@@ -1,0 +1,8 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/interactiveSession/startInteractiveSession.js
+requirements: >-
+  - Do not ask for notes, usea const notes with empty string
+
+  - Print a green message: "Watching for changes in prompt.yaml. Press Enter to
+  generate prompt"
