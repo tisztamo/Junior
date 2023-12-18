@@ -17,7 +17,7 @@
     "start": "node scripts/dev.js",
     "update-logo": "node ./scripts/updateLogo.js",
     "clear-branches": "node ./scripts/clearBranchesCommand.js $@",
-    "test": "mocha --recursive --extension .test.js src/backend/",
+    "test": "mocha --recursive --extension .test.js src/",
     "rollback": "node scripts/junior-rollback.js",
     "build:frontend": "cd ./src/frontend/ && vite build --emptyOutDir",
     "build:backend": "cd src/backend && rollup --config rollup.config.js",
