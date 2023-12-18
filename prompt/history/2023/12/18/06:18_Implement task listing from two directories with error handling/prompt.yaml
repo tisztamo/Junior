@@ -1,0 +1,12 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/backend/handlers/listTasks.js
+requirements: >-
+  When listing tasks, first load them from "prompt/task" relative to the current
+  directory (ignore errors here, use empty list on error, no log), then
+  concatenate the ones loaded with the current method from "prompt/task"
+  relative to the project root (allow errors to escape from here).
+
+  The returned paths should be relative to the root used (cwd or project root).
+  Note that this is not an async fn, do not change this.
+os: OSX
