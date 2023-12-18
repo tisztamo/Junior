@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention: []
+requirements: >-
+  Create src/response/parseConversationResponse.js (create the dir), which
+  parses a "response" string as markdown and returns a list of the code blocks
+  and the paragraphs that preceed every code block. Return an array of  {code,
+  lang, previousParagraph} objects.
+
+  Use marked, it is already added as dependency.
