@@ -1,0 +1,11 @@
+task: prompt/task/refactor/custom.md
+attention:
+  - src/backend/handlers/listTasks.js
+  - src/backend/routes/setupPromptRoutes.js
+  - src/backend/fileutils/readDirRecursively.js
+requirements: >
+  - Modify listTasks to be used directly as a handler (async, with args req,
+  res), and deduplicate the task list before returning from it.
+
+  - Make readDirRecursively async
+os: OSX

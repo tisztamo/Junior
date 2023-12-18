@@ -7,7 +7,7 @@ import { promptstotryHandler } from '../handlers/promptstotryHandler.js';
 
 export function setupPromptRoutes(app) {
   app.get('/descriptor', servePromptDescriptor);
-  app.get('/tasks', (req, res) => res.json({ tasks: listTasks() }));
+  app.get('/tasks', listTasks);
   app.post('/generate', generateHandler);
   app.post('/descriptor', updateDescriptorHandler);
   app.post('/updatetask', updateTaskHandler);

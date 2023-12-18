@@ -1,18 +1,17 @@
-import fs from 'fs';
+import fs from 'fs/promises';
 import path from 'path';
 
-export const readDirRecursively = (dir) => {
+export const readDirRecursively = async (dir) => {
     const files = [];
+    const items = await fs.readdir(dir, { withFileTypes: true });
 
-    fs.readdirSync(dir).forEach(file => {
-        const filePath = path.join(dir, file);
-
-        if (fs.statSync(filePath).isDirectory()) {
-            files.push(...readDirRecursively(filePath));
+    for (const item of items) {
+        const filePath = path.join(dir, item.name);
+        if (item.isDirectory()) {
+            files.push(...(await readDirRecursively(filePath)));
         } else {
             files.push(filePath);
         }
-    });
-
+    }
     return files;
 };
