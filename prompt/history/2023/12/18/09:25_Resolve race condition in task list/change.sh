@@ -1,3 +1,11 @@
+#!/bin/sh
+set -e
+goal="Resolve race condition in task list"
+echo "Plan:"
+echo "1. Modify TasksList.jsx to use the 'selected' attribute."
+echo "2. Test the updated component to ensure the race condition is resolved."
+
+cat > src/frontend/components/TasksList.jsx << EOF
 import { onMount, createEffect } from 'solid-js';
 import { fetchTasks } from '../fetchTasks';
 import { handleTaskChange } from '../service/handleTaskChange';
@@ -28,3 +36,5 @@ const TasksList = () => {
 };
 
 export default TasksList;
+EOF
+echo "\033[32mDone: $goal\033[0m\n"

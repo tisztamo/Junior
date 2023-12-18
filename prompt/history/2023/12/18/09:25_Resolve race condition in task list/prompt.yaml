@@ -1,0 +1,7 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/TasksList.jsx
+requirements: >-
+  We need to avoid a race condition affecting task list rendering. Do not set
+  the value attr of the select tag, set the selected attr of option instead.
+os: OSX
