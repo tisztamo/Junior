@@ -1,0 +1,12 @@
+task: prompt/task/test/unit.md
+attention:
+  - src/response/parseConversationResponse.js
+  - src/backend/sample.test.js
+requirements: >-
+  Expected functionality:  parses a "response" string as markdown and returns a
+  list of the code blocks and the paragraphs that preceed every code block.
+  Return an array of  {code, lang, previousParagraph} objects.
+
+
+  Be sure to include several tests, including complex ones with multiple,
+  different code blocks and other formatting.

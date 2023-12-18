@@ -1,11 +1,11 @@
-import { marked } from 'marked';
+import { Marked } from 'marked';
 
 export async function parseConversationResponse(response) {
+    const localMarked = new Marked();
     let previousParagraph = '';
     const results = [];
 
-    // Create a local marked instance
-    const localMarked = new marked.Markdown();
+    // Configure the localMarked instance with custom renderer
     localMarked.use({
         renderer: {
             code(code, lang) {
