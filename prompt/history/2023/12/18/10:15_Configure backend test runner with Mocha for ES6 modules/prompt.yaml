@@ -1,0 +1,8 @@
+task: prompt/task/feature/implement.md
+attention:
+  - package.json
+requirements: |-
+  Select, install and configure a test runner for the backend.
+  Put the config file to src/backend/
+  Test Files will we placed next to normal files with .test.js extension
+  Use a test runner that is known for its performance
