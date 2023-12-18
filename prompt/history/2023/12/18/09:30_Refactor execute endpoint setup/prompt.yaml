@@ -1,0 +1,6 @@
+task: prompt/task/refactor/custom.md
+attention:
+  - src/backend/handlers/executeHandler.js
+  - src/backend/routes/setupRoutes.js
+  - src/backend/routes/setupPromptRoutes.js
+requirements: Move the execute endpoint setup to the prompt routes
