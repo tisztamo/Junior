@@ -1,0 +1,13 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/response/parseConversationResponse.js
+requirements: >-
+  Create src/response/extractFileName.js which get a string. 
+
+  - It checks if it is a single line with a colon at the end, and throws an
+  error if not
+
+  - Checks if the text before the colon is a valid relative file path, and
+  throws an error if not
+
+  - Returns it
