@@ -1,0 +1,9 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/response/extractFileName.js
+requirements: >-
+  - Rename extractFileName to extractFilePath (both js and function name)
+
+  - Create src/response/applyChangeBlocks.js which gets an array of { code,
+  lang, previousParagraph } and for each item, calls extractFilePath on
+  previousPragraph and sets the filePath property.

@@ -1,4 +1,4 @@
-export function extractFileName(inputString) {
+export function extractFilePath(inputString) {
     // Check if input is a single line with a colon at the end
     if (!inputString.match(/^[^\n]+:$/)) {
         throw new Error('Input must be a single line with a colon at the end');
