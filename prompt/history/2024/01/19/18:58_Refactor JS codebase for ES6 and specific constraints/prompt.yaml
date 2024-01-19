@@ -1,0 +1,4 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/backend/handlers/listTasks.js
+requirements: Also ignore errors when reading tasks under cwd
