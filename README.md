@@ -29,7 +29,7 @@ cd junior-tryout
 junior
 ```
 
-* Note: Junior is a research project at this time, not production ready. *
+*Note: Junior is an experimental project at this time, not production ready.*
 
 For more info read the docs at https://aijunior.dev
 
@@ -38,5 +38,3 @@ For more info read the docs at https://aijunior.dev
 Your contributions make a difference! At Junior, we value the collaboration of the community. Your role as a contributor is to monitor the development, provide detailed prompts, and thoroughly review the generated outcomes.
 
 For support, please create an issue in the GitHub repository.
-
-**Note:** For meaningful results, it's recommended to use the GPT-4 model or a more recent version.
