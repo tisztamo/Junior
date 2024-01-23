@@ -38,3 +38,8 @@ For more info read the docs at https://aijunior.dev
 Your contributions make a difference! At Junior, we value the collaboration of the community. Your role as a contributor is to monitor the development, provide detailed prompts, and thoroughly review the generated outcomes.
 
 For support, please create an issue in the GitHub repository.
+
+
+## Similar tools
+
+There are more mature tools for helping developers utilize language models. The most notable one is aider at https://aider.chat
