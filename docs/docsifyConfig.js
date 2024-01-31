@@ -5,6 +5,6 @@ window.$docsify = {
   autoHeader: true,
   logo: "assets/logo.svg",
   nameLink: 'https://github.com/tisztamo/Junior',
-  coverpage: true,
+  coverpage: false,
   auto2top: true
 }
