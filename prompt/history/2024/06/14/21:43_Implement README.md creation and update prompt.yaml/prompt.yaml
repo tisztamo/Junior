@@ -1,0 +1,15 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/prompt/createPromptYaml.js
+  - src/git/juniorInit.js
+requirements: >
+  In juniorInit, also create ./README.md similarly to how prompt.yaml is created
+  if not exists and refer the readme instead of the current directory in the
+  attention section of the created prompt.yaml. 
+
+
+  Create a src/prompt/createReadme.js for the readme creation.
+
+
+  The readme should simply say something like: Project initialized with Junior
+os: OSX

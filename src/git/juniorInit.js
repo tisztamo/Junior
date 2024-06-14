@@ -8,6 +8,7 @@ import commitGit from './commitGit.js';
 import path from 'path';
 import isRepoClean from './isRepoClean.js';
 import getProjectRoot from '../backend/fileutils/getProjectRoot.js';
+import { createReadme } from '../prompt/createReadme.js';
 
 export async function juniorInit() {
   await checkAndInitRepo();
@@ -20,6 +21,7 @@ export async function juniorInit() {
   createGitignore();
   await createPromptDir();
   createPromptYaml();
+  createReadme();
 
   const projectRoot = getProjectRoot();
   const defaultsPath = path.join(projectRoot, 'prompt/defaults/');

@@ -3,7 +3,7 @@ import { writeFileSync } from 'fs';
 export function createPromptYaml() {
   const yamlContent = `task: prompt/task/feature/implement.md
 attention:
-  - ./
+  - ./README.md
 requirements: |
   1. Create the src/ dir
   2. Create src/main.js with a Hello World in Node.js
