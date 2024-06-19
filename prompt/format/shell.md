@@ -5,7 +5,7 @@ OS: <%= os %>
 
 Installed tools: <%= installedTools %>
 
-<%= task_readme %>
+<%#= task_readme %>
 
 EXAMPLE START
 ```sh
