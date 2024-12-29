@@ -42,6 +42,7 @@
     "markdown-it": "^13.0.1",
     "marked": "^5.1.0",
     "node-pty": "^1.0.0",
+    "sanitize-filename": "^1.6.3",
     "sharp": "^0.32.4",
     "simple-git": "^3.19.1",
     "solid-js": "^1.7.7",
