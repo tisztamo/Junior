@@ -1,0 +1,19 @@
+task: prompt/task/bug/fix.md
+attention:
+  - package.json
+requirements: >+
+  $ npm ci
+
+  npm error code ETARGET
+
+  npm error notarget No matching version found for
+  node-pty-prebuilt-multiarch@^0.10.1.
+
+  npm error notarget In most cases you or one of your dependencies are
+  requesting
+
+  npm error notarget a package version that doesn't exist.
+
+  npm error A complete log of this run can be found in:
+  C:\Users\schaf\AppData\Local\npm-cache\_logs\2024-12-29T20_58_06_854Z-debug-0.log
+
