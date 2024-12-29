@@ -12,7 +12,7 @@ export function sanitizeFilename(name) {
 
     // Define a regex for characters not allowed in Windows filenames
     const disallowedChars = /[<>:"/\\|?*]/g;
-    const sanitized = name.replace(disallowedChars, '_');
+    const sanitized = name.replace(disallowedChars, '_').replace(/\s+/g, '_');
 
     // Ensure the name is not empty or only underscores
     return sanitized || '_';

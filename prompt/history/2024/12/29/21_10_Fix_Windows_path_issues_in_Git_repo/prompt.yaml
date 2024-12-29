@@ -1,0 +1,10 @@
+task: prompt/task/bug/fix.md
+attention:
+  - scripts/fixPromptPathsForWindows.js
+  - src/utils/sanitizeFilename.js
+requirements: >-
+  Fix the sanitizer, git clone throws error: invalid path
+  'prompt/history/2023/08/24/10.39_Implement beta CLI flag with /config
+  endpoint/change.sh'
+
+  Run the fixer script at the end of the change.
