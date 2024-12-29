@@ -1,0 +1,7 @@
+task: prompt/task/feature/implement.md
+attention:
+  - scripts/fixPromptPathsForWindows.js
+  - src/utils/sanitizeFilename.js
+requirements: >-
+  When fixing a path, sanitize filenames for windows. Also run the script at the
+  end of the change
