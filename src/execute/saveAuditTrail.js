@@ -18,7 +18,7 @@ async function saveAuditTrail(code) {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
-    const time = String(date.getHours()).padStart(2, '0') + ':' + String(date.getMinutes()).padStart(2, '0');
+    const time = String(date.getHours()).padStart(2, '0') + '.' + String(date.getMinutes()).padStart(2, '0');
 
     const auditTrailDir = `./prompt/history/${year}/${month}/${day}/${time}_${goal}/`;
     await mkdir(auditTrailDir, { recursive: true });

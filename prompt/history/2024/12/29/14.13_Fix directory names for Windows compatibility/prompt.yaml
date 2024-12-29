@@ -1,0 +1,20 @@
+task: prompt/task/feature/implement.md
+attention:
+  - scripts/updateConfigList.js
+  - src/execute/saveAuditTrail.js
+requirements: >+
+  Instead of a colon, use dot character between hours and minutes in the
+  directory name.
+
+
+  Also create scripts/fixPromptPathsForWindows.js which runs through the dir
+  prompt/history recursively and renames all the directories that contain a
+  colon in the name. The script will run on unix, to fix the directory structure
+  and allow checkout on windows.
+
+
+  Also tun the newly created script at the end.
+
+
+  updateConfigList is an example script.
+
