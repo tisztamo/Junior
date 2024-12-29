@@ -1,0 +1,4 @@
+task: prompt/task/bug/fix.md
+attention:
+  - package.json
+requirements: 'Allow installing this module on windows without Visual Studio installed. '

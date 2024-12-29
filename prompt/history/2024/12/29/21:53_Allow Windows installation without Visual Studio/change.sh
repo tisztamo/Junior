@@ -1,3 +1,13 @@
+#!/bin/sh
+set -e
+goal="Allow Windows installation without Visual Studio"
+echo "Plan:"
+echo "1. Modify package.json to use prebuilt binaries for node-pty."
+echo "2. Ensure node-pty is fetched with prebuilt binaries on Windows."
+echo "3. Create a postinstall script to verify the prebuilt binaries are used."
+
+# Modify package.json to use node-pty with prebuilt binaries
+cat > package.json << 'EOF'
 {
   "name": "@aijunior/dev",
   "version": "0.3.21",
@@ -76,3 +86,27 @@
     "scripts/"
   ]
 }
+EOF
+
+# Create a postinstall script to validate prebuilt binaries
+mkdir -p scripts
+cat > scripts/postinstall.js << 'EOF'
+import { execSync } from 'child_process';
+
+async function validatePrebuiltBinary() {
+  try {
+    console.log('Validating prebuilt binaries for node-pty...');
+    execSync('node -e "require(\'node-pty-prebuilt-multiarch\')"', { stdio: 'inherit' });
+    console.log('Validation successful.');
+  } catch (error) {
+    console.error('Validation failed. Please check your setup.');
+    process.exit(1);
+  }
+}
+
+validatePrebuiltBinary();
+EOF
+
+chmod +x scripts/postinstall.js
+
+echo "\033[32mDone: $goal\033[0m\n"
