@@ -12,10 +12,12 @@ export function sanitizeFilename(name) {
 
     // Define a regex for characters not allowed in Windows filenames
     const disallowedChars = /[<>:"/\\|?*'`]/g;
-    let sanitized = name.replace(disallowedChars, '_').replace(/^\.\//, '_').replace(/\s+/g, '_');
-
-    // Consolidate multiple underscores
-    sanitized = sanitized.replace(/_+/g, '_');
+    let sanitized = name
+        .replace(disallowedChars, '_')        // Replace disallowed characters
+        .replace(/^\./, '_')                // Replace leading period
+        .replace(/^\_+/, '')                // Remove leading underscores
+        .replace(/\s+/g, '_')               // Replace spaces with underscores
+        .replace(/_+/g, '_');                // Consolidate multiple underscores
 
     // Ensure the name is not empty or only underscores
     return sanitized || '_';

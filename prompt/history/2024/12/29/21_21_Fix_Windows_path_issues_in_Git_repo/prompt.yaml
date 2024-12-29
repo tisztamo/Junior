@@ -1,0 +1,5 @@
+task: prompt/task/bug/fix.md
+attention:
+  - scripts/fixPromptPathsForWindows.js
+  - src/utils/sanitizeFilename.js
+requirements: ''
