@@ -1,0 +1,7 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/execute/saveAuditTrail.js
+requirements: >-
+  Sanitize the filename (dirname) using a new function so that it will be safe
+  to use or include it as a windows file path. Replace any unallowed character
+  with underscore.

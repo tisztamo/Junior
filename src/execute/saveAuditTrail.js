@@ -1,5 +1,6 @@
 import { writeFile, mkdir, readFile } from 'fs/promises';
 import AuditTrailConfig from './AuditTrailConfig.js';
+import { sanitizeFilename } from '../utils/sanitizeFilename.js';
 
 async function saveAuditTrail(code) {
     const { enabled } = AuditTrailConfig();
@@ -12,7 +13,7 @@ async function saveAuditTrail(code) {
     if (!goalMatch) {
         throw new Error('Goal not specified in the code');
     }
-    const goal = goalMatch[1];
+    const goal = sanitizeFilename(goalMatch[1]);
 
     const date = new Date();
     const year = date.getFullYear();
