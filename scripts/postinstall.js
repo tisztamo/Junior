@@ -1,9 +1,6 @@
+import { installBashIfWindows } from './postinstall/installBashIfWindows.js';
 import { execSync } from 'child_process';
 
-/**
- * Validates the prebuilt binaries for node-pty-prebuilt-multiarch.
- * Exits the process if validation fails.
- */
 export async function validateNodePty() {
   try {
     console.log('Validating prebuilt binaries for node-pty...');
@@ -15,4 +12,5 @@ export async function validateNodePty() {
   }
 }
 
-validateNodePty();
+await installBashIfWindows();
+await validateNodePty();

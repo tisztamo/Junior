@@ -1,0 +1,17 @@
+task: prompt\task\feature\implement.md
+attention:
+  - package.json
+  - scripts/installBashIfWindows.js
+  - scripts/postinstall.js
+requirements: >-
+  The install script fails to decide correctly if it runs directly or not
+  because differences in paths:
+
+
+  file:///C:/work/tmp/Junior/scripts/installBashIfWindows.js vs
+  file://C:\work\tmp\Junior\scripts\installBashIfWindows.js
+
+
+  Remove this check, the file should only export the fn, not run it. Instead,
+  move it to a newly created scripts/postinstall/ dir and import it from the
+  postinstall script. Also update package.json accordingly.
