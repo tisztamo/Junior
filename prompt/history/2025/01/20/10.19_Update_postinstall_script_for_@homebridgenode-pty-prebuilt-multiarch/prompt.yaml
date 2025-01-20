@@ -1,0 +1,7 @@
+task: prompt/task/feature/implement.md
+attention:
+  - scripts/postinstall.js
+  - package.json
+requirements: >-
+  We just switched to @homebridge/node-pty-prebuilt-multiarch, update the
+  postinstall script
