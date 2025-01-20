@@ -5,16 +5,32 @@ import { saveAuditTrail } from './saveAuditTrail.js';
 
 async function executeAndForwardOutput(code, next) {
     try {
-        if (code == null || !code.startsWith('#!')) {
+        if (!code || !code.startsWith('#!')) {
             throw new Error('Code does not start with a shebang');
         }
-        
+
         await saveAuditTrail(code);
 
         await writeFile('./change.sh', code);
         await makeExecutable('./change.sh');
-        
-        const child = spawn('./change.sh', [], { shell: true });
+
+        let command;
+        let args = [];
+        let spawnOptions = {};
+
+        if (process.platform === 'win32') {
+            // On Windows, explicitly call Bash
+            command = 'bash.exe';
+            args = ['./change.sh'];
+            spawnOptions.shell = false; 
+        } else {
+            // On other platforms, just execute the script with shell
+            command = './change.sh';
+            spawnOptions.shell = true;
+        }
+
+        const child = spawn(command, args, spawnOptions);
+
         let commandOutput = '';
 
         child.stdout.on('data', (data) => {
@@ -27,9 +43,9 @@ async function executeAndForwardOutput(code, next) {
             commandOutput += data;
         });
 
-        child.on('close', (code) => {
+        child.on('close', (exitCode) => {
             if (next && typeof next === 'function') {
-                next(code, commandOutput);
+                next(exitCode, commandOutput);
             }
         });
     } catch (err) {

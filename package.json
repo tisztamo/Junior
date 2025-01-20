@@ -23,7 +23,7 @@
     "build:backend": "cd src/backend && rollup --config rollup.config.js",
     "dev": "npm run start",
     "build": "npm run build:frontend && npm run build:backend",
-    "postinstall": "node scripts/postinstall.js"
+    "postinstall": "node scripts/installBashIfWindows.js && node scripts/postinstall.js"
   },
   "keywords": [
     "cli",

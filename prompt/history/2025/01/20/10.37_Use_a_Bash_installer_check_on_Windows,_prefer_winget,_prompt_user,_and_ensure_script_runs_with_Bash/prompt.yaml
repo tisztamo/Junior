@@ -1,0 +1,10 @@
+task: prompt\task\feature\implement.md
+attention:
+  - src/backend/handlers/executeHandler.js
+  - src/execute/executeAndForwardOutput.js
+  - package.json
+requirements: >-
+  We are executing a shell script here to make changes on the file system. On
+  Windows, we need a way for this to run properly. e.g. in git bash the script
+  works. Find a way to install a working bash together with our package and
+  execute the script with it on Windows. 
