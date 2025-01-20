@@ -32,6 +32,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@homebridge/node-pty-prebuilt-multiarch": "^0.11.14",
     "@types/js-yaml": "^4.0.5",
     "autoprefixer": "^10.4.14",
     "chatgpt": "^5.2.4",
@@ -42,7 +43,6 @@
     "js-yaml": "^4.1.0",
     "markdown-it": "^13.0.1",
     "marked": "^5.1.0",
-    "node-pty-prebuilt-multiarch": "^0.10.1-pre.5",
     "sanitize-filename": "^1.6.3",
     "sharp": "^0.32.4",
     "simple-git": "^3.19.1",

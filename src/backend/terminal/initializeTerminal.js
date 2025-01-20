@@ -1,5 +1,5 @@
 import os from 'os';
-import pty from 'node-pty';
+import pty from '@homebridge/node-pty-prebuilt-multiarch';
 
 export default function initializeTerminal(socket, id) {
   const defaultShell = process.env.SHELL || '/bin/sh';

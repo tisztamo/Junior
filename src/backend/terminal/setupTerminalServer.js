@@ -1,5 +1,5 @@
 import os from 'os';
-import pty from 'node-pty';
+import pty from '@homebridge/node-pty-prebuilt-multiarch';
 import initializeTerminal from './initializeTerminal.js';
 
 const terminals = {};
