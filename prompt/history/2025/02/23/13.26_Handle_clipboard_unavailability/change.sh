@@ -1,3 +1,15 @@
+#!/bin/sh
+set -e
+
+goal="Handle clipboard unavailability"
+
+echo "Plan:"
+echo "1. Modify ExecuteButton.jsx to use input event when clipboard is unavailable."
+echo "2. Ensure text execution happens when input length exceeds 50 characters."
+
+echo "Updating ExecuteButton.jsx..."
+
+cat > src/frontend/components/ExecuteButton.jsx << EOF
 import { createEffect } from 'solid-js';
 import handleExecuteChange from '../service/execute/handleExecuteChange';
 import { setChangeInput, changeInput } from '../model/changeInput';
@@ -31,3 +43,6 @@ const ExecuteButton = () => {
 };
 
 export default ExecuteButton;
+EOF
+
+echo "\033[32mDone: $goal\033[0m\n"

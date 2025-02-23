@@ -1,0 +1,6 @@
+task: prompt/task/feature/implement.md
+attention:
+  - src/frontend/components/ExecuteButton.jsx
+requirements: >-
+  When clipboard is not available, do not use the paste event, but the input
+  event. When the current value is longer than 50 chars, execute it
